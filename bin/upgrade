@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+echo -n "Upgrading HubKit please wait..."
+
+if [ ! -f bin/hubkit.php ]; then
+    echo -n "Please run this script from your installation directory."
+    exiit 2
+fi
+
+git fetch origin
+
+branchName=`git rev-parse --abbrev-ref HEAD`
+curDir=`pwd`
+
+if [ ${branchName} eq "master" ]; then
+    echo -n "[WARNING] You are using the master version, please checkout the latest version instead."
+
+    git rebase origin/master || (echo "Something went wrong, please try again" && exit 1)
+fi
+
+latest=`git describe --tags --abbrev=0 master`
+
+git checkout "tags/${latest}" -b "version-${latest}" || echo "Branch already exists it seems"
+
+composer install -o --no-dev
+./bin/hubkit.php self-diagnose || echo "Please see UPGRADE.md if you were asked to update your configuration."
+
+echo -n "You are now using version ${latest}, previous was {$branchName}"
+echo -n "To rollback simple run: git checkout ${branchName}"
+
+exit $?

@@ -1,0 +1,18 @@
+* text=auto
+*.crt -crlf
+*.key -crlf
+*.srl -crlf
+*.pub -crlf
+*.priv -crlf
+*.pem -crlf
+
+# Always use LF
+core.autocrlf=lf
+
+.gitignore export-ignore
+.gitattributes export-ignore
+.gitmodules export-ignore
+.travis.yml export-ignore
+.style_cs export-ignore
+.styleci.yml export-ignore
+phpunit.xml.dist export-ignore
