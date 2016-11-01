@@ -1,0 +1,14 @@
+<?php
+
+return [
+    'schema_version' => 1, // Config-schema version, only change this when requested
+
+    // Before you can authenticate, get a new token at: https://github.com/settings/tokens/new
+    //
+    // Use a unique and distinct name like: `hubkit on computer-1 at 2016-11-01 14:54 CET`
+    // with scopes: "repo:status, public_repo, admin:repo_hook, user:email, read:gpg_key"
+    'github' => [
+        'username' => '', // fill-in your github username
+        'api_token' => '', // fill-in the new GitHub authentication token (NOT YOUR PASSWORD!)
+    ],
+];
