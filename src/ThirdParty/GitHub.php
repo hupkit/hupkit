@@ -27,7 +27,7 @@ final class GitHub
 
     public function __construct(Client $client, string $apiToken)
     {
-        $this->client = new GitHubClient(new GuzzleClientAdapter());
+        $this->client = new GitHubClient(new GuzzleClientAdapter($client));
         $this->client->authenticate($apiToken, null, GitHubClient::AUTH_HTTP_TOKEN);
     }
 

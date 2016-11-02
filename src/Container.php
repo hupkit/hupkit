@@ -29,11 +29,6 @@ class Container extends \Pimple\Container
         $this['guzzle'] = function (Container $container) {
             $options = [];
 
-            if (!empty($_SERVER['HTTP_PROXY']) || !empty($_SERVER['http_proxy'])) {
-                $proxy = !empty($_SERVER['http_proxy']) ? $_SERVER['http_proxy'] : $_SERVER['HTTP_PROXY'];
-                $options['proxy'] = $proxy;
-            }
-
             if ($container['console_io']->isDebug()) {
                 $options['debug'] = true;
             }
