@@ -105,18 +105,16 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
         $this->addEventListener(
             ConsoleEvents::PRE_HANDLE,
             function (PreHandleEvent $event) {
-                // XXX We properly want to refactor this to an interface detection.
-//                if (in_array($name = $event->getCommand()->getName(), ['diagnose', 'help', 'repository:create'], true)) {
-//                    return;
-//                }
+                $handler = $event->getCommand()->getConfig()->getHandler();
+                $isGit = $this->container['git']->isGitDir();
 
-//                if (!$this->container['git']->isGitDir()) {
-//                    throw new \RuntimeException(
-//                        sprintf('Command "%s" can only be executed from the root of a Git repository.', $name)
-//                    );
-//                }
+                if ($handler instanceof RequiresGitRepository && !$isGit) {
+                    throw new \RuntimeException(
+                        'This Command can only be executed from the root of a Git repository.'
+                    );
+                }
 
-                if ($this->container['git']->isGitDir()) {
+                if ($isGit) {
                     $this->container['github']->autoConfigure($this->container['git']);
                 }
             }
