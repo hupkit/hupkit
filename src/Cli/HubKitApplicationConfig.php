@@ -105,17 +105,20 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
         $this->addEventListener(
             ConsoleEvents::PRE_HANDLE,
             function (PreHandleEvent $event) {
-                if (in_array($name = $event->getCommand()->getName(), ['diagnose', 'help'], true)) {
-                    return;
-                }
+                // XXX We properly want to refactor this to an interface detection.
+//                if (in_array($name = $event->getCommand()->getName(), ['diagnose', 'help', 'repository:create'], true)) {
+//                    return;
+//                }
 
-                if (!$this->container['git']->isGitDir()) {
-                    throw new \RuntimeException(
-                        sprintf('Command "%s" can only be executed from the root of a Git repository.', $name)
-                    );
-                }
+//                if (!$this->container['git']->isGitDir()) {
+//                    throw new \RuntimeException(
+//                        sprintf('Command "%s" can only be executed from the root of a Git repository.', $name)
+//                    );
+//                }
 
-                $this->container['github']->autoConfigure($this->container['git']);
+                if ($this->container['git']->isGitDir()) {
+                    $this->container['github']->autoConfigure($this->container['git']);
+                }
             }
         );
 
@@ -124,15 +127,6 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
                 ->setDescription('Pull-request management')
                 ->addArgument('profile', Argument::OPTIONAL, 'The name of the profile')
                 ->addOption('all', null, Option::BOOLEAN, 'Ask all questions (including optional)')
-//                ->addOption('dry-run', null, Option::BOOLEAN, 'Show what would have been executed, without actually executing')
-//                ->setHandler(function () {
-//                    return new Handler\GenerateCommandHandler(
-//                        $this->container['style'],
-//                        $this->container['config'],
-//                        $this->container['profile_config_resolver'],
-//                        $this->container['answers_set_factory']
-//                    );
-//                })
             ->end()
 
             ->beginCommand('diagnose')
@@ -145,16 +139,25 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
                         $this->container['github']
                     );
                 })
-//
-//                ->beginSubCommand('list')
-//                    ->setHandlerMethod('handleList')
-//                    ->markDefault()
-//                ->end()
-//
-//                ->beginSubCommand('show')
-//                    ->addArgument('name', Argument::OPTIONAL, 'The name of the profile')
-//                    ->setHandlerMethod('handleShow')
-//                ->end()
+            ->end()
+
+            ->beginCommand('repository')
+                ->setDescription('Manage the profiles of your project')
+                ->setHandler(function () {
+                    return new Handler\RepositoryHandler(
+                        $this->container['style'],
+                        $this->container['git'],
+                        $this->container['github']
+                    );
+                })
+                ->beginSubCommand('create')
+                    ->setDescription('Create a new empty GitHub repository. Wiki and Downloads are disabled by default')
+                    ->addArgument('organization', Argument::REQUIRED, 'Organization holding the repository')
+                    ->addArgument('name', Argument::REQUIRED, 'The name of the repository')
+                    ->addOption('no-issues', null, Option::BOOLEAN, 'Disable issues, when a global issue tracker is used')
+                    ->addOption('private', null, Option::BOOLEAN, 'Create private repository (requires paid plan)')
+                    ->setHandlerMethod('handleCreate')
+                ->end()
             ->end()
         ;
     }

@@ -385,4 +385,13 @@ class Git
         $this->process->mustRun(['patch', '-'.$type, '--input', $patchFile]);
         $this->process->mustRun(['git', 'commit', '-a', '--file', $this->filesystem->newTempFilename($message)]);
     }
+
+    public function clone(string $ssh_url, string $remoteName = 'origin')
+    {
+        $this->process->mustRun(['git', 'clone', $ssh_url, '.']);
+
+        if ('origin' !== $remoteName) {
+            $this->process->mustRun(['git', 'remote', 'rename', 'origin', $remoteName]);
+        }
+    }
 }
