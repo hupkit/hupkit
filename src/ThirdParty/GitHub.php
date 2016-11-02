@@ -121,6 +121,15 @@ final class GitHub
         }
     }
 
+    public function getIssue(int $number)
+    {
+        return $this->client->issue()->show(
+            $this->organization,
+            $this->repository,
+            $number
+        );
+    }
+
     public function updateIssue(int $id, array $parameters)
     {
         $api = $this->client->issue();

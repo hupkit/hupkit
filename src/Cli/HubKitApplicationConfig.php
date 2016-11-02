@@ -157,6 +157,19 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
                     ->setHandlerMethod('handleCreate')
                 ->end()
             ->end()
+
+            ->beginCommand('take-issue')
+                ->setDescription('Manage the profiles of your project')
+                ->addArgument('number', Argument::INTEGER, 'Number of the issue to take')
+                ->addOption('base', 'b', Option::STRING | Option::OPTIONAL_VALUE, 'Base branch', 'master')
+                ->setHandler(function () {
+                    return new Handler\IssueTakeHandler(
+                        $this->container['style'],
+                        $this->container['git'],
+                        $this->container['github']
+                    );
+                })
+            ->end()
         ;
     }
 }
