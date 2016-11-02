@@ -214,9 +214,6 @@ final class GitHub
         return $pager->fetchAll($this->client->repo()->statuses(), 'combined', [$org, $repo, $hash])['statuses'];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function updatePullRequest($id, array $parameters)
     {
         $api = $this->client->pullRequest();
@@ -226,6 +223,22 @@ final class GitHub
             $this->repository,
             $id,
             $parameters
+        );
+    }
+
+    public function mergePullRequest(int $id, string $title, string $message, string $sha, bool $squash = false)
+    {
+        $this->setApVersion('polaris-preview');
+        $api = $this->client->pullRequest();
+
+        return $api->merge(
+            $this->organization,
+            $this->repository,
+            $id,
+            $message,
+            $sha,
+            $squash,
+            $title
         );
     }
 
@@ -266,6 +279,11 @@ final class GitHub
                 'draft' => false,
             ]
         );
+    }
+
+    private function setApVersion(string $version)
+    {
+        $this->client->addHeaders(['Accept' => sprintf('application/vnd.github.%s+json', $version)]);
     }
 
     private static function getValuesFromNestedArray(array $array, string $key)
