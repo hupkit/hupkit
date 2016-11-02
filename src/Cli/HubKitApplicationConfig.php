@@ -121,12 +121,6 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
         );
 
         $this
-            ->beginCommand('pull-request')
-                ->setDescription('Pull-request management')
-                ->addArgument('profile', Argument::OPTIONAL, 'The name of the profile')
-                ->addOption('all', null, Option::BOOLEAN, 'Ask all questions (including optional)')
-            ->end()
-
             ->beginCommand('diagnose')
                 ->setDescription('Manage the profiles of your project')
                 ->setHandler(function () {
@@ -169,6 +163,24 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
                         $this->container['github']
                     );
                 })
+            ->end()
+
+            ->beginCommand('pull-request')
+                ->setHandler(function () {
+                    return new Handler\PullRequestMergeHandler(
+                        $this->container['style'],
+                        $this->container['git'],
+                        $this->container['config'],
+                        $this->container['github']
+                    );
+                })
+                ->beginSubCommand('merge')
+                    ->setDescription('Merge a pull-request using the GitHub API')
+                    ->addArgument('number', Argument::REQUIRED | Argument::INTEGER, 'The name of the repository')
+                    ->addOption('squash', 's', Option::BOOLEAN, 'Squash the pull-request when merging')
+                    ->addOption('thanks', null, Option::OPTIONAL_VALUE | Option::STRING, 'Thank you message, @author replaced with actual pr-author', 'Thank you @author')
+                    ->setHandlerMethod('handleMerge')
+                ->end()
             ->end()
         ;
     }

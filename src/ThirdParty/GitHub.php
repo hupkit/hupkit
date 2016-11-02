@@ -216,11 +216,11 @@ final class GitHub
         return sprintf('https://github.com/%s/%s/pull/%d', $this->organization, $this->repository, $id);
     }
 
-    public function getCommitStatuses($org, $repo, $hash)
+    public function getCommitStatuses($org, $repo, $hash): array
     {
         $pager = new ResultPager($this->client);
 
-        return $pager->fetchAll($this->client->repo()->statuses(), 'combined', [$org, $repo, $hash])['statuses'];
+        return $pager->fetchAll($this->client->repo()->statuses(), 'combined', [$org, $repo, $hash]);
     }
 
     public function updatePullRequest($id, array $parameters)
