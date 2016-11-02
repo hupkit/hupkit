@@ -50,7 +50,7 @@ class Container extends \Pimple\Container
         };
 
         $this['git'] = function (Container $container) {
-            return new Service\Git($container['process']);
+            return new Service\Git($container['process'], $container['filesystem'], $container['style']);
         };
 
         $this['filesystem'] = function () {
@@ -66,15 +66,9 @@ class Container extends \Pimple\Container
         //
 
         $this['github'] = function (Container $container) {
-            $gitHub = new ThirdParty\GitHub(
-                $container['guzzle'],
-                $container['config']->getOrFail(['github', 'username']),
-                $container['config']->getOrFail(['github', 'api_token'])
+            return new ThirdParty\GitHub(
+                $container['guzzle'], $container['config']->getOrFail(['github', 'api_token'])
             );
-
-            $gitHub->autoConfigure($container['git']);
-
-            return $gitHub;
         };
     }
 }

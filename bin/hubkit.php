@@ -20,14 +20,13 @@ require __DIR__.'/../vendor/autoload.php';
 \Symfony\Component\Debug\DebugClassLoader::enable();
 
 if (!file_exists(__DIR__.'/../config.php') && file_exists(__DIR__.'/../config.php.dist')) {
-    throw new \InvalidArgumentException(
-        sprintf('Please copy "%s.dist" to "%$1s" and change the API token.', __DIR__.'/../config.php')
-    );
+    echo sprintf('Please copy "%s.dist" to "%1$s" and change the API token.', __DIR__.'/../config.php');
+    exit(1);
 }
 
 $parameters = [];
 $parameters['current_dir'] = getcwd().'/';
-$parameters['config_dir'] = dirname(__DIR__).'/config.php';
+$parameters['config_file'] = dirname(__DIR__).'/config.php';
 
 $cli = new \Webmozart\Console\ConsoleApplication(new HubKitApplicationConfig(new Container($parameters)));
 $cli->run();

@@ -22,25 +22,18 @@ use HubKit\Service\Git;
 final class GitHub
 {
     private $client;
-
-    private $username;
-    private $apiToken;
-
     private $organization;
     private $repository;
 
-    public function __construct(Client $client, string $username, string $apiToken)
+    public function __construct(Client $client, string $apiToken)
     {
         $this->client = new GitHubClient(new GuzzleClientAdapter());
         $this->client->authenticate($apiToken, null, GitHubClient::AUTH_HTTP_TOKEN);
-
-        $this->username = $username;
-        $this->apiToken = $apiToken;
     }
 
     public function autoConfigure(Git $git)
     {
-        $repo = $git->getRemoteInfo('remote.upstream.url');
+        $repo = $git->getRemoteInfo('upstream');
 
         if ('' === $repo['org']) {
             throw new \RuntimeException('Remote "upstream" is missing, unable to configure GitHub gateway.');
@@ -59,14 +52,14 @@ final class GitHub
         $this->repository = $repository;
     }
 
-    public function isAuthenticated(): bool
+    public function isAuthenticated()
     {
-        return is_array($this->client->api('me')->show());
+        return is_array($this->client->currentUser()->show());
     }
 
     public function createRepo(string $organization, string $name, bool $public = true, bool $hasIssues = true)
     {
-        $repo = $this->client->api('repo');
+        $repo = $this->client->repo();
 
         return $repo->create(
             $name, // name
@@ -84,7 +77,7 @@ final class GitHub
 
     public function updateRepo(string $organization, string $name, array $values)
     {
-        $repo = $this->client->api('repo');
+        $repo = $this->client->repo();
 
         return $repo->update(
             $organization,
@@ -96,7 +89,7 @@ final class GitHub
     public function getIssues(array $parameters = [], int $limit = null)
     {
         $pager = new ResultPager($this->client);
-        $api = $this->client->api('issue');
+        $api = $this->client->issue();
         $perPage = $api->getPerPage();
 
         if (!$limit || $limit > 100) {
@@ -115,7 +108,7 @@ final class GitHub
             $api->setPerPage($limit);
 
             return $pager->fetch(
-                $this->client->api('issue'),
+                $this->client->issue(),
                 'all',
                 [
                     $this->organization,
@@ -130,7 +123,7 @@ final class GitHub
 
     public function updateIssue(int $id, array $parameters)
     {
-        $api = $this->client->api('issue');
+        $api = $this->client->issue();
 
         $api->update(
             $this->organization,
@@ -142,7 +135,7 @@ final class GitHub
 
     public function createComment(int $id, string $message)
     {
-        $api = $this->client->api('issue')->comments();
+        $api = $this->client->issue()->comments();
 
         $comment = $api->create(
             $this->organization,
@@ -159,7 +152,7 @@ final class GitHub
         $pager = new ResultPager($this->client);
 
         return $pager->fetchAll(
-            $this->client->api('issue')->comments(),
+            $this->client->issue()->comments(),
             'all',
             [
                 $this->organization,
@@ -171,7 +164,7 @@ final class GitHub
 
     public function getLabels(): array
     {
-        $api = $this->client->api('issue')->labels();
+        $api = $this->client->issue()->labels();
 
         return self::getValuesFromNestedArray(
             $api->all(
@@ -184,7 +177,7 @@ final class GitHub
 
     public function openPullRequest(string $base, string $head, string $subject, string $body)
     {
-        $api = $this->client->api('pull_request');
+        $api = $this->client->pullRequest();
 
         return $api->create(
             $this->organization,
@@ -200,7 +193,7 @@ final class GitHub
 
     public function getPullRequest(int $id)
     {
-        $api = $this->client->api('pull_request');
+        $api = $this->client->pullRequest();
 
         return $api->show(
             $this->organization,
@@ -211,14 +204,14 @@ final class GitHub
 
     public function getPullRequestUrl(int $id)
     {
-        return sprintf('%s/%s/%s/pull/%d', $this->domain, $this->organization, $this->repository, $id);
+        return sprintf('https://github.com/%s/%s/pull/%d', $this->organization, $this->repository, $id);
     }
 
     public function getCommitStatuses($org, $repo, $hash)
     {
         $pager = new ResultPager($this->client);
 
-        return $pager->fetchAll($this->client->api('repo')->statuses(), 'combined', [$org, $repo, $hash])['statuses'];
+        return $pager->fetchAll($this->client->repo()->statuses(), 'combined', [$org, $repo, $hash])['statuses'];
     }
 
     /**
@@ -226,7 +219,7 @@ final class GitHub
      */
     public function updatePullRequest($id, array $parameters)
     {
-        $api = $this->client->api('pull_request');
+        $api = $this->client->pullRequest();
 
         $api->update(
             $this->organization,
@@ -238,7 +231,7 @@ final class GitHub
 
     public function createRelease(string $name, string $body, $preRelease = false)
     {
-        $api = $this->client->api('repo')->releases();
+        $api = $this->client->repo()->releases();
 
         return $api->create(
             $this->organization,
@@ -255,7 +248,7 @@ final class GitHub
 
     public function publishRelease(string $name, int $id = null)
     {
-        $api = $this->client->api('repo')->releases();
+        $api = $this->client->repo()->releases();
 
         if (null === $id) {
             foreach ($api->all() as $release) {
@@ -265,7 +258,7 @@ final class GitHub
             }
         }
 
-        return $api->update(
+        return $api->edit(
             $this->organization,
             $this->repository,
             [

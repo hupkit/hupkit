@@ -63,6 +63,26 @@ final class Config
     }
 
     /**
+     * Returns a config value or throws an exception when config is missin.
+     *
+     * @param string|string[] $keys Single level key like 'profiles' or array-path
+     *                              like ['profiles', 'symfony-bundle']
+     *
+     * @return array|bool|float|int|string
+     */
+    public function getOrFail($keys)
+    {
+        $keys = (array) $keys;
+        $value = $this->get($keys, $invalid = new \stdClass());
+
+        if ($value === $invalid) {
+            throw new \InvalidArgumentException('Unable to find config "[%s]"', implode('][', $keys));
+        }
+
+        return $value;
+    }
+
+    /**
      * Returns the first none-null configuration value.
      *
      * @param string[]                    $keys    Array of single level keys like "adapters" or array-path

@@ -105,25 +105,6 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
         $this->addEventListener(
             ConsoleEvents::PRE_HANDLE,
             function (PreHandleEvent $event) {
-                // Set-up the IO for the Symfony Helper classes.
-                if (!isset($this->container['console_io'])) {
-                    $io = $event->getIO();
-                    $args = $event->getArgs();
-
-                    $input = new ArgsInput($args->getRawArgs(), $args);
-                    $input->setInteractive($io->isInteractive());
-
-                    $this->container['console_io'] = $io;
-                    $this->container['console_args'] = $args;
-                    $this->container['sf.console_input'] = $input;
-                    $this->container['sf.console_output'] = new IOOutput($io);
-                }
-            }
-        );
-
-        $this->addEventListener(
-            ConsoleEvents::PRE_HANDLE,
-            function (PreHandleEvent $event) {
                 if (in_array($name = $event->getCommand()->getName(), ['diagnose', 'help'], true)) {
                     return;
                 }
@@ -133,6 +114,8 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
                         sprintf('Command "%s" can only be executed from the root of a Git repository.', $name)
                     );
                 }
+
+                $this->container['github']->autoConfigure($this->container['git']);
             }
         );
 
@@ -152,25 +135,26 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
 //                })
             ->end()
 
-            ->beginCommand('profile')
+            ->beginCommand('diagnose')
                 ->setDescription('Manage the profiles of your project')
                 ->setHandler(function () {
-                    return new Handler\ProfileCommandHandler(
+                    return new Handler\DiagnoseHandler(
                         $this->container['style'],
-                        $this->container['profile_config_resolver'],
-                        $this->container['config']
+                        $this->container['config'],
+                        $this->container['git'],
+                        $this->container['github']
                     );
                 })
-
-                ->beginSubCommand('list')
-                    ->setHandlerMethod('handleList')
-                    ->markDefault()
-                ->end()
-
-                ->beginSubCommand('show')
-                    ->addArgument('name', Argument::OPTIONAL, 'The name of the profile')
-                    ->setHandlerMethod('handleShow')
-                ->end()
+//
+//                ->beginSubCommand('list')
+//                    ->setHandlerMethod('handleList')
+//                    ->markDefault()
+//                ->end()
+//
+//                ->beginSubCommand('show')
+//                    ->addArgument('name', Argument::OPTIONAL, 'The name of the profile')
+//                    ->setHandlerMethod('handleShow')
+//                ->end()
             ->end()
         ;
     }

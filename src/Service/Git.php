@@ -331,7 +331,7 @@ class Git
 
     public function getGitConfig(string $config, string $section = 'local', bool $all = false): string
     {
-        $process = $this->process->mustRun(
+        $process = $this->process->run(
             ['git', 'config', '--'.$section, '--'.($all ? 'get-all' : 'get'), $config]
         );
 
