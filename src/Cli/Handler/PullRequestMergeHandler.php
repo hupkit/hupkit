@@ -41,7 +41,7 @@ final class PullRequestMergeHandler implements RequiresGitRepository
         $this->github = $github;
     }
 
-    public function handleMerge(Args $args)
+    public function handle(Args $args)
     {
         $pr = $this->github->getPullRequest(
             $args->getArgument('number')
@@ -92,6 +92,7 @@ final class PullRequestMergeHandler implements RequiresGitRepository
 
         // XXX NTH Review status
 
+        $success = true;
         $labels = [
             'success' => '<fg=green> ✔ </>',
             'pending' => '<fg=yellow> ? </>',
@@ -99,41 +100,18 @@ final class PullRequestMergeHandler implements RequiresGitRepository
             'error' => '<fg=red> ! ️</>',
         ];
 
-        $success = true;
-        $rows = [];
+        $this->style->section('Pull request status');
 
         foreach ($status['statuses'] as $statusItem) {
             $label = explode('/', $statusItem['context']);
 
-            $rows[] = $labels[$statusItem['state']].($label[1] ?? $label[0]);
-            // XXX "description" show below status table
+            $this->style->writeln(' '.$labels[$statusItem['state']].'  '.($label[1] ?? $label[0]));
 
+            // XXX "description" show below status table
             if ($statusItem['state'] !== 'success') {
                 $success = false;
             }
         }
-
-        $this->style->section('Pull request status');
-
-        $elements = array_map(function ($element) {
-            return sprintf('  %s', $element);
-        }, $rows);
-
-        $this->style->writeln(array_map(function ($element) {
-            return sprintf('  %s', $element);
-        }, $rows));
-
-
-//        $table = new Table($this->style);
-//        $table->getStyle()
-//            ->setHorizontalBorderChar('')
-//            ->setVerticalBorderChar(' ')
-//            ->setCrossingChar(' ');
-//
-//        $table->setHeaders(['', '']);
-//        $table->setRows($rows);
-//        $table->render();
-//        $this->style->newLine();
 
         if (!$success) {
             $this->style->warning('One or more checks did not complete or failed. Merge with caution.');

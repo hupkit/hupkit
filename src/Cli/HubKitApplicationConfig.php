@@ -121,8 +121,8 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
         );
 
         $this
-            ->beginCommand('diagnose')
-                ->setDescription('Manage the profiles of your project')
+            ->beginCommand('self-diagnose')
+                ->setDescription('Run a self diagnoses of the HubKit application to find common problems')
                 ->setHandler(function () {
                     return new Handler\DiagnoseHandler(
                         $this->container['style'],
@@ -133,27 +133,23 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
                 })
             ->end()
 
-            ->beginCommand('repository')
-                ->setDescription('Manage the profiles of your project')
+            ->beginCommand('repo-create')
+                ->setDescription('Create a new empty GitHub repository. Wiki and Downloads are disabled by default')
+                ->addArgument('organization', Argument::REQUIRED, 'Organization holding the repository')
+                ->addArgument('full-name', Argument::REQUIRED, 'The user (org) and repository name. Eg. acme/my-repo')
+                ->addOption('no-issues', null, Option::BOOLEAN, 'Disable issues, when a global issue tracker is used')
+                ->addOption('private', null, Option::BOOLEAN, 'Create private repository (requires paid plan)')
                 ->setHandler(function () {
-                    return new Handler\RepositoryHandler(
+                    return new Handler\RepositoryCreateHandler(
                         $this->container['style'],
                         $this->container['git'],
                         $this->container['github']
                     );
                 })
-                ->beginSubCommand('create')
-                    ->setDescription('Create a new empty GitHub repository. Wiki and Downloads are disabled by default')
-                    ->addArgument('organization', Argument::REQUIRED, 'Organization holding the repository')
-                    ->addArgument('name', Argument::REQUIRED, 'The name of the repository')
-                    ->addOption('no-issues', null, Option::BOOLEAN, 'Disable issues, when a global issue tracker is used')
-                    ->addOption('private', null, Option::BOOLEAN, 'Create private repository (requires paid plan)')
-                    ->setHandlerMethod('handleCreate')
-                ->end()
             ->end()
 
-            ->beginCommand('take-issue')
-                ->setDescription('Manage the profiles of your project')
+            ->beginCommand('take')
+                ->setDescription('Take an issue to work on, checks out the issue as new branch')
                 ->addArgument('number', Argument::INTEGER, 'Number of the issue to take')
                 ->addOption('base', 'b', Option::STRING | Option::OPTIONAL_VALUE, 'Base branch', 'master')
                 ->setHandler(function () {
@@ -165,7 +161,12 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
                 })
             ->end()
 
-            ->beginCommand('pull-request')
+            ->beginCommand('merge')
+                ->setDescription('Merge a pull-request using the GitHub API')
+                ->addArgument('number', Argument::REQUIRED | Argument::INTEGER, 'The name of the repository')
+                ->addOption('squash', 's', Option::BOOLEAN, 'Squash the pull-request when merging')
+                ->addOption('thanks', null, Option::OPTIONAL_VALUE | Option::STRING, 'Thank you message, @author replaced with actual pr-author', 'Thank you @author')
+                ->setHandlerMethod('handleMerge')
                 ->setHandler(function () {
                     return new Handler\PullRequestMergeHandler(
                         $this->container['style'],
@@ -174,13 +175,6 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
                         $this->container['github']
                     );
                 })
-                ->beginSubCommand('merge')
-                    ->setDescription('Merge a pull-request using the GitHub API')
-                    ->addArgument('number', Argument::REQUIRED | Argument::INTEGER, 'The name of the repository')
-                    ->addOption('squash', 's', Option::BOOLEAN, 'Squash the pull-request when merging')
-                    ->addOption('thanks', null, Option::OPTIONAL_VALUE | Option::STRING, 'Thank you message, @author replaced with actual pr-author', 'Thank you @author')
-                    ->setHandlerMethod('handleMerge')
-                ->end()
             ->end()
         ;
     }

@@ -95,6 +95,8 @@ final class DiagnoseHandler
         if ($errors) {
             $this->style->section('Please fix the following errors');
             $this->style->listing($errors);
+        } else {
+            $this->style->success('All seems to be good.');
         }
     }
 

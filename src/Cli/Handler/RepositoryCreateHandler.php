@@ -18,7 +18,7 @@ use HubKit\ThirdParty\GitHub;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Webmozart\Console\Api\Args\Args;
 
-final class RepositoryHandler
+final class RepositoryCreateHandler
 {
     private $style;
     private $git;
@@ -31,7 +31,7 @@ final class RepositoryHandler
         $this->github = $github;
     }
 
-    public function handleCreate(Args $args)
+    public function handle(Args $args)
     {
         $repo = $this->github->createRepo(
             $args->getArgument('organization'),
