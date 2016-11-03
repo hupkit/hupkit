@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace HubKit;
 
 use GuzzleHttp\Client as GuzzleClient;
+use Http\Adapter\Guzzle6\Client as GuzzleClientAdapter;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 class Container extends \Pimple\Container
@@ -61,9 +62,7 @@ class Container extends \Pimple\Container
         //
 
         $this['github'] = function (Container $container) {
-            return new ThirdParty\GitHub(
-                $container['guzzle'], $container['config']->getOrFail(['github', 'api_token'])
-            );
+            return new ThirdParty\GitHub(new GuzzleClientAdapter($container['guzzle']), $container['config']);
         };
     }
 }

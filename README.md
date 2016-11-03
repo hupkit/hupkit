@@ -1,24 +1,26 @@
 Park-Manager HubKit
 ===================
 
-HubKit allows project(s) maintainers to easily manage there GitHub repositories.
+HubKit was created to ease the de development workflow of the Park-Manger project.
+In short HubKit allows project(s) maintainers to easily manage there GitHub repositories.
 
-Mass assign labels, merge pull-requests with preservation of all content (description and replies),
-and keep your repository labels and common files (README, LICENSE, styling configuration) in sync.
+* Take-on issues with ease.
+* Checkout an existing pull-request.
+* Merge pull-request with preservation of all information (description and replies).
+* Keep your repository labels and common files (README, LICENSE, styling configuration)
+  in sync.
+* Merge version branches without mistakes.
+* Create new releases with auto-generated changelog and without gaps in version numbers.
 
-If you are not using GitHub or want some more advanced take a look a [GushPHP](https://github.com/gushphp/gush).
-*HubKit was created as an lighter alternative, to suit the development workflow 
-of the Park-Manger project.*
-
-This tool is designed for project maintainers with a good knowledge of Git
-and GitHub.
+This tool is designed for project maintainers with a good knowledge of Git and GitHub.
+If you have some special needs please the contributing section below.
 
 **This project is still very young and in active development. Use at your own risk!.**
 
 Requirements
 ------------
 
-You need at least PHP 7.0, Git 2.10 and a GitHub account (no enterprise support).
+You need at least PHP 7.0, Git 2.10 and a GitHub account (enterprise possible).
 
 Installation
 ------------
@@ -47,9 +49,27 @@ composer install -o --no-dev
 ```
 
 Copy (don't rename) `config.php.dist` to `config.php`, and open it in your
-favorite editor. You need to change `YOUR-TOKEN` with a GitHub access-token.
+favorite editor.
 
-You can create a new token at: https://github.com/settings/tokens/new
+HubKit supports GitHub Enterprise, and therefor you can add multiple
+hub configurations by there hostname. The default one is `github.com`.
+
+```
+'github' => [
+    'github.com' => [ // hostname of the hub
+        'username' => '', // fill-in your github username
+        'api_token' => '', // fill-in the new GitHub authentication token (NOT YOUR PASSWORD!)
+    ],
+//    'hub.mycorp.com' => [ // hostname of your GitHub Enterprise installation
+//        'username' => '', // fill-in your github username
+//        'api_token' => '', // fill-in the new GitHub authentication token (NOT YOUR PASSWORD!)
+//    ],
+],
+```
+
+You need to change the value of `api_token` with a GitHub access-token.
+
+You can create a new token at: https://github.com/settings/tokens/new or (https://hub.mycorp.com/settings/tokens/new).
 See the instructions in `config.php` for required scopes (**DON'T SELECT ALL SCOPES!**)   
 
 Almost done. You'd properly want to create a command alias, rather then typing
@@ -60,7 +80,7 @@ Almost done. You'd properly want to create a command alias, rather then typing
 alias hk=~/.hubkit/bin/hubkit
 ```
 
-Now run `hk diagnose` to check if everything is working correctly.
+Now run `hk self-diagnose` to check if everything is working correctly.
 If all is green you are ready to use HubKit!
 
 ### Special note for Windows users

@@ -15,20 +15,26 @@ namespace HubKit\ThirdParty;
 
 use Github\Client as GitHubClient;
 use Github\ResultPager;
-use GuzzleHttp\Client;
-use Http\Adapter\Guzzle6\Client as GuzzleClientAdapter;
+use Http\Client\HttpClient;
+use HubKit\Config;
 use HubKit\Service\Git;
 
 final class GitHub
 {
+    const DEFAULT_HOST = 'github.com';
+
+    private $httpClient;
+    private $config;
+    /** @var GitHubClient */
     private $client;
     private $organization;
     private $repository;
+    private $hostname;
 
-    public function __construct(Client $client, string $apiToken)
+    public function __construct(HttpClient $client, Config $config)
     {
-        $this->client = new GitHubClient(new GuzzleClientAdapter($client));
-        $this->client->authenticate($apiToken, null, GitHubClient::AUTH_HTTP_TOKEN);
+        $this->httpClient = $client;
+        $this->config = $config;
     }
 
     public function autoConfigure(Git $git)
@@ -39,11 +45,24 @@ final class GitHub
             throw new \RuntimeException('Remote "upstream" is missing, unable to configure GitHub gateway.');
         }
 
-        if ('github.com' !== $repo['host']) {
-            throw new \RuntimeException('Remote "upstream" does not point to a GitHub repository.');
+        $this->initializeForHost($repo['host']);
+        $this->setRepository($repo['org'], $repo['repo']);
+    }
+
+    public function initializeForHost(string $hostname = null)
+    {
+        if (null === $hostname) {
+            $hostname = self::DEFAULT_HOST;
         }
 
-        $this->setRepository($repo['org'], $repo['repo']);
+        if (null === $this->client || $hostname !== $this->hostname) {
+            $apiToken = $this->config->getOrFail(['github', $hostname, 'api_token']);
+            $apiUrl = $this->config->get(['github', $hostname, 'api_url'], null);
+
+            $this->client = new GitHubClient($this->httpClient, null, $apiUrl);
+            $this->client->authenticate($apiToken, null, GitHubClient::AUTH_HTTP_TOKEN);
+            $this->hostname = $hostname;
+        }
     }
 
     public function setRepository(string $organization, string $repository)
@@ -55,6 +74,21 @@ final class GitHub
     public function isAuthenticated()
     {
         return is_array($this->client->currentUser()->show());
+    }
+
+    public function getHostname(): string
+    {
+        return $this->hostname;
+    }
+
+    public function getOrganization(): string
+    {
+        return $this->organization;
+    }
+
+    public function getRepository(): string
+    {
+        return $this->repository;
     }
 
     public function createRepo(string $organization, string $name, bool $public = true, bool $hasIssues = true)

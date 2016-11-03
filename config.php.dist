@@ -8,7 +8,14 @@ return [
     // Use a unique and distinct name like: `hubkit on computer-1 at 2016-11-01 14:54 CET`
     // with scopes: "repo, admin:repo_hook, user:email, read:gpg_key"
     'github' => [
-        'username' => '', // fill-in your github username
-        'api_token' => '', // fill-in the new GitHub authentication token (NOT YOUR PASSWORD!)
+        'github.com' => [ // hostname of the hub
+            'username' => '', // fill-in your github username
+            'api_token' => '', // fill-in the new GitHub authentication token (NOT YOUR PASSWORD!)
+        ],
+//        'hub.mycorp.com' => [ // hostname of your GitHub Enterprise installation
+//            'username' => '', // fill-in your github username
+//            'api_token' => '', // fill-in the new GitHub authentication token (NOT YOUR PASSWORD!)
+//            'api_url' => 'https://api.hub.mycorp.com/' // schema + hostname to API endpoint (excluding API version)
+//        ],
     ],
 ];

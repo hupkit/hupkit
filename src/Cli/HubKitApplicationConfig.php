@@ -116,6 +116,9 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
 
                 if ($isGit) {
                     $this->container['github']->autoConfigure($this->container['git']);
+                } else {
+                    $hostname = $event->getArgs()->isOptionSet('host') ? $event->getArgs()->getOption('host') : null;
+                    $this->container['github']->initializeForHost($hostname);
                 }
             }
         );
@@ -166,7 +169,6 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
                 ->addArgument('number', Argument::REQUIRED | Argument::INTEGER, 'The name of the repository')
                 ->addOption('squash', 's', Option::BOOLEAN, 'Squash the pull-request when merging')
                 ->addOption('thanks', null, Option::OPTIONAL_VALUE | Option::STRING, 'Thank you message, @author replaced with actual pr-author', 'Thank you @author')
-                ->setHandlerMethod('handleMerge')
                 ->setHandler(function () {
                     return new Handler\PullRequestMergeHandler(
                         $this->container['style'],
