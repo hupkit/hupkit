@@ -147,11 +147,6 @@ your own needs.
 *A source fork is nothing more then cloning the repository and then
 creating a new GitHub repository, rather then using the "Fork button".*
 
-Credits
--------
-
-This project contains code from the [GushPHP](https://github.com/gushphp/gush) project.
-
 License
 -------
 
