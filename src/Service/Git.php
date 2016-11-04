@@ -90,7 +90,7 @@ class Git
 
     public function getActiveBranchName(): string
     {
-        $activeBranch = $this->process->mustRun('git rev-parse --abbrev-ref HEAD')->getOutput();
+        $activeBranch = trim($this->process->mustRun('git rev-parse --abbrev-ref HEAD')->getOutput());
 
         if ('HEAD' === $activeBranch) {
             throw new \RuntimeException(
