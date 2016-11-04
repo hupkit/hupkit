@@ -4,18 +4,22 @@ Park-Manager HubKit
 HubKit was created to ease the de development workflow of the Park-Manger project.
 In short HubKit allows project(s) maintainers to easily manage there GitHub repositories.
 
+Features
+--------
+
 * Take-on issues with ease.
 * Checkout an existing pull-request.
 * Merge pull-request with preservation of all information (description and replies).
-* Keep your repository labels and common files (README, LICENSE, styling configuration)
-  in sync.
+* Keep your repository labels and common files (README, LICENSE, styling configuration) in sync.
 * Merge version branches without mistakes.
-* Create new releases with auto-generated changelog and without gaps in version numbers.
+* Create new releases with auto-generated changelog, and without gaps in version numbers.
+* Create security-patch pull-requests with a single command, and optionally automatically
+  merge them.
 
 This tool is designed for project maintainers with a good knowledge of Git and GitHub.
 If you have some special needs please the contributing section below.
 
-**This project is still very young and in active development. Use at your own risk!.**
+**This project is still very young and in active development. Don't use it yet! Please wait :no_good:.**
 
 Requirements
 ------------
