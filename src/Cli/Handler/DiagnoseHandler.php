@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace HubKit\Cli\Handler;
 
 use HubKit\Config;
+use HubKit\Helper\StatusTableRenderer;
 use HubKit\Service\Git;
 use HubKit\ThirdParty\GitHub;
 use Symfony\Component\Console\Helper\Table;
@@ -52,18 +53,18 @@ final class DiagnoseHandler
     {
         $this->style->title('HubKit diagnoses');
 
-        $result = [];
+        $rows = [];
         $errors = [];
 
-        $result[] = $this->testConfiguration('Git user.name configured', function () {
+        $rows[] = $this->testConfiguration('Git user.name configured', function () {
             return '' !== (string) $this->git->getGitConfig('user.name', 'global');
         }, $errors);
 
-        $result[] = $this->testConfiguration('Git user.email configured', function () {
+        $rows[] = $this->testConfiguration('Git user.email configured', function () {
             return '' !== (string) $this->git->getGitConfig('user.email', 'global');
         }, $errors);
 
-        $result[] = $this->testConfiguration('Git user.signingkey configured', function () {
+        $rows[] = $this->testConfiguration('Git user.signingkey configured', function () {
             if ('' === (string) $this->git->getGitConfig('user.signingkey', 'global')) {
                 return 'user.signingkey must be configured if you want to create a new release';
             }
@@ -71,30 +72,18 @@ final class DiagnoseHandler
             return true;
         }, $errors);
 
-        $this->testGitHubConfigurations($result, $errors);
+        $this->testGitHubConfigurations($rows, $errors);
 
-        $table = new Table($this->style);
-        $table->getStyle()
-            ->setHorizontalBorderChar('-')
-            ->setVerticalBorderChar(' ')
-            ->setCrossingChar(' ')
-        ;
-
-        $table->setHeaders(['Item', 'Status']);
-        $table->setRows($result);
-
-        $table->render();
-        $this->style->newLine();
+        StatusTableRenderer::renderTable($this->style, $rows);
 
         if ($errors) {
-            $this->style->section('Please fix the following errors');
-            $this->style->listing($errors);
+            $this->style->error('Please fix the reported errors.');
         } else {
             $this->style->success('All seems to be good.');
         }
     }
 
-    private function testGitHubConfigurations(array &$result, array &$errors)
+    private function testGitHubConfigurations(array &$result, &$errors)
     {
         foreach ($this->config->get('github', []) as $hostname => $authentication) {
             $this->github->initializeForHost($hostname);
@@ -113,18 +102,16 @@ final class DiagnoseHandler
         }
     }
 
-    private function testConfiguration(string $label, \Closure $expectation, array &$errors)
+    private function testConfiguration(string $label, \Closure $expectation, &$errors)
     {
         $result = $expectation();
 
         if (true === $result) {
-            return [$label, '<fg=green>OK</>'];
+            return [$label, StatusTableRenderer::renderLabel('success'), ''];
         }
 
-        if ('' !== (string) $result) {
-            $errors[] = $result;
-        }
+        $errors = true;
 
-        return [$label, '<fg=red>FAIL</>'];
+        return [$label, StatusTableRenderer::renderLabel('failure'), wordwrap((string) $result, 38)];
     }
 }
