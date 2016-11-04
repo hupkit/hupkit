@@ -234,15 +234,28 @@ final class GitHub
         );
     }
 
-    public function getPullRequest(int $id)
+    public function getPullRequest(int $id, bool $withLabels = false)
     {
         $api = $this->client->pullRequest();
-
-        return $api->show(
+        $pr = $api->show(
             $this->organization,
             $this->repository,
             $id
         );
+
+        // Still better then BitBucket...
+        if ($withLabels && !isset($pr['labels']) ) {
+           $api = $this->client->issues();
+            $issue = $api->show(
+                $this->organization,
+                $this->repository,
+                $id
+            );
+
+            $pr['labels'] = $issue['labels'];
+        }
+
+        return $pr;
     }
 
     public function getPullRequestUrl(int $id)
