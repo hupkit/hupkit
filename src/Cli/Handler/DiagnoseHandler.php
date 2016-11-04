@@ -71,13 +71,7 @@ final class DiagnoseHandler
             return true;
         }, $errors);
 
-        $result[] = $this->testConfiguration('GitHub authentication', function () {
-            try {
-                return $this->github->isAuthenticated();
-            } catch (\Exception $e) {
-                return get_class($e).': '.$e->getMessage();
-            }
-        }, $errors);
+        $this->testGitHubConfigurations($result, $errors);
 
         $table = new Table($this->style);
         $table->getStyle()
@@ -97,6 +91,25 @@ final class DiagnoseHandler
             $this->style->listing($errors);
         } else {
             $this->style->success('All seems to be good.');
+        }
+    }
+
+    private function testGitHubConfigurations(array &$result, array &$errors)
+    {
+        foreach ($this->config->get('github', []) as $hostname => $authentication) {
+            $this->github->initializeForHost($hostname);
+
+            $result[] = $this->testConfiguration(
+                sprintf('GitHub "%s" authentication', $hostname),
+                function () {
+                    try {
+                        return $this->github->isAuthenticated();
+                    } catch (\Exception $e) {
+                        return get_class($e).': '.$e->getMessage();
+                    }
+                },
+                $errors
+            );
         }
     }
 
