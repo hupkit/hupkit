@@ -14,10 +14,9 @@ declare(strict_types=1);
 namespace HubKit\Cli\Handler;
 
 use HubKit\Config;
-use HubKit\Helper\StatusTableRenderer;
+use HubKit\Helper\StatusTable;
 use HubKit\Service\Git;
 use HubKit\ThirdParty\GitHub;
-use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Webmozart\Console\Api\Args\Args;
 use Webmozart\Console\Api\IO\IO;
@@ -53,65 +52,93 @@ final class DiagnoseHandler
     {
         $this->style->title('HubKit diagnoses');
 
-        $rows = [];
-        $errors = [];
+        $table = new StatusTable($this->style);
 
-        $rows[] = $this->testConfiguration('Git user.name configured', function () {
-            return '' !== (string) $this->git->getGitConfig('user.name', 'global');
-        }, $errors);
+        $this->testRequiredGitConfig($table, 'user.name');
+        $this->testRequiredGitConfig($table, 'user.email');
+        $this->testOptionalGitConfig(
+            $table,
+            'user.signingkey',
+            'Must be configured for the `release` command'
+        );
+        $this->testOptionalGitConfig(
+            $table,
+            'gpg.program',
+            'No gpg program configured. Must be configured for the `release` command'
+        );
+        $this->testAdvisedGitConfigValue(
+            $table,
+            'commit.gpgsign',
+            'true',
+            'Commit signing is not enabled. Set "commit.gpgsign" to true'
+        );
 
-        $rows[] = $this->testConfiguration('Git user.email configured', function () {
-            return '' !== (string) $this->git->getGitConfig('user.email', 'global');
-        }, $errors);
+        if (defined('PHP_WINDOWS_VERSION_MAJOR')) {
+            $this->testAdvisedGitConfigValue(
+                $table,
+                'core.eol',
+                'lf',
+                'This is known to cause problems on Windows. Should be set to "lf", is "%s"'
+            );
+        }
 
-        $rows[] = $this->testConfiguration('Git user.signingkey configured', function () {
-            if ('' === (string) $this->git->getGitConfig('user.signingkey', 'global')) {
-                return 'user.signingkey must be configured if you want to create a new release';
-            }
+        $this->testGitHubConfigurations($table);
+        $table->render();
 
-            return true;
-        }, $errors);
-
-        $this->testGitHubConfigurations($rows, $errors);
-
-        StatusTableRenderer::renderTable($this->style, $rows);
-
-        if ($errors) {
+        if ($table->hasStatus('error')) {
             $this->style->error('Please fix the reported errors.');
         } else {
             $this->style->success('All seems to be good.');
         }
     }
 
-    private function testGitHubConfigurations(array &$result, &$errors)
+    private function testGitHubConfigurations(StatusTable $table)
     {
         foreach ($this->config->get('github', []) as $hostname => $authentication) {
-            $this->github->initializeForHost($hostname);
+            $label = sprintf('GitHub "%s" authentication', $hostname);
 
-            $result[] = $this->testConfiguration(
-                sprintf('GitHub "%s" authentication', $hostname),
-                function () {
-                    try {
-                        return $this->github->isAuthenticated();
-                    } catch (\Exception $e) {
-                        return get_class($e).': '.$e->getMessage();
-                    }
-                },
-                $errors
-            );
+            try {
+                $this->github->initializeForHost($hostname);
+                $table->addRow($label, $this->github->isAuthenticated() ? 'success' : 'failure');
+            } catch (\Exception $e) {
+                $table->addRow($label, 'failure', get_class($e).': '.$e->getMessage());
+            }
         }
     }
 
-    private function testConfiguration(string $label, \Closure $expectation, &$errors)
+    private function testRequiredGitConfig(StatusTable $table, string $config)
     {
-        $result = $expectation();
+        $result = (string) $this->git->getGitConfig($config, 'global');
+        $label = sprintf('Git "%s" configured', $config);
 
-        if (true === $result) {
-            return [$label, StatusTableRenderer::renderLabel('success'), ''];
+        if ('' !== $result) {
+            $table->addRow($label, 'success', $result);
+        } else {
+            $table->addRow($label, 'failure', sprintf('Missing "%s" in global Git config', $config));
         }
+    }
 
-        $errors = true;
+    private function testAdvisedGitConfigValue(StatusTable $table, string $config, string $expected, string $message)
+    {
+        $result = (string) $this->git->getGitConfig($config, 'global');
+        $label = sprintf('Git "%s" configured', $config);
 
-        return [$label, StatusTableRenderer::renderLabel('failure'), wordwrap((string) $result, 38)];
+        if ($expected === $result) {
+            $table->addRow($label, 'success', $result);
+        } else {
+            $table->addRow($label, 'warning', strpos($message, '%s') !== false ? sprintf($message, $result) : $message);
+        }
+    }
+
+    private function testOptionalGitConfig(StatusTable $table, string $config, string $message)
+    {
+        $result = (string) $this->git->getGitConfig($config, 'global');
+        $label = sprintf('Git "%s" configured', $config);
+
+        if ('' !== $result) {
+            $table->addRow($label, 'success', $result);
+        } else {
+            $table->addRow($label, 'warning', $message);
+        }
     }
 }
