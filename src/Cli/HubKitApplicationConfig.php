@@ -127,7 +127,7 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
             ->beginCommand('self-diagnose')
                 ->setDescription('Run a self diagnoses of the HubKit application to find common problems')
                 ->setHandler(function () {
-                    return new Handler\DiagnoseHandler(
+                    return new Handler\SelfDiagnoseHandler(
                         $this->container['style'],
                         $this->container['config'],
                         $this->container['git'],
