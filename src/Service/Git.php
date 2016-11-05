@@ -185,6 +185,23 @@ class Git
         throw new \RuntimeException(sprintf('Invalid list of local branches found while searching for "%s"', $branch));
     }
 
+    public function deleteRemoteBranch(string $remote, string $ref)
+    {
+        $this->process->mustRun(['git', 'push', $remote, ':'.$ref]);
+    }
+
+    public function deleteBranch(string $name, $allowFailure = false)
+    {
+        if ($allowFailure) {
+            $this->process->run(
+                ['git', 'branch', '-d', $name],
+                sprintf('Could not delete branch "%s", not fully merged?.', $name)
+            );
+        } else {
+            $this->process->mustRun(['git', 'branch', '-d', $name]);
+        }
+    }
+
     /**
      * Merge a branch with a commit log in the merge message.
      *
@@ -218,7 +235,7 @@ class Git
             $commitHash,
         ];
 
-        $this->process->run($commands, true);
+        $this->process->run($commands, 'Adding git notes failed.');
     }
 
     public function pushToRemote(string $remote, string $ref, bool $setUpstream = false, bool $force = false)
@@ -327,6 +344,28 @@ class Git
                 'Push is prohibited for this operation. Create a new branch and do a `git reset --hard`.'
             );
         }
+    }
+
+    public function setGitConfig(string $config, $value, bool $overwrite = false, string $section = 'local')
+    {
+        if (!$overwrite && '' !== (string) $this->getGitConfig($config, $section, $value)) {
+            throw new \RuntimeException(
+                sprintf(
+                    'Unable to set git config "%s" at %s, because the value is already set.',
+                    $config,
+                    $section
+                )
+            );
+        }
+
+        $this->process->mustRun(
+            sprintf(
+                'git config "%s" "%s" --%s',
+                $config,
+                $value,
+                $section
+            )
+        );
     }
 
     public function getGitConfig(string $config, string $section = 'local', bool $all = false): string

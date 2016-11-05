@@ -30,6 +30,7 @@ final class GitHub
     private $organization;
     private $repository;
     private $hostname;
+    private $username;
 
     public function __construct(HttpClient $client, Config $config)
     {
@@ -57,6 +58,7 @@ final class GitHub
 
         if (null === $this->client || $hostname !== $this->hostname) {
             $apiToken = $this->config->getOrFail(['github', $hostname, 'api_token']);
+            $this->username = $this->config->getOrFail(['github', $hostname, 'username']);
             $apiUrl = $this->config->get(['github', $hostname, 'api_url'], null);
 
             $this->client = new GitHubClient($this->httpClient, null, $apiUrl);
@@ -89,6 +91,11 @@ final class GitHub
     public function getRepository(): string
     {
         return $this->repository;
+    }
+
+    public function getAuthUsername(): string
+    {
+        return $this->username;
     }
 
     public function createRepo(string $organization, string $name, bool $public = true, bool $hasIssues = true)
@@ -263,11 +270,27 @@ final class GitHub
         return sprintf('https://github.com/%s/%s/pull/%d', $this->organization, $this->repository, $id);
     }
 
-    public function getCommitStatuses($org, $repo, $hash): array
+    public function getCommitStatuses(string $org, string $repo, string $hash): array
     {
         $pager = new ResultPager($this->client);
 
         return $pager->fetchAll($this->client->repo()->statuses(), 'combined', [$org, $repo, $hash]);
+    }
+
+    public function getCommits(string $org, string $repo, string $base, string $head): array
+    {
+        $pager = new ResultPager($this->client);
+
+        return $pager->fetchAll(
+            $this->client->repo()->commits(),
+            'compare',
+            [
+                $org,
+                $repo,
+                $base,
+                $head
+            ]
+        )['commits'];
     }
 
     public function updatePullRequest($id, array $parameters)

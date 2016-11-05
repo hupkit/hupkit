@@ -165,10 +165,28 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
             ->end()
 
             ->beginCommand('merge')
-                ->setDescription('Merge a pull-request using the GitHub API')
-                ->addArgument('number', Argument::REQUIRED | Argument::INTEGER, 'The name of the repository')
-                ->addOption('squash', 's', Option::BOOLEAN, 'Squash the pull-request when merging')
-                ->addOption('thanks', null, Option::OPTIONAL_VALUE | Option::STRING, 'Thank you message, @author replaced with actual pr-author', 'Thank you @author')
+                ->setDescription(
+                    <<<'DESC'
+Merge a pull request with preservation of the original title/description and comments.
+
+Use the `--squash` option if you want to squash the commits before merging.
+
+After merging the pull request your local branch (when existent) is automatically
+updated, unless you have uncommitted changes. Use the `--no-pull` option to skip.
+
+Unless you are merging your own pull request a comment is given to thank the
+author(s) for there contribution. Use the `--pat` option to use a custom message,
+or `--no-pat` skip this step.
+
+If you are merging a your own pull-request the source branch can be automatically
+removed (unless `--squash` was given). You will be prompted about before deletion.
+DESC
+                )
+                ->addArgument('number', Argument::REQUIRED | Argument::INTEGER, 'The number of the pull request to merge')
+                ->addOption('squash', null, Option::BOOLEAN, 'Squash the pull request before merging')
+                ->addOption('no-pull', null, Option::BOOLEAN, 'Skip pulling changes to your local branch')
+                ->addOption('pat', null, Option::OPTIONAL_VALUE | Option::STRING, 'Thank you message, @author will be replaced with pr author(s)', 'Thank you @author')
+                ->addOption('no-pat', null, Option::NO_VALUE | Option::BOOLEAN, 'Skip thank you message, cannot be used in combination with --pat')
                 ->setHandler(function () {
                     return new Handler\PullRequestMergeHandler(
                         $this->container['style'],
