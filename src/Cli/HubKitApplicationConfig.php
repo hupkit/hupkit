@@ -196,6 +196,16 @@ DESC
                     );
                 })
             ->end()
+
+            ->beginCommand('branch-alias')
+                ->setDescription('Set/get the "master" branch alias.')
+                ->addArgument('alias', Argument::OPTIONAL | Argument::STRING, 'New alias to assign (omit to get the current alias)')
+                ->setHandler(function () {
+                    return new Handler\BranchAliasHandler(
+                        $this->container['git']
+                    );
+                })
+            ->end()
         ;
     }
 }
