@@ -200,7 +200,7 @@ final class MergeHandler extends GitBaseHandler
             [
                 'No branch-alias found for "master", please provide an alias.',
                 'This should be the version the master will become.',
-                'If the last release is 2.1 the next will be eg. 2.2 or 3.0.'
+                'If the last release is 2.1 the next will be eg. 2.2 or 3.0.',
             ]
         );
 
@@ -218,7 +218,7 @@ final class MergeHandler extends GitBaseHandler
         $this->style->note(
             [
                 'Branch-alias is stored for feature reference.',
-                'You can change this any time using the `branch-alias` command.'
+                'You can change this any time using the `branch-alias` command.',
             ]
         );
 

@@ -251,8 +251,8 @@ final class GitHub
         );
 
         // Still better then BitBucket...
-        if ($withLabels && !isset($pr['labels']) ) {
-           $api = $this->client->issues();
+        if ($withLabels && !isset($pr['labels'])) {
+            $api = $this->client->issues();
             $issue = $api->show(
                 $this->organization,
                 $this->repository,
@@ -288,7 +288,7 @@ final class GitHub
                 $org,
                 $repo,
                 $base,
-                $head
+                $head,
             ]
         )['commits'];
     }
