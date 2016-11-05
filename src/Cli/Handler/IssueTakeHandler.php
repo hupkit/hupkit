@@ -13,28 +13,15 @@ declare(strict_types=1);
 
 namespace HubKit\Cli\Handler;
 
-use HubKit\Cli\RequiresGitRepository;
-use HubKit\Service\Git;
 use HubKit\StringUtil;
-use HubKit\ThirdParty\GitHub;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Webmozart\Console\Api\Args\Args;
 
-final class IssueTakeHandler implements RequiresGitRepository
+final class IssueTakeHandler extends GitBaseHandler
 {
-    private $style;
-    private $git;
-    private $github;
-
-    public function __construct(SymfonyStyle $style, Git $git, GitHub $github)
-    {
-        $this->style = $style;
-        $this->git = $git;
-        $this->github = $github;
-    }
-
     public function handle(Args $args)
     {
+        $this->informationHeader();
+
         $issue = $this->github->getIssue(
             $args->getArgument('number')
         );
