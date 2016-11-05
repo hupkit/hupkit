@@ -156,7 +156,7 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
                 ->addArgument('number', Argument::INTEGER, 'Number of the issue to take')
                 ->addOption('base', 'b', Option::STRING | Option::OPTIONAL_VALUE, 'Base branch', 'master')
                 ->setHandler(function () {
-                    return new Handler\IssueTakeHandler(
+                    return new Handler\TakeHandler(
                         $this->container['style'],
                         $this->container['git'],
                         $this->container['github']
@@ -188,7 +188,7 @@ DESC
                 ->addOption('pat', null, Option::OPTIONAL_VALUE | Option::STRING, 'Thank you message, @author will be replaced with pr author(s)', 'Thank you @author')
                 ->addOption('no-pat', null, Option::NO_VALUE | Option::BOOLEAN, 'Skip thank you message, cannot be used in combination with --pat')
                 ->setHandler(function () {
-                    return new Handler\PullRequestMergeHandler(
+                    return new Handler\MergeHandler(
                         $this->container['style'],
                         $this->container['git'],
                         $this->container['config'],

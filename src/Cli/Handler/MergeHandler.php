@@ -24,7 +24,7 @@ use Webmozart\Console\Adapter\ArgsInput;
 use Webmozart\Console\Api\Args\Args;
 use Webmozart\Console\Api\IO\IO;
 
-final class PullRequestMergeHandler extends GitBaseHandler
+final class MergeHandler extends GitBaseHandler
 {
     private $config;
 

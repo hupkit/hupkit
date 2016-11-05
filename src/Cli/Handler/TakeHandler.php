@@ -16,7 +16,7 @@ namespace HubKit\Cli\Handler;
 use HubKit\StringUtil;
 use Webmozart\Console\Api\Args\Args;
 
-final class IssueTakeHandler extends GitBaseHandler
+final class TakeHandler extends GitBaseHandler
 {
     public function handle(Args $args)
     {
