@@ -206,6 +206,19 @@ DESC
                     );
                 })
             ->end()
+
+            ->beginCommand('changelog')
+                ->setDescription('Generate a changelog with all changes between commits')
+                ->addArgument('ref', Argument::OPTIONAL | Argument::STRING, 'Range reference as `base..head`')
+                ->setHandler(function () {
+                    return new Handler\ChangelogHandler(
+                        $this->container['style'],
+                        $this->container['git'],
+                        $this->container['github'],
+                        $this->container['process']
+                    );
+                })
+            ->end()
         ;
     }
 }

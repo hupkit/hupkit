@@ -104,7 +104,7 @@ class Git
 
     public function getLastTagOnBranch(string $ref = 'HEAD'): string
     {
-        return $this->process->mustRun(['git', 'describe', '--tags', '--abbrev=0', $ref])->getOutput();
+        return trim($this->process->mustRun(['git', 'describe', '--tags', '--abbrev=0', $ref])->getOutput());
     }
 
     /**
@@ -138,6 +138,7 @@ class Git
                 'git',
                 '--no-pager',
                 'log',
+                '--merges',
                 '--oneline',
                 '--no-color',
                 '--format=%H',
@@ -193,10 +194,7 @@ class Git
     public function deleteBranch(string $name, $allowFailure = false)
     {
         if ($allowFailure) {
-            $this->process->run(
-                ['git', 'branch', '-d', $name],
-                sprintf('Could not delete branch "%s", not fully merged?.', $name)
-            );
+            $this->process->run(['git', 'branch', '-d', $name], sprintf('Could not delete branch "%s".', $name));
         } else {
             $this->process->mustRun(['git', 'branch', '-d', $name]);
         }
