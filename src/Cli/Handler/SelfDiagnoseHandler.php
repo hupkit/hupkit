@@ -15,11 +15,10 @@ namespace HubKit\Cli\Handler;
 
 use HubKit\Config;
 use HubKit\Helper\StatusTable;
+use HubKit\Service\CliProcess;
 use HubKit\Service\Git;
 use HubKit\ThirdParty\GitHub;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Webmozart\Console\Api\Args\Args;
-use Webmozart\Console\Api\IO\IO;
 
 final class SelfDiagnoseHandler
 {
@@ -36,23 +35,37 @@ final class SelfDiagnoseHandler
      */
     private $github;
 
+    /**
+     * @var CliProcess
+     */
+    private $process;
+
     public function __construct(
         SymfonyStyle $style,
         Config $config,
         Git $git,
-        GitHub $github
+        GitHub $github,
+        CliProcess $process
     ) {
         $this->style = $style;
         $this->config = $config;
         $this->git = $git;
         $this->github = $github;
+        $this->process = $process;
     }
 
-    public function handle(Args $args, IO $io)
+    public function handle()
     {
         $this->style->title('HubKit diagnoses');
 
+        $version = $this->getGitVersion();
         $table = new StatusTable($this->style);
+
+        if (version_compare($version, '2.10.0', 'lt')) {
+            $table->addRow('Git version', 'failure', sprintf('Git version "%s" should be upgraded to at least 2.10.0', $version));
+        } else {
+            $table->addRow('Git version', 'success', $version);
+        }
 
         $this->testRequiredGitConfig($table, 'user.name');
         $this->testRequiredGitConfig($table, 'user.email');
@@ -80,6 +93,12 @@ final class SelfDiagnoseHandler
                 'lf',
                 'This is known to cause problems on Windows. Should be set to "lf", is "%s"'
             );
+        }
+
+        if (false !== $editor = getenv('EDITOR')) {
+            $table->addRow('EDITOR configured', 'success', $editor);
+        } else {
+            $table->addRow('EDITOR configured', 'warning', 'The EDITOR environment variable should be set');
         }
 
         $this->testGitHubConfigurations($table);
@@ -140,5 +159,15 @@ final class SelfDiagnoseHandler
         } else {
             $table->addRow($label, 'warning', $message);
         }
+    }
+
+    private function getGitVersion(): string
+    {
+        return explode(' ', trim($this->process->mustRun(
+                   'git --version',
+                   'Git is not installed or PATH is not properly configured.'
+               )->getOutput()
+           )
+        )[2];
     }
 }
