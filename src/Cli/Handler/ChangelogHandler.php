@@ -13,9 +13,8 @@ declare(strict_types=1);
 
 namespace HubKit\Cli\Handler;
 
-use HubKit\Service\CliProcess;
+use HubKit\Helper\ChangelogRenderer;
 use HubKit\Service\Git;
-use HubKit\StringUtil;
 use HubKit\ThirdParty\GitHub;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Webmozart\Console\Api\Args\Args;
@@ -23,26 +22,36 @@ use Webmozart\Console\Api\IO\IO;
 
 final class ChangelogHandler extends GitBaseHandler
 {
-    private $process;
+    private $renderer;
 
-    public function __construct(SymfonyStyle $style, Git $git, GitHub $github, CliProcess $process)
+    public function __construct(SymfonyStyle $style, Git $git, GitHub $github)
     {
         parent::__construct($style, $git, $github);
-        $this->process = $process;
+        $this->renderer = new ChangelogRenderer($git, $github);
     }
 
     public function handle(Args $args, IO $io)
     {
+        list($base, $head) = $this->resolveCommitRange($args);
+        $this->informationHeader($head);
+
+        if ($args->getOption('oneline')) {
+            $io->writeLine($this->renderer->renderChangelogOneLine($base, $head));
+        } else {
+            $io->writeLine($this->renderer->renderChangelogWithSections($base, $head, !$args->getOption('all')));
+        }
+    }
+
+    private function resolveCommitRange(Args $args): array
+    {
         if (!($ref = $args->getArgument('ref'))) {
             $base = $this->git->getLastTagOnBranch();
             $head = $this->git->getActiveBranchName();
-        } else {
-            list($base, $head) = $this->getRefRange($ref);
+
+            return [$base, $head];
         }
 
-        $this->informationHeader($head);
-
-        $io->writeLine($this->renderChangelog($base, $head, !$args->getOption('all')));
+        return $this->getRefRange($ref);
     }
 
     private function getRefRange(string $ref): array
@@ -52,102 +61,5 @@ final class ChangelogHandler extends GitBaseHandler
         }
 
         return $points;
-    }
-
-    // To be moved to ChangelogRenderer
-
-    private function renderChangelog(string $base, string $head, bool $skipEmptySections = true): string
-    {
-        $url = 'https://'.$this->github->getHostname().$this->github->getOrganization().'/'.$this->github->getRepository();
-        $changelog = '';
-
-        foreach ($this->getSections($base, $head) as $section => $items) {
-            if (!count($items)) {
-                if (!$skipEmptySections) {
-                    $changelog .= "### {$section}\n- nothing\n\n";
-                }
-
-                continue;
-            }
-
-            $changelog .= "### {$section}\n";
-
-            foreach ($items as $item) {
-                $changelog .= sprintf('- %s [#%d](%s/issues/%2$d)', $this->formatAuthorsInTitle($item['title']), $item['number'], $url)."\n";
-            }
-
-            $changelog .= "\n";
-        }
-
-        return $changelog;
-    }
-
-    private function formatAuthorsInTitle(string $title): string
-    {
-        $pos = mb_strrpos($title, '(');
-
-        return mb_substr($title, 0, $pos).
-            preg_replace(
-               '#([\w\d-_]+)#',
-               '[$1](https://'.$this->github->getHostname().'/$1)',
-               mb_substr($title, $pos)
-            )
-        ;
-    }
-
-    private function getSections(string $base, string $head): array
-    {
-        $sections = [
-            'Security' => [],
-            'Added' => '',
-            'Changed' => [],
-            'Deprecated' => [],
-            'Removed' => [],
-            'Fixed' => [],
-        ];
-
-        foreach ($this->git->getLogBetweenCommits($base, $head) as $commit) {
-            if (0 === stripos($commit['subject'], 'Merge pull request #') ||
-                !preg_match('/^(?P<category>\w+) #(?P<number>\d+) (?P<title>[^$]+)/', $commit['subject'], $matches)
-            ) {
-                continue;
-            }
-
-            $section = $this->getSectionForCommit($commit + $matches);
-            $sections[$section][] = $matches;
-        }
-
-        return $sections;
-    }
-
-    private function getSectionForCommit(array $commit): string
-    {
-        // Security can only ever be related about security.
-        if ('security' === $commit['category']) {
-            return 'Security';
-        }
-
-        list(, $labelsStr) = StringUtil::splitLines(ltrim($commit['message']));
-
-        $catToSection = [
-            'feature' => 'Added',
-            'refactor' => 'Changed',
-            'bug' => 'Fixed',
-        ];
-
-        // Detect labels eg. `labels: deprecation`
-        if (0 === strpos($labelsStr, 'labels: ')) {
-            $labels = array_map('trim', explode(', ', substr($labelsStr, 8)));
-
-            if (in_array('deprecation', $labels, true)) {
-                return 'Deprecated';
-            }
-
-            if (in_array('removed-deprecation', $labels, true)) {
-                return 'Removed';
-            }
-        }
-
-        return $catToSection[$commit['category']] ?? 'Changed';
     }
 }
