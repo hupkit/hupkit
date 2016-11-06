@@ -210,6 +210,7 @@ DESC
             ->beginCommand('changelog')
                 ->setDescription('Generate a changelog with all changes between commits')
                 ->addArgument('ref', Argument::OPTIONAL | Argument::STRING, 'Range reference as `base..head`')
+                ->addOption('all', null, Option::NO_VALUE | Option::BOOLEAN, 'Show all sections (including empty)')
                 ->setHandler(function () {
                     return new Handler\ChangelogHandler(
                         $this->container['style'],

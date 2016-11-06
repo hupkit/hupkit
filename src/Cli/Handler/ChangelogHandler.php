@@ -42,7 +42,7 @@ final class ChangelogHandler extends GitBaseHandler
 
         $this->informationHeader($head);
 
-        $io->writeLine($this->renderChangelog($base, $head));
+        $io->writeLine($this->renderChangelog($base, $head, !$args->getOption('all')));
     }
 
     private function getRefRange(string $ref): array
@@ -58,24 +58,41 @@ final class ChangelogHandler extends GitBaseHandler
 
     private function renderChangelog(string $base, string $head, bool $skipEmptySections = true): string
     {
-        $url = 'https://'.$this->github->getOrganization().'/'.$this->github->getRepository();
+        $url = 'https://'.$this->github->getHostname().$this->github->getOrganization().'/'.$this->github->getRepository();
         $changelog = '';
 
         foreach ($this->getSections($base, $head) as $section => $items) {
-            if ($skipEmptySections && !count($items)) {
+            if (!count($items)) {
+                if (!$skipEmptySections) {
+                    $changelog .= "### {$section}\n- nothing\n\n";
+                }
+
                 continue;
             }
 
-            $changelog .= '### '.$section."\n";
+            $changelog .= "### {$section}\n";
 
             foreach ($items as $item) {
-                $changelog .= sprintf('- %s [#%d](%s/issues/%2$d)', $item['title'], $item['number'], $url)."\n";
+                $changelog .= sprintf('- %s [#%d](%s/issues/%2$d)', $this->formatAuthorsInTitle($item['title']), $item['number'], $url)."\n";
             }
 
             $changelog .= "\n";
         }
 
         return $changelog;
+    }
+
+    private function formatAuthorsInTitle(string $title): string
+    {
+        $pos = mb_strrpos($title, '(');
+
+        return mb_substr($title, 0, $pos).
+            preg_replace(
+               '#([\w\d-_]+)#',
+               '[$1](https://'.$this->github->getHostname().'/$1)',
+               mb_substr($title, $pos)
+            )
+        ;
     }
 
     private function getSections(string $base, string $head): array
