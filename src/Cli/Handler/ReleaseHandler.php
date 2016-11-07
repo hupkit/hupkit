@@ -31,7 +31,14 @@ final class ReleaseHandler extends GitBaseHandler
      * * For historic reasons stability versions may have a hyphen or dot
      *   and is considered optional
      */
-    const VERSION_REGEX = '(?P<major>\d++)\.(?P<minor>\d++)(?:\.(?P<patch>\d++))?(?:[-.]?(?P<stability>beta|RC|alpha)(?:-?(?P<metaver>\d+))?)?';
+    const VERSION_REGEX = '(?P<major>\d++)\.(?P<minor>\d++)(?:\.(?P<patch>\d++))?(?:[-.]?(?P<stability>beta|RC|alpha|stable)(?:[.-]?(?P<metaver>\d+))?)?';
+
+    /**
+     * Stability indexes, higher means more stable.
+     *
+     * @var string[]
+     */
+    private static $stabilises = ['alpha', 'beta', 'rc', 'stable'];
 
     private $process;
 
@@ -91,7 +98,7 @@ final class ReleaseHandler extends GitBaseHandler
                         'major' => (int) $matches['major'],
                         'minor' => (int) $matches['minor'],
                         'patch' => (int) $matches['patch'],
-                        'stability' => $matches['stability'],
+                        'stability' => self::$stabilises[strtolower($matches['stability'] ?: 'stable')],
                         'metaver' => (int) $matches['metaver'],
                     ];
                 }
@@ -144,7 +151,35 @@ final class ReleaseHandler extends GitBaseHandler
             return $newVersion['minor'] - 1 === $current['minor'];
         }
 
-
-
+        return true;
     }
+
+//    private function isVersionContinues(array $versions, array $newVersion)
+//    {
+//        if (!isset($versions[$newVersion['major']])) {
+//            return isset($versions[$newVersion['major'] - 1]);
+//        }
+//
+//        $current = $versions[$newVersion['major']];
+//
+//        foreach (['minor', 'patch', 'stability', 'metaver'] as $k) {
+//            // Current version is newer
+//            if ($current[$k] > $newVersion[$k]) {
+//                return false;
+//            }
+//
+//            // New is higher, but is the increment correct?
+//            if ($newVersion[$k] > $current[$k]) {
+//                if ('stability' === $k) {
+//                    break; // Stability may jump higher
+//                }
+//
+//                return $newVersion[$k] - 1 === $current[$k];
+//            }
+//        }
+//
+//
+//
+//        return true;
+//    }
 }
