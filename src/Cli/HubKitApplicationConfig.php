@@ -223,6 +223,11 @@ DESC
                 })
             ->end()
 
+            ->beginCommand('release')
+                ->setDescription('Make a new release for the current branch')
+                ->addArgument('version', Argument::REQUIRED | Argument::STRING, 'Version to make')
+                ->addOption('edit', null, Option::NO_VALUE | Option::BOOLEAN, 'Show all sections (including empty)')
+                ->addOption('pre-release', null, Option::NO_VALUE | Option::BOOLEAN, 'Mark as pre-release (not production ready)')
                 ->setHandler(function () {
                     return new Handler\ChangelogHandler(
                         $this->container['style'],
