@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace HubKit\Cli\Handler;
 
+use Composer\Semver\Comparator;
 use HubKit\Service\CliProcess;
 use HubKit\Service\Git;
 use HubKit\StringUtil;
@@ -66,76 +67,83 @@ final class ReleaseHandler extends GitBaseHandler
             }
         }
 
-        $this->tagsToHighestVersion();
+        $this->getHighestVersions();
         // XXX check for gaps
     }
 
-    private function tagsToHighestVersion():void
+    private function getHighestVersions(): array
     {
-        $tags = array_map(
-            array_filter(
-                StringUtil::splitLines($this->process->mustRun('git tag --list')->getOutput()),
-                function (string $v) {
-                    // Don't match end so it's possible to detect build-metadata.
-                    if (preg_match('/^v?'.self::VERSION_REGEX.'/', $v, $matches)) {
-                        return [
-                            'full' => $v,
-                            'major' => (int) $matches['major'],
-                            'minor' => (int) $matches['minor'],
-                            'patch' => (int) $matches['patch'],
-                            'stability' => $matches['stability'],
-                            'metaver' => (int) $matches['metaver'],
-                        ];
-                    }
+        $tags = StringUtil::splitLines($this->process->mustRun('git tag --list')->getOutput());
+        usort($tags, function ($a, $b) {
+            if (Comparator::equalTo($a, $b)) {
+                return 0;
+            }
 
-                    return false;
+            return Comparator::lessThan($a, $b) ? -1 : 1;
+        });
+
+        $versions = array_map(
+            function (string $v) {
+                // Don't match end so it's possible to detect build-metadata.
+                if (preg_match('/^v?'.self::VERSION_REGEX.'/', $v, $matches)) {
+                    return [
+                        'full' => $v,
+                        'major' => (int) $matches['major'],
+                        'minor' => (int) $matches['minor'],
+                        'patch' => (int) $matches['patch'],
+                        'stability' => $matches['stability'],
+                        'metaver' => (int) $matches['metaver'],
+                    ];
                 }
-            )
+
+                return false;
+            },
+            $tags
         );
 
         // Keeps a list of all highest version.
         // As: major => [minor => x, patch => x, stability => vvv, metaver => x]
         // Any version higher then whats are already stored gets used.
-        $versions = [];
+        $resolvedVersions = [];
 
-        foreach ($tags as $tag) {
-            if (!$tag) {
+        foreach ($versions as $version) {
+            // None supported version detected.
+            if (!$version) {
                 continue;
             }
 
-            if (!isset($versions[$tag['major']])) {
-                $versions[$tag['major']] = $tag;
-
-                continue;
-            }
-
-            if ($tag['minor'] > $versions[$tag['major']]['minor']) {
-                $versions[$tag['major']] = $tag;
-
-                continue;
-            }
-
-            // Minor version is lower so ignore to simplify the process
-            if ($tag['minor'] < $versions[$tag['major']]['minor']) {
-                continue;
-            }
-
-            // Minor can only be equal now
-            if ($tag['patch'] > $versions[$tag['major']]['patch']) {
-                $versions[$tag['major']] = $tag;
-
-                continue;
-            }
-
-            // OK, major, minor are equal and patch is not higher.
-            // So now we need to check the stability.
-            // alpha < beta < RC.
-
-            if ('' === $tag['stability']) {
-                continue;
-            }
-
+            // As versions are sorted we can simple use the major as key.
+            // Any newer version will simple overwrite the old one!
+            $resolvedVersions[$version['major']] = $version;
         }
+
+        return $resolvedVersions;
+    }
+
+    private function isVersionContinues(array $versions, array $newVersion)
+    {
+        if (!isset($versions[$newVersion['major']])) {
+            return isset($versions[$newVersion['major'] - 1]);
+        }
+
+        $current = $versions[$newVersion['major']];
+
+        // Current version is newer
+        if ($current['minor'] > $newVersion['minor'] || $newVersion['minor'] < $current['minor']) {
+            return false;
+        }
+
+        // New minor is higher, but is the increment correct
+        if ($newVersion['minor'] > $current['minor']) {
+            return $newVersion['minor'] - 1 === $current['minor'];
+        }
+
+        // Minor is equal so now check the patch and stability
+
+        if ($newVersion['minor'] > $current['minor']) {
+            return $newVersion['minor'] - 1 === $current['minor'];
+        }
+
 
 
     }
