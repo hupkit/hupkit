@@ -229,7 +229,7 @@ DESC
                 ->addOption('edit', null, Option::NO_VALUE | Option::BOOLEAN, 'Show all sections (including empty)')
                 ->addOption('pre-release', null, Option::NO_VALUE | Option::BOOLEAN, 'Mark as pre-release (not production ready)')
                 ->setHandler(function () {
-                    return new Handler\ChangelogHandler(
+                    return new Handler\ReleaseHandler(
                         $this->container['style'],
                         $this->container['git'],
                         $this->container['github'],

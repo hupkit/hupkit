@@ -38,7 +38,7 @@ final class ReleaseHandler extends GitBaseHandler
      *
      * @var string[]
      */
-    private static $stabilises = ['alpha', 'beta', 'rc', 'stable'];
+    private static $stabilises = ['alpha' => 0, 'beta' => 1, 'rc' => 2, 'stable' => 3];
 
     private $process;
 
@@ -51,20 +51,22 @@ final class ReleaseHandler extends GitBaseHandler
     public function handle(Args $args, IO $io)
     {
         $this->informationHeader();
+
+        $io->writeLine($this->validateVersion($args->getArgument('version')));
     }
 
     private function validateVersion(string $version): string
     {
         if (!preg_match('/^'.self::VERSION_REGEX.'$/', $version, $matches)) {
             throw new \InvalidArgumentException(
-                'Invalid version format, expects an SemVer compatible version without prefix. '.
+                'Invalid version format, expects an SemVer compatible version without prefix or build-meta. '.
                 'Eg. "1.0.0", "1.0", "1.0" or "1.0.0-beta1", "1.0.0-beta-1"'
             );
         }
 
-        if ('' === $matches['patch']) {
-            $matches['patch'] = 0;
-        }
+        $matches['patch'] = $matches['patch'] ?? 0;
+        $matches['stability'] = $matches['stability'] ?? 'stable';
+        $matches['metaver'] = $matches['metaver'] ?? '0';
 
         foreach (['major', 'minor', 'patch', 'metaver'] as $v) {
             if (strlen($matches[$v]) > 1 && '0' === $matches[$v][0]) {
@@ -74,8 +76,29 @@ final class ReleaseHandler extends GitBaseHandler
             }
         }
 
-        $this->getHighestVersions();
-        // XXX check for gaps
+        $versions = $this->getHighestVersions();
+
+        if (!$this->isVersionContinues($versions, $matches)) {
+            $this->style->warning(
+                [
+                    'It appears there is gap compared to the last version.',
+                    'Please check your input or confirm is this intended.',
+                ]
+            );
+        }
+
+        if ('stable' !== strtolower($matches['stability'])) {
+            return sprintf(
+                '%d.%d.%d-%s%d',
+                (int) $matches['major'],
+                (int) $matches['minor'],
+                (int) $matches['patch'],
+                strtoupper($matches['stability']),
+                (int) $matches['mataver']
+            );
+        }
+
+        return sprintf('%d.%d.%d', (int) $matches['major'], (int) $matches['minor'], (int) $matches['patch']);
     }
 
     private function getHighestVersions(): array
@@ -94,12 +117,12 @@ final class ReleaseHandler extends GitBaseHandler
                 // Don't match end so it's possible to detect build-metadata.
                 if (preg_match('/^v?'.self::VERSION_REGEX.'/', $v, $matches)) {
                     return [
-                        'full' => $v,
+                        //'full' => $v,
                         'major' => (int) $matches['major'],
                         'minor' => (int) $matches['minor'],
                         'patch' => (int) $matches['patch'],
-                        'stability' => self::$stabilises[strtolower($matches['stability'] ?: 'stable')],
-                        'metaver' => (int) $matches['metaver'],
+                        'stability' => self::$stabilises[strtolower(($matches['stability'] ?? 'stable'))],
+                        'metaver' => (int) ($matches['metaver'] ?? 0),
                     ];
                 }
 
@@ -127,59 +150,71 @@ final class ReleaseHandler extends GitBaseHandler
         return $resolvedVersions;
     }
 
-    private function isVersionContinues(array $versions, array $newVersion)
+    private function isVersionContinues(array $versions, array $newVersion): bool
     {
+        if (!count($versions)) {
+            return true;
+        }
+
+        $newVersion = [
+            'major' => (int) $newVersion['major'],
+            'minor' => (int) $newVersion['minor'],
+            'patch' => (int) $newVersion['patch'],
+            'stability' => self::$stabilises[strtolower($newVersion['stability'])],
+            'metaver' => (int) $newVersion['metaver'],
+        ];
+
+        // No points exist for this major.
         if (!isset($versions[$newVersion['major']])) {
-            return isset($versions[$newVersion['major'] - 1]);
+            // Previous major version doesn't exist or minor/patch are not reset
+            if (0 !== $newVersion['minor'] ||
+                0 !== $newVersion['patch'] ||
+                !isset($versions[$newVersion['major'] - 1])
+            ) {
+                return false;
+            }
+
+            // Check if "unstable" version starts with meta-version 1
+            if ($newVersion['stability'] < 3 && 1 !== $newVersion['metaver']) {
+                return false;
+            }
+
+            return true;
         }
 
         $current = $versions[$newVersion['major']];
 
-        // Current version is newer
-        if ($current['minor'] > $newVersion['minor'] || $newVersion['minor'] < $current['minor']) {
+        foreach (['minor', 'patch', 'stability', 'metaver'] as $k) {
+            // Current version is newer
+            if ($current[$k] > $newVersion[$k]) {
+                return false;
+            }
+
+            // New is higher, but is the increment correct?
+            if ($newVersion[$k] > $current[$k]) {
+                if ('stability' === $k) {
+                    break; // Stability may jump higher
+                }
+
+                if ($newVersion[$k] - 1 !== $current[$k]) {
+                    return false;
+                }
+            }
+        }
+
+        // All seems good, but better check to be sure.
+        // The loop above doesn't check whether patch or metaver is reset after a minor increase.
+
+        // An increase in minor point must reset patch.
+        if (0 !== $newVersion['patch'] && $newVersion['minor'] > $current['minor']) {
             return false;
         }
 
-        // New minor is higher, but is the increment correct
-        if ($newVersion['minor'] > $current['minor']) {
-            return $newVersion['minor'] - 1 === $current['minor'];
-        }
-
-        // Minor is equal so now check the patch and stability
-
-        if ($newVersion['minor'] > $current['minor']) {
-            return $newVersion['minor'] - 1 === $current['minor'];
+        // An increase in stability point must reset metaver (unless stable).
+        if (1 !== $newVersion['patch'] && 3 < $newVersion['stability'] && $newVersion['stability'] > $current['stability']) {
+            return false;
         }
 
         return true;
     }
-
-//    private function isVersionContinues(array $versions, array $newVersion)
-//    {
-//        if (!isset($versions[$newVersion['major']])) {
-//            return isset($versions[$newVersion['major'] - 1]);
-//        }
-//
-//        $current = $versions[$newVersion['major']];
-//
-//        foreach (['minor', 'patch', 'stability', 'metaver'] as $k) {
-//            // Current version is newer
-//            if ($current[$k] > $newVersion[$k]) {
-//                return false;
-//            }
-//
-//            // New is higher, but is the increment correct?
-//            if ($newVersion[$k] > $current[$k]) {
-//                if ('stability' === $k) {
-//                    break; // Stability may jump higher
-//                }
-//
-//                return $newVersion[$k] - 1 === $current[$k];
-//            }
-//        }
-//
-//
-//
-//        return true;
-//    }
 }
