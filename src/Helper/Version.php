@@ -38,7 +38,7 @@ final class Version
      */
     private static $stabilises = ['alpha' => 0, 'beta' => 1, 'rc' => 2, 'stable' => 3];
 
-    private function __construct(int $major, int $minor, int $patch, int $stability, int $metaver)
+    private function __construct(int $major, int $minor, int $patch, int $stability, int $metaver = 0)
     {
         $this->major = $major;
         $this->minor = $minor;
@@ -79,6 +79,8 @@ final class Version
             );
         }
 
+        // Check for 0.x-stable (really?? who does this...)
+
         throw new \InvalidArgumentException(
             sprintf(
                 'Unable to parse version "%s" Expects an SemVer compatible version without build-metadata. '.
@@ -86,6 +88,53 @@ final class Version
                 $version
             )
         );
+    }
+
+    /**
+     * Returns a list of possible feature versions.
+     *
+     * * 1.0.0 -> [1.0.1, 1.1.0, 2.0.0-beta1, 2.0.0]
+     * * 1.0.1 -> [1.0.2, 1.2.0, 2.0.0-beta1, 2.0.0]
+     * * 1.1.0 -> [1.2.0, 1.2.0-beta1, 2.0.0-beta1, 2.0.0]
+     * * 1.0.0-beta1 -> [1.0.0-beta2, 1.0.0] (no minor or major increases)
+     * * 1.0.0-alpha1 -> [1.0.0-alpha2, 1.0.0-beta1, 1.0.0] (no minor or major increases)
+     *
+     * Note: The alpha stability-version increases are only considered for alpha releases,
+     * not others. 1.0.0 will never consider 2.0.0-alpha1, as alpha is reversed for pre
+     * 1.0.0-stable releases.
+     *
+     * @return Version[]
+     */
+    public function getNewVersionCandidates(): array
+    {
+        $candidates = [];
+
+        // (int $major, int $minor, int $patch, int $stability, int $metaver)
+
+        // New major release
+        $candidates[] = new Version($this->major + 1, 0, 0, 3);
+
+        // Alpha release, so pre 1.0.0-stable but after 0.x
+        
+
+        // Major is already listed, a new major leap 0.x -> 2.0 is prohibited.
+        if ($this->stability === 0) {
+            $candidates[] = new Version($this->major, $this->minor, 0, 0, $this->metaver + 1); // next alpha
+            $candidates[] = new Version($this->major, $this->minor, 0, 1, 1); // beta
+            $candidates[] = new Version($this->major, $this->minor, 0, 2, 2); // rc
+
+            // No future candidates considered.
+            return $candidates;
+        }
+
+        // beta release
+        if ($this->stability === 1) {
+            $candidates[] = new Version($this->major, 0, 0, 1, $this->metaver + 1); // next beta
+            $candidates[] = new Version($this->major, 0, 0, 1, 2); // rc
+        }
+
+
+        return $candidates;
     }
 
     public function equalTo(Version $second): bool
