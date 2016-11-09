@@ -42,7 +42,7 @@ final class VersionsValidator
                 continue;
             }
 
-            // Ue the highest version for this major
+            // Use the highest version for this major
             // And ignore others until there is another major version.
             if ((int) $matches['major'] !== $currentMajor) {
                 $version = Version::fromString($tag);
@@ -57,38 +57,42 @@ final class VersionsValidator
 
     /**
      * @param Version[] $versions
-     * @param Version   $newVersion
+     * @param Version   $new
      * @param array     $possibleVersions
      *
      * @return bool
      */
-    public static function isVersionContinues(array $versions, Version $newVersion, &$possibleVersions): bool
+    public static function isVersionContinues(array $versions, Version $new, &$possibleVersions): bool
     {
         if (!count($versions)) {
-            return $newVersion->minor !== 0 ||
-                   $newVersion->patch !== 0 ||
-                   (3 < $newVersion->stability && 1 !== $newVersion->metaver);
-        }
+            $possibleVersions = [
+                Version::fromString('0.1.0'),
+                Version::fromString('1.0.0-ALPHA1'),
+                Version::fromString('1.0.0-BETA1'),
+                Version::fromString('1.0.0'),
+            ];
+        } elseif (isset($versions[$new->major])) {
+            $possibleVersions = $versions[$new->major]->getNextVersionCandidates();
+        } else {
+            // No versions for this major, so look-back till we find an existing major version
+            $expectedMajor = $new->major;
 
-        // No points exist for this major.
-        if (!isset($versions[$newVersion->major])) {
-            // Previous major version doesn't exist or minor/patch are not reset
-            if (0 !== $newVersion->minor || 0 !== $newVersion->patch || !isset($versions[$newVersion->major - 1])) {
-                return false;
+            while (!isset($versions[$expectedMajor]) && $expectedMajor > 0) {
+                --$expectedMajor;
             }
 
-            // Check if "unstable" version starts with meta-version 1
-            if ($newVersion->stability < 3 && 1 !== $newVersion->metaver) {
-                return false;
-            }
+            // Actually need the version *after* the existing one.
+            ++$expectedMajor;
 
-            return true;
+            $possibleVersions = [
+                Version::fromString($expectedMajor.'.0.0-ALPHA1'),
+                Version::fromString($expectedMajor.'.0.0-BETA1'),
+                Version::fromString($expectedMajor.'.0.0'),
+            ];
         }
-
-        $possibleVersions = $versions[$newVersion->major]->getNextVersionCandidates();
 
         foreach ($possibleVersions as $possibleVersion) {
-            if ($possibleVersion->equalTo($newVersion)) {
+            if ($possibleVersion->equalTo($new)) {
                 return true;
             }
         }
