@@ -19,9 +19,6 @@ install:
     - export SYMFONY_DEPRECATIONS_HELPER=strict
     - export COMPOSER_ROOT_VERSION=dev-master
     - travis_retry composer update --no-interaction
-    - if [ "$DEPENDENCIES" == "dev" ]; then perl -pi -e 's/^}$/,"minimum-stability":"dev"}/' composer.json; fi;
-    - if [ "$DEPENDENCIES" != "low" ]; then travis_retry composer update; fi;
-    - if [ "$DEPENDENCIES" == "low" ]; then travis_retry composer update --prefer-lowest; fi;
 
 script:
     - vendor/bin/phpunit --configuration phpunit.xml.dist --verbose
