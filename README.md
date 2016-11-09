@@ -5,7 +5,7 @@ In short HubKit allows project(s) maintainers to easily manage there GitHub repo
 
 ## Features
 
-* Checkout and issue to work on.
+* Checkout an issue to work on.
 * Checkout an existing pull-request.
 * Merge pull-request with preservation of all information (description and GitHub discussion).
 * Merge version branches without mistakes.
@@ -41,7 +41,7 @@ cd ~/.hubkit
 git clone https://github.com/park-manager-bot/hubkit.git .
 ```
 
-Checkout the [latest version](https://github.com/park-manager/hubkit/releases).
+Checkout the [latest version](https://github.com/park-manager/hubkit/releases). Eg.
 
 ```bash
 git checkout tags/1.0.0 -b version-1.0.0
