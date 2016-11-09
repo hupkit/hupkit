@@ -107,6 +107,14 @@ class Git
         return trim($this->process->mustRun(['git', 'describe', '--tags', '--abbrev=0', $ref])->getOutput());
     }
 
+    public function getFirstCommitOnBranch(string $branch): string
+    {
+        return trim(
+            $this->process->mustRun('git rev-list --reverse --first-parent "${1:-'.$branch.'}" | head -n 1')
+                ->getOutput()
+        );
+    }
+
     /**
      * Returns the log commits between two ranges (either commit or branch-name).
      *
@@ -178,6 +186,8 @@ class Git
 
     public function branchExists(string $branch): bool
     {
+        // FIXME this doesn't work for remote branches... use a simple split-line and in_array instead.
+
         $result = $this->process->mustRun(['git', 'branch', '--list', $branch])->getOutput();
         if (1 >= ($exists = preg_match_all('#(?<=\s)'.preg_quote($branch, '#').'(?!\w)$#m', $result))) {
             return 1 === $exists;
