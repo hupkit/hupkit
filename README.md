@@ -1,38 +1,33 @@
-Park-Manager HubKit
-===================
+# Park-Manager HubKit
 
 HubKit was created to ease the de development workflow of the Park-Manger project.
 In short HubKit allows project(s) maintainers to easily manage there GitHub repositories.
 
-Features
---------
+## Features
 
-* Take-on issues with ease.
+* Checkout and issue to work on.
 * Checkout an existing pull-request.
-* Merge pull-request with preservation of all information (description and replies).
-* Keep your repository labels and common files (README, LICENSE, styling configuration) in sync.
+* Merge pull-request with preservation of all information (description and GitHub discussion).
 * Merge version branches without mistakes.
-* Create new releases with auto-generated changelog, and without gaps in version numbers.
-* Create security-patch pull-requests with a single command, and optionally automatically
-  merge them.
+* Create new releases with a proper changelog, and without gaps in version numbers.
+* Create security-patch pull-requests with a single command, and automatically merge them (if needed).
 
 This tool is designed for project maintainers with a good knowledge of Git and GitHub.
-If you have some special needs please the contributing section below.
+If you have some special needs, please see the contributing section below.
 
 **This project is still very young and in active development. Don't use it yet! Please wait :no_good:.**
 
-Requirements
-------------
+## Requirements
 
-You need at least PHP 7.0, Git 2.10 and a GitHub account (enterprise possible).
+You need at least PHP 7.0, Git 2.10 and a GitHub account (GitHub Enterprise is possible).
+Composer is assumed to be installed and configured in your PATH.
 
-Installation
-------------
+## Installation
 
 HubKit is an PHP application, you don't install it as an dependency
 and you don't you install it with Composer global.
 
-To install HubKit first choose a directory you want to keep the installation.
+To install HubKit first choose a directory where you want to keep the installation.
 Eg. `~/.hubkit` or any of your choice.
 
 **Caution:** Make sure you don't use a directory that is accessible by
@@ -46,46 +41,17 @@ cd ~/.hubkit
 git clone https://github.com/park-manager-bot/hubkit.git .
 ```
 
+Checkout the [latest version](https://github.com/park-manager/hubkit/releases).
+
+```bash
+git checkout tags/1.0.0 -b version-1.0.0
+```
+
 And install the dependencies:
 
 ```bash
-composer install -o --no-dev
+./bin/install
 ```
-
-Copy (don't rename) `config.php.dist` to `config.php`, and open it in your
-favorite editor.
-
-HubKit supports GitHub Enterprise, and therefor you can add multiple
-hub configurations by there hostname. The default one is `github.com`.
-
-```
-'github' => [
-    'github.com' => [ // hostname of the hub
-        'username' => '', // fill-in your github username
-        'api_token' => '', // fill-in the new GitHub authentication token (NOT YOUR PASSWORD!)
-    ],
-//    'hub.mycorp.com' => [ // hostname of your GitHub Enterprise installation
-//        'username' => '', // fill-in your github username
-//        'api_token' => '', // fill-in the new GitHub authentication token (NOT YOUR PASSWORD!)
-//    ],
-],
-```
-
-You need to change the value of `api_token` with a GitHub access-token.
-
-You can create a new token at: https://github.com/settings/tokens/new or (https://hub.mycorp.com/settings/tokens/new).
-See the instructions in `config.php` for required scopes (**DON'T SELECT ALL SCOPES!**)   
-
-Almost done. You'd properly want to create a command alias, rather then typing
-`~/.hubkit/bin/hubkit` all the time. Add it to `~/.bash_profile` or 
-`~/.oh-my-zsh/custom/example.zsh` if you use oh-my-zsh.
-
-```bash
-alias hk=~/.hubkit/bin/hubkit
-```
-
-Now run `hk self-diagnose` to check if everything is working correctly.
-If all is green you are ready to use HubKit!
 
 ### Special note for Windows users
 
@@ -95,26 +61,25 @@ But you may encounter some problems.**
 Note that HubKit expects a Unix (alike) environment.
 You are advised to use the Git console or Bash shell (Windows 10+).
 
-On Windows make sure to use `/c/Users/` rather then `c:/users/` for the alias.
-
 Please open an issue in the issue-tracker when something is not working.
 Or open a pull-request when you can fix the problem :+1:
 
 ### Updating
 
-Updating HubKit is very easy, simple run `~/.hubkit/bin/update`.
-Assuming that `~/.hubkit` is your installation directory.
+Updating HubKit is very easy. Go to the HubKit installation
+directory, and run `./bin/upgrade`.
 
-Basic usage
------------
+Done, you now have the latest version.
+
+## Basic usage
 
 Run `hk help` for a full list of all available commands and options.
 
-**Note:** All commands except `help` and `diagnose` require you are in a Git repository,
-and have Git remote `upstream` existing and pointing to the GitHub repository.
+**Note:** All commands except `help`, `repo-create` and `self-diagnose` require 
+you are in a Git repository, and have Git remote `upstream` existing and pointing 
+to the GitHub repository.
 
-Versioning
-----------
+## Versioning
 
 For transparency and insight into the release cycle, and for striving
 to maintain backward compatibility, this package is maintained under
@@ -132,26 +97,32 @@ And constructed with the following guidelines:
 
 For more information on SemVer, please visit <http://semver.org/>.
 
-Feature request
----------------
+## Contributing
 
-HubKit is designed specifically for the maintenance workflow of the Park-Manager project.
-But in the spirit of free-software it's made available to everyone.
+HubKit was designed specifically for the maintenance workflow of the Park-Manager project.
+In the spirit of free-software it's made available to everyone.
 
-This project is open-source, but doesn't accept feature requests
-outside the scope of the project. Support for BitBucket or GitLab will never happen. 
+HubKit is open-source and community driven, but to prevent becoming 
+to bloated not all requested features maybe actually accepted.
 
-We do accept pull-request for improvements and support for third-party
-integrations like CodeClimate support for repository-config synchronization.
+**Adding support for BitBucket or GitLab will never happen.**
 
-If you need special features there outside the scope of this project
-it's properly better to "source fork" this project and adjust it to 
-your own needs.
+If you have special requirements that are outside the scope of HubKit
+it's properly better to "source fork" this repository and adjust it to
+your own needs (*don't forget to change the name or indicate your providing
+a modified version. To prevent confusion.*). But always keep the original credits!
 
-*A source fork is nothing more then cloning the repository and then
-creating a new GitHub repository, rather then using the "Fork button".*
+*A source fork is nothing more then Git cloning the repository and then
+creating a new (GitHub) repository, rather then using the "Fork button".*
 
-License
--------
+## License
 
-HubKit is provided under under [MIT license](LICENSE).
+HubKit is provided under the [MIT license](LICENSE).
+
+## Credits
+
+This project is maintained by Sebastiaan Stok (aka. [@sstok](https://github.com/sstok),
+founder of the Park-Manager project.
+
+HubKit was inspired on the GH Tool used by the Symfony maintainers, 
+no actual code from GH was used.

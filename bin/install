@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+echo -n "Installing HubKit please wait..."
+
+branchName=`git rev-parse --abbrev-ref HEAD`
+curDir=`pwd`
+
+if [ ${branchName} eq "master" ]; then
+    echo -n "[WARNING] You are using the master version, please checkout the latest version instead."
+fi
+
+composer install -o --no-dev
+
+if [ ! -f ./config.php ]; then
+    echo -n "Copying config.php.dist to config.php"
+    cp ./config.php.dist to ./config.php
+
+    if [ $EDITOR eg "" ]; then
+        echo -n "No EDITOR environment variable set. You need to edit config.php manually before you can use HubKit"
+        exit 1
+    fi;
+
+    ${EDITOR} ./config.php
+fi;
+
+chmod u+x ./bin/hubkit.php
+./bin/hubkit.php self-diagnose
+
+echo -n "Don't forgot to add alias hk=""${curDir}/bin/hubkit.php"" to your Bash profile"
+exit $?
