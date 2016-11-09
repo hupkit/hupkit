@@ -58,10 +58,11 @@ final class VersionsValidator
     /**
      * @param Version[] $versions
      * @param Version   $newVersion
+     * @param array     $possibleVersions
      *
      * @return bool
      */
-    public static function isVersionContinues(array $versions, Version $newVersion): bool
+    public static function isVersionContinues(array $versions, Version $newVersion, &$possibleVersions): bool
     {
         if (!count($versions)) {
             return $newVersion->minor !== 0 ||
@@ -84,39 +85,14 @@ final class VersionsValidator
             return true;
         }
 
-        $current = $versions[$newVersion->major];
+        $possibleVersions = $versions[$newVersion->major]->getNextVersionCandidates();
 
-        foreach (['minor', 'patch', 'stability', 'metaver'] as $k) {
-            // Current version is newer
-            if ($current->{$k} > $newVersion->{$k}) {
-                return false;
-            }
-
-            // New is higher, but is the increment correct?
-            if ($newVersion->{$k} > $current->{$k}) {
-                if ('stability' === $k) {
-                    break; // Stability may jump higher
-                }
-
-                if ($newVersion->{$k} - 1 !== $current->{$k}) {
-                    return false;
-                }
+        foreach ($possibleVersions as $possibleVersion) {
+            if ($possibleVersion->equalTo($newVersion)) {
+                return true;
             }
         }
 
-        // All seems good, but better check to be sure.
-        // The loop above doesn't check whether patch or metaver is reset after a minor increase.
-
-        // An increase in minor point must reset patch.
-        if (0 !== $newVersion->patch && $newVersion->minor > $current->minor) {
-            return false;
-        }
-
-        // An increase in stability point must reset metaver (unless stable).
-        if (1 !== $newVersion->patch && 3 < $newVersion->stability && $newVersion->stability > $current->stability) {
-            return false;
-        }
-
-        return true;
+        return false;
     }
 }

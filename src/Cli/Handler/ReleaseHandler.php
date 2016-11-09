@@ -49,8 +49,13 @@ final class ReleaseHandler extends GitBaseHandler
         $version = Version::fromString($version);
         $tags = StringUtil::splitLines($this->process->mustRun('git tag --list')->getOutput());
 
-        if (!VersionsValidator::isVersionContinues(VersionsValidator::getHighestVersions($tags), $version)) {
-            $this->style->warning('It appears there is gap compared to the last version.');
+        if (!VersionsValidator::isVersionContinues(VersionsValidator::getHighestVersions($tags), $version, $suggested)) {
+            $this->style->warning(
+                [
+                    'It appears there is gap compared to the last version.',
+                    'Expected one of : '.implode(', ', $suggested),
+                ]
+            );
 
             $this->confirmPossibleError();
         }

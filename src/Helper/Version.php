@@ -40,13 +40,23 @@ final class Version
 
     private function __construct(int $major, int $minor, int $patch, int $stability, int $metaver = 0)
     {
+        // A 0 major release is always
+        if (0 === $major) {
+            $stability = 0;
+            $metaver = 1;
+        }
+
         $this->major = $major;
         $this->minor = $minor;
         $this->patch = $patch;
         $this->stability = $stability;
         $this->metaver = $metaver;
 
-        if ($stability < 3) {
+        if (3 === $stability && $this->metaver > 0) {
+            throw new \InvalidArgumentException('Meta version of the stability flag cannot be set for stable.');
+        }
+
+        if ($major > 0 && $stability < 3) {
             $this->full = sprintf(
                 '%d.%d.%d-%s%d',
                 $this->major,
@@ -55,8 +65,6 @@ final class Version
                 strtoupper(array_search($this->stability, self::$stabilises, true)),
                 $this->metaver
             );
-        } elseif ($this->metaver > 0) {
-            throw new \InvalidArgumentException('Meta version of the stability flag cannot be set for stable.');
         } else {
             $this->full = sprintf('%d.%d.%d', $this->major, $this->minor, $this->patch);
         }
@@ -93,46 +101,59 @@ final class Version
     /**
      * Returns a list of possible feature versions.
      *
+     * * 0.1.0 -> [0.1.1, 0.2.0, 1.0.0-beta1, 1.0.0]
      * * 1.0.0 -> [1.0.1, 1.1.0, 2.0.0-beta1, 2.0.0]
      * * 1.0.1 -> [1.0.2, 1.2.0, 2.0.0-beta1, 2.0.0]
      * * 1.1.0 -> [1.2.0, 1.2.0-beta1, 2.0.0-beta1, 2.0.0]
      * * 1.0.0-beta1 -> [1.0.0-beta2, 1.0.0] (no minor or major increases)
      * * 1.0.0-alpha1 -> [1.0.0-alpha2, 1.0.0-beta1, 1.0.0] (no minor or major increases)
      *
-     * Note: The alpha stability-version increases are only considered for alpha releases,
-     * not others. 1.0.0 will never consider 2.0.0-alpha1, as alpha is reversed for pre
-     * 1.0.0-stable releases.
-     *
      * @return Version[]
      */
-    public function getNewVersionCandidates(): array
+    public function getNextVersionCandidates(): array
     {
         $candidates = [];
 
-        // (int $major, int $minor, int $patch, int $stability, int $metaver)
+        // Pre first-stable, so 0.x-[rc,beta,stable] releases are not considered.
+        // Use alpha as stability with metaver 1, 0.2-alpha2 is simple ignored.
+        // If anyone really uses this... not our problem :)
+        if (0 === $this->major) {
+            $candidates[] = new Version(0, $this->minor, $this->patch + 1, 0, 1); // patch increase
+            $candidates[] = new Version(0, $this->minor + 1, 0, 0, 1); // minor increase
+            $candidates[] = new Version(1, 0, 0, 1, 1); // 1.0.0-BETA1
 
-        // New major release
-        $candidates[] = new Version($this->major + 1, 0, 0, 3);
-
-        // Alpha release, so pre 1.0.0-stable but after 0.x
-        
-
-        // Major is already listed, a new major leap 0.x -> 2.0 is prohibited.
-        if ($this->stability === 0) {
-            $candidates[] = new Version($this->major, $this->minor, 0, 0, $this->metaver + 1); // next alpha
-            $candidates[] = new Version($this->major, $this->minor, 0, 1, 1); // beta
-            $candidates[] = new Version($this->major, $this->minor, 0, 2, 2); // rc
+            // stable (RC usually follows *after* beta, but jumps to stable are accepted)
+            // RC is technically valid, but not very common and therefor ignored.
+            $candidates[] = new Version(1, 0, 0, 3);
 
             // No future candidates considered.
             return $candidates;
         }
 
-        // beta release
-        if ($this->stability === 1) {
-            $candidates[] = new Version($this->major, 0, 0, 1, $this->metaver + 1); // next beta
-            $candidates[] = new Version($this->major, 0, 0, 1, 2); // rc
+        // Latest is unstable, may increase stability or metaver (nothing else)
+        // 1.0.1-beta1 is not accepted, an (un)stability only applies for x.0.0
+        if ($this->stability < 3) {
+            $candidates[] = new Version($this->major, $this->minor, 0, $this->stability, $this->metaver + 1);
+
+            for ($s = $this->stability + 1; $s < 3; ++$s) {
+                $candidates[] = new Version($this->major, $this->minor, 0, $s, 1);
+            }
+
+            $candidates[] = new Version($this->major, $this->minor, 0, 3);
+
+            return $candidates;
         }
 
+        // Stable, so a patch, major or new minor (with lower stability) version is possible
+        // RC is excluded.
+        $candidates[] = new Version($this->major, $this->minor, $this->patch + 1, 3);
+        $candidates[] = new Version($this->major, $this->minor + 1, 0, 1, 1); // BETA1 for next minor
+        $candidates[] = new Version($this->major, $this->minor + 1, 0, 3); // stable next minor
+
+        // New (un)stable major (excluding RC)
+        $candidates[] = new Version($this->major + 1, 0, 0, 0, 1); // alpha
+        $candidates[] = new Version($this->major + 1, 0, 0, 1, 1); // beta
+        $candidates[] = new Version($this->major + 1, 0, 0, 3); // stable
 
         return $candidates;
     }

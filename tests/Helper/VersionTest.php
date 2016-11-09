@@ -112,4 +112,29 @@ class VersionTest extends TestCase
 
         Version::fromString('1.0.0-stable-5');
     }
+
+        public function provideExpectedNextVersionCandidates(): array
+    {
+        return [
+            'alpha 0' => ['0.1.0', ['0.1.1', '0.2.0', '1.0.0-BETA1', '1.0.0']],
+            'beta' => ['1.0.0-beta-5', ['1.0.0-BETA6', '1.0.0-RC1', '1.0.0']],
+            'rc' => ['1.0.0-RC5', ['1.0.0-RC6', '1.0.0']],
+            'stable major' => ['1.0.0', ['1.0.1', '1.1.0-BETA1', '1.1.0', '2.0.0-ALPHA1', '2.0.0-BETA1', '2.0.0']],
+            'stable with minor' => ['1.1.0', ['1.1.1', '1.2.0-BETA1', '1.2.0', '2.0.0-ALPHA1', '2.0.0-BETA1', '2.0.0']],
+            'stable with minor and patch' => ['1.1.1', ['1.1.2', '1.2.0-BETA1', '1.2.0', '2.0.0-ALPHA1', '2.0.0-BETA1', '2.0.0']],
+            'stable with patch' => ['1.0.1', ['1.0.2', '1.1.0-BETA1', '1.1.0', '2.0.0-ALPHA1', '2.0.0-BETA1', '2.0.0']],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider provideExpectedNextVersionCandidates
+     */
+    public function it_provides_next_version_candidates($current, $expected)
+    {
+        $candidates = Version::fromString($current)->getNextVersionCandidates();
+        $expected = array_map([Version::class, 'fromString'], $expected);
+
+        self::assertEquals($expected, $candidates);
+    }
 }
