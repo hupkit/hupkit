@@ -107,14 +107,6 @@ class Git
         return trim($this->process->mustRun(['git', 'describe', '--tags', '--abbrev=0', $ref])->getOutput());
     }
 
-    public function getFirstCommitOnBranch(string $branch): string
-    {
-        return trim(
-            $this->process->mustRun('git rev-list --reverse --first-parent "${1:-'.$branch.'}" | head -n 1')
-                ->getOutput()
-        );
-    }
-
     /**
      * Returns the log commits between two ranges (either commit or branch-name).
      *
@@ -184,16 +176,25 @@ class Git
         );
     }
 
+    public function remoteBranchExists(string $remote, string $branch): bool
+    {
+        $this->remoteUpdate($remote);
+        $branches = StringUtil::splitLines(
+            $this->process->mustRun(
+                ['git', 'for-each-ref', '--format', '%(refname:strip=3)', 'refs/remotes/'.$remote]
+            )->getOutput()
+        );
+
+        return in_array($branch, $branches, true);
+    }
+
     public function branchExists(string $branch): bool
     {
-        // FIXME this doesn't work for remote branches... use a simple split-line and in_array instead.
+        $branches = StringUtil::splitLines(
+            $this->process->mustRun(["git for-each-ref --format='%(refname:short)' refs/heads/"])->getOutput()
+        );
 
-        $result = $this->process->mustRun(['git', 'branch', '--list', $branch])->getOutput();
-        if (1 >= ($exists = preg_match_all('#(?<=\s)'.preg_quote($branch, '#').'(?!\w)$#m', $result))) {
-            return 1 === $exists;
-        }
-
-        throw new \RuntimeException(sprintf('Invalid list of local branches found while searching for "%s"', $branch));
+        return in_array($branch, $branches, true);
     }
 
     public function deleteRemoteBranch(string $remote, string $ref)

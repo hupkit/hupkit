@@ -17,6 +17,7 @@ use HubKit\Helper\ChangelogRenderer;
 use HubKit\Helper\Version;
 use HubKit\Helper\VersionsValidator;
 use HubKit\Service\CliProcess;
+use HubKit\Service\Editor;
 use HubKit\Service\Git;
 use HubKit\StringUtil;
 use HubKit\ThirdParty\GitHub;
@@ -27,48 +28,92 @@ use Webmozart\Console\Api\IO\IO;
 final class ReleaseHandler extends GitBaseHandler
 {
     private $process;
+    private $editor;
+    /** @var IO */
+    private $io;
 
-    public function __construct(SymfonyStyle $style, Git $git, GitHub $github, CliProcess $process)
+    public function __construct(SymfonyStyle $style, Git $git, GitHub $github, CliProcess $process, Editor $editor)
     {
         parent::__construct($style, $git, $github);
         $this->process = $process;
+        $this->editor = $editor;
     }
 
     public function handle(Args $args, IO $io)
     {
+        $this->io = $io;
         $this->informationHeader();
 
         $version = $this->validateVersion($args->getArgument('version'));
         $branch = $this->git->getActiveBranchName();
+        $versionStr = (string) $version;
 
-        // XXX Check if version matches expected branch, 1.0 for master while 1.0 branch exists.
+        $this->validateBranchCompatibility($branch, $version);
 
-        $io->writeLine((string) $version);
+        $this->style->writeln(
+            [
+                sprintf(
+                    '<fg=cyan>Preparing release</> <fg=yellow>%s</> <fg=cyan>(target branch</> <fg=yellow>%s</><fg=cyan>)</>',
+                    $versionStr,
+                    $branch
+                ),
+                'Please wait...',
+            ]
+        );
 
-        $base = $this->getFirstCommit($branch);
-        $changelog = (new ChangelogRenderer($this->git, $this->github))->renderChangelogWithSections($base, $branch);
+        $changelog = $this->getChangelog($branch);
 
-        $io->writeLine($changelog);
+        if (!$args->getOption('no-edit')) {
+            $changelog = $this->editor->fromString(
+                $changelog,
+                true,
+                sprintf('Release "%s" for branch "%s". Leave file empty to abort operation.', $versionStr, $branch)
+            );
+        }
+
+        $this->process->mustRun(['git', 'tag', '-s', $versionStr, '-m', 'Release '.$versionStr]);
+        $this->process->mustRun(['git', 'push', '--tags', 'upstream']);
+
+        $release = $this->github->createRelease($versionStr, $changelog, $args->getOption('pre-release'));
+        $this->style->success([sprintf('Successfully released %s', $versionStr), $release['html_url']]);
     }
 
     private function validateBranchCompatibility(string $branch, Version $version)
     {
+        if (!$this->io->isInteractive()) {
+            return;
+        }
+
         if ($branch === $version->major.'.'.$version->minor) {
-            return true;
+            return;
         }
 
-        // $this->git->branchExists();
+        if ($this->git->remoteBranchExists('upstream', $expected = $version->major.'.'.$version->minor)) {
+            $this->style->warning(
+                [
+                    sprintf('This release will be created for the "%s" branch.', $branch),
+                    sprintf(
+                        'But a branch with version pattern "%s" exists, did you target the correct branch?',
+                        $expected
+                    ),
+                    'If this is incorrect, checkout the correct version branch first.',
+                ]
+            );
 
+            $this->confirmPossibleError();
 
-        if ('master' === $branch) {
-            return true; // XXX Not actually correct, this should only be considered when there is no other branch
+            return;
         }
-
     }
 
     private function validateVersion(string $version): Version
     {
         $version = Version::fromString($version);
+
+        if (!$this->io->isInteractive()) {
+            return $version;
+        }
+
         $tags = StringUtil::splitLines($this->process->mustRun('git tag --list')->getOutput());
 
         if (!VersionsValidator::isVersionContinues(VersionsValidator::getHighestVersions($tags), $version, $suggested)) {
@@ -92,17 +137,19 @@ final class ReleaseHandler extends GitBaseHandler
         }
     }
 
-    private function getFirstCommit(string $branchName): string
+    private function getChangelog(string $branch): string
     {
         try {
-            return $this->git->getLastTagOnBranch();
+            $base = $this->git->getLastTagOnBranch();
         } catch (\Exception $e) {
-            // No tags exist yet so use the first commit on this branch.
-            //
-            // This is basically the first commit every made! but should be no problem as
-            // any branch after a tagged branch will have a tag, any orphan branch has it's own commits.
-            // Only when the branch diverged this may fail, but you'd properly have bigger problems then.
-            return $this->git->getFirstCommitOnBranch($branchName);
+            // No tags exist yet so there is no need for a changelog.
+            $base = null;
         }
+
+        if (null !== $base) {
+            return (new ChangelogRenderer($this->git, $this->github))->renderChangelogWithSections($base, $branch);
+        }
+
+        return 'Initial release.';
     }
 }

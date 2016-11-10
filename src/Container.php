@@ -57,6 +57,10 @@ class Container extends \Pimple\Container
             return new Service\Downloader($container['filesystem'], $container['guzzle'], $container['io']);
         };
 
+        $this['editor'] = function (Container $container) {
+            return new Service\Editor($container['process'], $container['filesystem']);
+        };
+
         //
         // Third-party APIs
         //

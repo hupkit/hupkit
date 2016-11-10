@@ -332,30 +332,7 @@ final class GitHub
                 'tag_name' => $name,
                 'name' => 'Release '.$name,
                 'body' => $body,
-                'draft' => true,
                 'prerelease' => $preRelease,
-            ]
-        );
-    }
-
-    public function publishRelease(string $name, int $id = null)
-    {
-        $api = $this->client->repo()->releases();
-
-        if (null === $id) {
-            foreach ($api->all() as $release) {
-                if ($name === $release['tag_name']) {
-                    $id = $release['id'];
-                }
-            }
-        }
-
-        return $api->edit(
-            $this->organization,
-            $this->repository,
-            [
-                'id' => $id,
-                'draft' => false,
             ]
         );
     }
