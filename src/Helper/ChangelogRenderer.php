@@ -44,7 +44,7 @@ class ChangelogRenderer
 
     public function renderChangelogWithSections(string $base, string $head, bool $skipEmptySections = true): string
     {
-        $url = 'https://'.$this->github->getHostname().$this->github->getOrganization().'/'.$this->github->getRepository();
+        $url = 'https://'.$this->github->getHostname().'/'.$this->github->getOrganization().'/'.$this->github->getRepository();
         $changelog = '';
 
         foreach ($this->getSections($base, $head) as $section => $items) {
@@ -71,14 +71,15 @@ class ChangelogRenderer
     private function extractInfoFromSubject(string $subject, &$matches): bool
     {
         return 0 !== stripos($subject, 'Merge pull request #') &&
-               preg_match('/^(?P<category>\w+) #(?P<number>\d+) (?P<title>[^$]+)/', $subject, $matches);
+               preg_match('/^(?P<category>\w+) #(?P<number>\d+) (?P<title>.+?)$/', $subject, $matches);
     }
 
-    private function formatLine(array $item, string $url):string
+    private function formatLine(array $item, string $url): string
     {
         $title = $item['title'];
         $pos = mb_strrpos($title, '(');
 
+        // Replace authors with links
         $title = mb_substr($title, 0, $pos).
             preg_replace(
                 '#([\w\d-_]+)#',
@@ -87,7 +88,7 @@ class ChangelogRenderer
             )
         ;
 
-        return sprintf('- %s [#%d](%s/issues/%2$d)', $title, $item['number'], $url)."\n";
+        return sprintf('- %s [#%d](%s/issues/%2$d)', trim($title), $item['number'], $url)."\n";
     }
 
     private function getSections(string $base, string $head): array

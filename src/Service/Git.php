@@ -175,9 +175,9 @@ class Git
                 return [
                     'sha' => $commitHash,
                     'author' => array_shift($commitData),
-                    'subject' => $commitData[0],
+                    'subject' => array_shift($commitData),
                     // subject + \n\n + {$commitData remaining}
-                    'message' => array_shift($commitData)."\n\n".implode("\n", $commitData),
+                    'message' => implode("\n", $commitData),
                 ];
             },
             $commits
