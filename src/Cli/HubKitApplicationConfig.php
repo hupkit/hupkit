@@ -211,7 +211,7 @@ DESC
             ->beginCommand('changelog')
                 ->setDescription('Generate a changelog with all changes between commits')
                 ->addArgument('ref', Argument::OPTIONAL | Argument::STRING, 'Range reference as `base..head`')
-                ->addOption('all', null, Option::NO_VALUE | Option::BOOLEAN, 'Show all sections (including empty)')
+                ->addOption('all', null, Option::NO_VALUE | Option::BOOLEAN, 'Show all categories (including empty)')
                 ->addOption('oneline', null, Option::NO_VALUE | Option::BOOLEAN, 'Show changelog without sections')
                 ->setHandler(function () {
                     return new Handler\ChangelogHandler(
@@ -226,7 +226,7 @@ DESC
             ->beginCommand('release')
                 ->setDescription('Make a new release for the current branch')
                 ->addArgument('version', Argument::REQUIRED | Argument::STRING, 'Version to make')
-                ->addOption('all', null, Option::NO_VALUE | Option::BOOLEAN, 'Show all sections (including empty)')
+                ->addOption('all-categories', null, Option::NO_VALUE | Option::BOOLEAN, 'Show all categories (including empty)')
                 ->addOption('no-edit', null, Option::NO_VALUE | Option::BOOLEAN, 'Don not open the editor for')
                 ->addOption('pre-release', null, Option::NO_VALUE | Option::BOOLEAN, 'Mark as pre-release (not production ready)')
                 ->setHandler(function () {

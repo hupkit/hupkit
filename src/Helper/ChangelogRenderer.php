@@ -42,21 +42,21 @@ class ChangelogRenderer
         return $changelog;
     }
 
-    public function renderChangelogWithSections(string $base, string $head, bool $skipEmptySections = true): string
+    public function renderChangelogByCategories(string $base, string $head, bool $skipEmptyLists = true): string
     {
         $url = 'https://'.$this->github->getHostname().'/'.$this->github->getOrganization().'/'.$this->github->getRepository();
         $changelog = '';
 
-        foreach ($this->getSections($base, $head) as $section => $items) {
+        foreach ($this->getCategory($base, $head) as $category => $items) {
             if (!count($items)) {
-                if (!$skipEmptySections) {
-                    $changelog .= "### {$section}\n- nothing\n\n";
+                if (!$skipEmptyLists) {
+                    $changelog .= "### {$category}\n- nothing\n\n";
                 }
 
                 continue;
             }
 
-            $changelog .= "### {$section}\n";
+            $changelog .= "### {$category}\n";
 
             foreach ($items as $item) {
                 $changelog .= $this->formatLine($item, $url);
@@ -91,9 +91,9 @@ class ChangelogRenderer
         return sprintf('- %s [#%d](%s/issues/%2$d)', trim($title), $item['number'], $url)."\n";
     }
 
-    private function getSections(string $base, string $head): array
+    private function getCategory(string $base, string $head): array
     {
-        $sections = [
+        $categories = [
             'Security' => [],
             'Added' => [],
             'Changed' => [],
@@ -107,14 +107,14 @@ class ChangelogRenderer
                 continue;
             }
 
-            $section = $this->getSectionForCommit($commit + $matches);
-            $sections[$section][] = $matches;
+            $category = $this->getCategoryForCommit($commit + $matches);
+            $categories[$category][] = $matches;
         }
 
-        return $sections;
+        return $categories;
     }
 
-    private function getSectionForCommit(array $commit): string
+    private function getCategoryForCommit(array $commit): string
     {
         // Security can only ever be related about security.
         if ('security' === $commit['category']) {
@@ -123,7 +123,7 @@ class ChangelogRenderer
 
         list(, $labelsStr) = StringUtil::splitLines(ltrim($commit['message']));
 
-        $catToSection = [
+        $catToFinal = [
             'feature' => 'Added',
             'refactor' => 'Changed',
             'bug' => 'Fixed',
@@ -142,6 +142,6 @@ class ChangelogRenderer
             }
         }
 
-        return $catToSection[$commit['category']] ?? 'Changed';
+        return $catToFinal[$commit['category']] ?? 'Changed';
     }
 }

@@ -38,7 +38,7 @@ final class ChangelogHandler extends GitBaseHandler
         if ($args->getOption('oneline')) {
             $io->writeLine($this->renderer->renderChangelogOneLine($base, $head));
         } else {
-            $io->writeLine($this->renderer->renderChangelogWithSections($base, $head, !$args->getOption('all')));
+            $io->writeLine($this->renderer->renderChangelogByCategories($base, $head, !$args->getOption('all')));
         }
     }
 

@@ -147,7 +147,7 @@ final class ReleaseHandler extends GitBaseHandler
         }
 
         if (null !== $base) {
-            return (new ChangelogRenderer($this->git, $this->github))->renderChangelogWithSections($base, $branch);
+            return (new ChangelogRenderer($this->git, $this->github))->renderChangelogByCategories($base, $branch);
         }
 
         return 'Initial release.';
