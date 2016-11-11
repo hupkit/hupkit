@@ -17,7 +17,6 @@ use Github\Client as GitHubClient;
 use Github\ResultPager;
 use Http\Client\HttpClient;
 use HubKit\Config;
-use HubKit\Service\Git;
 
 class GitHub
 {

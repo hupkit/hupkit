@@ -58,7 +58,7 @@ class Editor
             $contents = preg_replace("/^# THIS LINE IS AUTOMATICALLY AND REMOVED;(.++)(\r?\n)/i", '', $contents);
         }
 
-        if ($abortOnEmpty &&'' === trim($contents)) {
+        if ($abortOnEmpty && '' === trim($contents)) {
             throw new \RuntimeException('No content found. User aborted.');
         }
 

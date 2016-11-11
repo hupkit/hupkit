@@ -113,7 +113,7 @@ class VersionTest extends TestCase
         Version::fromString('1.0.0-stable-5');
     }
 
-        public function provideExpectedNextVersionCandidates(): array
+    public function provideExpectedNextVersionCandidates(): array
     {
         return [
             'alpha 0' => ['0.1.0', ['0.1.1', '0.2.0', '1.0.0-BETA1', '1.0.0']],

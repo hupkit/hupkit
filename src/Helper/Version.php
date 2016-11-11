@@ -118,13 +118,13 @@ final class Version
         // Use alpha as stability with metaver 1, 0.2-alpha2 is simple ignored.
         // If anyone really uses this... not our problem :)
         if (0 === $this->major) {
-            $candidates[] = new Version(0, $this->minor, $this->patch + 1, 0, 1); // patch increase
-            $candidates[] = new Version(0, $this->minor + 1, 0, 0, 1); // minor increase
-            $candidates[] = new Version(1, 0, 0, 1, 1); // 1.0.0-BETA1
+            $candidates[] = new self(0, $this->minor, $this->patch + 1, 0, 1); // patch increase
+            $candidates[] = new self(0, $this->minor + 1, 0, 0, 1); // minor increase
+            $candidates[] = new self(1, 0, 0, 1, 1); // 1.0.0-BETA1
 
             // stable (RC usually follows *after* beta, but jumps to stable are accepted)
             // RC is technically valid, but not very common and therefor ignored.
-            $candidates[] = new Version(1, 0, 0, 3);
+            $candidates[] = new self(1, 0, 0, 3);
 
             // No future candidates considered.
             return $candidates;
@@ -133,27 +133,27 @@ final class Version
         // Latest is unstable, may increase stability or metaver (nothing else)
         // 1.0.1-beta1 is not accepted, an (un)stability only applies for x.0.0
         if ($this->stability < 3) {
-            $candidates[] = new Version($this->major, $this->minor, 0, $this->stability, $this->metaver + 1);
+            $candidates[] = new self($this->major, $this->minor, 0, $this->stability, $this->metaver + 1);
 
             for ($s = $this->stability + 1; $s < 3; ++$s) {
-                $candidates[] = new Version($this->major, $this->minor, 0, $s, 1);
+                $candidates[] = new self($this->major, $this->minor, 0, $s, 1);
             }
 
-            $candidates[] = new Version($this->major, $this->minor, 0, 3);
+            $candidates[] = new self($this->major, $this->minor, 0, 3);
 
             return $candidates;
         }
 
         // Stable, so a patch, major or new minor (with lower stability) version is possible
         // RC is excluded.
-        $candidates[] = new Version($this->major, $this->minor, $this->patch + 1, 3);
-        $candidates[] = new Version($this->major, $this->minor + 1, 0, 1, 1); // BETA1 for next minor
-        $candidates[] = new Version($this->major, $this->minor + 1, 0, 3); // stable next minor
+        $candidates[] = new self($this->major, $this->minor, $this->patch + 1, 3);
+        $candidates[] = new self($this->major, $this->minor + 1, 0, 1, 1); // BETA1 for next minor
+        $candidates[] = new self($this->major, $this->minor + 1, 0, 3); // stable next minor
 
         // New (un)stable major (excluding RC)
-        $candidates[] = new Version($this->major + 1, 0, 0, 0, 1); // alpha
-        $candidates[] = new Version($this->major + 1, 0, 0, 1, 1); // beta
-        $candidates[] = new Version($this->major + 1, 0, 0, 3); // stable
+        $candidates[] = new self($this->major + 1, 0, 0, 0, 1); // alpha
+        $candidates[] = new self($this->major + 1, 0, 0, 1, 1); // beta
+        $candidates[] = new self($this->major + 1, 0, 0, 3); // stable
 
         return $candidates;
     }

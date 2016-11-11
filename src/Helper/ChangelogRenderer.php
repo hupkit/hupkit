@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace HubKit\Helper;
 
 use HubKit\Service\Git;
-use HubKit\StringUtil;
 use HubKit\Service\GitHub;
+use HubKit\StringUtil;
 
 class ChangelogRenderer
 {

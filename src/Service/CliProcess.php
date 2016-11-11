@@ -29,10 +29,6 @@ class CliProcess
      * @var ProcessHelper
      */
     private $processHelper;
-
-    /**
-     * @var OutputInterface
-     */
     private $output;
 
     public function __construct(OutputInterface $output)

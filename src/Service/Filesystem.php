@@ -17,13 +17,9 @@ use Symfony\Component\Filesystem\Filesystem as SfFilesystem;
 
 class Filesystem
 {
+    private $tempdir;
     private $tempFilenames = [];
     private $fs;
-
-    /**
-     * @var string
-     */
-    private $tempdir;
 
     public function __construct(string $tempdir = null)
     {

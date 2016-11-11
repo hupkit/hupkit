@@ -24,15 +24,7 @@ final class SelfDiagnoseHandler
 {
     private $style;
     private $config;
-
-    /**
-     * @var Git
-     */
     private $git;
-
-    /**
-     * @var GitHub
-     */
     private $github;
 
     /**
