@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace HubKit\Cli\Handler;
 
 use HubKit\Service\Git;
-use HubKit\ThirdParty\GitHub;
+use HubKit\Service\GitHub;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Webmozart\Console\Api\Args\Args;
 

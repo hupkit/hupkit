@@ -17,7 +17,7 @@ use HubKit\Config;
 use HubKit\Helper\SingleLineChoiceQuestionHelper;
 use HubKit\Helper\StatusTable;
 use HubKit\Service\Git;
-use HubKit\ThirdParty\GitHub;
+use HubKit\Service\GitHub;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Webmozart\Console\Adapter\ArgsInput;

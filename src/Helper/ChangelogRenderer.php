@@ -15,7 +15,7 @@ namespace HubKit\Helper;
 
 use HubKit\Service\Git;
 use HubKit\StringUtil;
-use HubKit\ThirdParty\GitHub;
+use HubKit\Service\GitHub;
 
 class ChangelogRenderer
 {

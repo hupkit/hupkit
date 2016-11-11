@@ -66,7 +66,7 @@ class Container extends \Pimple\Container
         //
 
         $this['github'] = function (Container $container) {
-            return new ThirdParty\GitHub(new GuzzleClientAdapter($container['guzzle']), $container['config']);
+            return new Service\GitHub(new GuzzleClientAdapter($container['guzzle']), $container['config']);
         };
     }
 }

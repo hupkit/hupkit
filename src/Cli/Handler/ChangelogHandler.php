@@ -15,7 +15,7 @@ namespace HubKit\Cli\Handler;
 
 use HubKit\Helper\ChangelogRenderer;
 use HubKit\Service\Git;
-use HubKit\ThirdParty\GitHub;
+use HubKit\Service\GitHub;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Webmozart\Console\Api\Args\Args;
 use Webmozart\Console\Api\IO\IO;

@@ -15,7 +15,7 @@ namespace HubKit\Cli\Handler;
 
 use HubKit\Cli\RequiresGitRepository;
 use HubKit\Service\Git;
-use HubKit\ThirdParty\GitHub;
+use HubKit\Service\GitHub;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 abstract class GitBaseHandler implements RequiresGitRepository

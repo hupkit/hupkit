@@ -17,7 +17,7 @@ use HubKit\Config;
 use HubKit\Helper\StatusTable;
 use HubKit\Service\CliProcess;
 use HubKit\Service\Git;
-use HubKit\ThirdParty\GitHub;
+use HubKit\Service\GitHub;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 final class SelfDiagnoseHandler

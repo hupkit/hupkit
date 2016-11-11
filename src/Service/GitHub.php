@@ -11,7 +11,7 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace HubKit\ThirdParty;
+namespace HubKit\Service;
 
 use Github\Client as GitHubClient;
 use Github\ResultPager;
@@ -19,7 +19,7 @@ use Http\Client\HttpClient;
 use HubKit\Config;
 use HubKit\Service\Git;
 
-final class GitHub
+class GitHub
 {
     const DEFAULT_HOST = 'github.com';
 
