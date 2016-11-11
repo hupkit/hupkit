@@ -181,9 +181,13 @@ or `--no-pat` skip this step.
 
 If you are merging a your own pull-request the source branch can be automatically
 removed (unless `--squash` was given). You will be prompted about before deletion.
+
+To merge a pull request as security patch (category security) use the `--security`
+option.
 DESC
                 )
                 ->addArgument('number', Argument::REQUIRED | Argument::INTEGER, 'The number of the pull request to merge')
+                ->addOption('security', null, Option::BOOLEAN, 'Merge pull request as a security patch')
                 ->addOption('squash', null, Option::BOOLEAN, 'Squash the pull request before merging')
                 ->addOption('no-pull', null, Option::BOOLEAN, 'Skip pulling changes to your local branch')
                 ->addOption('pat', null, Option::OPTIONAL_VALUE | Option::STRING, 'Thank you message, @author will be replaced with pr author(s)', 'Thank you @author')

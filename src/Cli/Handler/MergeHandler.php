@@ -77,7 +77,7 @@ final class MergeHandler extends GitBaseHandler
         $this->style->text('<fg=yellow>Pushing notes please wait...</>');
         $this->addCommentsToMergeCommit($pr, $mergeHash);
 
-        $this->style->success('Pull-request has been merged.');
+        $this->style->success('Pull request has been merged.');
 
         if (!$args->getOption('no-pull')) {
             $this->updateLocalBranch($pr);
@@ -91,12 +91,12 @@ final class MergeHandler extends GitBaseHandler
     private function guardMergeStatus(array $pr)
     {
         if ('closed' === $pr['state']) {
-            throw new \InvalidArgumentException('Cannot merge closed pull-request.');
+            throw new \InvalidArgumentException('Cannot merge closed pull request.');
         }
 
         if (null === $pr['mergeable']) {
             throw new \InvalidArgumentException(
-                'Pull-request is not processed yet. Please try again in a few seconds.'
+                'Pull request is not processed yet. Please try again in a few seconds.'
             );
         }
 
@@ -104,7 +104,7 @@ final class MergeHandler extends GitBaseHandler
             return;
         }
 
-        throw new \InvalidArgumentException('Pull-request has conflicts which need to be resolved first.');
+        throw new \InvalidArgumentException('Pull request has conflicts which need to be resolved first.');
     }
 
     private function renderStatus(array $pr)
@@ -229,6 +229,16 @@ final class MergeHandler extends GitBaseHandler
     {
         $this->style->newLine();
 
+        // Always prompt to ensure the user has some time to check
+        // the provided information.
+        if ($args->getOption('security')) {
+            if (!$this->style->confirm('You are merging a security patch, is this correct?', true)) {
+                throw new \RuntimeException('User aborted.');
+            }
+
+            return 'security';
+        }
+
         return (new SingleLineChoiceQuestionHelper())->ask(
             new ArgsInput($args->getRawArgs(), $args),
             $this->style,
@@ -238,7 +248,6 @@ final class MergeHandler extends GitBaseHandler
                     'bug' => 'bug',
                     'minor' => 'minor',
                     'style' => 'style',
-                    // 'security' => 'security', // (special case needs to be handled differently)
                 ]
             )
         );
