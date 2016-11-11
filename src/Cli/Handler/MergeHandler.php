@@ -66,7 +66,7 @@ final class MergeHandler extends GitBaseHandler
         $authors = [];
 
         $message = $this->getCommitMessage($pr, $authors, $branchLabel, $args->getOption('squash'));
-        $title = $this->getCommitTitle($pr, $this->getCategory($args), $authors);
+        $title = $this->getCommitTitle($pr, $this->getCategory($pr, $args), $authors);
 
         $mergeHash = $this->github->mergePullRequest($id, $title, $message, $pr['head']['sha'])['sha'];
 
@@ -225,7 +225,7 @@ final class MergeHandler extends GitBaseHandler
         return $label;
     }
 
-    private function getCategory(Args $args): string
+    private function getCategory(array $pr, Args $args): string
     {
         $this->style->newLine();
 
@@ -239,17 +239,28 @@ final class MergeHandler extends GitBaseHandler
             return 'security';
         }
 
+        $guessedCat = null;
+        $categories = [
+            'feature' => 'feature',
+            'bug' => 'bug',
+            'minor' => 'minor',
+            'style' => 'style',
+        ];
+
+        foreach ($pr['labels'] as $label) {
+            $labelName = strtolower($label['name']);
+
+            if (isset($categories[$labelName])) {
+                $guessedCat = $labelName;
+
+                break;
+            }
+        }
+
         return (new SingleLineChoiceQuestionHelper())->ask(
             new ArgsInput($args->getRawArgs(), $args),
             $this->style,
-            new ChoiceQuestion(
-                'Category', [
-                    'feature' => 'feature',
-                    'bug' => 'bug',
-                    'minor' => 'minor',
-                    'style' => 'style',
-                ]
-            )
+            new ChoiceQuestion('Category', $categories, $guessedCat)
         );
     }
 
@@ -261,9 +272,27 @@ final class MergeHandler extends GitBaseHandler
     private function getCommitMessage(array $pr, array &$authors, string $branchLabel, bool $squash = false): string
     {
         if ($squash) {
-            $message = sprintf('This PR was squashed before being merged into the %s branch.', $branchLabel);
+            $message = sprintf('This PR was squashed before being merged into the %s branch.', $branchLabel)."\n";
         } else {
-            $message = sprintf('This PR was merged into the %s branch.', $branchLabel);
+            $message = sprintf('This PR was merged into the %s branch.', $branchLabel)."\n";
+        }
+
+        $labels = [];
+        $labelToMergeLabel = [
+            'deprecation' => 'deprecation',
+            'deprecation removal' => 'removed-deprecation',
+        ];
+
+        foreach ($pr['labels'] as $label) {
+            $labelName = strtolower($label['name']);
+
+            if (isset($labelToMergeLabel[$labelName])) {
+                $labels[] = $labelToMergeLabel[$labelName];
+            }
+        }
+
+        if ($labels) {
+            $message .= 'labels: '.implode(',', $labels)."\n";
         }
 
         $message .= "\n\n";
