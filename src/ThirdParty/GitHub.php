@@ -116,70 +116,12 @@ final class GitHub
         );
     }
 
-    public function updateRepo(string $organization, string $name, array $values)
-    {
-        $repo = $this->client->repo();
-
-        return $repo->update(
-            $organization,
-            $name, // name
-            $values
-        );
-    }
-
-    public function getIssues(array $parameters = [], int $limit = null)
-    {
-        $pager = new ResultPager($this->client);
-        $api = $this->client->issue();
-        $perPage = $api->getPerPage();
-
-        if (!$limit || $limit > 100) {
-            return $pager->fetchAll(
-                $api,
-                'all',
-                [
-                    $this->organization,
-                    $this->repository,
-                    $parameters,
-                ]
-            );
-        }
-
-        try {
-            $api->setPerPage($limit);
-
-            return $pager->fetch(
-                $this->client->issue(),
-                'all',
-                [
-                    $this->organization,
-                    $this->repository,
-                    $parameters,
-                ]
-            );
-        } finally {
-            $api->setPerPage($perPage);
-        }
-    }
-
     public function getIssue(int $number)
     {
         return $this->client->issue()->show(
             $this->organization,
             $this->repository,
             $number
-        );
-    }
-
-    public function updateIssue(int $id, array $parameters)
-    {
-        $api = $this->client->issue();
-
-        $api->update(
-            $this->organization,
-            $this->repository,
-            $id,
-            $parameters
         );
     }
 
@@ -263,11 +205,6 @@ final class GitHub
         }
 
         return $pr;
-    }
-
-    public function getPullRequestUrl(int $id)
-    {
-        return sprintf('https://github.com/%s/%s/pull/%d', $this->organization, $this->repository, $id);
     }
 
     public function getCommitStatuses(string $org, string $repo, string $hash): array
