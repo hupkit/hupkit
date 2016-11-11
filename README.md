@@ -5,8 +5,7 @@ In short HubKit allows project(s) maintainers to easily manage there GitHub repo
 
 ## Features
 
-* Checkout an issue to work on.
-* Checkout an existing pull-request.
+* Checkout an issue (as local working branch).
 * Merge pull-request with preservation of all information (description and GitHub discussion).
 * Merge version branches without mistakes.
 * Create new releases with a proper changelog, and without gaps in version numbers.
