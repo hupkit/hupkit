@@ -58,7 +58,7 @@ final class MergeHandler extends GitBaseHandler
             $this->style->note('This pull request will be squashed before being merged.');
         }
 
-        // $this->guardMergeStatus($pr);
+        $this->guardMergeStatus($pr);
         $this->renderStatus($pr);
 
         // Resolve branch-alias here so it's shown before the category is asked.
@@ -68,7 +68,7 @@ final class MergeHandler extends GitBaseHandler
         $message = $this->getCommitMessage($pr, $authors, $branchLabel, $args->getOption('squash'));
         $title = $this->getCommitTitle($pr, $this->getCategory($args), $authors);
 
-        $mergeHash = 'd22220c0a97a5fc0ff4e0a0e595247919b89bfa0'; // $this->github->mergePullRequest($id, $title, $message, $pr['head']['sha'])['sha'];
+        $mergeHash = $this->github->mergePullRequest($id, $title, $message, $pr['head']['sha'])['sha'];
 
         if (!$args->getOption('no-pat')) {
             $this->patAuthor($pr, $args->getOption('pat'));
