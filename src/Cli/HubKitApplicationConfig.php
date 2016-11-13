@@ -227,6 +227,20 @@ DESC
                 })
             ->end()
 
+            ->beginCommand('upmerge')
+                ->setDescription('Merges current branch to the next version branch (eg. 1.0 into 1.1)')
+                ->addArgument('branch', Argument::OPTIONAL | Argument::STRING, 'Base branch to checkout and start with')
+                ->addOption('all', null, Option::NO_VALUE | Option::BOOLEAN, 'Merge all version branches from lowest into highest')
+                ->setHandler(function () {
+                    return new Handler\UpMergeHandler(
+                        $this->container['style'],
+                        $this->container['git'],
+                        $this->container['github'],
+                        $this->container['process']
+                    );
+                })
+            ->end()
+
             ->beginCommand('release')
                 ->setDescription('Make a new release for the current branch')
                 ->addArgument('version', Argument::REQUIRED | Argument::STRING, 'Version to make')

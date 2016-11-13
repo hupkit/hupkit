@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace HubKit\Service;
 
+use Composer\Semver\Comparator;
 use HubKit\Exception\WorkingTreeIsNotReady;
+use HubKit\Helper\Version;
 use HubKit\StringUtil;
 use Symfony\Component\Console\Style\StyleInterface;
 
@@ -105,6 +107,34 @@ class Git
     public function getLastTagOnBranch(string $ref = 'HEAD'): string
     {
         return trim($this->process->mustRun(['git', 'describe', '--tags', '--abbrev=0', $ref])->getOutput());
+    }
+
+    public function getVersionBranches(string $remote): array
+    {
+        $branches = StringUtil::splitLines(
+            $this->process->mustRun(
+                ['git', 'for-each-ref', '--format', '%(refname:strip=3)', 'refs/remotes/'.$remote]
+            )->getOutput()
+        );
+
+        $branches = array_filter($branches, function (string $branch) {
+            return preg_match('/^v?'.Version::VERSION_REGEX.'$/i', $branch);
+        });
+
+        // Sort in ascending order (lowest first).
+        // Trim v prefix as this causes problems with the comparator.
+        usort($branches, function ($a, $b) {
+            $a = ltrim($a, 'vV');
+            $b = ltrim($b, 'vV');
+
+            if (Comparator::equalTo($a, $b)) {
+                return 0;
+            }
+
+            return Comparator::lessThan($a, $b) ? -1 : 1;
+        });
+
+        return array_merge([], $branches);
     }
 
     /**
@@ -211,24 +241,6 @@ class Git
         }
     }
 
-    /**
-     * Merge a branch with a commit log in the merge message.
-     *
-     * @param string $base         The branch to which $sourceBranch is merged
-     * @param string $sourceBranch The source branch name
-     *
-     * @throws WorkingTreeIsNotReady
-     *
-     * @return string The merge-commit hash
-     */
-    public function mergeBranchWithLog(string $base, string $sourceBranch): string
-    {
-        $this->guardWorkingTreeReady();
-        $this->checkout($base);
-
-        return trim($this->process->mustRun(['git', 'merge', '--no-ff', '--log', $sourceBranch])->getOutput());
-    }
-
     public function addNotes(string $notes, string $commitHash, string $ref = 'github-comments')
     {
         $tmpName = $this->filesystem->newTempFilename();
@@ -247,13 +259,24 @@ class Git
         $this->process->run($commands, 'Adding git notes failed.');
     }
 
-    public function pushToRemote(string $remote, string $ref, bool $setUpstream = false, bool $force = false)
+    public function pushToRemote(string $remote, $ref, bool $setUpstream = false, bool $force = false)
     {
-        if (':' === $ref[0]) {
-            throw new \RuntimeException(
-                sprintf('Push target "%s" does not include the local branch-name, please report this bug!', $ref)
-            );
-        }
+        $ref = (array) $ref;
+        $ref = array_map(
+            function ($ref) {
+                if (':' === $ref[0]) {
+                    throw new \RuntimeException(
+                        sprintf(
+                            'Push target "%s" does not include the local branch-name, please report this bug!',
+                            $ref
+                        )
+                    );
+                }
+
+                return $ref;
+            },
+            $ref
+        );
 
         $command = ['git', 'push'];
 
@@ -266,9 +289,8 @@ class Git
         }
 
         $command[] = $remote;
-        $command[] = $ref;
 
-        $this->process->mustRun($command);
+        $this->process->mustRun(array_merge($command, $ref));
     }
 
     public function pullRemote(string $remote, string $ref = null)
@@ -305,6 +327,23 @@ class Git
         $command[] = $branchName;
 
         $this->process->mustRun($command);
+    }
+
+    /**
+     * Checkout a remote branch or create it when it doesn't exit yet.
+     *
+     * @param string $remote
+     * @param string $branchName
+     */
+    public function checkoutRemoteBranch(string $remote, string $branchName)
+    {
+        if ($this->branchExists($branchName)) {
+            $this->process->mustRun(['git', 'checkout', $branchName]);
+
+            return;
+        }
+
+        $this->process->mustRun(['git', 'checkout', $remote.'/'.$branchName, '-b', $branchName]);
     }
 
     public function guardWorkingTreeReady()
