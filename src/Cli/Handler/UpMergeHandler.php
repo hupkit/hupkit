@@ -17,7 +17,6 @@ use HubKit\Service\CliProcess;
 use HubKit\Service\Git;
 use HubKit\Service\GitHub;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Process\Exception\ProcessFailedException;
 use Webmozart\Console\Api\Args\Args;
 
 final class UpMergeHandler extends GitBaseHandler
@@ -58,11 +57,13 @@ final class UpMergeHandler extends GitBaseHandler
 
             $this->git->pushToRemote('upstream', $changedBranches, true);
             $this->style->success('Branch(es) where merged.');
-        } catch (ProcessFailedException $e) {
+        } catch (\Exception $e) {
             $this->style->error(
                 [
-                    'Merge operation failed with conflicts, please resolve this problem manually.',
-                    'Run `git add` and `git commit` after your done, and run this command again to finish.',
+                    'Operation failed, please resolve this problem manually.',
+                    'In the case of a conflict. Run `git add` and `git commit` after your done.',
+                    'And run this command again to finish.',
+                    '',
                     $e->getMessage(),
                 ]
             );
@@ -80,11 +81,14 @@ final class UpMergeHandler extends GitBaseHandler
             return [];
         }
 
+        $this->git->ensureBranchInSync('upstream', $branch);
+
         $branches[] = 'master';
         $changedBranches = [];
 
         for ($i = $idx + 1, $c = count($branches); $i < $c; ++$i) {
             $this->git->checkoutRemoteBranch('upstream', $branches[$i]);
+            $this->git->ensureBranchInSync('upstream', $branches[$i]);
             $this->process->mustRun(['git', 'merge', '--no-ff', '--log', $branches[$i - 1]]);
 
             $changedBranches[] = $branches[$i];
@@ -104,17 +108,13 @@ final class UpMergeHandler extends GitBaseHandler
             return [];
         }
 
-        // No next version exists, so use the master branch instead.
         if ('' === ($nextVersion = $branches[$idx + 1] ?? '')) {
-            $this->git->checkoutRemoteBranch('upstream', 'master');
-            $this->process->mustRun(['git', 'merge', '--no-ff', '--log', $branch]);
-
-            $this->git->checkout($branch);
-
-            return ['master'];
+            $nextVersion = 'master';
         }
 
+        $this->git->ensureBranchInSync('upstream', $branch);
         $this->git->checkoutRemoteBranch('upstream', $nextVersion);
+        $this->git->ensureBranchInSync('upstream', $nextVersion);
         $this->process->mustRun(['git', 'merge', '--no-ff', '--log', $branch]);
 
         $this->git->checkout($branch);

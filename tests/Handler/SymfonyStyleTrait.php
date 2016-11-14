@@ -54,4 +54,43 @@ trait SymfonyStyleTrait
 
         return $stream;
     }
+
+    protected function getDisplay(bool $normalize = true)
+    {
+        rewind($this->output->getStream());
+
+        $display = stream_get_contents($this->output->getStream());
+
+        if ($normalize) {
+            $display = str_replace(PHP_EOL, "\n", $display);
+        }
+
+        return $display;
+    }
+
+    protected function assertOutputMatches($expectedLines, string $output = null, $regex = false)
+    {
+        if (null === $output) {
+            $output = $this->getDisplay();
+        }
+
+        $output = preg_replace('/\s!\s/', ' ', trim($output));
+        $expectedLines = (array) $expectedLines;
+
+        foreach ($expectedLines as $matchLine) {
+            if (is_array($matchLine)) {
+                $line = $matchLine[0];
+                $lineRegex = $matchLine[1];
+            } else {
+                $line = $matchLine;
+                $lineRegex = $regex;
+            }
+
+            if (!$lineRegex) {
+                $line = preg_replace('#\s+#', '\\s+', preg_quote($line, '#'));
+            }
+
+            $this->assertRegExp('#'.$line.'#m', $output);
+        }
+    }
 }
