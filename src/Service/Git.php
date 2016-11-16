@@ -221,7 +221,7 @@ class Git
     public function branchExists(string $branch): bool
     {
         $branches = StringUtil::splitLines(
-            $this->process->mustRun(["git for-each-ref --format='%(refname:short)' refs/heads/"])->getOutput()
+            $this->process->mustRun("git for-each-ref --format='%(refname:short)' refs/heads/")->getOutput()
         );
 
         return in_array($branch, $branches, true);
