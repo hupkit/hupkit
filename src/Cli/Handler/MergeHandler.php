@@ -349,7 +349,10 @@ COMMENT;
 
     private function removeSourceBranch(array $pr)
     {
-        if ($this->github->getAuthUsername() !== $pr['user']['login'] || !$this->git->branchExists($pr['base']['ref'])) {
+        if (!$this->git->isWorkingTreeReady() ||
+            $this->github->getAuthUsername() !== $pr['user']['login'] ||
+            !$this->git->branchExists($pr['base']['ref'])
+        ) {
             return;
         }
 
