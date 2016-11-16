@@ -123,13 +123,11 @@ final class MergeHandler extends GitBaseHandler
 
         if ('pending' === $status['state']) {
             $this->style->warning('Status checks are pending, merge with caution.');
-
-            return;
         }
 
         $table = new StatusTable($this->style);
 
-        foreach ($status['statuses'] as $statusItem) {
+        foreach ($status['statuses'] ?? [] as $statusItem) {
             $label = explode('/', $statusItem['context']);
             $label = ucfirst($label[1] ?? $label[0]);
 
