@@ -246,6 +246,11 @@ class Git
         $tmpName = $this->filesystem->newTempFilename();
         file_put_contents($tmpName, $notes);
 
+        // Cannot add empty notes
+        if ('' === trim($notes)) {
+            return;
+        }
+
         $commands = [
             'git',
             'notes',

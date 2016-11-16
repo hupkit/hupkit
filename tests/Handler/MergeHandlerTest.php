@@ -999,7 +999,10 @@ BODY
         $this->git->ensureNotesFetching('upstream')->shouldBeCalled();
         $this->git->remoteUpdate('upstream')->shouldBeCalled();
         $this->git->addNotes($notesMessage ? PropArgument::containingString($notesMessage) : '', self::MERGE_SHA, 'github-comments')->shouldBeCalled();
-        $this->git->pushToRemote('upstream', 'refs/notes/github-comments')->shouldBeCalled();
+
+        if ('' !== $notesMessage) {
+            $this->git->pushToRemote('upstream', 'refs/notes/github-comments')->shouldBeCalled();
+        }
     }
 
     private function expectLocalUpdate(bool $ready = true, bool $branchExists = true)

@@ -323,7 +323,10 @@ COMMENT;
         // could be stale.
         $this->git->remoteUpdate('upstream');
         $this->git->addNotes($commentText, $sha, 'github-comments');
-        $this->git->pushToRemote('upstream', 'refs/notes/github-comments');
+
+        if ('' !== $commentText) {
+            $this->git->pushToRemote('upstream', 'refs/notes/github-comments');
+        }
     }
 
     private function updateLocalBranch(string $branch)
