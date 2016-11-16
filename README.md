@@ -127,7 +127,7 @@ HubKit is provided under the [MIT license](LICENSE).
 
 ## Credits
 
-This project is maintained by Sebastiaan Stok (aka. [@sstok](https://github.com/sstok),
+This project is maintained by Sebastiaan Stok (aka. [@sstok](https://github.com/sstok)),
 creator of Park-Manager.
 
 HubKit was inspired on the GH Tool used by the Symfony maintainers, 
