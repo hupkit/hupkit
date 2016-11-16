@@ -133,4 +133,4 @@ creator of Park-Manager.
 HubKit was inspired on the GH Tool used by the Symfony maintainers, 
 no actual code from GH was used. 
 
-HubKit is not to be confused with [Hub](https://hub.github.com/ (from GitHub).
+HubKit is not to be confused with [Hub](https://hub.github.com/) (from GitHub).
