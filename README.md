@@ -1,5 +1,9 @@
 # Park-Manager HubKit
 
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/4b94233d-799f-4276-91fb-2acd4a34f15e/mini.png)](https://insight.sensiolabs.com/projects/4b94233d-799f-4276-91fb-2acd4a34f15e)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/park-manager/hubkit/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/park-manager/hubkit/?branch=master)
+[![Build Status](https://travis-ci.org/park-manager/hubkit.svg?branch=master)](https://travis-ci.org/park-manager/hubkit)
+
 HubKit was created to ease the development workflow of the Park-Manger project.
 In short HubKit allows project(s) maintainers to easily manage there GitHub repositories.
 
