@@ -55,7 +55,7 @@ class Editor
         $contents = file_get_contents($tmpName);
 
         if (null !== $instructions) {
-            $contents = preg_replace("/^# THIS LINE IS AUTOMATICALLY AND REMOVED;(.++)(\r?\n)/i", '', $contents);
+            $contents = preg_replace("/^# THIS LINE IS AUTOMATICALLY REMOVED;(.++)(\r?\n)/i", '', $contents);
         }
 
         if ($abortOnEmpty && '' === trim($contents)) {
