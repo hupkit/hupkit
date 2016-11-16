@@ -42,7 +42,7 @@ class Editor
         }
 
         if (null !== $instructions) {
-            $instructions = "# THIS LINE IS AUTOMATICALLY AND REMOVED; $instructions\n\n";
+            $instructions = "# THIS LINE IS AUTOMATICALLY REMOVED; $instructions\n\n";
             $contents = $instructions.$contents;
         }
 
