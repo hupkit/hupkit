@@ -137,7 +137,7 @@ labels: removed-deprecation
                 'Preparing release 1.0.0 (target branch master)',
                 'Please wait...',
                 'Successfully released 1.0.0',
-                $url
+                $url,
             ]
         );
     }
@@ -163,7 +163,7 @@ labels: removed-deprecation
                 'Preparing release 1.0.0 (target branch master)',
                 'Please wait...',
                 'Successfully released 1.0.0',
-                $url
+                $url,
             ]
         );
     }
@@ -192,7 +192,7 @@ labels: removed-deprecation
                 'Preparing release 3.0.0 (target branch master)',
                 'Please wait...',
                 'Successfully released 3.0.0',
-                $url
+                $url,
             ]
         );
     }
@@ -237,7 +237,7 @@ labels: removed-deprecation
                 'Preparing release 3.0.0 (target branch 2.0)',
                 'Please wait...',
                 'Successfully released 3.0.0',
-                $url
+                $url,
             ]
         );
     }
