@@ -32,16 +32,17 @@ class SingleLineChoiceQuestionHelper extends QuestionHelper
         }
 
         $text = OutputFormatter::escape($question->getQuestion());
-        $default = $question->getDefault();
+        $text = sprintf(' <info>%s</info> ', $text);
 
-        if (null === $default) {
-            $text = sprintf(' <info>%s</info> ', $text);
-        } else {
-            $text = sprintf(' <info>%s</info> [<comment>%s</comment>] ', $text, OutputFormatter::escape($default));
+        $default = $question->getDefault();
+        $defaultLabel = '';
+
+        if (null !== $default) {
+            $defaultLabel = sprintf(' [<comment>%s</comment>] ', OutputFormatter::escape($default));
         }
 
         $output->write($text);
-        $output->writeln('<info>('.implode(', ', array_values($question->getChoices())).')?</>');
+        $output->writeln('<info>('.implode(', ', array_values($question->getChoices())).')?</>'.$defaultLabel);
         $output->write(' > ');
     }
 }
