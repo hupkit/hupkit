@@ -62,8 +62,8 @@ class Git
      *                GitHelper::STATUS_UP_TO_DATE, GitHelper::STATUS_NEED_PULL
      *                GitHelper::STATUS_NEED_PUSH, GitHelper::STATUS_DIVERGED
      *
-     * @link https://gist.github.com/WebPlatformDocs/437f763b948c926ca7ba
-     * @link https://stackoverflow.com/questions/3258243/git-check-if-pull-needed
+     * @see https://gist.github.com/WebPlatformDocs/437f763b948c926ca7ba
+     * @see https://stackoverflow.com/questions/3258243/git-check-if-pull-needed
      */
     public function getRemoteDiffStatus(string $remoteName, string $localBranch, string $remoteBranch = null): string
     {
