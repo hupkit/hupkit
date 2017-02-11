@@ -94,6 +94,7 @@ final class SelfDiagnoseHandler
         }
 
         $this->testGitHubConfigurations($table);
+        $this->testUpstreamRemoteSet($table);
         $table->render();
 
         if ($table->hasStatus('error')) {
@@ -150,6 +151,22 @@ final class SelfDiagnoseHandler
             $table->addRow($label, 'success', $result);
         } else {
             $table->addRow($label, 'warning', $message);
+        }
+    }
+
+    private function testUpstreamRemoteSet(StatusTable $table)
+    {
+        if (!$this->git->isGitDir()) {
+            return;
+        }
+
+        $result = (string) $this->git->getGitConfig('remote.upstream.url');
+        $label = sprintf('Git remote "upstream" configured');
+
+        if ('' !== $result) {
+            $table->addRow($label, 'success', $result);
+        } else {
+            $table->addRow($label, 'failure', 'Git remote "upstream" should be configured');
         }
     }
 
