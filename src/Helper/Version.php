@@ -203,7 +203,12 @@ final class Version
                 return $this->increaseStable();
 
             default:
-                throw new \InvalidArgumentException('Unknown or unsupported stability provided: '.$stability);
+                throw new \InvalidArgumentException(
+                    sprintf(
+                        'Unknown stability "%s", accepts "%s" '.$stability,
+                        implode('", "', ['alpha', 'beta', 'rc', 'stable', 'major', 'minor', 'patch'])
+                    )
+                );
         }
     }
 

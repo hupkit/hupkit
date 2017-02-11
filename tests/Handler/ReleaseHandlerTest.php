@@ -259,6 +259,32 @@ labels: removed-deprecation
         $this->executeHandler($args); // default answer is no
     }
 
+    /** @test */
+    public function it_creates_a_new_release_with_a_relative_version()
+    {
+        $this->expectTags(['0.1.0', '1.0.0', '2.0.0']);
+        $this->git->getLastTagOnBranch()->willReturn('2.5.0');
+        $this->expectMatchingVersionBranchNotExists('3.0');
+
+        $this->git->getLogBetweenCommits('2.5.0', 'master')->willReturn(self::COMMITS);
+
+        $this->expectEditorReturns("### Added\n- Introduce a new API for ValuesBag", 'Drop support for older PHP versions');
+
+        $url = $this->expectTagAndGitHubRelease('3.0.0', 'Drop support for older PHP versions');
+
+        $args = $this->getArgs('major');
+        $this->executeHandler($args);
+
+        $this->assertOutputMatches(
+            [
+                'Preparing release 3.0.0 (target branch master)',
+                'Please wait...',
+                'Successfully released 3.0.0',
+                $url,
+            ]
+        );
+    }
+
     private function getArgs(string $version): Args
     {
         $format = ArgsFormat::build()
