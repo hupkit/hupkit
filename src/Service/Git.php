@@ -42,13 +42,13 @@ class Git
 
     public function isGitDir(): bool
     {
-        $directory = $this->process->run(['git', 'rev-parse', '--show-toplevel'])->getOutput();
+        $directory = trim($this->process->run(['git', 'rev-parse', '--show-toplevel'])->getOutput());
 
         if ('' === $directory) {
             return false;
         }
 
-        return str_replace('\\', '/', getcwd()) !== $directory;
+        return str_replace('\\', '/', getcwd()) === $directory;
     }
 
     /**
