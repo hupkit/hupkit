@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace HubKit\Service;
 
 use Github\Client as GitHubClient;
+use Github\HttpClient\Builder;
 use Github\ResultPager;
 use Http\Client\HttpClient;
 use HubKit\Config;
@@ -24,6 +25,8 @@ class GitHub
 
     private $httpClient;
     private $config;
+    /** @var Builder */
+    private $clientBuilder;
     /** @var GitHubClient */
     private $client;
     private $organization;
@@ -60,7 +63,9 @@ class GitHub
             $this->username = $this->config->getOrFail(['github', $hostname, 'username']);
             $apiUrl = $this->config->get(['github', $hostname, 'api_url'], null);
 
-            $this->client = new GitHubClient($this->httpClient, null, $apiUrl);
+            $this->clientBuilder = new Builder($this->httpClient);
+
+            $this->client = new GitHubClient($this->clientBuilder, null, $apiUrl);
             $this->client->authenticate($apiToken, null, GitHubClient::AUTH_HTTP_TOKEN);
             $this->hostname = $hostname;
         }
@@ -275,7 +280,7 @@ class GitHub
 
     private function setApVersion(string $version)
     {
-        $this->client->addHeaders(['Accept' => sprintf('application/vnd.github.%s+json', $version)]);
+        $this->clientBuilder->addHeaders(['Accept' => sprintf('application/vnd.github.%s+json', $version)]);
     }
 
     private static function getValuesFromNestedArray(array $array, string $key)
