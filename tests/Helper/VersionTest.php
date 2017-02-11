@@ -137,4 +137,63 @@ class VersionTest extends TestCase
 
         self::assertEquals($expected, $candidates);
     }
+
+    public function provideExpectedIncreasedVersion(): array
+    {
+        return [
+            'patch with patch 0' => ['0.1.0', '0.1.1', 'patch'],
+            'patch with patch 1' => ['0.1.1', '0.1.2', 'patch'],
+
+            // Minor, patch must be reset
+            'minor with patch 0' => ['0.1.0', '0.2.0', 'minor'],
+            'minor with patch 1' => ['0.1.1', '0.2.0', 'minor'],
+
+            // Major, minor and patch must be reset
+            'major.0.0' => ['0.1.0', '1.0.0', 'major'],
+            'major.1.0' => ['0.1.0', '1.0.0', 'major'],
+            'major.1.1' => ['0.1.1', '1.0.0', 'major'],
+            'major from beta' => ['1.0.0-beta1', '1.0.0', 'major'],
+            'major from 1.0' => ['1.0.0', '2.0.0', 'major'],
+            'major from 2.0-beta' => ['2.0.0-beta1', '2.0.0', 'major'],
+
+            // Alpha
+            'next alpha' => ['1.0.0-alpha1', '1.0.0-alpha2', 'alpha'],
+            'new alpha' => ['1.0.0', '1.1.0-alpha1', 'alpha'],
+
+            // Beta
+            'next beta' => ['1.0.0-beta1', '1.0.0-beta2', 'beta'],
+            'new beta' => ['1.0.0', '1.1.0-beta1', 'beta'],
+            'new beta from alpha' => ['1.0.0-alpha1', '1.0.0-beta1', 'beta'],
+
+            // RC
+            'next rc' => ['1.0.0-rc1', '1.0.0-rc2', 'rc'],
+            'new rc' => ['1.0.0', '1.1.0-rc1', 'rc'],
+            'new rc from alpha' => ['1.0.0-alpha1', '1.0.0-rc1', 'rc'],
+            'new rc from beta' => ['1.0.0-beta1', '1.0.0-rc1', 'rc'],
+
+            // Stable
+            'new stable from 0.0' => ['0.1.0', '1.0.0', 'stable'],
+            'new stable from alpha' => ['1.0.0-alpha6', '1.0.0', 'stable'],
+            'new stable from beta' => ['1.0.0-beta1', '1.0.0', 'stable'],
+            'new stable from current stable' => ['1.0.0', '1.1.0', 'stable'],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider provideExpectedIncreasedVersion
+     */
+    public function it_increases_to_next_version(string $current, string $expected, $stability)
+    {
+        self::assertEquals(Version::fromString($expected), Version::fromString($current)->increase($stability));
+    }
+
+    /** @test */
+    public function it_cannot_increases_patch_on_unstable()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Cannot increase patch for an unstable version.');
+
+        Version::fromString('1.0.0-beta1')->increase('patch');
+    }
 }

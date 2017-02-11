@@ -162,4 +162,75 @@ final class Version
     {
         return $this->full === $second->full;
     }
+
+    /**
+     * Returns the increased Version based on the stability.
+     *
+     * Note. Using 'major' on a beta release will create a stable release
+     * for that major version. Using 'stable' on an existing stable will increase
+     * minor.
+     *
+     * @param string $stability Eg. alpha, beta, rc, stable, major, minor, patch
+     *
+     * @return Version A new version instance with the changes applied
+     */
+    public function increase(string $stability): Version
+    {
+        switch ($stability) {
+            case 'patch':
+                if ($this->major > 0 && $this->metaver > 0) {
+                    throw new \InvalidArgumentException('Cannot increase patch for an unstable version.');
+                }
+
+                return new self($this->major, $this->minor, $this->patch + 1, 3);
+
+            case 'minor':
+                return new self($this->major, $this->minor + 1, 0, 3);
+
+            case 'major':
+                if ($this->stability < 3) {
+                    return new self($this->major > 0 ? $this->major : $this->major + 1, 0, 0, 3);
+                }
+
+                return new self($this->major + 1, 0, 0, 3);
+
+            case 'alpha':
+            case 'beta':
+            case 'rc':
+                return $this->increaseMetaver($stability);
+
+            case 'stable':
+                return $this->increaseStable();
+
+            default:
+                throw new \InvalidArgumentException(
+                    sprintf(
+                        'Unknown stability "%s", accepts "%s" '.$stability,
+                        implode('", "', ['alpha', 'beta', 'rc', 'stable', 'major', 'minor', 'patch'])
+                    )
+                );
+        }
+    }
+
+    private function increaseMetaver(string $stability): Version
+    {
+        if ($this->stability === self::$stabilises[$stability]) {
+            return new self($this->major, $this->minor, 0, $this->stability, $this->metaver + 1);
+        }
+
+        if (self::$stabilises[$stability] > $this->stability) {
+            return new self($this->major, $this->minor, 0, self::$stabilises[$stability], 1);
+        }
+
+        return new self($this->major, $this->minor + 1, 0, self::$stabilises[$stability], 1);
+    }
+
+    private function increaseStable(): Version
+    {
+        if ($this->stability < 3) {
+            return new self(max($this->major, 1), 0, 0, 3);
+        }
+
+        return new self($this->major, $this->minor + 1, 0, 3);
+    }
 }
