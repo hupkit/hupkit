@@ -115,7 +115,7 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
                     );
                 }
 
-                if ($isGit) {
+                if ($handler instanceof RequiresGitRepository && $isGit) {
                     $this->container['github']->autoConfigure($this->container['git']);
                 } else {
                     $hostname = $event->getArgs()->isOptionSet('host') ? $event->getArgs()->getOption('host') : null;
