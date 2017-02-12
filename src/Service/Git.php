@@ -318,7 +318,15 @@ class Git
 
     public function isWorkingTreeReady()
     {
-        return '' === trim($this->process->mustRun('git status --porcelain --untracked-files=no')->getOutput());
+        if ('' !== trim($this->process->mustRun('git status --porcelain --untracked-files=no')->getOutput())) {
+            return false;
+        }
+
+        if ('' !== trim($this->process->run('ls `git rev-parse --git-dir` | grep rebase')->getOutput())) {
+            return false;
+        }
+
+        return true;
     }
 
     public function checkout(string $branchName, bool $createBranch = false)
