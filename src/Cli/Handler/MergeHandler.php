@@ -266,6 +266,7 @@ final class MergeHandler extends GitBaseHandler
         $labelToMergeLabel = [
             'deprecation' => 'deprecation',
             'deprecation removal' => 'removed-deprecation',
+            'bc break' => 'bc-break',
         ];
 
         foreach ($prLabels as $label) {

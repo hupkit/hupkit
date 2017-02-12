@@ -783,7 +783,7 @@ BODY
     /** @test */
     public function it_includes_info_labels_in_merge_commit_message()
     {
-        $pr = $this->expectPrInfo('sstok', ['Bug', 'Deprecation']);
+        $pr = $this->expectPrInfo('sstok', ['Bug', 'Deprecation', 'BC Break']);
         $this->expectCommitStatus();
         $this->expectCommits($pr);
 
@@ -792,7 +792,7 @@ BODY
             'feature #42 Brand new design (sstok)',
             PropArgument::exact(<<<'BODY'
 This PR was squashed before being merged into the 1.0-dev branch.
-labels: deprecation
+labels: deprecation,bc-break
 
 Discussion
 ----------
