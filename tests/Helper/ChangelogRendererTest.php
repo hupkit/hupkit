@@ -67,7 +67,7 @@ labels: deprecation , removed-deprecation
             'author' => 'Sebastiaan Stok <s.stok@rollerscapes.net>',
             'subject' => 'refactor #52 Removed deprecated API (sstok)',
             'message' => 'This PR was merged into the 1.0-dev branch.
-labels: removed-deprecation
+labels: removed-deprecation,bc-break
 
 9b67df3871e871084d0abef1e0db639d552fc7e commit 2',
         ],
@@ -112,7 +112,7 @@ labels: removed-deprecation
 - Great new architecture ([sstok](https://github.com/sstok), [someone](https://github.com/someone)) [#55](https://github.com/park-manager/hubkit/issues/55)
 
 ### Removed
-- Removed deprecated API ([sstok](https://github.com/sstok)) [#52](https://github.com/park-manager/hubkit/issues/52)
+- [BC BREAK] Removed deprecated API ([sstok](https://github.com/sstok)) [#52](https://github.com/park-manager/hubkit/issues/52)
 LOG
 , $this->getRenderer()->renderChangelogByCategories('base', 'head'));
     }
@@ -136,7 +136,7 @@ LOG
 - Great new architecture ([sstok](https://github.com/sstok), [someone](https://github.com/someone)) [#55](https://github.com/park-manager/hubkit/issues/55)
 
 ### Removed
-- Removed deprecated API ([sstok](https://github.com/sstok)) [#52](https://github.com/park-manager/hubkit/issues/52)
+- [BC BREAK] Removed deprecated API ([sstok](https://github.com/sstok)) [#52](https://github.com/park-manager/hubkit/issues/52)
 
 ### Fixed
 - nothing
@@ -153,7 +153,7 @@ LOG
 - Introduce a new API for ValuesBag ([sstok](https://github.com/sstok)) [#93](https://github.com/park-manager/hubkit/issues/93)
 - Clean up ([sstok](https://github.com/sstok)) [#56](https://github.com/park-manager/hubkit/issues/56)
 - Great new architecture ([sstok](https://github.com/sstok), [someone](https://github.com/someone)) [#55](https://github.com/park-manager/hubkit/issues/55)
-- Removed deprecated API ([sstok](https://github.com/sstok)) [#52](https://github.com/park-manager/hubkit/issues/52)
+- [BC BREAK] Removed deprecated API ([sstok](https://github.com/sstok)) [#52](https://github.com/park-manager/hubkit/issues/52)
 LOG
 , $this->getRenderer()->renderChangelogOneLine('base', 'head'));
     }

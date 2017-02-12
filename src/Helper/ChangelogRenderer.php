@@ -35,7 +35,8 @@ class ChangelogRenderer
 
         foreach ($this->git->getLogBetweenCommits($base, $head) as $commit) {
             if ($this->extractInfoFromSubject($commit['subject'], $matches)) {
-                $changelog .= $this->formatLine($matches, $url);
+                $labels = $this->getLabels($commit['message']);
+                $changelog .= $this->formatLine($matches + ['labels' => $labels], $url);
             }
         }
 
@@ -47,7 +48,7 @@ class ChangelogRenderer
         $url = 'https://'.$this->github->getHostname().'/'.$this->github->getOrganization().'/'.$this->github->getRepository();
         $changelog = '';
 
-        foreach ($this->getCategory($base, $head) as $category => $items) {
+        foreach ($this->getItemsPerCategories($base, $head) as $category => $items) {
             if (!count($items)) {
                 if (!$skipEmptyLists) {
                     $changelog .= "### {$category}\n- nothing\n\n";
@@ -88,10 +89,14 @@ class ChangelogRenderer
             )
         ;
 
+        if (in_array('bc-break', $item['labels'], true)) {
+            $title = '[BC BREAK] '.$title;
+        }
+
         return sprintf('- %s [#%d](%s/issues/%2$d)', trim($title), $item['number'], $url)."\n";
     }
 
-    private function getCategory(string $base, string $head): array
+    private function getItemsPerCategories(string $base, string $head): array
     {
         $categories = [
             'Security' => [],
@@ -107,21 +112,20 @@ class ChangelogRenderer
                 continue;
             }
 
-            $category = $this->getCategoryForCommit($commit + $matches);
-            $categories[$category][] = $matches;
+            $labels = $this->getLabels($commit['message']);
+            $category = $this->getCategoryForCommit($commit + $matches, $labels);
+            $categories[$category][] = $matches + ['labels' => $labels];
         }
 
         return $categories;
     }
 
-    private function getCategoryForCommit(array $commit): string
+    private function getCategoryForCommit(array $commit, array $labels): string
     {
         // Security can only ever be related about security.
         if ('security' === $commit['category']) {
             return 'Security';
         }
-
-        list(, $labelsStr) = StringUtil::splitLines(ltrim($commit['message']));
 
         $catToFinal = [
             'feature' => 'Added',
@@ -129,19 +133,26 @@ class ChangelogRenderer
             'bug' => 'Fixed',
         ];
 
-        // Detect labels eg. `labels: deprecation`
-        if (0 === strpos($labelsStr, 'labels: ')) {
-            $labels = preg_split('/\s*,\s*/', substr($labelsStr, 8));
+        if (in_array('deprecation', $labels, true)) {
+            return 'Deprecated';
+        }
 
-            if (in_array('deprecation', $labels, true)) {
-                return 'Deprecated';
-            }
-
-            if (in_array('removed-deprecation', $labels, true)) {
-                return 'Removed';
-            }
+        if (in_array('removed-deprecation', $labels, true)) {
+            return 'Removed';
         }
 
         return $catToFinal[$commit['category']] ?? 'Changed';
+    }
+
+    private function getLabels(string $message): array
+    {
+        list(, $labelsStr) = StringUtil::splitLines(ltrim($message));
+
+        // Detect labels eg. `labels: deprecation`
+        if (0 === strpos($labelsStr, 'labels: ')) {
+            return preg_split('/\s*,\s*/', substr($labelsStr, 8));
+        }
+
+        return [];
     }
 }
