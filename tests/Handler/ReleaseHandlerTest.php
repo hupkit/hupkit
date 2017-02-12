@@ -285,6 +285,34 @@ labels: removed-deprecation
         );
     }
 
+    /** @test */
+    public function it_fails_when_tag_already_exists()
+    {
+        $this->expectTags(['v0.1.0', 'v0.2.0', 'v0.3.0', '1.0.0-BETA1', '1.0.0']);
+        $this->git->getLastTagOnBranch()->willReturn('1.0.0-BETA1');
+        $this->expectMatchingVersionBranchNotExists('3.0');
+
+        $this->expectException('RuntimeException');
+        $this->expectExceptionMessage('Tag for version "v0.1.0" already exists, did you mean: v0.3.1, v0.4.0 ?');
+
+        $args = $this->getArgs('0.1.0');
+        $this->executeHandler($args);
+    }
+
+    /** @test */
+    public function it_fails_when_tag_without_prefix_already_exists()
+    {
+        $this->expectTags(['0.1.0', '1.0.0-BETA1']);
+        $this->git->getLastTagOnBranch()->willReturn('1.0.0-BETA1');
+        $this->expectMatchingVersionBranchNotExists('3.0');
+
+        $this->expectException('RuntimeException');
+        $this->expectExceptionMessage('Tag for version "v0.1.0" already exists, did you mean: v0.1.1, v0.2.0, v1.0.0 ?');
+
+        $args = $this->getArgs('0.1.0');
+        $this->executeHandler($args);
+    }
+
     private function getArgs(string $version): Args
     {
         $format = ArgsFormat::build()

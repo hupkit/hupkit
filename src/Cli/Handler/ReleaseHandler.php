@@ -115,11 +115,12 @@ final class ReleaseHandler extends GitBaseHandler
             $version = Version::fromString($version);
         }
 
+        $tags = StringUtil::splitLines($this->process->mustRun('git tag --list')->getOutput());
+        $this->guardTagDoesNotExist($version, $tags);
+
         if (!$this->io->isInteractive()) {
             return $version;
         }
-
-        $tags = StringUtil::splitLines($this->process->mustRun('git tag --list')->getOutput());
 
         if (!VersionsValidator::isVersionContinues(VersionsValidator::getHighestVersions($tags), $version, $suggested)) {
             $this->style->warning(
@@ -156,5 +157,36 @@ final class ReleaseHandler extends GitBaseHandler
         }
 
         return 'Initial release.';
+    }
+
+    private function guardTagDoesNotExist(Version $version, array $tags)
+    {
+        $tags = array_map(
+            function ($tag) {
+                return ltrim($tag, 'vV');
+            },
+            $tags
+        );
+
+        if (!in_array((string) $version, $tags, true)) {
+            return;
+        }
+
+        VersionsValidator::isVersionContinues(VersionsValidator::getHighestVersions($tags), $version, $suggested);
+
+        $suggested = array_filter(
+            $suggested,
+            function (Version $version) use ($tags) {
+                return !in_array((string) $version, $tags, true);
+            }
+        );
+
+        throw new \RuntimeException(
+            sprintf(
+                'Tag for version "v%s" already exists, did you mean: v%s ?',
+                (string) $version,
+                implode(', v', $suggested)
+            )
+        );
     }
 }
