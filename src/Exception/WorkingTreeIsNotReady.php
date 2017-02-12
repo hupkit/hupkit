@@ -15,6 +15,6 @@ final class WorkingTreeIsNotReady extends \Exception
 {
     public function __construct()
     {
-        parent::__construct('The Git working tree has uncommitted changes, stash your changes before continuing.');
+        parent::__construct('The Git working tree is not ready. There are uncommitted changes or a rebase is in progress.');
     }
 }
