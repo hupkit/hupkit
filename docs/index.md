@@ -71,7 +71,7 @@ Done, you now have the latest version.
 
 ## Basic usage
 
-See the [usage](docs/index.md) for all commands and usage instructions.
+See the [usage](usage.md) for all commands and usage instructions.
 
 <!--Run `hubkit help` for a full list of all available commands and options.
 
