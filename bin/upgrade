@@ -5,7 +5,7 @@ echo ""
 
 if [ ! -f bin/hubkit.php ]; then
     echo "Please run this script from your installation directory."
-    exiit 2
+    exit 2
 fi
 
 git fetch origin
