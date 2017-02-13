@@ -77,9 +77,12 @@ Done, you now have the latest version.
 
 Run `hubkit help` for a full list of all available commands and options.
 
-**Note:** All commands except `help`, `repo-create` and `self-diagnose` require 
-you are in a Git repository, and have Git remote `upstream` existing and pointing 
+**Note:** All commands except `help`, `repo-create` and `self-diagnose` require
+you are in a Git repository, and have Git remote `upstream` existing and pointing
 to the GitHub head repository (from which all work is coordinated, not your fork).
+
+See the [usage](http://www.park-manager.com/hubkit/usage.html) for all commands
+and usage instructions.
 
 ## Versioning
 
@@ -104,7 +107,7 @@ For more information on SemVer, please visit <http://semver.org/>.
 HubKit was designed specifically for the maintenance workflow of the Park-Manager project.
 In the spirit of free-software it's made available to everyone.
 
-HubKit is open-source and community driven, but to prevent becoming 
+HubKit is open-source and community driven, but to prevent becoming
 to bloated not all requested features will be actually accepted.
 
 *The purpose of HubKit is to ease the daily workflow of project maintainers,
@@ -134,7 +137,7 @@ HubKit is provided under the [MIT license](LICENSE).
 This project is maintained by Sebastiaan Stok (aka. [@sstok](https://github.com/sstok)),
 creator of Park-Manager.
 
-HubKit was inspired on the GH Tool used by the Symfony maintainers, 
-no actual code from GH was used. 
+HubKit was inspired on the GH Tool used by the Symfony maintainers,
+no actual code from GH was used.
 
 HubKit is not to be confused with [Hub](https://hub.github.com/) (from GitHub).

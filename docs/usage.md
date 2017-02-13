@@ -78,34 +78,34 @@ And obtain a new api-token at `https://development.example.com/settings/tokens/n
 place it in your 'development.example.com' hub configuration and run `hubkit self-diagnose`
 to test if everything is working.
 
-Whenever you use hubkit in a git repository it will automatically detect the
+Whenever you use hubkit in a Git repository it will automatically detect the
 correct hub configuration by remote "upstream".
 
 ## Commands
 
 Run `hubkit help` for a full list of all available commands and options.
 
-**Note:** All commands except `help`, `repo-create` and `self-diagnose` require 
-you are in a Git repository, and have Git remote `upstream` existing and pointing 
+**Note:** All commands except `help`, `repo-create` and `self-diagnose` require
+you are in a Git repository, and have Git remote `upstream` existing and pointing
 to the GitHub head repository (from which all work is coordinated, not your fork).
 
 For the `repo-create` command you may need to provide which hub configuration you
 want to use. By default 'github.com' is used, use `--host=development.example.com`
-for Enterprise example shown above.
+for the Enterprise example shown above.
 
-Commands are in lowercase.
+Command names and options are in lowercase.
 
 ### branch-alias
 
-Set/get the "master" branch-alias. Omit alias argument to get the current alias.
+Set/get the "master" branch-alias. Omit the `alias` argument to get the current alias.
 
-To set a branch-alias for the "master" use 
+To set a branch-alias for the "master" use:
 
 ```bash
 $ hubkit branch-alias 1.0
 ```
 
-To get the branch-alias for the "master" use the command without any arguments. 
+To get the branch-alias for "master" use the command without any arguments:
 
 ```bash
 $ hubkit branch-alias
@@ -113,7 +113,7 @@ $ hubkit branch-alias
 
 ### changelog
 
-Generate a changelog formatted according to http://keepachangelog.com/
+Generate a changelog, formatted according to http://keepachangelog.com/
 with all changes between (the specified) commits.
 
 **Note:** Security is placed higher then the original spec to ensure they
@@ -175,16 +175,16 @@ Alternatively you use the `--online` option to get a changelog without sections.
 - [BC BREAK] Removed deprecated API ([sstok](https://github.com/sstok)) [#52](https://github.com/park-manager/hubkit/issues/52)
 ```
 
-**Caution:** The changelog auto formatting work because of some conventions used
+**Caution:** The changelog auto formatting works because of some conventions used
 in HubKit. Only pull requests that were merged with the `merge` command (not the merge button!)
-will be properly categorized and labeled, all other show-up in he "Changed" section.
- 
+will be properly categorized and labeled, all others show-up in he "Changed" section.
+
 ### merge
 
 Merge a pull request with preservation of the original title/description and comments.
 Plus some additional information for the `changelog` command.
 
-To merge pull request 22 in your repository simple run:
+To merge pull request `#22` in your repository simple run:
 
 ```bash
 $ hubkit merge 22
@@ -193,20 +193,20 @@ $ hubkit merge 22
 And choose a category (feature, refactor, bug, minor, style).
 
 **Note:** You may get a warning that some checks are pending, depending on your
-repositories branch protection you may not be able to merge then.
+repository's branch protection you may not be able to merge then.
 
 #### Bat on the back
 
 Once the pull request is merged the author (unless you are merging your own)
 automatically gets little "pat on the back" for there work.
 
-You can change the default message `Thank you @author` using the `--pat` option.
+You can change the (default) message `Thank you @author` using the `--pat` option.
 
 ```bash
 $ hubkit merge 22 --pat=':beers: @author !'
 ```
 
-Or use the `--no-pat` option to disable for this merge.
+Or use the `--no-pat` option to skip it for this merge.
 
 **Caution:** The `!` has a special meaning in the shell, use single quotes
 to prevent expansion.
@@ -215,25 +215,25 @@ to prevent expansion.
 
 The `merge` command has a number of special options:
 
-* `--squash`: Squash the pull request before merging.
+* `--squash`: Squash the pull request before merging;
 
-* `--no-pull`: Skip pulling changes to your local base branch.
+* `--no-pull`: Skip pulling changes to your local base branch;
 
-* `--security`: Merge pull request as a security patch (uses the security category)
+* `--security`: Merge pull request as a security patch (uses the 'security' category);
 
 ### release
 
 Make a new release for the current branch, this creates a signed Git tag and GitHub release-page.
 
-The `release` command automatically generates a changelog and allows you to change
-it with additional in favorite editor. Use `--no-edit` to skip the editing, you change
-this later using the GitHub web interface.
+The `release` command automatically generates a changelog and allows to add
+additional info using your favorite editor. Use `--no-edit` to skip the editing,
+you can change the content later using the GitHub web interface.
 
 ```bash
 $ hubkit release 1.0.0
 ```
 
-A version is expected to follow the SemVer format, eg. `v1.0.0`, `0.1.0` or `v1.0.0-BETA1`
+A version is expected to follow the SemVer format, eg. `v1.0.0`, `0.1.0` or `v1.0.0-BETA1`.
 Leading `v` is automatically added when missing and the meta version (alpha, beta, rc) is
 upper cased.
 
@@ -247,26 +247,47 @@ upper cased.
 
 The `release` command has a number of special options:
 
-* `--all-categories`: Show all categories (including empty) (same as `--all` of the `changelog` command).
+* `--all-categories`: Show all categories (including empty) (same as `--all` of the `changelog` command);
 
-* `--no-edit`: Don't open the editor for editing the release page, accept the changelog as-is.
+* `--no-edit`: Don't open the editor for editing the release page, accept the changelog as-is;
 
-* `--pre-release`: Mark as pre-release (not production ready)
+* `--pre-release`: Mark as pre-release (not production ready);
 
 #### Notes on signing
 
-The Git tag of a release is signed, you can't disable this. Make sure you have
+The Git tag of a release is signed, *you can't disable this*. Make sure you have
 a signing key configured and that gpg/pgp is set-up properly.
 
-### repo-create
+See also: https://git-scm.com/book/tr/v2/Git-Tools-Signing-Your-Work
 
-Create a new empty GitHub repository. Wiki and Downloads are disabled by default.
+### repo-create (deprecated)
 
-TBD.
+Creates a new minimal empty GitHub repository.
+Wiki and Downloads are disabled by default.
+
+```bash
+$ hubkit repo-create park-manager/hubkit
+```
+
+This creates the "hubkit" repository in the "park-manager" organization.
+To create a private repository (may require a paid plan) use the `--private` option.
+
+**Note:** This command is considered deprecated, it will not be removed
+anytime soon, but will be moved to RepoKit (not publicly available yet).
+
+#### Special options
+
+The `repo-create` command has a number of special options:
+
+* `--private`: Create private repository (may require a paid plan);
+
+* `--no-issues`: Disable issues, usable when you have a global issue tracker or using
+  a third party solution like Jira.
 
 ### self-diagnose
 
-Checks your system is ready to use HubKit and gives recommendations about changes you should make.
+Checks your system is ready to use HubKit and gives recommendations
+about changes you should make.
 
 **Note:** It's recommended to run this command from a local Git repository,
 as more information is shown then.
@@ -284,16 +305,16 @@ a different one. Eg. `--base=1.x` for `upstream/1.x`.
 
 ### upmerge
 
-Merges current branch to the next version branch (eg. 1.0 into 1.1).
+Merge the current branch to the next version branch (eg. 1.0 into 1.1).
 
-Most project follow a merge bug fixes to the lowest supported branch first approach,
+Most projects follow a 'merge bug fixes to the lowest supported branch first' approach,
 and then merge the lower branch into newer branches. Usually: `1.0 -> 2.0 -> master`.
 
 But this process is tedious (boring) and error prone, the `upmerge` command makes
 this boring work, as simple and save as possible.
 
 The process ensures your local source *and* target branch are up-to-date,
-uses the correct flags (`--no-ff` and `--log`), and pushes to upstream. 
+uses the correct flags (`--no-ff` and `--log`), and pushes to upstream.
 
 First checkout the lowest supported branch, eg. `1.0`. And run the upmerge command.
 
@@ -305,7 +326,7 @@ $ hubkit upmerge
 That's it! The command automatically detects which branch `1.0` is to be merged into.
 
 **Caution:** The `upmerge` command uses the Semantic Versioning schematics, versions
-are automatically detected based on there precedence. **Don't use this command when 
+are automatically detected based on there precedence. **Don't use this command when
 you use GitFlow!**
 
 Need to merge more then one branch? Use `--all` option to merge the current branch
