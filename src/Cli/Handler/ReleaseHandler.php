@@ -115,6 +115,8 @@ final class ReleaseHandler extends GitBaseHandler
             $version = Version::fromString($version);
         }
 
+        $this->style->text('Provided version: '.$version);
+
         $tags = StringUtil::splitLines($this->process->mustRun('git tag --list')->getOutput());
         $this->guardTagDoesNotExist($version, $tags);
 
