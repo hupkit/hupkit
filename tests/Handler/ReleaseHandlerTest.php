@@ -160,6 +160,7 @@ labels: removed-deprecation
 
         $this->assertOutputMatches(
             [
+                'Provided version: 1.0.0',
                 'Preparing release 1.0.0 (target branch master)',
                 'Please wait...',
                 'Successfully released 1.0.0',
@@ -186,6 +187,7 @@ labels: removed-deprecation
 
         $this->assertOutputMatches(
             [
+                'Provided version: 3.0.0',
                 'It appears there is gap compared to the last version.',
                 'Expected one of : 2.0.0-ALPHA1, 2.0.0-BETA1, 2.0.0',
                 'Please confirm your input is correct. (yes/no) [no]:',
@@ -231,6 +233,7 @@ labels: removed-deprecation
 
         $this->assertOutputMatches(
             [
+                'Provided version: 3.0.0',
                 'This release will be created for the "2.0" branch.',
                 'But a branch with version pattern "3.0" exists, did you target the correct branch?',
                 'Please confirm your input is correct. (yes/no) [no]:',
@@ -277,6 +280,7 @@ labels: removed-deprecation
 
         $this->assertOutputMatches(
             [
+                'Provided version: 3.0.0',
                 'Preparing release 3.0.0 (target branch master)',
                 'Please wait...',
                 'Successfully released 3.0.0',
