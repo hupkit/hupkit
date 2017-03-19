@@ -14,13 +14,13 @@ declare(strict_types=1);
 namespace HubKit\Cli\Handler;
 
 use HubKit\Helper\ChangelogRenderer;
-use HubKit\Helper\Version;
-use HubKit\Helper\VersionsValidator;
 use HubKit\Service\CliProcess;
 use HubKit\Service\Editor;
 use HubKit\Service\Git;
 use HubKit\Service\GitHub;
 use HubKit\StringUtil;
+use Rollerworks\Component\Version\Version;
+use Rollerworks\Component\Version\VersionsValidator;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Webmozart\Console\Api\Args\Args;
 use Webmozart\Console\Api\IO\IO;

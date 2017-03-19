@@ -15,8 +15,8 @@ namespace HubKit\Service;
 
 use Composer\Semver\Comparator;
 use HubKit\Exception\WorkingTreeIsNotReady;
-use HubKit\Helper\Version;
 use HubKit\StringUtil;
+use Rollerworks\Component\Version\Version;
 use Symfony\Component\Console\Style\StyleInterface;
 
 class Git
