@@ -248,7 +248,6 @@ class GitHub
 
     public function mergePullRequest(int $id, string $title, string $message, string $sha, bool $squash = false)
     {
-        $this->setApVersion('polaris-preview');
         $api = $this->client->pullRequest();
 
         return $api->merge(
@@ -276,11 +275,6 @@ class GitHub
                 'prerelease' => $preRelease,
             ]
         );
-    }
-
-    private function setApVersion(string $version)
-    {
-        $this->clientBuilder->addHeaders(['Accept' => sprintf('application/vnd.github.%s+json', $version)]);
     }
 
     private static function getValuesFromNestedArray(array $array, string $key)
