@@ -28,13 +28,13 @@ use Webmozart\Console\Api\Args\Format\Option;
 use Webmozart\Console\Args\StringArgs;
 use Webmozart\Console\IO\BufferedIO;
 
-class MergeHandlerTest extends TestCase
+final class MergeHandlerTest extends TestCase
 {
     use SymfonyStyleTrait;
-    const PR_NUMBER = 42;
-    const PR_BRANCH = 'feature-something';
-    const HEAD_SHA = '1b04532c8a09d9084abce36f8d9daf675f89eacc';
-    const MERGE_SHA = '52a6bb3aeb7e08e8b641cfa679e4416096bf8439';
+    private const PR_NUMBER = 42;
+    private const PR_BRANCH = 'feature-something';
+    private const HEAD_SHA = '1b04532c8a09d9084abce36f8d9daf675f89eacc';
+    private const MERGE_SHA = '52a6bb3aeb7e08e8b641cfa679e4416096bf8439';
 
     /** @var ObjectProphecy */
     private $git;

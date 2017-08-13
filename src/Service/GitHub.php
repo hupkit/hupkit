@@ -21,7 +21,7 @@ use HubKit\Config;
 
 class GitHub
 {
-    const DEFAULT_HOST = 'github.com';
+    public const DEFAULT_HOST = 'github.com';
 
     private $httpClient;
     private $config;
@@ -125,7 +125,7 @@ class GitHub
         return $this->client->issue()->show(
             $this->organization,
             $this->repository,
-            $number
+            (string) $number
         );
     }
 
@@ -193,7 +193,7 @@ class GitHub
         $pr = $api->show(
             $this->organization,
             $this->repository,
-            $id
+            (string) $id
         );
 
         // Still better then BitBucket...
@@ -202,7 +202,7 @@ class GitHub
             $issue = $api->show(
                 $this->organization,
                 $this->repository,
-                $id
+                (string) $id
             );
 
             $pr['labels'] = $issue['labels'];

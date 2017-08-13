@@ -18,7 +18,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class StatusTable
 {
-    const STATUS_LABELS = [
+    private const STATUS_LABELS = [
         'success' => '<fg=green>OK</>',
         'failure' => '<fg=red>FAIL</>',
         'pending' => '<fg=yellow>Pending</>',
@@ -58,7 +58,7 @@ class StatusTable
     }
 
     // make other methods none static
-    public function addRow(string $label, string $status, string $message = null)
+    public function addRow(string $label, string $status, ?string $message = null)
     {
         $this->rows[] = [$label, self::STATUS_LABELS[$status], wordwrap((string) $message, 38)];
         $this->statuses[$status] = true;

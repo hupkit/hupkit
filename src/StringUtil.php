@@ -19,8 +19,6 @@ use Ddd\Slug\Infra\Transliterator\TransliteratorCollection;
 
 class StringUtil
 {
-    const BRANCH_REGEX = '%(^[./]|[~^:]|[/.]$)%';
-
     /**
      * Split lines to an array.
      *
