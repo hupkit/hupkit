@@ -21,10 +21,10 @@ use Symfony\Component\Console\Style\StyleInterface;
 
 class Git
 {
-    const STATUS_UP_TO_DATE = 'up-to-date';
-    const STATUS_NEED_PULL = 'need_pull';
-    const STATUS_NEED_PUSH = 'up-to-date';
-    const STATUS_DIVERGED = 'diverged';
+    public const STATUS_UP_TO_DATE = 'up-to-date';
+    public const STATUS_NEED_PULL = 'need_pull';
+    public const STATUS_NEED_PUSH = 'up-to-date';
+    public const STATUS_DIVERGED = 'diverged';
 
     private $process;
     private $filesystem;
@@ -409,7 +409,7 @@ class Git
 
     public function setGitConfig(string $config, $value, bool $overwrite = false, string $section = 'local')
     {
-        if (!$overwrite && '' !== (string) $this->getGitConfig($config, $section, $value)) {
+        if (!$overwrite && '' !== $this->getGitConfig($config, $section, $value)) {
             throw new \RuntimeException(
                 sprintf(
                     'Unable to set git config "%s" at %s, because the value is already set.',

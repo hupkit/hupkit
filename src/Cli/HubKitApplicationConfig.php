@@ -31,7 +31,7 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
     /**
      * The version of the Application.
      */
-    const VERSION = '@package_version@';
+    private const VERSION = '@package_version@';
 
     /**
      * @var Container
@@ -203,8 +203,7 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
                     return new Handler\ChangelogHandler(
                         $this->container['style'],
                         $this->container['git'],
-                        $this->container['github'],
-                        $this->container['process']
+                        $this->container['github']
                     );
                 })
             ->end()

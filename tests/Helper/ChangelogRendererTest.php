@@ -21,7 +21,7 @@ use Prophecy\Prophecy\ObjectProphecy;
 
 final class ChangelogRendererTest extends TestCase
 {
-    const COMMITS = [
+    private const COMMITS = [
         [
             'sha' => '2bee3b83a9b0073497f37acd4f0920ef61945552',
             'author' => 'Sebastiaan Stok <s.stok@rollerscapes.net>',

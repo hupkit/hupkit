@@ -21,7 +21,7 @@ final class ConfigFactory
      * Needs to be updated whenever the config structure changes
      * break BC compatibility.
      */
-    const SCHEMA_VERSION = 1;
+    private const SCHEMA_VERSION = 1;
 
     private $currentDir;
     private $configFile;

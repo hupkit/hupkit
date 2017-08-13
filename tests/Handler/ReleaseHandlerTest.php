@@ -29,11 +29,11 @@ use Webmozart\Console\Api\Args\Format\Option;
 use Webmozart\Console\Args\StringArgs;
 use Webmozart\Console\IO\BufferedIO;
 
-class ReleaseHandlerTest extends TestCase
+final class ReleaseHandlerTest extends TestCase
 {
     use SymfonyStyleTrait;
 
-    const COMMITS = [
+    private const COMMITS = [
         [
             'sha' => '2bee3b83a9b0073497f37acd4f0920ef61945552',
             'author' => 'Sebastiaan Stok <s.stok@rollerscapes.net>',

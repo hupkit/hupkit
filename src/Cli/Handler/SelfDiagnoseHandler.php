@@ -120,7 +120,7 @@ final class SelfDiagnoseHandler
 
     private function testRequiredGitConfig(StatusTable $table, string $config)
     {
-        $result = (string) $this->git->getGitConfig($config, 'global');
+        $result = $this->git->getGitConfig($config, 'global');
         $label = sprintf('Git "%s" configured', $config);
 
         if ('' !== $result) {
@@ -144,7 +144,7 @@ final class SelfDiagnoseHandler
 
     private function testOptionalGitConfig(StatusTable $table, string $config, string $message)
     {
-        $result = (string) $this->git->getGitConfig($config, 'global');
+        $result = $this->git->getGitConfig($config, 'global');
         $label = sprintf('Git "%s" configured', $config);
 
         if ('' !== $result) {
@@ -160,7 +160,7 @@ final class SelfDiagnoseHandler
             return;
         }
 
-        $result = (string) $this->git->getGitConfig('remote.upstream.url');
+        $result = $this->git->getGitConfig('remote.upstream.url');
         $label = sprintf('Git remote "upstream" configured');
 
         if ('' !== $result) {
