@@ -212,6 +212,7 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
                 ->setDescription('Merges current branch to the next version branch (eg. 1.0 into 1.1)')
                 ->addArgument('branch', Argument::OPTIONAL | Argument::STRING, 'Base branch to checkout and start with, uses current when omitted')
                 ->addOption('all', null, Option::NO_VALUE | Option::BOOLEAN, 'Merge all version branches from lowest into highest (and finally master)')
+                ->addOption('dry-run', null, Option::NO_VALUE | Option::BOOLEAN, 'Show which operations would have been performed (without actually merging)')
                 ->setHandler(function () {
                     return new Handler\UpMergeHandler(
                         $this->container['style'],

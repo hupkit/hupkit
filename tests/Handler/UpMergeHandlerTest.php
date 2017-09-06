@@ -66,6 +66,8 @@ class UpMergeHandlerTest extends TestCase
         $this->git->pushToRemote('upstream', ['2.5'], true)->shouldBeCalled();
 
         $this->executeHandler();
+
+        $this->assertOutputMatches('Merged "2.3" into "2.5"');
     }
 
     /** @test */
@@ -85,6 +87,8 @@ class UpMergeHandlerTest extends TestCase
         $this->git->pushToRemote('upstream', ['2.x'], true)->shouldBeCalled();
 
         $this->executeHandler();
+
+        $this->assertOutputMatches('Merged "2.3" into "2.x"');
     }
 
     /** @test */
@@ -104,6 +108,8 @@ class UpMergeHandlerTest extends TestCase
         $this->git->pushToRemote('upstream', ['master'], true)->shouldBeCalled();
 
         $this->executeHandler();
+
+        $this->assertOutputMatches('Merged "2.6" into "master"');
     }
 
     /** @test */
@@ -133,6 +139,8 @@ class UpMergeHandlerTest extends TestCase
         $this->git->pushToRemote('upstream', ['2.5'], true)->shouldBeCalled();
 
         $this->executeHandler($this->getArgs()->setArgument('branch', '2.3'));
+
+        $this->assertOutputMatches('Merged "2.3" into "2.5"');
     }
 
     /** @test */
@@ -165,6 +173,13 @@ class UpMergeHandlerTest extends TestCase
         $this->git->pushToRemote('upstream', ['2.5', '2.6', '2.x', 'master'], true)->shouldBeCalled();
 
         $this->executeHandler($this->getArgs()->setOption('all', true));
+
+        $this->assertOutputMatches([
+            'Merged "2.3" into "2.5"',
+            'Merged "2.5" into "2.6"',
+            'Merged "2.6" into "2.x"',
+            'Merged "2.x" into "master"',
+        ]);
     }
 
     /** @test */
@@ -192,6 +207,44 @@ class UpMergeHandlerTest extends TestCase
         $this->assertOutputMatches('Local branch is not up-to-date.');
     }
 
+    /** @test */
+    public function it_dry_merges_current_branch_into_next_version_branch()
+    {
+        $this->git->getActiveBranchName()->willReturn('2.3');
+        $this->git->remoteUpdate('upstream')->shouldBeCalled();
+
+        $this->git->getVersionBranches('upstream')->willReturn(['2.2', '2.3', '2.5', '2.6']);
+        $this->git->ensureBranchInSync('upstream', '2.3')->shouldBeCalled();
+        $this->git->ensureBranchInSync('upstream', '2.5')->shouldBeCalled();
+
+        $this->executeHandler($this->getArgs()->setOption('dry-run', true));
+
+        $this->assertOutputMatches('[DRY-RUN] Merged "2.3" into "2.5"');
+    }
+
+    /** @test */
+    public function it_dry_merges_current_branch_into_next_version_branches()
+    {
+        $this->git->getActiveBranchName()->willReturn('2.3');
+        $this->git->remoteUpdate('upstream')->shouldBeCalled();
+
+        $this->git->getVersionBranches('upstream')->willReturn(['2.2', '2.3', '2.5', '2.6', '2.x']);
+        $this->git->ensureBranchInSync('upstream', '2.3')->shouldBeCalled();
+        $this->git->ensureBranchInSync('upstream', '2.5')->shouldBeCalled();
+        $this->git->ensureBranchInSync('upstream', '2.6')->shouldBeCalled();
+        $this->git->ensureBranchInSync('upstream', '2.x')->shouldBeCalled();
+        $this->git->ensureBranchInSync('upstream', 'master')->shouldBeCalled();
+
+        $this->executeHandler($this->getArgs()->setOption('all', true)->setOption('dry-run', true));
+
+        $this->assertOutputMatches([
+            '[DRY-RUN] Merged "2.3" into "2.5"',
+            '[DRY-RUN] Merged "2.5" into "2.6"',
+            '[DRY-RUN] Merged "2.6" into "2.x"',
+            '[DRY-RUN] Merged "2.x" into "master"',
+        ]);
+    }
+
     /**
      * @return Args
      */
@@ -199,6 +252,7 @@ class UpMergeHandlerTest extends TestCase
     {
         $format = ArgsFormat::build()
             ->addOption(new Option('all', null, Option::NO_VALUE | Option::BOOLEAN))
+            ->addOption(new Option('dry-run', null, Option::NO_VALUE | Option::BOOLEAN))
             ->addArgument(new Argument('branch', Argument::OPTIONAL | Argument::STRING))
             ->getFormat()
         ;
