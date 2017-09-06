@@ -118,7 +118,7 @@ class Git
         );
 
         $branches = array_filter($branches, function (string $branch) {
-            return preg_match('/^v?'.Version::VERSION_REGEX.'$/i', $branch);
+            return preg_match('/^v?'.Version::VERSION_REGEX.'$/i', $branch) || preg_match('/^v?(?P<major>\d++)\.(?P<rel>x)$/', $branch);
         });
 
         // Sort in ascending order (lowest first).
@@ -126,6 +126,14 @@ class Git
         usort($branches, function ($a, $b) {
             $a = ltrim($a, 'vV');
             $b = ltrim($b, 'vV');
+
+            if (substr($a, -1, 1) === 'x') {
+                $a = substr_replace($a, '999', -1, 1);
+            }
+
+            if (substr($b, -1, 1) === 'x') {
+                $b = substr_replace($b, '999', -1, 1);
+            }
 
             if (Comparator::equalTo($a, $b)) {
                 return 0;
