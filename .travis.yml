@@ -43,3 +43,5 @@ script:
 
 after_success:
     - if [[ $coverage = 1 ]]; then travis_retry php coveralls.phar; fi
+
+## Ignore this.
