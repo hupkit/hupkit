@@ -165,6 +165,19 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
                 })
             ->end()
 
+            ->beginCommand('checkout')
+                ->setDescription('Checkout a pull request as local branch. Allows to push changes (unless disabled by author)')
+                ->addArgument('number', Argument::INTEGER, 'Number of the pull request to checkout')
+                ->setHandler(function () {
+                    return new Handler\CheckoutHandler(
+                        $this->container['style'],
+                        $this->container['git'],
+                        $this->container['process'],
+                        $this->container['github']
+                    );
+                })
+            ->end()
+
             ->beginCommand('merge')
                 ->setDescription('Merge a pull request with preservation of the original title/description and comments.')
                 ->addArgument('number', Argument::REQUIRED | Argument::INTEGER, 'The number of the pull request to merge')

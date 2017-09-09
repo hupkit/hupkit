@@ -415,6 +415,19 @@ class Git
         }
     }
 
+    public function ensureRemoteExists(string $name, string $url)
+    {
+        if ($url !== $this->getGitConfig('remote.'.$name.'.url')) {
+            $this->style->note(sprintf('Adding remote "%s" with "%s".', $name, $url));
+
+            if (!$this->getGitConfig('remote.'.$name.'.url')) {
+                $this->process->mustRun(['git', 'remote', 'add', $name, $url]);
+            } else {
+                $this->setGitConfig('remote.'.$name.'.url', $url, true);
+            }
+        }
+    }
+
     public function setGitConfig(string $config, $value, bool $overwrite = false, string $section = 'local')
     {
         if (!$overwrite && '' !== $this->getGitConfig($config, $section, $value)) {
