@@ -179,6 +179,16 @@ Alternatively you use the `--online` option to get a changelog without sections.
 in HubKit. Only pull requests that were merged with the `merge` command (not the merge button!)
 will be properly categorized and labeled, all others show-up in he "Changed" section.
 
+### checkout
+
+Checkout a pull request by number. This creates a new branch based on the user
+and branch name to prevent conflicts with your local branches, eg. `sstok--great-new-feature`.
+If the branch already exists it's updated instead.
+
+Unless the author of the pull request disabled this feature. It's possible to push new changes
+to user's fork by simply using `git push`. _HubKit already configured the upstream for your,
+but remember to be careful with forced pushes._
+
 ### merge
 
 Merge a pull request with preservation of the original title/description and comments.
