@@ -72,8 +72,8 @@ class Git
         }
 
         $localRef = $this->process->mustRun(['git', 'rev-parse', $localBranch])->getOutput();
-        $remoteRef = $this->process->mustRun(['git', 'rev-parse', $remoteName.'/'.$remoteBranch])->getOutput();
-        $baseRef = $this->process->mustRun(['git', 'merge-base', $remoteBranch, $remoteName.'/'.$remoteBranch])->getOutput();
+        $remoteRef = $this->process->mustRun(['git', 'rev-parse', 'refs/remotes/'.$remoteName.'/'.$remoteBranch])->getOutput();
+        $baseRef = $this->process->mustRun(['git', 'merge-base', $localBranch, 'refs/remotes/'.$remoteName.'/'.$remoteBranch])->getOutput();
 
         if ($localRef === $remoteRef) {
             return self::STATUS_UP_TO_DATE;
