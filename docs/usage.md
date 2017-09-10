@@ -313,6 +313,24 @@ $ hubkit take 22
 By default the "master" branch is used as base, use the `--base` option to use
 a different one. Eg. `--base=1.x` for `upstream/1.x`.
 
+### switch-base
+
+Switch the base of a pull request (and perform a rebase to prevent unwanted commits).
+
+```bash
+$ hubkit switch-base 22 1.6
+```
+
+#### Conflict resolving
+
+Switching the base of a branch may cause some conflicts.
+
+When this happens you can simple resolve the conflicts as you would with using `git rebase --continue`,
+then once all conflicts are resolved. Run the `switch-base` command (with the original parameters) 
+again and it will continue as normal.
+
+**Do not push these changes manually as this will not update the pull-request target base.**
+
 ### upmerge
 
 Merge the current branch to the next version branch (eg. 1.0 into 1.1).

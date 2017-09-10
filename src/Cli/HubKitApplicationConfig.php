@@ -197,6 +197,20 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
                 })
             ->end()
 
+            ->beginCommand('switch-base')
+                ->setDescription('Switch the base of a pull request (and perform a rebase to prevent unwanted commits)')
+                ->addArgument('number', Argument::REQUIRED | Argument::INTEGER, 'The number of the pull request to switch')
+                ->addArgument('new-base', Argument::REQUIRED | Argument::STRING, 'New base of the pull-request (must exist in remote "upstream")')
+                ->setHandler(function () {
+                    return new Handler\SwitchBaseHandler(
+                        $this->container['style'],
+                        $this->container['git'],
+                        $this->container['process'],
+                        $this->container['github']
+                    );
+                })
+            ->end()
+
             ->beginCommand('branch-alias')
                 ->setDescription('Set/get the "master" branch-alias. Omit alias argument to get the current alias.')
                 ->addArgument('alias', Argument::OPTIONAL | Argument::STRING, 'New alias to assign (omit to get the current alias)')
