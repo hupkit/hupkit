@@ -29,6 +29,7 @@ class Git
     private $process;
     private $filesystem;
     private $style;
+    private $gitDir;
 
     public function __construct(
         CliProcess $process,
@@ -514,5 +515,19 @@ class Git
         if ('origin' !== $remoteName) {
             $this->process->mustRun(['git', 'remote', 'rename', 'origin', $remoteName]);
         }
+    }
+
+    public function getGitDirectory(): string
+    {
+        if (null === $this->gitDir) {
+            $gitDir = trim($this->process->run('git rev-parse --git-dir')->getOutput());
+            if ('.git' === $gitDir) {
+                $gitDir = getcwd().'/.git';
+            }
+
+            $this->gitDir = $gitDir;
+        }
+
+        return $this->gitDir;
     }
 }
