@@ -60,10 +60,10 @@ class CliProcess
      * This is identical to run() except that an exception is thrown if the process
      * exits with a non-zero exit code.
      *
-     * @param string|Process $cmd      An instance of Process or a command to run
-     * @param string|null    $error    An error message that must be displayed if something went wrong
-     * @param callable|null  $callback A PHP callback to run whenever there is some
-     *                                 output available on STDOUT or STDERR
+     * @param string|array|Process $cmd      An instance of Process or an array of arguments to escape and run or a command to run
+     * @param string|null          $error    An error message that must be displayed if something went wrong
+     * @param callable|null        $callback A PHP callback to run whenever there is some
+     *                                       output available on STDOUT or STDERR
      *
      * @throws ProcessFailedException
      *
