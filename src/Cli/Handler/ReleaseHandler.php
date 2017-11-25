@@ -109,7 +109,7 @@ final class ReleaseHandler extends GitBaseHandler
 
     private function validateVersion(string $version): Version
     {
-        if (in_array(strtolower($version), ['alpha', 'beta', 'rc', 'stable', 'major', 'minor', 'patch'], true)) {
+        if (in_array(strtolower($version), ['alpha', 'beta', 'rc', 'stable', 'major', 'minor', 'next', 'patch'], true)) {
             $version = Version::fromString($this->git->getLastTagOnBranch())->increase(strtolower($version));
         } else {
             $version = Version::fromString($version);
