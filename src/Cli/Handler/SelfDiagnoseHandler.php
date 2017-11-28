@@ -19,6 +19,7 @@ use HubKit\Service\CliProcess;
 use HubKit\Service\Git;
 use HubKit\Service\GitHub;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Process\ExecutableFinder;
 
 final class SelfDiagnoseHandler
 {
@@ -95,6 +96,11 @@ final class SelfDiagnoseHandler
 
         $this->testGitHubConfigurations($table);
         $this->testUpstreamRemoteSet($table);
+        $this->testExecutableFound(
+            $table,
+            'splitsh-lite',
+            'Unable to find splitsh-lite in your PATH. Must be set for the `split-repo` command'
+        );
         $table->render();
 
         if ($table->hasStatus('error')) {
@@ -111,7 +117,7 @@ final class SelfDiagnoseHandler
 
             try {
                 $this->github->initializeForHost($hostname);
-                $table->addRow($label, $this->github->isAuthenticated() ? 'success' : 'failure');
+                $table->addRow($label, $this->github->isAuthenticated() ? 'success' : 'failure', $authentication['username']);
             } catch (\Exception $e) {
                 $table->addRow($label, 'failure', get_class($e).': '.$e->getMessage());
             }
@@ -167,6 +173,19 @@ final class SelfDiagnoseHandler
             $table->addRow($label, 'success', $result);
         } else {
             $table->addRow($label, 'failure', 'Git remote "upstream" should be configured');
+        }
+    }
+
+    private function testExecutableFound(StatusTable $table, string $executable, string $message)
+    {
+        $finder = new ExecutableFinder();
+        $result = $finder->find($executable, '');
+        $label = sprintf('Executable "%s" found in PATH', $executable);
+
+        if ('' !== $result) {
+            $table->addRow($label, 'success', $result);
+        } else {
+            $table->addRow($label, 'warning', strpos($message, '%s') !== false ? sprintf($message, $result) : $message);
         }
     }
 

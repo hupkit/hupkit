@@ -42,6 +42,20 @@ class Filesystem
         return $tmpName;
     }
 
+    public function tempDirectory(string $name, bool $clearExisting = true): string
+    {
+        $tmpName = $this->tempdir.DIRECTORY_SEPARATOR.'hubkit'.DIRECTORY_SEPARATOR.$name;
+
+        if ($clearExisting && $this->fs->exists($tmpName)) {
+            $this->fs->remove($tmpName);
+        }
+
+        $this->fs->mkdir($tmpName);
+        $this->tempFilenames[] = $tmpName;
+
+        return $tmpName;
+    }
+
     /**
      * Remove all the temp-file that were created
      * with newTempFilename().
@@ -49,5 +63,15 @@ class Filesystem
     public function clearTempFiles()
     {
         $this->fs->remove($this->tempFilenames);
+    }
+
+    public function getFilesystem(): SfFilesystem
+    {
+        return $this->fs;
+    }
+
+    public function chdir(string $directory): bool
+    {
+        return chdir($directory);
     }
 }

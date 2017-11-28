@@ -16,6 +16,7 @@ namespace HubKit;
 use GuzzleHttp\Client as GuzzleClient;
 use Http\Adapter\Guzzle6\Client as GuzzleClientAdapter;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Process\ExecutableFinder;
 
 class Container extends \Pimple\Container
 {
@@ -47,6 +48,15 @@ class Container extends \Pimple\Container
 
         $this['git'] = function (Container $container) {
             return new Service\Git($container['process'], $container['filesystem'], $container['style']);
+        };
+
+        $this['splitsh_git'] = function (Container $container) {
+            return new Service\SplitshGit(
+                $container['git'],
+                $container['process'],
+                $container['filesystem'],
+                (new ExecutableFinder())->find('splitsh-lite')
+            );
         };
 
         $this['filesystem'] = function () {
