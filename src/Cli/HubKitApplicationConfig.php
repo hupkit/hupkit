@@ -277,7 +277,9 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
                         $this->container['git'],
                         $this->container['github'],
                         $this->container['process'],
-                        $this->container['editor']
+                        $this->container['editor'],
+                        $this->container['config'],
+                        $this->container['splitsh_git']
                     );
                 })
             ->end()

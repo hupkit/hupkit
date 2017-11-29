@@ -14,10 +14,12 @@ declare(strict_types=1);
 namespace HubKit\Tests\Handler;
 
 use HubKit\Cli\Handler\ReleaseHandler;
+use HubKit\Config;
 use HubKit\Service\CliProcess;
 use HubKit\Service\Editor;
 use HubKit\Service\Git;
 use HubKit\Service\GitHub;
+use HubKit\Service\SplitshGit;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument as PropArgument;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -99,6 +101,10 @@ labels: removed-deprecation
     private $process;
     /** @var ObjectProphecy */
     private $editor;
+    /** @var Config */
+    private $config;
+    /** @var ObjectProphecy */
+    private $splitshGit;
     /** @var BufferedIO */
     private $io;
 
@@ -107,6 +113,7 @@ labels: removed-deprecation
     {
         $this->git = $this->prophesize(Git::class);
         $this->git->getActiveBranchName()->willReturn('master');
+        $this->git->ensureBranchInSync('upstream', 'master')->willReturn(true);
 
         $this->github = $this->prophesize(GitHub::class);
         $this->github->getHostname()->willReturn('github.com');
@@ -115,6 +122,26 @@ labels: removed-deprecation
 
         $this->process = $this->prophesize(CliProcess::class);
         $this->editor = $this->prophesize(Editor::class);
+
+        $this->config = new Config(
+            [
+                'repos' => [
+                    'github.com' => [
+                        'park-manager/park-manager' => [
+                            'sync-tags' => true,
+                            'split' => [
+                                'src/Component/Core' => 'git@github.com:park-manager/core.git',
+                                'src/Component/Model' => 'git@github.com:park-manager/model.git',
+                                'doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => false],
+                            ],
+                        ],
+                    ],
+                ],
+            ]
+        );
+
+        $this->splitshGit = $this->prophesize(SplitshGit::class);
+        $this->splitshGit->checkPrecondition()->shouldNotBeCalled();
 
         $this->io = new BufferedIO();
         $this->io->setInteractive(true);
@@ -140,6 +167,8 @@ labels: removed-deprecation
                 $url,
             ]
         );
+
+        $this->assertOutputNotMatches('Starting split operation, please wait...');
     }
 
     /** @test */
@@ -222,6 +251,7 @@ labels: removed-deprecation
         $this->git->getLastTagOnBranch()->willReturn('2.0.0');
         $this->expectMatchingVersionBranchExists('3.0');
 
+        $this->git->ensureBranchInSync('upstream', '2.0')->shouldBeCalled();
         $this->git->getLogBetweenCommits('2.0.0', '2.0')->willReturn(self::COMMITS);
 
         $this->expectEditorReturns("### Added\n- Introduce a new API for ValuesBag");
@@ -290,6 +320,48 @@ labels: removed-deprecation
     }
 
     /** @test */
+    public function it_creates_a_new_release_for_split_repositories()
+    {
+        $this->github->getOrganization()->willReturn('park-manager');
+        $this->github->getRepository()->willReturn('park-manager');
+
+        $this->expectTags();
+        $this->expectMatchingVersionBranchNotExists();
+        $this->expectEditorReturns('Initial release.');
+
+        $this->splitshGit->checkPrecondition()->shouldBeCalled();
+        $this->expectGitSplit('src/Component/Core', '_core', 'git@github.com:park-manager/core.git', '09d103bae644592ebdc10a2665a2791c291fbea7');
+        $this->expectGitSplit('src/Component/Model', '_model', 'git@github.com:park-manager/model.git', 'b2faccdde512f226ae67e5e73a9f3259c83b933a', 0);
+        $this->expectGitSplit('doc', '_doc', 'git@github.com:park-manager/doc.git', 'c526695a61c698d220f5b2c68ce7b6c689013d55');
+
+        $this->splitshGit->syncTags(
+            '1.0.0',
+            'master',
+            [
+                '_core' => ['09d103bae644592ebdc10a2665a2791c291fbea7', 'git@github.com:park-manager/core.git', 3],
+                '_model' => ['b2faccdde512f226ae67e5e73a9f3259c83b933a', 'git@github.com:park-manager/model.git', 0],
+                // doc is ignored because tag synchronization is disabled for this repository
+            ]
+        )->shouldBeCalled();
+
+        $url = $this->expectTagAndGitHubRelease('1.0.0', 'Initial release.');
+
+        $args = $this->getArgs('1.0');
+        $this->executeHandler($args);
+
+        $this->assertOutputMatches(
+            [
+                'Preparing release 1.0.0 (target branch master)',
+                'Please wait...',
+                'Starting split operation please wait...',
+                ['3/3 \[[^\]]+\] 100%', true],
+                'Successfully released 1.0.0',
+                $url,
+            ]
+        );
+    }
+
+    /** @test */
     public function it_fails_when_tag_already_exists()
     {
         $this->expectTags(['v0.1.0', 'v0.2.0', 'v0.3.0', '1.0.0-BETA1', '1.0.0']);
@@ -341,7 +413,9 @@ labels: removed-deprecation
             $this->git->reveal(),
             $this->github->reveal(),
             $this->process->reveal(),
-            $this->editor->reveal()
+            $this->editor->reveal(),
+            $this->config,
+            $this->splitshGit->reveal()
         );
 
         $handler->handle($args, $this->io);
@@ -381,5 +455,10 @@ labels: removed-deprecation
     {
         $this->editor->fromString(PropArgument::containingString($input), true, PropArgument::containingString('Leave file empty to abort operation.'))
             ->willReturn($output ?? $input);
+    }
+
+    private function expectGitSplit(string $prefix, string $remote, string $url, string $sha, int $commits = 3): void
+    {
+        $this->splitshGit->splitTo('master', $prefix, $url)->shouldBeCalled()->willReturn([$remote => [$sha, $url, $commits]]);
     }
 }

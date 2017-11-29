@@ -72,7 +72,7 @@ class SplitshGit
      * Existing tags are silently ignored.
      *
      * @param string $versionStr Version (without prefix) for the tag name
-     * @param array  $targets    Targets to tag and push as ['remote-name' => 'sha1-hash']
+     * @param array  $targets    Targets to tag and push as ['remote-name' => ['sha1-hash', 'url', 'commits count']]
      */
     public function syncTags(string $versionStr, string $branch, array $targets): void
     {
