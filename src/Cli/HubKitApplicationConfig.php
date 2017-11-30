@@ -207,7 +207,9 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
                         $this->container['git'],
                         $this->container['github'],
                         new BranchAliasResolver($this->container['style'], $this->container['git'], getcwd()),
-                        new SingleLineChoiceQuestionHelper()
+                        new SingleLineChoiceQuestionHelper(),
+                        $this->container['config'],
+                        $this->container['splitsh_git']
                     );
                 })
             ->end()
