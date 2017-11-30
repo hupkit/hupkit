@@ -43,6 +43,7 @@ return PhpCsFixer\Config::create()
         'single_import_per_statement' => false,
         'strict_comparison' => true,
         'strict_param' => true,
+        'yoda_style' => false,
     ])
     ->setFinder(
         PhpCsFixer\Finder::create()

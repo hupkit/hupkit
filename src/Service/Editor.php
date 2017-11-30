@@ -32,16 +32,17 @@ class Editor
      *
      * @param string $contents
      * @param bool   $abortOnEmpty
+     * @param string $instructions
      *
      * @return string
      */
-    public function fromString(string $contents, bool $abortOnEmpty = true, string $instructions = null)
+    public function fromString(string $contents, bool $abortOnEmpty = true, string $instructions = '')
     {
         if (false === $editor = getenv('EDITOR')) {
             throw new \RuntimeException('No EDITOR environment variable set.');
         }
 
-        if (null !== $instructions) {
+        if ('' !== $instructions) {
             $instructions = "# THIS LINE IS AUTOMATICALLY REMOVED; $instructions\n\n";
             $contents = $instructions.$contents;
         }
@@ -54,7 +55,7 @@ class Editor
         $this->process->mustRun($process);
         $contents = file_get_contents($tmpName);
 
-        if (null !== $instructions) {
+        if ('' !== $instructions) {
             $contents = preg_replace("/^# THIS LINE IS AUTOMATICALLY REMOVED;(.++)(\r?\n)/i", '', $contents);
         }
 
