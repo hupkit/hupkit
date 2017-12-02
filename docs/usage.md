@@ -368,3 +368,98 @@ Mering branches into each other you cause some merge conflicts.
 When this happens you can simple resolve the conflicts as you would with using `git merge`,
 then once all conflicts are resolved. Run the `upmerge` command again and it will
 continue as normal.
+
+## split-repo
+
+Splits the repository into other repositories.
+
+This operation is related to monolith project development, instead of having separate 
+Git repositories for each package all are housed in a central repository from where 
+all work is coordinated.
+
+To make distribution of the packages possible they are split into "push only" repositories 
+(no issues or pull requests).
+
+**Warning:** Repository splitting only works when using HubKit, using the GitHub merge button 
+does not automatically split the repository!
+
+**Before you continue make sure [splitsh-lite](https://github.com/splitsh/lite) is 
+installed and can be found in your path (no `alias`!).** 
+
+Run `hubkit self-diagnose` to check your configuration.
+
+### Configuration
+
+To make this "repository splitting" work, a number of targets must 
+be configured. Each target consists of a prefix (directory path),
+target repository and optionally if tag-synchronizing is enabled.
+
+**Suffice to say the repositories must exist! They are not automatically created,
+use the `create-repo` command with the correct arguments to create the repositories.**
+
+In your global `config.php` set the following:
+
+```php
+    ...
+
+    // Configuration for repository splitting.
+    // Structure is expected to be: [hostname][organization/source-repository]
+    // With 'split' being a list of paths (relative to repository root, and no patterns)
+    //    and the value e.g. an 'push url' or `['url' => 'push url', 'sync-tags' => false]`.
+    //
+    // All configured targets are split when requested. Missing directories are ignored.
+    //
+    // The push remote is automatically registered.
+    // The 'sync-tags' can be configured for all split targets, and per target.
+    //
+    'repos' => [
+        'github.com' => [
+            'park-manager/park-manager' => [
+                'sync-tags' => true,
+                'split' => [
+                    'src/Bundle/CoreBundle' => 'git@github.com:park-manager/core-bundle.git',
+                    'src/Bundle/TestBundle' => 'git@github.com:park-manager/test-bundle.git',
+                    'src/Bundle/UserBundle' => 'git@github.com:park-manager/user-bundle.git',
+                    'src/Component/Core' => 'git@github.com:park-manager/core.git',
+                    'src/Component/Model' => 'git@github.com:park-manager/model.git',
+                    'src/Component/Security' => 'git@github.com:park-manager/security.git',
+                    'src/Component/User' => 'git@github.com:park-manager/user.git',
+                    'src/Component/WebUI' => 'git@github.com:park-manager/webui.git',
+                    'src/Module/Webhosting' => 'git@github.com:park-manager/webhosting.git',
+                    'src/Bridge/Doctrine' => 'git@github.com:park-manager/doctrine-bridge.git',
+                ],
+            ],
+        ],
+    ],
+```
+
+*And obviously change the values to suite your own.*
+
+> Park-Manager core developers should contact the project lead for
+> the correct configuration to use for `park-manager/park-manager`.
+
+To test if the configuration is correct run `hubkit split-repo --dry-run`
+to see what would have happened.
+
+Everything correct? Then run `hubkit split-repo` (this may take some time).
+
+### Splitting during merge/release
+
+Once the repository splitting is configured, you want to make sure
+the split repositories are up-to-date.
+
+When running `merge` you are automatically asked if you want to split now,
+this process may take some time depending of number of commits and targets.
+
+**Note:** If you need to merge more then one pull-request you properly want to hold-of
+the split operation till you're done. Changes never split when the `--no-pull` option
+is provided.
+
+The release command works a little different here, when making a new release the 
+split operation is always performed! You cannot skip this. However you can skip
+the synchronizing of tags to certain split repositories.
+
+**Note:** The split operation is performed first, then split repositories
+are tagged, and *then* the main repository is tagged. This ensures when something
+goes wrong the main repository remains unaffected, existing tags in split repositories
+are simple ignored. 
