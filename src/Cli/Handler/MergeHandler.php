@@ -93,8 +93,7 @@ final class MergeHandler extends GitBaseHandler
 
         $this->style->success('Pull request has been merged.');
 
-        if (!$args->getOption('no-pull')) {
-            $this->updateLocalBranch($pr['base']['ref']);
+        if (!$args->getOption('no-pull') && $this->updateLocalBranch($pr['base']['ref'])) {
             $this->splitRepository($pr);
         }
 
@@ -337,22 +336,24 @@ COMMENT;
         }
     }
 
-    private function updateLocalBranch(string $branch)
+    private function updateLocalBranch(string $branch): bool
     {
         if (!$this->git->branchExists($branch)) {
-            return;
+            return false;
         }
 
         if (!$this->git->isWorkingTreeReady()) {
             $this->style->warning('The Git working tree has uncommitted changes, unable to update your local branch.');
 
-            return;
+            return false;
         }
 
         $this->git->checkout($branch);
         $this->git->pullRemote('upstream', $branch);
 
         $this->style->success(sprintf('Your local "%s" branch is updated.', $branch));
+
+        return true;
     }
 
     private function splitRepository(array $pr)
