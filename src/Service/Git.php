@@ -467,23 +467,31 @@ class Git
      */
     public function getRemoteInfo(string $name = 'upstream'): array
     {
+        return self::getGitUrlInfo($this->getGitConfig('remote.'.$name.'.url'));
+    }
+
+    /**
+     * @param string $gitUri
+     *
+     * @return array [host, org, repo]
+     */
+    public static function getGitUrlInfo(string $gitUri): array
+    {
         $info = [
             'host' => '',
             'org' => '',
             'repo' => '',
         ];
 
-        $output = $this->getGitConfig('remote.'.$name.'.url');
-
-        if (0 === stripos($output, 'http://') || 0 === stripos($output, 'https://')) {
-            $url = parse_url($output);
+        if (0 === stripos($gitUri, 'http://') || 0 === stripos($gitUri, 'https://')) {
+            $url = parse_url($gitUri);
 
             $info['host'] = $url['host'];
             $info['path'] = ltrim($url['path'], '/');
-        } elseif (preg_match('%^(?:(?:git|ssh)://)?[^@]+@(?P<host>[^:]+):(?P<path>[^$]+)$%', $output, $match)) {
+        } elseif (preg_match('%^(?:(?:git|ssh)://)?[^@]+@(?P<host>[^:]+):(?P<path>[^$]+)$%', $gitUri, $match)) {
             $info['host'] = $match['host'];
             $info['path'] = $match['path'];
-        } elseif (preg_match('%^(?:(?:git|ssh)://)?([^@]+@)?(?P<host>[^/]+)/(?P<path>[^$]+)$%', $output, $match)) {
+        } elseif (preg_match('%^(?:(?:git|ssh)://)?([^@]+@)?(?P<host>[^/]+)/(?P<path>[^$]+)$%', $gitUri, $match)) {
             $info['host'] = $match['host'];
             $info['path'] = $match['path'];
         }
@@ -508,9 +516,16 @@ class Git
         $this->process->mustRun(['git', 'commit', '-a', '--file', $this->filesystem->newTempFilename($message)]);
     }
 
-    public function clone(string $ssh_url, string $remoteName = 'origin')
+    public function clone(string $ssh_url, string $remoteName = 'origin', ?int $depth = null)
     {
-        $this->process->mustRun(['git', 'clone', $ssh_url, '.']);
+        $command = ['git', 'clone', $ssh_url, '.'];
+
+        if (null !== $depth) {
+            $command[] = '--depth';
+            $command[] = $depth;
+        }
+
+        $this->process->mustRun($command);
 
         if ('origin' !== $remoteName) {
             $this->process->mustRun(['git', 'remote', 'rename', 'origin', $remoteName]);

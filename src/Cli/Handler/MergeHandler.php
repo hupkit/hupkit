@@ -13,11 +13,13 @@ declare(strict_types=1);
 
 namespace HubKit\Cli\Handler;
 
+use HubKit\Config;
 use HubKit\Helper\BranchAliasResolver;
 use HubKit\Helper\SingleLineChoiceQuestionHelper;
 use HubKit\Helper\StatusTable;
 use HubKit\Service\Git;
 use HubKit\Service\GitHub;
+use HubKit\Service\SplitshGit;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Webmozart\Console\Adapter\ArgsInput;
@@ -28,17 +30,23 @@ final class MergeHandler extends GitBaseHandler
 {
     private $aliasResolver;
     private $questionHelper;
+    private $config;
+    private $splitshGit;
 
     public function __construct(
         SymfonyStyle $style,
         Git $git,
         GitHub $github,
         BranchAliasResolver $aliasResolver,
-        SingleLineChoiceQuestionHelper $questionHelper
+        SingleLineChoiceQuestionHelper $questionHelper,
+        Config $config,
+        SplitshGit $splitshGit
     ) {
         parent::__construct($style, $git, $github);
         $this->aliasResolver = $aliasResolver;
         $this->questionHelper = $questionHelper;
+        $this->config = $config;
+        $this->splitshGit = $splitshGit;
     }
 
     public function handle(Args $args, IO $io)
@@ -87,6 +95,7 @@ final class MergeHandler extends GitBaseHandler
 
         if (!$args->getOption('no-pull')) {
             $this->updateLocalBranch($pr['base']['ref']);
+            $this->splitRepository($pr);
         }
 
         if (!$args->getOption('squash')) {
@@ -344,6 +353,27 @@ COMMENT;
         $this->git->pullRemote('upstream', $branch);
 
         $this->style->success(sprintf('Your local "%s" branch is updated.', $branch));
+    }
+
+    private function splitRepository(array $pr)
+    {
+        $configName = ['repos', $this->github->getHostname(), $this->github->getOrganization().'/'.$this->github->getRepository()];
+        $reposConfig = $this->config->get($configName);
+
+        if (empty($reposConfig['split']) || !$this->style->confirm('Split repository now?')) {
+            return;
+        }
+
+        $this->splitshGit->checkPrecondition();
+
+        $this->style->text('Starting split operation please wait...');
+        $progressBar = $this->style->createProgressBar();
+        $progressBar->start(count($reposConfig['split']));
+
+        foreach ($reposConfig['split'] as $prefix => $config) {
+            $progressBar->advance();
+            $this->splitshGit->splitTo($pr['base']['ref'], $prefix, is_array($config) ? $config['url'] : $config);
+        }
     }
 
     private function removeSourceBranch(array $pr)

@@ -152,6 +152,21 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
                 })
             ->end()
 
+            ->beginCommand('split-repo')
+                ->setDescription('Split the repository into configured targets. Requires "repos" is configured in config.php')
+                ->addArgument('branch', Argument::OPTIONAL | Argument::STRING, 'Branch to checkout and split from, uses current when omitted')
+                ->addOption('dry-run', null, Option::NO_VALUE | Option::BOOLEAN, 'Show which operations would have been performed (without actually splitting)')
+                ->setHandler(function () {
+                    return new Handler\SplitRepoHandler(
+                        $this->container['style'],
+                        $this->container['splitsh_git'],
+                        $this->container['git'],
+                        $this->container['github'],
+                        $this->container['config']
+                    );
+                })
+            ->end()
+
             ->beginCommand('take')
                 ->setDescription('Take an issue to work on, checks out the issue as new branch.')
                 ->addArgument('number', Argument::INTEGER, 'Number of the issue to take')
@@ -192,7 +207,9 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
                         $this->container['git'],
                         $this->container['github'],
                         new BranchAliasResolver($this->container['style'], $this->container['git'], getcwd()),
-                        new SingleLineChoiceQuestionHelper()
+                        new SingleLineChoiceQuestionHelper(),
+                        $this->container['config'],
+                        $this->container['splitsh_git']
                     );
                 })
             ->end()
@@ -262,7 +279,9 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
                         $this->container['git'],
                         $this->container['github'],
                         $this->container['process'],
-                        $this->container['editor']
+                        $this->container['editor'],
+                        $this->container['config'],
+                        $this->container['splitsh_git']
                     );
                 })
             ->end()
