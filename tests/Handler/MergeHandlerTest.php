@@ -306,6 +306,163 @@ by who-else at 2014-11-23T14:50:24Z
     }
 
     /** @test */
+    public function it_merges_a_pull_request_and_skips_repository_split_when_local_branch_is_not_ready()
+    {
+        $this->config = new Config([
+            'repos' => [
+                'github.com' => [
+                    'park-manager/hubkit' => [
+                        'sync-tags' => true,
+                        'split' => [
+                            'src/Component/Core' => 'git@github.com:park-manager/core.git',
+                            'src/Component/Model' => 'git@github.com:park-manager/model.git',
+                            'doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => false],
+                        ],
+                    ],
+                ],
+            ],
+        ]);
+
+        $pr = $this->expectPrInfo();
+        $this->expectCommitStatus();
+        $this->expectCommits($pr);
+
+        $this->github->mergePullRequest(
+            self::PR_NUMBER,
+            'feature #42 Brand new design (sstok)',
+            PropArgument::exact(<<<'BODY'
+This PR was merged into the 1.0-dev branch.
+
+Discussion
+----------
+
+There I fixed it
+
+Commits
+-------
+
+06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
+06f57b45415f0456719d578ca5003f9683b941fe OH: PullRequestMergeHandler was already committed
+
+BODY
+),
+            self::HEAD_SHA
+        )->willReturn(['sha' => self::MERGE_SHA]);
+
+        $this->expectNotes(
+            [
+                ['user' => ['login' => 'someone'], 'created_at' => '2014-11-23T14:39:24Z', 'body' => 'Status: reviewed'],
+                ['user' => ['login' => 'who-else'], 'created_at' => '2014-11-23T14:50:24Z', 'body' => ':+1:'],
+            ],
+            '---------------------------------------------------------------------------
+
+by someone at 2014-11-23T14:39:24Z
+
+Status: reviewed
+
+---------------------------------------------------------------------------
+
+by who-else at 2014-11-23T14:50:24Z
+
+:+1:
+');
+
+        $this->expectLocalUpdate(false);
+        $this->expectLocalBranchNotExists();
+
+        $args = $this->getArgs();
+        $args->setArgument('number', '42');
+        $this->executeHandler($args, 'feature', ['no']);
+
+        $this->assertOutputMatches([
+            'master branch is aliased as 1.0-dev (detected by composer.json "extra.branch-alias.dev-master")',
+            'Pull request has been merged.',
+            'Pushing notes please wait...',
+            'The Git working tree has uncommitted changes, unable to update your local branch.',
+        ]);
+
+        $this->assertOutputNotMatches(['Split repository now?', 'Starting split operation please wait...']);
+    }
+
+    /** @test */
+    public function it_merges_a_pull_request_and_skips_repository_split_when_local_branch_does_exist()
+    {
+        $this->config = new Config([
+            'repos' => [
+                'github.com' => [
+                    'park-manager/hubkit' => [
+                        'sync-tags' => true,
+                        'split' => [
+                            'src/Component/Core' => 'git@github.com:park-manager/core.git',
+                            'src/Component/Model' => 'git@github.com:park-manager/model.git',
+                            'doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => false],
+                        ],
+                    ],
+                ],
+            ],
+        ]);
+
+        $pr = $this->expectPrInfo();
+        $this->expectCommitStatus();
+        $this->expectCommits($pr);
+
+        $this->github->mergePullRequest(
+            self::PR_NUMBER,
+            'feature #42 Brand new design (sstok)',
+            PropArgument::exact(<<<'BODY'
+This PR was merged into the 1.0-dev branch.
+
+Discussion
+----------
+
+There I fixed it
+
+Commits
+-------
+
+06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
+06f57b45415f0456719d578ca5003f9683b941fe OH: PullRequestMergeHandler was already committed
+
+BODY
+),
+            self::HEAD_SHA
+        )->willReturn(['sha' => self::MERGE_SHA]);
+
+        $this->expectNotes(
+            [
+                ['user' => ['login' => 'someone'], 'created_at' => '2014-11-23T14:39:24Z', 'body' => 'Status: reviewed'],
+                ['user' => ['login' => 'who-else'], 'created_at' => '2014-11-23T14:50:24Z', 'body' => ':+1:'],
+            ],
+            '---------------------------------------------------------------------------
+
+by someone at 2014-11-23T14:39:24Z
+
+Status: reviewed
+
+---------------------------------------------------------------------------
+
+by who-else at 2014-11-23T14:50:24Z
+
+:+1:
+');
+
+        $this->expectLocalUpdate(true, false);
+        $this->expectLocalBranchNotExists();
+
+        $args = $this->getArgs();
+        $args->setArgument('number', '42');
+        $this->executeHandler($args, 'feature', ['no']);
+
+        $this->assertOutputMatches([
+            'master branch is aliased as 1.0-dev (detected by composer.json "extra.branch-alias.dev-master")',
+            'Pull request has been merged.',
+            'Pushing notes please wait...',
+        ]);
+
+        $this->assertOutputNotMatches(['Split repository now?', 'Starting split operation please wait...']);
+    }
+
+    /** @test */
     public function it_skips_updating_base_when_missing()
     {
         $pr = $this->expectPrInfo();
