@@ -272,6 +272,7 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
                 ->addArgument('version', Argument::REQUIRED | Argument::STRING, 'Version to make (supports relative, eg. minor, alpha, ...)')
                 ->addOption('all-categories', null, Option::NO_VALUE | Option::BOOLEAN, 'Show all categories (including empty)')
                 ->addOption('no-edit', null, Option::NO_VALUE | Option::BOOLEAN, 'Don\'t open the editor for editing the release page')
+                ->addOption('title', null, Option::REQUIRED_VALUE | Option::NULLABLE | Option::STRING, 'Custom title for the release (added after version)')
                 ->addOption('pre-release', null, Option::NO_VALUE | Option::BOOLEAN, 'Mark as pre-release (not production ready)')
                 ->setHandler(function () {
                     return new Handler\ReleaseHandler(

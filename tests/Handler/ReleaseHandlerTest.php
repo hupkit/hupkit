@@ -362,6 +362,34 @@ labels: removed-deprecation
     }
 
     /** @test */
+    public function it_creates_a_new_release_with_a_custom_title()
+    {
+        $this->expectTags(['0.1.0', '1.0.0-BETA1']);
+        $this->git->getLastTagOnBranch()->willReturn('1.0.0-BETA1');
+        $this->expectMatchingVersionBranchNotExists();
+
+        $this->git->getLogBetweenCommits('1.0.0-BETA1', 'master')->willReturn(self::COMMITS);
+
+        $this->expectEditorReturns("### Added\n- Introduce a new API for ValuesBag");
+
+        $url = $this->expectTagAndGitHubRelease('1.0.0', "### Added\n- Introduce a new API for ValuesBag", 'When Pigs fly');
+
+        $args = $this->getArgs('1.0');
+        $args->setOption('title', 'When Pigs fly');
+        $this->executeHandler($args);
+
+        $this->assertOutputMatches(
+            [
+                'Provided version: 1.0.0',
+                'Preparing release 1.0.0 (target branch master)',
+                'Please wait...',
+                'Successfully released 1.0.0',
+                $url,
+            ]
+        );
+    }
+
+    /** @test */
     public function it_fails_when_tag_already_exists()
     {
         $this->expectTags(['v0.1.0', 'v0.2.0', 'v0.3.0', '1.0.0-BETA1', '1.0.0']);
@@ -395,6 +423,7 @@ labels: removed-deprecation
             ->addOption(new Option('all-categories', null, Option::NO_VALUE | Option::BOOLEAN))
             ->addOption(new Option('no-edit', null, Option::NO_VALUE | Option::BOOLEAN))
             ->addOption(new Option('pre-release', null, Option::BOOLEAN))
+            ->addOption(new Option('title', null, Option::REQUIRED_VALUE | Option::NULLABLE | Option::STRING))
             ->addArgument(new Argument('version', Argument::REQUIRED | Argument::STRING))
             ->getFormat()
         ;
@@ -439,12 +468,12 @@ labels: removed-deprecation
         $this->git->remoteBranchExists('upstream', $branch)->willReturn(false);
     }
 
-    private function expectTagAndGitHubRelease(string $version, string $message): string
+    private function expectTagAndGitHubRelease(string $version, string $message, ?string $title = null): string
     {
         $this->process->mustRun(['git', 'tag', '-s', 'v'.$version, '-m', 'Release '.$version])->shouldBeCalled();
         $this->process->mustRun(['git', 'push', '--tags', 'upstream'])->shouldBeCalled();
 
-        $this->github->createRelease('v'.$version, $message, false)->willReturn(
+        $this->github->createRelease('v'.$version, $message, false, $title)->willReturn(
             ['html_url' => $url = 'https://github.com/park-manager/hubkit/releases/tag/v'.$version]
         );
 

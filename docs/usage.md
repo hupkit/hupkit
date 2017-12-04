@@ -263,6 +263,8 @@ The `release` command has a number of special options:
 
 * `--pre-release`: Mark as pre-release (not production ready);
 
+* `--title="A Bright New Year"`: Append a custom title to release name (after the version number);
+
 #### Notes on signing
 
 The Git tag of a release is signed, *you can't disable this*. Make sure you have

@@ -93,7 +93,7 @@ final class ReleaseHandler extends GitBaseHandler
         $this->process->mustRun(['git', 'tag', '-s', 'v'.$versionStr, '-m', 'Release '.$versionStr]);
         $this->process->mustRun(['git', 'push', '--tags', 'upstream']);
 
-        $release = $this->github->createRelease('v'.$versionStr, $changelog, $args->getOption('pre-release'));
+        $release = $this->github->createRelease('v'.$versionStr, $changelog, $args->getOption('pre-release'), $args->getOption('title'));
         $this->style->success([sprintf('Successfully released %s', $versionStr), $release['html_url']]);
     }
 
