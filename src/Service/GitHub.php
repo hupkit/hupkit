@@ -261,7 +261,7 @@ class GitHub
         );
     }
 
-    public function createRelease(string $name, string $body, $preRelease = false)
+    public function createRelease(string $name, string $body, bool $preRelease = false, ?string $title = null)
     {
         $api = $this->client->repo()->releases();
 
@@ -270,7 +270,7 @@ class GitHub
             $this->repository,
             [
                 'tag_name' => $name,
-                'name' => 'Release '.$name,
+                'name' => 'Release '.$name.(null !== $title ? ' '.$title : ''),
                 'body' => $body,
                 'prerelease' => $preRelease,
             ]
