@@ -18,7 +18,7 @@ if [ ! -f ./config.php ]; then
     echo -n "Copying config.php.dist to config.php"
     cp ./config.php.dist ./config.php
 
-    if [ $EDITOR == "" ]; then
+    if [ "$EDITOR" == "" ]; then
         echo "No EDITOR environment variable set. You need to edit config.php manually before you can use HubKit".
         echo "Please run the install script again once your config.php is updated."
         exit 1
