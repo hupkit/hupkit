@@ -19,7 +19,9 @@ use HubKit\Helper\SingleLineChoiceQuestionHelper;
 use HubKit\Helper\StatusTable;
 use HubKit\Service\Git;
 use HubKit\Service\GitHub;
+use HubKit\Service\MessageValidator;
 use HubKit\Service\SplitshGit;
+use HubKit\StringUtil;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Webmozart\Console\Adapter\ArgsInput;
@@ -210,12 +212,16 @@ final class MergeHandler extends GitBaseHandler
         $message .= $pr['body'];
         $message .= "\n\nCommits\n-------\n\n";
 
-        foreach ($this->github->getCommits(
+        $commits = $this->github->getCommits(
             $pr['head']['user']['login'],
             $pr['head']['repo']['name'],
             $pr['base']['repo']['owner']['login'].':'.$pr['base']['ref'],
             $pr['head']['ref']
-        ) as $commit) {
+        );
+
+        $this->validateMessages($commits);
+
+        foreach ($commits as $commit) {
             $authors[$commit['author']['login']] = $commit['author']['login'];
             $message .= $commit['sha'].' '.explode("\n", $commit['commit']['message'], 2)[0]."\n";
         }
@@ -404,5 +410,38 @@ COMMENT;
 
         $this->git->deleteBranch($branch, true);
         $this->style->note(sprintf('Branch "%s" was deleted.', $branch));
+    }
+
+    private function validateMessages(array $commits): void
+    {
+        $violations = MessageValidator::validateCommitsMessages($commits);
+        $severity = MessageValidator::SEVERITY_LOW;
+
+        if (count($violations) === 0) {
+            return;
+        }
+
+        $messages = [];
+
+        foreach ($violations as $violation) {
+            $severity = max($severity, $violation[0]);
+            $messages[] = "{$violation[1]}: {$violation[2]}";
+        }
+
+        $this->style->warning('On or more commits are problematic, make sure this is correct.');
+        $this->style->writeln(
+            array_map(function ($element) {
+                return sprintf(' * <fg=yellow>%s</>', implode("\n   ", StringUtil::splitLines($element)));
+            }, $messages)
+        );
+        $this->style->newLine();
+
+        if ($severity === MessageValidator::SEVERITY_HIGH) {
+            throw new \InvalidArgumentException('Please fix the commits contents before continuing.');
+        }
+
+        if (!$this->style->confirm('Ignore problematic commits and continue anyway?', false)) {
+            throw new \InvalidArgumentException('User aborted. Please fix commits contents before continuing.');
+        }
     }
 }
