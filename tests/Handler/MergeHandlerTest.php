@@ -98,7 +98,7 @@ Commits
 -------
 
 06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
-06f57b45415f0456719d578ca5003f9683b941fe OH: PullRequestMergeHandler was already committed
+06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
 
 BODY
 ),
@@ -182,7 +182,7 @@ Commits
 -------
 
 06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
-06f57b45415f0456719d578ca5003f9683b941fe OH: PullRequestMergeHandler was already committed
+06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
 
 BODY
 ),
@@ -262,7 +262,7 @@ Commits
 -------
 
 06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
-06f57b45415f0456719d578ca5003f9683b941fe OH: PullRequestMergeHandler was already committed
+06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
 
 BODY
 ),
@@ -342,7 +342,7 @@ Commits
 -------
 
 06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
-06f57b45415f0456719d578ca5003f9683b941fe OH: PullRequestMergeHandler was already committed
+06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
 
 BODY
 ),
@@ -421,7 +421,7 @@ Commits
 -------
 
 06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
-06f57b45415f0456719d578ca5003f9683b941fe OH: PullRequestMergeHandler was already committed
+06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
 
 BODY
 ),
@@ -484,7 +484,7 @@ Commits
 -------
 
 06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
-06f57b45415f0456719d578ca5003f9683b941fe OH: PullRequestMergeHandler was already committed
+06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
 
 BODY
 ),
@@ -525,7 +525,7 @@ Commits
 -------
 
 06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
-06f57b45415f0456719d578ca5003f9683b941fe OH: PullRequestMergeHandler was already committed
+06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
 
 BODY
 ),
@@ -566,7 +566,7 @@ Commits
 -------
 
 06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
-06f57b45415f0456719d578ca5003f9683b941fe OH: PullRequestMergeHandler was already committed
+06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
 
 BODY
 ),
@@ -606,7 +606,7 @@ Commits
 -------
 
 06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
-06f57b45415f0456719d578ca5003f9683b941fe OH: PullRequestMergeHandler was already committed
+06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
 
 BODY
 ),
@@ -653,7 +653,7 @@ Commits
 -------
 
 06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
-06f57b45415f0456719d578ca5003f9683b941fe OH: PullRequestMergeHandler was already committed
+06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
 
 BODY
 ),
@@ -701,7 +701,7 @@ Commits
 -------
 
 06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
-06f57b45415f0456719d578ca5003f9683b941fe OH: PullRequestMergeHandler was already committed
+06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
 
 BODY
 ),
@@ -749,7 +749,7 @@ Commits
 -------
 
 06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
-06f57b45415f0456719d578ca5003f9683b941fe OH: PullRequestMergeHandler was already committed
+06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
 
 BODY
 ),
@@ -803,7 +803,7 @@ Commits
 -------
 
 06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
-06f57b45415f0456719d578ca5003f9683b941fe OH: PullRequestMergeHandler was already committed
+06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
 
 BODY
 ),
@@ -844,7 +844,7 @@ Commits
 -------
 
 06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
-06f57b45415f0456719d578ca5003f9683b941fe OH: PullRequestMergeHandler was already committed
+06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
 
 BODY
 ),
@@ -903,7 +903,7 @@ Commits
 -------
 
 06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
-06f57b45415f0456719d578ca5003f9683b941fe OH: PullRequestMergeHandler was already committed
+06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
 
 BODY
 ),
@@ -961,7 +961,7 @@ Commits
 -------
 
 06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
-06f57b45415f0456719d578ca5003f9683b941fe OH: PullRequestMergeHandler was already committed
+06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
 
 BODY
 ),
@@ -1019,7 +1019,7 @@ Commits
 -------
 
 06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
-06f57b45415f0456719d578ca5003f9683b941fe OH: PullRequestMergeHandler was already committed
+06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
 
 BODY
 ),
@@ -1069,7 +1069,7 @@ Commits
 -------
 
 06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
-06f57b45415f0456719d578ca5003f9683b941fe OH: PullRequestMergeHandler was already committed
+06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
 
 BODY
 ),
@@ -1135,7 +1135,7 @@ Commits
 -------
 
 06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
-06f57b45415f0456719d578ca5003f9683b941fe OH: PullRequestMergeHandler was already committed
+06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
 
 BODY
 ),
@@ -1166,6 +1166,108 @@ BODY
         $this->expectExceptionMessage('Cannot merge closed pull request.');
 
         $this->executeHandler($args);
+    }
+
+    /** @test */
+    public function it_checks_commit_messages_contents_and_fails_for_high_severity()
+    {
+        $pr = $this->expectPrInfo();
+        $this->expectCommitStatus();
+        $this->expectUnacceptableCommits($pr);
+
+        $args = $this->getArgs();
+        $args->setArgument('number', '42');
+
+        try {
+            $this->executeHandler($args, 'feature', ['yes']);
+
+            $this->fail('Should have throw an exception.');
+        } catch (\InvalidArgumentException $e) {
+            self::assertEquals('Please fix the commits contents before continuing.', $e->getMessage());
+
+            $this->assertOutputMatches(
+                [
+                    '[WARNING] On or more commits are problematic, make sure this is correct.',
+                    ' * Description contains unacceptable contents: Crap, I am so...',
+                    " * Unrelated commits or work in progress?: OH: PullRequestMergeHandler was already committed\n  Anyway, moved some stuff to a base Handler class",
+                ]
+            );
+        }
+    }
+
+    /** @test */
+    public function it_checks_commit_messages_contents_rejects_acceptance()
+    {
+        $pr = $this->expectPrInfo();
+        $this->expectCommitStatus();
+        $this->expectLessAcceptableCommits($pr);
+
+        $args = $this->getArgs();
+        $args->setArgument('number', '42');
+
+        try {
+            $this->executeHandler($args, 'feature', ['no']);
+
+            $this->fail('Should have throw an exception.');
+        } catch (\InvalidArgumentException $e) {
+            self::assertEquals('User aborted. Please fix commits contents before continuing.', $e->getMessage());
+
+            $this->assertOutputMatches(
+                [
+                    '[WARNING] On or more commits are problematic, make sure this is correct.',
+                    " * Unrelated commits or work in progress?: OH: PullRequestMergeHandler was already committed\n  Anyway, moved some stuff to a base Handler class",
+                    'Ignore problematic commits and continue anyway?',
+                ]
+            );
+        }
+    }
+
+    /** @test */
+    public function it_checks_commit_messages_contents_allows_acceptance()
+    {
+        $pr = $this->expectPrInfo();
+        $this->expectCommitStatus();
+        $this->expectLessAcceptableCommits($pr);
+
+        $this->github->mergePullRequest(
+            self::PR_NUMBER,
+            'feature #42 Brand new design (sstok)',
+            PropArgument::exact(<<<'BODY'
+This PR was merged into the 1.0-dev branch.
+
+Discussion
+----------
+
+There I fixed it
+
+Commits
+-------
+
+06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
+06f57b45415f0456719d578ca5003f9683b941fe OH: PullRequestMergeHandler was already committed
+
+BODY
+),
+            self::HEAD_SHA
+        )->willReturn(['sha' => self::MERGE_SHA]);
+
+        $this->expectNotes();
+        $this->expectLocalUpdate();
+        $this->expectLocalBranchNotExists();
+
+        $args = $this->getArgs();
+        $args->setArgument('number', '42');
+
+        $this->executeHandler($args, 'feature', ['yes']);
+        $this->assertOutputMatches(
+            [
+                '[WARNING] On or more commits are problematic, make sure this is correct.',
+                " * Unrelated commits or work in progress?: OH: PullRequestMergeHandler was already committed\n  Anyway, moved some stuff to a base Handler class",
+                'Ignore problematic commits and continue anyway?',
+            ]
+        );
+
+        $this->assertOutputNotMatches('Please fix the commits contents before continuing.');
     }
 
     /** @test */
@@ -1294,6 +1396,60 @@ BODY
                 ],
                 [
                     'author' => ['login' => $author2],
+                    'sha' => '06f57b45415f0456719d578ca5003f9683b941fe',
+                    'commit' => [
+                        'message' => 'PullRequestMergeHandler was already committed'."\n\n".
+                                     'Anyway, moved some stuff to a base Handler class, '.
+                                     'review status (if any) and fixes for broken command',
+                    ],
+                ],
+            ]
+        );
+    }
+
+    private function expectUnacceptableCommits(array $pr)
+    {
+        $this->github->getCommits(
+            $pr['head']['user']['login'],
+            $pr['head']['repo']['name'],
+            $pr['base']['repo']['owner']['login'].':'.$pr['base']['ref'],
+            $pr['head']['ref']
+        )->willReturn(
+            [
+                [
+                    'author' => ['login' => 'sstok'],
+                    'sha' => '06f57b45415f0456719d578ca5003f9683b941fb',
+                    'commit' => ['message' => 'Crap, I am so...'],
+                ],
+                [
+                    'author' => ['login' => 'sstok'],
+                    'sha' => '06f57b45415f0456719d578ca5003f9683b941fe',
+                    'commit' => [
+                        'message' => 'OH: PullRequestMergeHandler was already committed'."\n\n".
+                                     'Anyway, moved some stuff to a base Handler class, '.
+                                     'review status (if any) and fixes for broken command',
+                    ],
+                ],
+            ]
+        );
+    }
+
+    private function expectLessAcceptableCommits(array $pr)
+    {
+        $this->github->getCommits(
+            $pr['head']['user']['login'],
+            $pr['head']['repo']['name'],
+            $pr['base']['repo']['owner']['login'].':'.$pr['base']['ref'],
+            $pr['head']['ref']
+        )->willReturn(
+            [
+                [
+                    'author' => ['login' => 'sstok'],
+                    'sha' => '06f57b45415f0456719d578ca5003f9683b941fb',
+                    'commit' => ['message' => 'Properly handle repository requirement'],
+                ],
+                [
+                    'author' => ['login' => 'sstok'],
                     'sha' => '06f57b45415f0456719d578ca5003f9683b941fe',
                     'commit' => [
                         'message' => 'OH: PullRequestMergeHandler was already committed'."\n\n".
