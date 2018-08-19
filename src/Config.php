@@ -76,7 +76,7 @@ final class Config
         $value = $this->get($keys, $invalid = new \stdClass());
 
         if ($value === $invalid) {
-            throw new \InvalidArgumentException('Unable to find config "[%s]"', implode('][', $keys));
+            throw new \InvalidArgumentException(sprintf('Unable to find config "[%s]"', implode('][', $keys)));
         }
 
         return $value;

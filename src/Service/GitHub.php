@@ -125,7 +125,7 @@ class GitHub
         return $this->client->issue()->show(
             $this->organization,
             $this->repository,
-            (string) $number
+            $number
         );
     }
 
@@ -193,7 +193,7 @@ class GitHub
         $pr = $api->show(
             $this->organization,
             $this->repository,
-            (string) $id
+            $id
         );
 
         // Still better then BitBucket...
@@ -202,7 +202,7 @@ class GitHub
             $issue = $api->show(
                 $this->organization,
                 $this->repository,
-                (string) $id
+                $id
             );
 
             $pr['labels'] = $issue['labels'];
