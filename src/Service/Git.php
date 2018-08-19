@@ -322,7 +322,7 @@ class Git
 
     public function remoteUpdate(string $remote)
     {
-        $this->process->mustRun(['git', 'remote', 'update', $remote]);
+        $this->process->mustRun(['git', 'fetch', $remote]);
     }
 
     public function isWorkingTreeReady()
