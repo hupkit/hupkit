@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace HubKit\Tests\Handler;
 
-use PHPUnit_Framework_Assert;
+use PHPUnit\Framework\Assert;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\StreamOutput;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -91,7 +91,7 @@ trait SymfonyStyleTrait
                 $line = preg_replace('#\s+#', '\\s+', preg_quote($line, '#'));
             }
 
-            PHPUnit_Framework_Assert::assertRegExp('#'.$line.'#m', $output);
+            Assert::assertRegExp('#'.$line.'#m', $output);
         }
     }
 
@@ -117,7 +117,7 @@ trait SymfonyStyleTrait
                 $line = preg_replace('#\s+#', '\\s+', preg_quote($line, '#'));
             }
 
-            PHPUnit_Framework_Assert::assertNotRegExp('#'.$line.'#m', $output);
+            Assert::assertNotRegExp('#'.$line.'#m', $output);
         }
     }
 }
