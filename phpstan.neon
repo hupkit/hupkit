@@ -6,9 +6,6 @@ parameters:
         - '#Property HubKit\\Service\\CliProcess\:\:\$processHelper \(Symfony\\Component\\Console\\Helper\\ProcessHelper\) does not accept Symfony\\Component\\Console\\Helper\\HelperInterface#'
         #- '#Call to an undefined method Webmozart\\Console\\Api\\Config\\ApplicationConfig\|Webmozart\\Console\\Api\\Config\\CommandConfig\:\:end\(\)#'
 
-        ## False positive
-        - '#Parameter \#2 \$cmd of method Symfony\\Component\\Console\\Helper\\ProcessHelper\:\:mustRun\(\) expects string\|Symfony\\Component\\Process\\Process#'
-
         ## Tests
         #- '#Call to an undefined method Prophecy\\Prophecy\\ObjectProphecy::[a-zA-Z0-9_]+\(\)#'
         #- '#Access to an undefined property Prophecy\\Prophecy\\ObjectProphecy::\$[a-zA-Z0-9_]+#'

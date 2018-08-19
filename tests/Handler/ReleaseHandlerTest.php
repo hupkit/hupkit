@@ -471,7 +471,7 @@ labels: removed-deprecation
     private function expectTagAndGitHubRelease(string $version, string $message, ?string $title = null): string
     {
         $this->process->mustRun(['git', 'tag', '-s', 'v'.$version, '-m', 'Release '.$version])->shouldBeCalled();
-        $this->process->mustRun(['git', 'push', '--tags', 'upstream'])->shouldBeCalled();
+        $this->process->mustRun(['git', 'push', 'upstream', 'v'.$version])->shouldBeCalled();
 
         $this->github->createRelease('v'.$version, $message, false, $title)->willReturn(
             ['html_url' => $url = 'https://github.com/park-manager/hubkit/releases/tag/v'.$version]

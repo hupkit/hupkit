@@ -78,7 +78,7 @@ class SplitshGitTest extends TestCase
         $processCliProphecy = $this->prophesize(CliProcess::class);
         $processCliProphecy->mustRun(['git', 'tag', 'v1.0.0', '2c00338aef823d0c0916fc1b59ef49d0bb76f02f', '-s', '-m', 'Release 1.0.0'])->shouldBeCalledTimes(1);
         $processCliProphecy->mustRun(['git', 'tag', 'v1.0.0', '3eed8083737422fe9ac2da9f4348423089fceb7f', '-s', '-m', 'Release 1.0.0'])->shouldBeCalledTimes(1);
-        $processCliProphecy->run(['git', 'push', '--tags', 'origin'])->shouldBeCalledTimes(2);
+        $processCliProphecy->run(['git', 'push', 'origin', 'v1.0.0'])->shouldBeCalledTimes(2);
         $cliProcess = $processCliProphecy->reveal();
 
         $sfFilesystemProphecy = $this->prophesize(SfFilesystem::class);

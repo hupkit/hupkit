@@ -15,7 +15,7 @@ security-check:
 	sh -c "${QA_DOCKER_COMMAND} security-checker security:check ./composer.lock"
 
 phpstan:
-	sh -c "${QA_DOCKER_COMMAND} phpstan analyse --configuration phpstan.neon --level max src bin"
+	sh -c "${QA_DOCKER_COMMAND} phpstan analyse --configuration phpstan.neon --level 5 src bin"
 
 cs:
 	sh -c "${QA_DOCKER_COMMAND} php-cs-fixer fix -vvv --diff"
