@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace HubKit\Service;
 
+use Symfony\Component\Process\Exception\ProcessFailedException;
+
 class SplitshGit
 {
     private $git;
@@ -57,9 +59,26 @@ class SplitshGit
 
         $remoteName = '_'.Git::getGitUrlInfo($url)['repo'];
         $this->git->ensureRemoteExists($remoteName, $url);
+        $tempBranchName = null;
 
         if ($commits > 0) {
-            $this->git->pushToRemote($remoteName, $sha.':'.$targetBranch);
+            try {
+                $this->git->pushToRemote($remoteName, $sha.':'.$targetBranch);
+            } catch (ProcessFailedException $e) {
+                // Failed to push. If remote branch is missing Git fails.
+                if ($this->git->remoteBranchExists($remoteName, $targetBranch)) {
+                    throw $e;
+                }
+
+                $this->git->checkout($sha);
+                $this->git->checkout($tempBranchName = '_tmp_'.$sha, true);
+                $this->git->pushToRemote($remoteName, $tempBranchName.':'.$targetBranch);
+            } finally {
+                if (null !== $tempBranchName) {
+                    $this->git->checkout($targetBranch);
+                    $this->git->deleteBranch($tempBranchName, true);
+                }
+            }
         }
 
         return [$remoteName => [$sha, $url, $commits]];
@@ -99,7 +118,7 @@ class SplitshGit
                 // no-op. Ignore and try to push.
             }
 
-            $this->process->run(['git', 'push', '--tags', 'origin']);
+            $this->process->run(['git', 'push', 'origin', 'v'.$versionStr]);
         }
 
         $this->filesystem->chdir($currentDir);
