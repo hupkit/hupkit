@@ -28,7 +28,7 @@ class Git
 
     protected $process;
     private $filesystem;
-    private $style;
+    protected $style;
     private $gitDir;
 
     public function __construct(
