@@ -508,14 +508,6 @@ class Git
         return $info;
     }
 
-    public function applyPatch(string $patchFile, $message, $type = 'p0')
-    {
-        $this->guardWorkingTreeReady();
-
-        $this->process->mustRun(['patch', '-'.$type, '--input', $patchFile]);
-        $this->process->mustRun(['git', 'commit', '-a', '--file', $this->filesystem->newTempFilename($message)]);
-    }
-
     public function clone(string $ssh_url, string $remoteName = 'origin', ?int $depth = null)
     {
         $command = ['git', 'clone', $ssh_url, '.'];

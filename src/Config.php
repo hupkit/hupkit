@@ -105,16 +105,6 @@ final class Config
     }
 
     /**
-     * Get the configuration is as array.
-     *
-     * @return array
-     */
-    public function toArray()
-    {
-        return $this->config;
-    }
-
-    /**
      * Checks whether the config exists.
      *
      * @param string $keys Single level key like "profiles" or array-path
