@@ -45,14 +45,14 @@ final class Config
     {
         $keys = (array) $keys;
 
-        if (count($keys) === 1) {
+        if (\count($keys) === 1) {
             return array_key_exists($keys[0], $this->config) ? $this->config[$keys[0]] : $default;
         }
 
         $current = $this->config;
 
         foreach ($keys as $key) {
-            if (!is_array($current) || !array_key_exists($key, $current)) {
+            if (!\is_array($current) || !array_key_exists($key, $current)) {
                 return $default;
             }
 
@@ -126,14 +126,14 @@ final class Config
     {
         $keys = (array) $keys;
 
-        if (count($keys) === 1) {
+        if (\count($keys) === 1) {
             return array_key_exists($keys[0], $this->config);
         }
 
         $current = $this->config;
 
         foreach ($keys as $key) {
-            if (!is_array($current) || !array_key_exists($key, $current)) {
+            if (!\is_array($current) || !array_key_exists($key, $current)) {
                 return false;
             }
 

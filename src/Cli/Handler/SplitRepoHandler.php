@@ -69,10 +69,10 @@ final class SplitRepoHandler extends GitBaseHandler
         $this->git->ensureBranchInSync('upstream', $branch);
         $this->splitshGit->checkPrecondition();
 
-        $this->style->section(sprintf('%s sources to split', count($repos)));
+        $this->style->section(sprintf('%s sources to split', \count($repos)));
 
         foreach ($repos as $prefix => $config) {
-            $url = is_array($config) ? $config['url'] : $config;
+            $url = \is_array($config) ? $config['url'] : $config;
 
             $this->style->writeln(sprintf('<fg=default;bg=default> Splitting %s to %s</>', $prefix, $url));
             $this->splitshGit->splitTo($branch, $prefix, $url);
@@ -88,11 +88,11 @@ final class SplitRepoHandler extends GitBaseHandler
         $this->git->ensureBranchInSync('upstream', $branch);
         $this->splitshGit->checkPrecondition();
 
-        $this->style->section(sprintf('%s sources to split', count($repos)));
+        $this->style->section(sprintf('%s sources to split', \count($repos)));
 
         foreach ($repos as $prefix => $config) {
             $this->style->writeln(sprintf('<fg=default;bg=default> [DRY-RUN] Splitting %s to %s</>', $prefix,
-                is_array($config) ? $config['url'] : $config
+                \is_array($config) ? $config['url'] : $config
             ));
         }
 

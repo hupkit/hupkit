@@ -154,7 +154,7 @@ final class MergeHandler extends GitBaseHandler
 
     private function determineReviewStatus(array $pr, StatusTable $table)
     {
-        if (!count($pr['labels'])) {
+        if (!\count($pr['labels'])) {
             return;
         }
 
@@ -375,11 +375,11 @@ COMMENT;
 
         $this->style->text('Starting split operation please wait...');
         $progressBar = $this->style->createProgressBar();
-        $progressBar->start(count($reposConfig['split']));
+        $progressBar->start(\count($reposConfig['split']));
 
         foreach ($reposConfig['split'] as $prefix => $config) {
             $progressBar->advance();
-            $this->splitshGit->splitTo($pr['base']['ref'], $prefix, is_array($config) ? $config['url'] : $config);
+            $this->splitshGit->splitTo($pr['base']['ref'], $prefix, \is_array($config) ? $config['url'] : $config);
         }
     }
 
@@ -417,7 +417,7 @@ COMMENT;
         $violations = MessageValidator::validateCommitsMessages($commits);
         $severity = MessageValidator::SEVERITY_LOW;
 
-        if (count($violations) === 0) {
+        if (\count($violations) === 0) {
             return;
         }
 

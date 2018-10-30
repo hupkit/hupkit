@@ -49,7 +49,7 @@ trait SymfonyStyleTrait
     {
         $input = implode(PHP_EOL, $input);
 
-        $stream = fopen('php://memory', 'rb+', false);
+        $stream = fopen('php://memory', 'b+r', false);
         fwrite($stream, $input);
         rewind($stream);
 
@@ -79,7 +79,7 @@ trait SymfonyStyleTrait
         $expectedLines = (array) $expectedLines;
 
         foreach ($expectedLines as $matchLine) {
-            if (is_array($matchLine)) {
+            if (\is_array($matchLine)) {
                 $line = $matchLine[0];
                 $lineRegex = $matchLine[1];
             } else {
@@ -105,7 +105,7 @@ trait SymfonyStyleTrait
         $lines = (array) $lines;
 
         foreach ($lines as $matchLine) {
-            if (is_array($matchLine)) {
+            if (\is_array($matchLine)) {
                 $line = $matchLine[0];
                 $lineRegex = $matchLine[1];
             } else {

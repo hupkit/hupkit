@@ -224,7 +224,7 @@ class Git
             )->getOutput()
         );
 
-        return in_array($branch, $branches, true);
+        return \in_array($branch, $branches, true);
     }
 
     public function branchExists(string $branch): bool
@@ -233,7 +233,7 @@ class Git
             $this->process->mustRun("git for-each-ref --format='%(refname:short)' refs/heads/")->getOutput()
         );
 
-        return in_array($branch, $branches, true);
+        return \in_array($branch, $branches, true);
     }
 
     public function deleteRemoteBranch(string $remote, string $ref)
@@ -381,7 +381,7 @@ class Git
             $this->getGitConfig('remote.'.$remote.'.fetch', 'local', true)
         );
 
-        if (!in_array('+refs/notes/*:refs/notes/*', $fetches, true)) {
+        if (!\in_array('+refs/notes/*:refs/notes/*', $fetches, true)) {
             $this->style->note(
                 sprintf('Set fetching of notes for remote "%s".', $remote)
             );
@@ -497,7 +497,7 @@ class Git
         }
 
         if (isset($info['path'])) {
-            $dirs = array_slice(explode('/', $info['path']), -2, 2);
+            $dirs = \array_slice(explode('/', $info['path']), -2, 2);
 
             $info['org'] = $dirs[0];
             $info['repo'] = substr($dirs[1], -4, 4) === '.git' ? substr($dirs[1], 0, -4) : $dirs[1];

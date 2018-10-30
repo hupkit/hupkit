@@ -79,7 +79,7 @@ final class SelfDiagnoseHandler
             'Commit signing is not enabled. Set "commit.gpgsign" to true'
         );
 
-        if (defined('PHP_WINDOWS_VERSION_MAJOR')) {
+        if (\defined('PHP_WINDOWS_VERSION_MAJOR')) {
             $this->testAdvisedGitConfigValue(
                 $table,
                 'core.eol',
@@ -119,7 +119,7 @@ final class SelfDiagnoseHandler
                 $this->github->initializeForHost($hostname);
                 $table->addRow($label, $this->github->isAuthenticated() ? 'success' : 'failure', $authentication['username']);
             } catch (\Exception $e) {
-                $table->addRow($label, 'failure', get_class($e).': '.$e->getMessage());
+                $table->addRow($label, 'failure', \get_class($e).': '.$e->getMessage());
             }
         }
     }

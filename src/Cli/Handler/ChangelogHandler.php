@@ -56,7 +56,7 @@ final class ChangelogHandler extends GitBaseHandler
 
     private function getRefRange(string $ref): array
     {
-        if (false === strpos($ref, '..', 1) || 2 !== count($points = explode('..', $ref))) {
+        if (false === strpos($ref, '..', 1) || 2 !== \count($points = explode('..', $ref))) {
             throw new \InvalidArgumentException('missing ref range `base..head` or illegal offset given');
         }
 

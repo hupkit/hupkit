@@ -63,7 +63,7 @@ final class UpMergeHandler extends GitBaseHandler
         $branches[] = 'master';
         $changedBranches = [];
 
-        for ($i = $idx + 1, $c = count($branches); $i < $c; ++$i) {
+        for ($i = $idx + 1, $c = \count($branches); $i < $c; ++$i) {
             $this->git->checkoutRemoteBranch('upstream', $branches[$i]);
             $this->git->ensureBranchInSync('upstream', $branches[$i]);
             $this->process->mustRun(['git', 'merge', '--no-ff', '--log', $branches[$i - 1]]);
@@ -119,7 +119,7 @@ final class UpMergeHandler extends GitBaseHandler
         $branches[] = 'master';
         $changedBranches = [];
 
-        for ($i = $idx + 1, $c = count($branches); $i < $c; ++$i) {
+        for ($i = $idx + 1, $c = \count($branches); $i < $c; ++$i) {
             $this->git->ensureBranchInSync('upstream', $branches[$i]);
             $this->style->note(sprintf('[DRY-RUN] Merged "%s" into "%s"', $branches[$i - 1], $branches[$i]));
 

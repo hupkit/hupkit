@@ -49,7 +49,7 @@ class ChangelogRenderer
         $changelog = '';
 
         foreach ($this->getItemsPerCategories($base, $head) as $category => $items) {
-            if (!count($items)) {
+            if (!\count($items)) {
                 if (!$skipEmptyLists) {
                     $changelog .= "### {$category}\n- nothing\n\n";
                 }
@@ -89,7 +89,7 @@ class ChangelogRenderer
             )
         ;
 
-        if (in_array('bc-break', $item['labels'], true)) {
+        if (\in_array('bc-break', $item['labels'], true)) {
             $title = '[BC BREAK] '.$title;
         }
 
@@ -133,11 +133,11 @@ class ChangelogRenderer
             'bug' => 'Fixed',
         ];
 
-        if (in_array('deprecation', $labels, true)) {
+        if (\in_array('deprecation', $labels, true)) {
             return 'Deprecated';
         }
 
-        if (in_array('removed-deprecation', $labels, true)) {
+        if (\in_array('removed-deprecation', $labels, true)) {
             return 'Removed';
         }
 

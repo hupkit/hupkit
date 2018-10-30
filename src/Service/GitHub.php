@@ -79,7 +79,7 @@ class GitHub
 
     public function isAuthenticated()
     {
-        return is_array($this->client->currentUser()->show());
+        return \is_array($this->client->currentUser()->show());
     }
 
     public function getHostname(): string
