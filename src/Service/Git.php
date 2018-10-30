@@ -26,7 +26,7 @@ class Git
     public const STATUS_NEED_PUSH = 'up-to-date';
     public const STATUS_DIVERGED = 'diverged';
 
-    private $process;
+    protected $process;
     private $filesystem;
     private $style;
     private $gitDir;
@@ -49,7 +49,7 @@ class Git
             return false;
         }
 
-        return str_replace('\\', '/', getcwd()) === $directory;
+        return str_replace('\\', '/', $this->getCwd()) === $directory;
     }
 
     /**
@@ -529,12 +529,17 @@ class Git
         if (null === $this->gitDir) {
             $gitDir = trim($this->process->run('git rev-parse --git-dir')->getOutput());
             if ('.git' === $gitDir) {
-                $gitDir = getcwd().'/.git';
+                $gitDir = $this->getCwd() . '/.git';
             }
 
             $this->gitDir = $gitDir;
         }
 
         return $this->gitDir;
+    }
+
+    protected function getCwd(): string
+    {
+        return getcwd();
     }
 }
