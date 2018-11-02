@@ -2,6 +2,15 @@
 
 declare(strict_types=1);
 
+/*
+ * This file is part of the HubKit package.
+ *
+ * (c) Sebastiaan Stok <s.stok@rollerscapes.net>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace HubKit\Tests\Unit\Service\Git;
 
 use HubKit\Service\CliProcess;
@@ -105,7 +114,7 @@ class GitBranchTest extends TestCase
 
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage(
-            'Cannot safely perform the operation. ' .
+            'Cannot safely perform the operation. '.
             'Your local and remote version of branch "master" have differed.'.
             ' Please resolve this problem manually.'
         );
@@ -124,8 +133,7 @@ class GitBranchTest extends TestCase
         //
         // Performing actual Git commands for this related test would be much slower (and not to mention difficult),
         // plus the called methods are already tested on their own. ensureBranchInSync() is merely a helper method.
-        $git = new class($style) extends GitBranch
-        {
+        $git = new class($style) extends GitBranch {
             public $diffStatus;
             public $diffStatusCall = [];
             public $pushCall = [];
@@ -148,7 +156,7 @@ class GitBranchTest extends TestCase
                 $this->pushCall = [$remote, $ref, $setUpstream, $force];
             }
 
-            public function pullRemote(string $remote, string $ref = null)
+            public function pullRemote(string $remote, string $ref = null): void
             {
                 $this->pullCall = [$remote, $ref];
             }

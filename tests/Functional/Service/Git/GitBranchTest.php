@@ -2,12 +2,20 @@
 
 declare(strict_types=1);
 
+/*
+ * This file is part of the HubKit package.
+ *
+ * (c) Sebastiaan Stok <s.stok@rollerscapes.net>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace HubKit\Tests\Functional\Service\Git;
 
 use HubKit\Service\Git\GitBranch;
 use HubKit\Tests\Functional\GitTesterTrait;
 use PHPUnit\Framework\TestCase;
-use RuntimeException;
 use Symfony\Component\Console\Style\StyleInterface;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
@@ -25,11 +33,11 @@ class GitBranchTest extends TestCase
     /** @before */
     public function setUpLocalRepository(): void
     {
-        $this->cwd = $this->localRepository = $this->createGitDirectory($this->getTempDir() . '/git');
+        $this->cwd = $this->localRepository = $this->createGitDirectory($this->getTempDir().'/git');
         $this->commitFileToRepository('foo.txt', $this->localRepository);
         $this->commitFileToRepository('diggy.txt', $this->localRepository);
 
-        $this->remoteRepository = $this->createBareGitDirectory($this->getTempDir() . '/git2');
+        $this->remoteRepository = $this->createBareGitDirectory($this->getTempDir().'/git2');
         $this->addRemote('origin', $this->remoteRepository, $this->localRepository);
         $this->runCliCommand(['git', 'push', 'origin', 'master'], $this->localRepository);
 
@@ -81,7 +89,7 @@ class GitBranchTest extends TestCase
 
         $this->expectException('RuntimeException');
         $this->expectExceptionMessage(
-            'You are currently in a detached HEAD state, ' .
+            'You are currently in a detached HEAD state, '.
             'unable to get active branch-name.Please run `git checkout` first.'
         );
 

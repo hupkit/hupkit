@@ -2,9 +2,17 @@
 
 declare(strict_types=1);
 
+/*
+ * This file is part of the HubKit package.
+ *
+ * (c) Sebastiaan Stok <s.stok@rollerscapes.net>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace HubKit\Tests\Functional;
 
-use HubKit\Tests\Functional\TestCliProcess;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Process\Process;
 
@@ -95,7 +103,7 @@ trait GitTesterTrait
 
     protected function addRemote(string $remoteName, string $remoteRepository, ?string $sourceRepository = null): void
     {
-        $this->runCliCommand(['git', 'remote', 'add', $remoteName, 'file://' . $remoteRepository], $sourceRepository);
+        $this->runCliCommand(['git', 'remote', 'add', $remoteName, 'file://'.$remoteRepository], $sourceRepository);
     }
 
     protected function givenRemoteBranchesExist(iterable $branches, string $remote = 'origin'): void
@@ -114,7 +122,7 @@ trait GitTesterTrait
 
     protected function setUpstreamRepository(): void
     {
-        $upstreamRepos = $this->createBareGitDirectory($this->getTempDir() . '/git3');
+        $upstreamRepos = $this->createBareGitDirectory($this->getTempDir().'/git3');
         $this->addRemote('upstream', $upstreamRepos, $this->localRepository);
         $this->runCliCommand(['git', 'push', 'upstream', 'master'], $this->localRepository);
     }

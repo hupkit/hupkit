@@ -529,7 +529,7 @@ class Git
         if (null === $this->gitDir) {
             $gitDir = trim($this->process->run('git rev-parse --git-dir')->getOutput());
             if ('.git' === $gitDir) {
-                $gitDir = $this->getCwd() . '/.git';
+                $gitDir = $this->getCwd().'/.git';
             }
 
             $this->gitDir = $gitDir;
