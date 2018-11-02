@@ -23,7 +23,7 @@ class Git
 {
     public const STATUS_UP_TO_DATE = 'up-to-date';
     public const STATUS_NEED_PULL = 'need_pull';
-    public const STATUS_NEED_PUSH = 'up-to-date';
+    public const STATUS_NEED_PUSH = 'need_push';
     public const STATUS_DIVERGED = 'diverged';
 
     protected $process;
