@@ -24,4 +24,9 @@ class GitBranch extends Git
         $this->process = $process;
         $this->style = $style;
     }
+
+    public function checkoutNew(string $branch)
+    {
+        $this->checkout($branch, true);
+    }
 }

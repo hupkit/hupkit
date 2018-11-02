@@ -153,8 +153,6 @@ class GitBranchTest extends TestCase
         self::assertFalse($this->git->branchExists('3.0'));
     }
 
-    // ensureBranchInSync
-
     /** @test */
     public function it_removes_remote_branch()
     {
@@ -191,5 +189,46 @@ class GitBranchTest extends TestCase
         $this->expectExceptionMessage("error: The branch '2.0' is not fully merged.");
 
         $this->git->deleteBranch('2.0');
+    }
+
+    /** @test */
+    public function it_checkouts_out_an_existing_branch()
+    {
+        $this->givenLocalBranchesExist(['2.0']);
+
+        $this->git->checkout('2.0');
+
+        self::assertEquals('2.0', $this->git->getActiveBranchName());
+    }
+
+    /** @test */
+    public function it_checkouts_out_a_new_branch()
+    {
+        $this->runCliCommand(['git', 'checkout', 'HEAD@{1}']);
+
+        $this->git->checkoutNew('2.0');
+
+        self::assertEquals('2.0', $this->git->getActiveBranchName());
+    }
+
+    /** @test */
+    public function it_checkouts_out_a_remote_branche_existing_locally()
+    {
+        $this->givenRemoteBranchesExist(['2.0']);
+        $this->givenLocalBranchesExist(['2.0']);
+
+        $this->git->checkoutRemoteBranch('origin', '2.0');
+
+        self::assertEquals('2.0', $this->git->getActiveBranchName());
+    }
+
+    /** @test */
+    public function it_checkouts_out_a_remote_branche()
+    {
+        $this->givenRemoteBranchesExist(['2.0']);
+
+        $this->git->checkoutRemoteBranch('origin', '2.0');
+
+        self::assertEquals('2.0', $this->git->getActiveBranchName());
     }
 }
