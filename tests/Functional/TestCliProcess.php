@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace HubKit\Tests;
+namespace HubKit\Tests\Functional;
 
 use HubKit\Service\CliProcess;
 use Symfony\Component\Console\Output\OutputInterface;

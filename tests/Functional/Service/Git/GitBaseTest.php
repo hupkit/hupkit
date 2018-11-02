@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace HubKit\Tests\Service\Git;
+namespace HubKit\Tests\Functional\Service\Git;
 
 use HubKit\Service\Git\GitBase;
-use HubKit\Tests\GitTesterTrait;
+use HubKit\Tests\Functional\GitTesterTrait;
 use PHPUnit\Framework\TestCase;
 
 final class GitBaseTest extends TestCase

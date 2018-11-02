@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-namespace HubKit\Tests\Service\Git;
+namespace HubKit\Tests\Functional\Service\Git;
 
 use HubKit\Service\Git\GitBranch;
-use HubKit\Tests\GitTesterTrait;
+use HubKit\Tests\Functional\GitTesterTrait;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 use Symfony\Component\Console\Style\StyleInterface;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
@@ -142,5 +143,45 @@ class GitBranchTest extends TestCase
         self::assertTrue($this->git->branchExists('2.0'));
         self::assertTrue($this->git->branchExists('1.x'));
         self::assertFalse($this->git->branchExists('3.0'));
+    }
+
+    // ensureBranchInSync
+
+    /** @test */
+    public function it_removes_remote_branch()
+    {
+        $this->givenRemoteBranchesExist(['2.0', '1.x']);
+
+        $this->git->deleteRemoteBranch('origin', '1.x');
+
+        self::assertTrue($this->git->remoteBranchExists('origin', 'master'));
+        self::assertTrue($this->git->remoteBranchExists('origin', '2.0'));
+        self::assertFalse($this->git->remoteBranchExists('origin', '1.x'));
+    }
+
+    /** @test */
+    public function it_removes_local_branch()
+    {
+        $this->givenLocalBranchesExist(['2.0', '1.x']);
+
+        $this->git->deleteBranch('1.x');
+
+        self::assertTrue($this->git->branchExists('master'));
+        self::assertTrue($this->git->branchExists('2.0'));
+        self::assertFalse($this->git->branchExists('1.x'));
+    }
+
+    /** @test */
+    public function it_removes_local_branch_respecting_the_merge_status()
+    {
+        $this->givenLocalBranchesExist(['2.0', '1.x']);
+        $this->runCliCommand(['git', 'checkout', '2.0']);
+        $this->commitFileToRepository('something.txt', $this->localRepository);
+        $this->runCliCommand(['git', 'checkout', 'master']);
+
+        $this->expectException(ProcessFailedException::class);
+        $this->expectExceptionMessage("error: The branch '2.0' is not fully merged.");
+
+        $this->git->deleteBranch('2.0');
     }
 }

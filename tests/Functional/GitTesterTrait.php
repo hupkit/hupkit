@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace HubKit\Tests;
+namespace HubKit\Tests\Functional;
 
-use HubKit\Tests\Service\Git\GitBranchTest;
+use HubKit\Tests\Functional\TestCliProcess;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Process\Process;
 
