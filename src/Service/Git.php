@@ -441,14 +441,10 @@ class Git
             );
         }
 
-        $this->process->mustRun(
-            sprintf(
-                'git config "%s" "%s" --%s',
-                $config,
-                $value,
-                $section
-            )
-        );
+        // Git adds a new value (superseding the old one) but we want replace the entire value.
+        // And `--replace-all` requires a regexp (WAT?) to properly replace the value...
+        $this->process->run(['git', 'config', '--'.$section, '--unset', $config]);
+        $this->process->mustRun(['git', 'config', '--'.$section, $config, $value]);
     }
 
     public function getGitConfig(string $config, string $section = 'local', bool $all = false): string
