@@ -63,10 +63,6 @@ class Container extends \Pimple\Container
             return new Service\Filesystem();
         };
 
-        $this['downloader'] = function (self $container) {
-            return new Service\Downloader($container['filesystem'], $container['guzzle'], $container['io']);
-        };
-
         $this['editor'] = function (self $container) {
             return new Service\Editor($container['process'], $container['filesystem']);
         };

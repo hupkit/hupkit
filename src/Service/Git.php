@@ -23,12 +23,12 @@ class Git
 {
     public const STATUS_UP_TO_DATE = 'up-to-date';
     public const STATUS_NEED_PULL = 'need_pull';
-    public const STATUS_NEED_PUSH = 'up-to-date';
+    public const STATUS_NEED_PUSH = 'need_push';
     public const STATUS_DIVERGED = 'diverged';
 
-    private $process;
+    protected $process;
     private $filesystem;
-    private $style;
+    protected $style;
     private $gitDir;
 
     public function __construct(
@@ -49,7 +49,7 @@ class Git
             return false;
         }
 
-        return str_replace('\\', '/', getcwd()) === $directory;
+        return str_replace('\\', '/', $this->getCwd()) === $directory;
     }
 
     /**
@@ -441,14 +441,10 @@ class Git
             );
         }
 
-        $this->process->mustRun(
-            sprintf(
-                'git config "%s" "%s" --%s',
-                $config,
-                $value,
-                $section
-            )
-        );
+        // Git adds a new value (superseding the old one) but we want replace the entire value.
+        // And `--replace-all` requires a regexp (WAT?) to properly replace the value...
+        $this->process->run(['git', 'config', '--'.$section, '--unset', $config]);
+        $this->process->mustRun(['git', 'config', '--'.$section, $config, $value]);
     }
 
     public function getGitConfig(string $config, string $section = 'local', bool $all = false): string
@@ -508,14 +504,6 @@ class Git
         return $info;
     }
 
-    public function applyPatch(string $patchFile, $message, $type = 'p0')
-    {
-        $this->guardWorkingTreeReady();
-
-        $this->process->mustRun(['patch', '-'.$type, '--input', $patchFile]);
-        $this->process->mustRun(['git', 'commit', '-a', '--file', $this->filesystem->newTempFilename($message)]);
-    }
-
     public function clone(string $ssh_url, string $remoteName = 'origin', ?int $depth = null)
     {
         $command = ['git', 'clone', $ssh_url, '.'];
@@ -537,12 +525,17 @@ class Git
         if (null === $this->gitDir) {
             $gitDir = trim($this->process->run('git rev-parse --git-dir')->getOutput());
             if ('.git' === $gitDir) {
-                $gitDir = getcwd().'/.git';
+                $gitDir = $this->getCwd().'/.git';
             }
 
             $this->gitDir = $gitDir;
         }
 
         return $this->gitDir;
+    }
+
+    protected function getCwd(): string
+    {
+        return getcwd();
     }
 }
