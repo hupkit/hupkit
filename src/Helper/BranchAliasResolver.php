@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace HubKit\Helper;
 
 use HubKit\Service\Git;
-use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Console\Style\StyleInterface;
 
 class BranchAliasResolver
 {
@@ -23,25 +23,25 @@ class BranchAliasResolver
     private $cwd;
     private $detectedBy = '';
 
-    public function __construct(SymfonyStyle $style, Git $git, string $cwd = null)
+    public function __construct(StyleInterface $style, Git $git, string $cwd = null)
     {
         $this->style = $style;
         $this->git = $git;
         $this->cwd = $cwd ?? getcwd();
     }
 
-    public function getAlias()
+    public function getAlias(): string
     {
-        if (file_exists($this->cwd.'/composer.json') && '' !== $label = $this->getAliasByComposer()) {
+        if (file_exists($this->cwd.'/composer.json') && '' !== $alias = $this->getAliasByComposer()) {
             $this->detectedBy = 'composer.json "extra.branch-alias.dev-master"';
 
-            return $label;
+            return $alias;
         }
 
         $this->detectedBy = 'Git config "branch.master.alias"';
 
-        if ('' !== ($label = $this->git->getGitConfig('branch.master.alias'))) {
-            return $label;
+        if ('' !== ($alias = $this->git->getGitConfig('branch.master.alias'))) {
+            return $alias;
         }
 
         return $this->askNewAlias();

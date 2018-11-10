@@ -120,4 +120,13 @@ trait SymfonyStyleTrait
             Assert::assertNotRegExp('#'.$line.'#m', $output);
         }
     }
+
+    protected function assertNoOutput(string $output = null)
+    {
+        if (null === $output) {
+            $output = $this->getDisplay();
+        }
+
+        Assert::assertEquals('', $output);
+    }
 }
