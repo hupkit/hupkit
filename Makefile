@@ -8,7 +8,7 @@ install:
 	composer install --no-progress --no-interaction --no-suggest --optimize-autoloader --prefer-dist --ansi
 
 test:
-	vendor/bin/phpunit --verbose
+	./vendor/bin/phpunit --disallow-test-output --verbose
 
 # Linting tools
 security-check:

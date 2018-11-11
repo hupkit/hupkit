@@ -28,6 +28,7 @@ install:
 
 script:
     - export SYMFONY_DEPRECATIONS_HELPER=strict
+    - if [[ ! $lint ]]; then make test; fi
     - if [[ $lint ]]; then make security-check cs-full-check phpstan; fi
     - cp config.php.dist config.php
     - bin/hubkit.php self-diagnose
