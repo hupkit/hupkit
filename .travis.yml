@@ -23,6 +23,9 @@ before_install:
     - phpenv config-rm xdebug.ini || echo "xdebug not available"
     - export PATH="$PATH:$HOME/.composer/vendor/bin:./vendor/bin"
 
+    - git config --global author.name Sebastiaan Stok
+    - git config --global author.email s.stok@rollerscapes.net
+
 install:
     - make install
 
