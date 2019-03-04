@@ -39,7 +39,7 @@ trait SymfonyStyleTrait
             $this->input->setStream($this->getInputStream($input));
         }
 
-        $this->output = new StreamOutput(fopen('php://memory', 'wb', false));
+        $this->output = new StreamOutput(fopen('php://memory', 'w', false));
         $this->output->setDecorated(false);
 
         return new SymfonyStyle($this->input, $this->output);
