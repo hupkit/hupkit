@@ -27,7 +27,7 @@ trait GitTesterTrait
 
     protected function setUpTempDirectory()
     {
-        $this->tempDir = realpath(sys_get_temp_dir()).'/hbk-sut/'.substr(hash('sha256', (\random_bytes(8))), 0, 10);
+        $this->tempDir = realpath(sys_get_temp_dir()).'/hbk-sut/'.substr(hash('sha256', (random_bytes(8))), 0, 10);
         mkdir($this->tempDir, 0777, true);
     }
 

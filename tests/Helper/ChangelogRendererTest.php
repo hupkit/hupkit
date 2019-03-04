@@ -48,7 +48,7 @@ final class ChangelogRendererTest extends TestCase
         [
             'sha' => 'd22220c0a97a5fc0ff4e0a0e595247919b89bfa0',
             'author' => 'Sebastiaan Stok <s.stok@rollerscapes.net>',
-            'subject' => 'minor #56 Clean up (sstok)',
+            'subject' => 'minor #56 Clean up (sstok2)',
             'message' => 'This PR was merged into the 1.0-dev branch.
 
                 9b67df3871e871084d0ebbf1e0db639d552fc7eb commit 1',
@@ -106,7 +106,7 @@ labels: removed-deprecation,bc-break
 - Introduce a new API for ValuesBag ([sstok](https://github.com/sstok)) [#93](https://github.com/park-manager/hubkit/issues/93)
 
 ### Changed
-- Clean up ([sstok](https://github.com/sstok)) [#56](https://github.com/park-manager/hubkit/issues/56)
+- Clean up ([sstok2](https://github.com/sstok2)) [#56](https://github.com/park-manager/hubkit/issues/56)
 
 ### Deprecated
 - Great new architecture ([sstok](https://github.com/sstok), [someone](https://github.com/someone)) [#55](https://github.com/park-manager/hubkit/issues/55)
@@ -130,7 +130,7 @@ LOG
 - Introduce a new API for ValuesBag ([sstok](https://github.com/sstok)) [#93](https://github.com/park-manager/hubkit/issues/93)
 
 ### Changed
-- Clean up ([sstok](https://github.com/sstok)) [#56](https://github.com/park-manager/hubkit/issues/56)
+- Clean up ([sstok2](https://github.com/sstok2)) [#56](https://github.com/park-manager/hubkit/issues/56)
 
 ### Deprecated
 - Great new architecture ([sstok](https://github.com/sstok), [someone](https://github.com/someone)) [#55](https://github.com/park-manager/hubkit/issues/55)
@@ -151,7 +151,7 @@ LOG
 
         self::assertEquals(<<<'LOG'
 - Introduce a new API for ValuesBag ([sstok](https://github.com/sstok)) [#93](https://github.com/park-manager/hubkit/issues/93)
-- Clean up ([sstok](https://github.com/sstok)) [#56](https://github.com/park-manager/hubkit/issues/56)
+- Clean up ([sstok2](https://github.com/sstok2)) [#56](https://github.com/park-manager/hubkit/issues/56)
 - Great new architecture ([sstok](https://github.com/sstok), [someone](https://github.com/someone)) [#55](https://github.com/park-manager/hubkit/issues/55)
 - [BC BREAK] Removed deprecated API ([sstok](https://github.com/sstok)) [#52](https://github.com/park-manager/hubkit/issues/52)
 LOG

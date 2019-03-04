@@ -83,7 +83,7 @@ class ChangelogRenderer
         // Replace authors with links
         $title = mb_substr($title, 0, $pos).
             preg_replace(
-                '#([\w\d-_]+)#',
+                '#([\w\-_]+)#',
                 '[$1](https://'.$this->github->getHostname().'/$1)',
                 mb_substr($title, $pos)
             )
