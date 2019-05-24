@@ -218,7 +218,7 @@ labels: removed-deprecation
             [
                 'Provided version: 3.0.0',
                 'It appears there is gap compared to the last version.',
-                'Expected one of : 2.0.0-ALPHA1, 2.0.0-BETA1, 2.0.0',
+                'Expected one of: 1.0.0-BETA2, 1.0.0-RC1, 1.0.0',
                 'Please confirm your input is correct. (yes/no) [no]:',
                 'Preparing release 3.0.0 (target branch master)',
                 'Please wait...',
@@ -397,7 +397,7 @@ labels: removed-deprecation
         $this->expectMatchingVersionBranchNotExists('3.0');
 
         $this->expectException('RuntimeException');
-        $this->expectExceptionMessage('Tag for version "v0.1.0" already exists, did you mean: v0.3.1, v0.4.0 ?');
+        $this->expectExceptionMessage('Tag for version "v0.1.0" already exists, did you mean: v0.1.1 ?');
 
         $args = $this->getArgs('0.1.0');
         $this->executeHandler($args);
@@ -411,7 +411,7 @@ labels: removed-deprecation
         $this->expectMatchingVersionBranchNotExists('3.0');
 
         $this->expectException('RuntimeException');
-        $this->expectExceptionMessage('Tag for version "v0.1.0" already exists, did you mean: v0.1.1, v0.2.0, v1.0.0 ?');
+        $this->expectExceptionMessage('Tag for version "v0.1.0" already exists, did you mean: v0.1.1 ?');
 
         $args = $this->getArgs('0.1.0');
         $this->executeHandler($args);
