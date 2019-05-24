@@ -21,8 +21,8 @@ use HubKit\Service\Git;
 use HubKit\Service\GitHub;
 use HubKit\Service\SplitshGit;
 use HubKit\StringUtil;
+use Rollerworks\Component\Version\ContinuesVersionsValidator;
 use Rollerworks\Component\Version\Version;
-use Rollerworks\Component\Version\VersionsValidator;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Webmozart\Console\Api\Args\Args;
 use Webmozart\Console\Api\IO\IO;
@@ -125,12 +125,12 @@ final class ReleaseHandler extends GitBaseHandler
         }
     }
 
-    private function validateVersion(string $version): Version
+    private function validateVersion(string $providedVersion): Version
     {
-        if (\in_array(strtolower($version), ['alpha', 'beta', 'rc', 'stable', 'major', 'minor', 'next', 'patch'], true)) {
-            $version = Version::fromString($this->git->getLastTagOnBranch())->increase(strtolower($version));
+        if (\in_array(strtolower($providedVersion), ['alpha', 'beta', 'rc', 'stable', 'major', 'minor', 'next', 'patch'], true)) {
+            $version = Version::fromString($this->git->getLastTagOnBranch())->getNextIncreaseOf(strtolower($providedVersion));
         } else {
-            $version = Version::fromString($version);
+            $version = Version::fromString($providedVersion);
         }
 
         $this->style->text('Provided version: '.$version);
@@ -142,11 +142,13 @@ final class ReleaseHandler extends GitBaseHandler
             return $version;
         }
 
-        if (!VersionsValidator::isVersionContinues(VersionsValidator::getHighestVersions($tags), $version, $suggested)) {
+        $validator = new ContinuesVersionsValidator(...array_map([Version::class, 'fromString'], $tags));
+
+        if (!$validator->isContinues($version)) {
             $this->style->warning(
                 [
                     'It appears there is gap compared to the last version.',
-                    'Expected one of : '.implode(', ', $suggested),
+                    'Expected one of: '.implode(', ', $validator->getPossibleVersions()),
                 ]
             );
 
@@ -192,10 +194,11 @@ final class ReleaseHandler extends GitBaseHandler
             return;
         }
 
-        VersionsValidator::isVersionContinues(VersionsValidator::getHighestVersions($tags), $version, $suggested);
+        $validator = new ContinuesVersionsValidator(...array_map([Version::class, 'fromString'], $tags));
+        $validator->isContinues($version);
 
         $suggested = array_filter(
-            $suggested,
+            $validator->getPossibleVersions(),
             function (Version $version) use ($tags) {
                 return !\in_array((string) $version, $tags, true);
             }
