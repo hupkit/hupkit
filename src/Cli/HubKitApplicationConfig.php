@@ -48,7 +48,7 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
         if (null === $container) {
             if (!file_exists(__DIR__.'/../../config.php') && file_exists(__DIR__.'/../../config.php.dist')) {
                 throw new \InvalidArgumentException(
-                    sprintf('Please copy "%s.dist" to "%$1s" and change the API token.', __DIR__.'/../../config.php')
+                    sprintf('Please copy "%s.dist" to "%1$s" and change the API token.', __DIR__.'/../../config.php')
                 );
             }
 
