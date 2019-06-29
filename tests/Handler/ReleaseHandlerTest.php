@@ -217,7 +217,7 @@ labels: removed-deprecation
         $this->assertOutputMatches(
             [
                 'Provided version: 3.0.0',
-                'It appears there is gap compared to the last version.',
+                'It appears there is a gap compared to the last version.',
                 'Expected one of: 1.0.0-BETA2, 1.0.0-RC1, 1.0.0',
                 'Please confirm your input is correct. (yes/no) [no]:',
                 'Preparing release 3.0.0 (target branch master)',

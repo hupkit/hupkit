@@ -147,7 +147,7 @@ final class ReleaseHandler extends GitBaseHandler
         if (!$validator->isContinues($version)) {
             $this->style->warning(
                 [
-                    'It appears there is gap compared to the last version.',
+                    'It appears there is a gap compared to the last version.',
                     'Expected one of: '.implode(', ', $validator->getPossibleVersions()),
                 ]
             );
