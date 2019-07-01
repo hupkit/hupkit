@@ -25,7 +25,7 @@ class GitConfig extends Git
         $this->style = $style;
     }
 
-    public function setLocal(string $key, $value, bool $overwrite): void
+    public function setLocal(string $key, $value, bool $overwrite = false): void
     {
         $this->setGitConfig($key, $value, $overwrite, 'local');
     }

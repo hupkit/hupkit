@@ -72,6 +72,14 @@ labels: removed-deprecation,bc-break
 9b67df3871e871084d0abef1e0db639d552fc7e commit 2',
         ],
         [
+            'sha' => 'd2222010a97a5fc0ff4e0a0e595247919b89bfa0',
+            'author' => 'Sebastiaan Stok <s.stok@rollerscapes.net>',
+            'subject' => 'security #57 Fix password-reset procedure (sstok)',
+            'message' => 'This PR was merged into the 1.0-dev branch.
+
+9b67df3871e871084d0abef1e0db639d552fc7e commit 2',
+        ],
+        [
             'sha' => 'd22220c0a97a666fc0ff4e0a0e5247919b89bfa0',
             'author' => 'Sebastiaan Stok <s.stok@rollerscapes.net>',
             'subject' => 'Merge pull request #50 from sstok/docs-cleanup',
@@ -102,6 +110,9 @@ labels: removed-deprecation,bc-break
         $this->git->getLogBetweenCommits('base', 'head')->willReturn(self::COMMITS);
 
         self::assertEquals(<<<'LOG'
+### Security
+- Fix password-reset procedure ([sstok](https://github.com/sstok)) [#57](https://github.com/park-manager/hubkit/issues/57)
+
 ### Added
 - Introduce a new API for ValuesBag ([sstok](https://github.com/sstok)) [#93](https://github.com/park-manager/hubkit/issues/93)
 
@@ -124,7 +135,7 @@ LOG
 
         self::assertEquals(<<<'LOG'
 ### Security
-- nothing
+- Fix password-reset procedure ([sstok](https://github.com/sstok)) [#57](https://github.com/park-manager/hubkit/issues/57)
 
 ### Added
 - Introduce a new API for ValuesBag ([sstok](https://github.com/sstok)) [#93](https://github.com/park-manager/hubkit/issues/93)
@@ -154,6 +165,7 @@ LOG
 - Clean up ([sstok2](https://github.com/sstok2)) [#56](https://github.com/park-manager/hubkit/issues/56)
 - Great new architecture ([sstok](https://github.com/sstok), [someone](https://github.com/someone)) [#55](https://github.com/park-manager/hubkit/issues/55)
 - [BC BREAK] Removed deprecated API ([sstok](https://github.com/sstok)) [#52](https://github.com/park-manager/hubkit/issues/52)
+- Fix password-reset procedure ([sstok](https://github.com/sstok)) [#57](https://github.com/park-manager/hubkit/issues/57)
 LOG
 , $this->getRenderer()->renderChangelogOneLine('base', 'head'));
     }

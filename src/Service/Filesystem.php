@@ -21,12 +21,19 @@ class Filesystem
     private $tempFilenames = [];
     private $fs;
 
-    public function __construct(string $tempdir = null)
+    public function __construct(?string $tempdir = null, ?SfFilesystem $sfFilesystem = null)
     {
         $this->tempdir = $tempdir ?: sys_get_temp_dir();
-        $this->fs = new SfFilesystem();
+        $this->fs = $sfFilesystem ?? new SfFilesystem();
     }
 
+    /**
+     * Creates a new temporary file (with the contents).
+     *
+     * This file is removed when clearTempFiles() is called.
+     *
+     * @return string The full path to the temporary file
+     */
     public function newTempFilename(string $content = null): string
     {
         $dir = $this->tempdir.\DIRECTORY_SEPARATOR.'hubkit';
@@ -42,6 +49,16 @@ class Filesystem
         return $tmpName;
     }
 
+    /**
+     * Creates a (new) or overwrites a temporary directory.
+     *
+     * Note: Unlike a regular temp file this method will remove
+     * the existing temp directory (by name) if it exists.
+     *
+     * This directory is removed when clearTempFiles() is called.
+     *
+     * @return string The full path to the temporary directory
+     */
     public function tempDirectory(string $name, bool $clearExisting = true): string
     {
         $tmpName = $this->tempdir.\DIRECTORY_SEPARATOR.'hubkit'.\DIRECTORY_SEPARATOR.$name;
@@ -58,9 +75,9 @@ class Filesystem
 
     /**
      * Remove all the temp-file that were created
-     * with newTempFilename().
+     * with newTempFilename() and tempDirectory().
      */
-    public function clearTempFiles()
+    public function clearTempFiles(): void
     {
         $this->fs->remove($this->tempFilenames);
     }

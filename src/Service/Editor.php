@@ -27,8 +27,7 @@ class Editor
     }
 
     /**
-     * Launch an external editor and open a temporary
-     * file containing the given string value.
+     * Launch an external editor and open a temporary file containing the $contents value.
      *
      * @param string $contents
      * @param bool   $abortOnEmpty
@@ -38,9 +37,7 @@ class Editor
      */
     public function fromString(string $contents, bool $abortOnEmpty = true, string $instructions = '')
     {
-        if (false === $editor = getenv('EDITOR')) {
-            throw new \RuntimeException('No EDITOR environment variable set.');
-        }
+        $editor = $this->getEditorExecutable();
 
         if ('' !== $instructions) {
             $instructions = "# THIS LINE IS AUTOMATICALLY REMOVED; $instructions\n\n";
@@ -59,10 +56,35 @@ class Editor
             $contents = preg_replace("/^# THIS LINE IS AUTOMATICALLY REMOVED;(.++)(\r?\n)/i", '', $contents);
         }
 
-        if ($abortOnEmpty && '' === trim($contents)) {
+        if ($abortOnEmpty) {
+            $this->abortWhenEmpty($contents);
+        }
+
+        return $contents;
+    }
+
+    public function fromStringWithInstructions(string $contents, string $instructions): string
+    {
+        return $this->fromString($contents, false, $instructions);
+    }
+
+    public function abortWhenEmpty(string $contents): string
+    {
+        if ('' === trim($contents)) {
             throw new \RuntimeException('No content found. User aborted.');
         }
 
         return $contents;
+    }
+
+    protected function getEditorExecutable(): string
+    {
+        $editor = getenv('EDITOR');
+
+        if (false === $editor) {
+            throw new \RuntimeException('No EDITOR environment variable set.');
+        }
+
+        return (string) $editor;
     }
 }

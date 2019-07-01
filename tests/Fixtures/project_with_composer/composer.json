@@ -1,0 +1,15 @@
+{
+    "name": "park-manager/hub-kit",
+    "description": "",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sebastiaan Stok",
+            "email": "s.stok@rollerscapes.net"
+        }
+    ],
+    "require": {
+        "php": "^7.1"
+    }
+}
