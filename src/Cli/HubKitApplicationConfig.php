@@ -16,6 +16,7 @@ namespace HubKit\Cli;
 use HubKit\Container;
 use HubKit\Helper\BranchAliasResolver;
 use HubKit\Helper\SingleLineChoiceQuestionHelper;
+use Symfony\Component\Console\Logger\ConsoleLogger;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Webmozart\Console\Adapter\ArgsInput;
 use Webmozart\Console\Adapter\IOOutput;
@@ -99,6 +100,7 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
                     $this->container['console_args'] = $args;
                     $this->container['sf.console_input'] = $input;
                     $this->container['sf.console_output'] = new IOOutput($io);
+                    $this->container['logger'] = new ConsoleLogger($this->container['sf.console_output']);
                 }
             }
         );
@@ -282,7 +284,8 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
                         $this->container['process'],
                         $this->container['editor'],
                         $this->container['config'],
-                        $this->container['splitsh_git']
+                        $this->container['splitsh_git'],
+                        $this->container['release_hooks']
                     );
                 })
             ->end()
