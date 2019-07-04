@@ -8,7 +8,7 @@ But sometimes you need to perform a special operation before and/or after the re
 This might vary from updating the `composer.json` branch-alias, to creating a pull request for 
 the new release.
 
-Now instead of doing this manually Hubkit allows to hook-into the release process, but executing
+Now instead of doing this manually HubKit allows to hook-into the release process, but executing
 a custom script before and/or after a new release created.
 
 Both the pre and post hooks work the same way, but are executed at different stages.
@@ -31,7 +31,7 @@ use Rollerworks\Component\Version\Version;
 return function (Container $container, Version $version, string $branch, ?string $releaseTitle, string $changelog) {
     // Place the hooks logic here.
     
-    // The $container provides access to the Hubkit application Service Container
+    // The $container provides access to the HubKit application Service Container
     // with among following services: github, git (git.config, git.branch), process, filesystem, style, editor, logger.
     // 
     // See \HubKit\Container for all services and there corresponding classes.
@@ -60,7 +60,7 @@ return function (Container $container, Version $version, string $branch, ?string
     $container->get('logger')->info('Updating composer branch-alias');
     $container->get('process')->mustRun(['composer', 'config', 'extra.branch-alias.dev-'.$branch, sprintf('%d.%d-dev', $version->major, $version->minor)]);
     
-    // Caution: Make sure to commit the changes. Hubkit will refuse to continue if there are dangling changes.
+    // Caution: Make sure to commit the changes. HubKit will refuse to continue if there are dangling changes.
     
     /** @var \HubKit\Service\Git\GitBranch $gitBranch */
     $gitBranch = $container->get('git.branch');
@@ -91,7 +91,7 @@ return function (Container $container, Version $version, string $branch, ?string
     $container->get('logger')->info('Updating composer branch-alias');
     $container->get('process')->mustRun(['composer', 'config', 'extra.branch-alias.dev-'.$branch, sprintf('%d.%d-dev', $version->major, $version->minor)]);
     
-    // Caution: Make sure to commit the changes. Hubkit will refuse to continue if there are dangling changes.
+    // Caution: Make sure to commit the changes. HubKit will refuse to continue if there are dangling changes.
     
     /** @var \HubKit\Service\Git\GitBranch $gitBranch */
     $gitBranch = $container->get('git.branch');
