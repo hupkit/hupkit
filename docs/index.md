@@ -25,6 +25,8 @@ Composer is assumed to be installed and configured in your PATH.
 HubKit is a PHP application, you don't install it as a dependency
 and you don't you install it with Composer global.
 
+> Currently there is no Phar version available, this is being worked-on.
+
 To install HubKit first choose a directory where you want to keep the installation.
 Eg. `~/.hubkit` or any of your choice.
 
