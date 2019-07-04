@@ -238,16 +238,6 @@ final class MergeHandler extends GitBaseHandler
     {
         $this->style->newLine();
 
-        // Always prompt to ensure the user has some time to check
-        // the provided information.
-        if ($args->getOption('security')) {
-            if (!$this->style->confirm('You are merging a security patch, is this correct?', true)) {
-                throw new \RuntimeException('User aborted.');
-            }
-
-            return 'security';
-        }
-
         $guessedCat = null;
         $categories = [
             'feature' => 'feature',
@@ -255,6 +245,7 @@ final class MergeHandler extends GitBaseHandler
             'bug' => 'bug',
             'minor' => 'minor',
             'style' => 'style',
+            'security' => 'security',
         ];
 
         foreach ($pr['labels'] as $label) {

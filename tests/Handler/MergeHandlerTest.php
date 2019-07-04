@@ -1301,7 +1301,6 @@ BODY
     private function getArgs(): Args
     {
         $format = ArgsFormat::build()
-            ->addOption(new Option('security', null, Option::BOOLEAN))
             ->addOption(new Option('squash', null, Option::BOOLEAN))
             ->addOption(new Option('no-pull', null, Option::BOOLEAN))
             ->addOption(new Option('pat', null, Option::OPTIONAL_VALUE | Option::STRING, null, 'Thank you @author'))
