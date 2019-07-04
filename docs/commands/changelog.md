@@ -12,7 +12,7 @@ with all detectable changes between releases (the specified) commits.
 > will be properly categorized and labeled, all others show-up in he "Changed" section.
 
 The commit range is automatically determined using the last tag on the (current)
-branch and the current branch. Eg. `v1.0.0..master`. But you can provide your 
+branch and the current branch. Eg. `v1.0.0..master`. But you can provide your
 own range as you would with `git log`, except now you get a nice changelog!
 
 ```bash
@@ -73,7 +73,7 @@ Alternatively you can use the `--online` option to get a changelog without secti
 
 ### Labeling detection
 
-HubKit automatically uses the following labels (case insensitive) for special conventions, 
+HubKit automatically uses the following labels (case insensitive) for special conventions,
 like detecting breaking changes and deprecations:
 
 * `deprecation` puts the change in the `Deprecated` section

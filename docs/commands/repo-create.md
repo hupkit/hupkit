@@ -7,7 +7,7 @@ Create a new minimal empty GitHub repository. Wiki and Downloads are disabled by
 $ hubkit repo-create park-manager/hubkit
 ```
 
-This creates the "hubkit" repository in the "park-manager" organization. To create a 
+This creates the "hubkit" repository in the "park-manager" organization. To create a
 private repository (may require a paid plan) use the `--private` option.
 
 # Special options

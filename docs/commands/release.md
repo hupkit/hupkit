@@ -43,7 +43,7 @@ operation. See [Release Hooks](release-hooks.md) for details.
 ## Notes on Git tag signing
 
 The Git tag of each release is cryptographically signed, **this cannot be disabled**.
-Make sure you have a signing key configured, and that your gpg/pgp application is 
+Make sure you have a signing key configured, and that your gpg/pgp application is
 set-up properly.
 
 Run `hubkit self-diagnose` to test if this set-up correctly for you.

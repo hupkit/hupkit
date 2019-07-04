@@ -83,7 +83,7 @@ correct hub configuration by remote "upstream".
 
 ## Self Diagnoses
 
-The `self-diagnose` checks your system is ready to use HubKit and gives recommendations 
+The `self-diagnose` checks your system is ready to use HubKit and gives recommendations
 about changes you should make.
 
 **Note:** It's recommended to run this command from a local Git repository,
@@ -92,7 +92,7 @@ as more information is shown then.
 ## Repository splitting
 
 A special feature of HubKit is the ability to manage split monolith repositories,
-each split-repository holds the contents of a smaller portion of the main monolith 
+each split-repository holds the contents of a smaller portion of the main monolith
 repository.
 
 See [Managing Split Repositories](split-repositories.md) for all details.
@@ -111,13 +111,13 @@ for the Enterprise example shown above.
 
 Command names and options are in lowercase.
 
-* [branch-alias](branch-alias.md)
-* [changelog](changelog.md)
-* [checkout](checkout.md)
-* [merge](merge.md)
-* [release](release.md)
-* [repo-create](repo-create.md)
-* [upmerge](upmerge.md)
+* [branch-alias](commands/branch-alias.md)
+* [changelog](commands/changelog.md)
+* [checkout](commands/checkout.md)
+* [merge](commands/merge.md)
+* [release](commands/release.md)
+* [repo-create](commands/repo-create.md)
+* [upmerge](commands/upmerge.md)
 
 Further there are some minor commands to help you in your daily operation
 as a maintainer.
@@ -150,7 +150,7 @@ $ hubkit switch-base 22 1.6
 Switching the base of a branch may cause some conflicts.
 
 When this happens you can simple resolve the conflicts as you would with using `git rebase --continue`,
-then once all conflicts are resolved. Run the `switch-base` command (with the original parameters) 
+then once all conflicts are resolved. Run the `switch-base` command (with the original parameters)
 again and it will continue as normal.
 
 **Do not push these changes manually as this will not update the pull-request target base.**

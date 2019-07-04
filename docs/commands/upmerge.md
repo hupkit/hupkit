@@ -14,7 +14,7 @@ this boring work, as simple and save as possible.
 The process ensures your local source *and* target branch are up-to-date, with
 the recommended flags (`--no-ff` and `--log`), and pushes to upstream.
 
-To use this command first checkout the lowest supported branch, either `1.0`. 
+To use this command first checkout the lowest supported branch, either `1.0`.
 And run the upmerge command.
 
 ```bash
@@ -41,6 +41,6 @@ $ hubkit upmerge --all
 
 By merging branches into each other, you might cause some merge conflicts.
 
-When this happens you can simple resolve the conflicts as you would with using 
-the `git mergetool`, then once all conflicts are resolved. Run the `upmerge` 
+When this happens you can simple resolve the conflicts as you would with using
+the `git mergetool`, then once all conflicts are resolved. Run the `upmerge`
 command again and it will continue as normal.
