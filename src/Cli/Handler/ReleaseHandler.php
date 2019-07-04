@@ -19,6 +19,7 @@ use HubKit\Service\CliProcess;
 use HubKit\Service\Editor;
 use HubKit\Service\Git;
 use HubKit\Service\GitHub;
+use HubKit\Service\ReleaseHooks;
 use HubKit\Service\SplitshGit;
 use HubKit\StringUtil;
 use Rollerworks\Component\Version\ContinuesVersionsValidator;
@@ -35,6 +36,7 @@ final class ReleaseHandler extends GitBaseHandler
     private $splitshGit;
     /** @var IO */
     private $io;
+    private $releaseHooks;
 
     public function __construct(
         SymfonyStyle $style,
@@ -43,13 +45,15 @@ final class ReleaseHandler extends GitBaseHandler
         CliProcess $process,
         Editor $editor,
         Config $config,
-        SplitshGit $splitshGit
+        SplitshGit $splitshGit,
+        ReleaseHooks $releaseHooks
     ) {
         parent::__construct($style, $git, $github);
         $this->process = $process;
         $this->editor = $editor;
         $this->config = $config;
         $this->splitshGit = $splitshGit;
+        $this->releaseHooks = $releaseHooks;
     }
 
     public function handle(Args $args, IO $io)
@@ -86,14 +90,19 @@ final class ReleaseHandler extends GitBaseHandler
             );
         }
 
+        $this->releaseHooks->preRelease($version, $branch, $args->getOption('title'), $changelog);
+
         // Perform the sub-split and tagging first as it's easier to recover from split error
         // then being able to re-run the release command on the source repository.
-        $this->splitRepository($branch, $versionStr);
+        $this->tagSplitRepositories($branch, $versionStr);
 
         $this->process->mustRun(['git', 'tag', '-s', 'v'.$versionStr, '-m', 'Release '.$versionStr]);
         $this->process->mustRun(['git', 'push', 'upstream', 'v'.$versionStr]);
 
         $release = $this->github->createRelease('v'.$versionStr, $changelog, $args->getOption('pre-release'), $args->getOption('title'));
+
+        $this->releaseHooks->postRelease($version, $branch, $args->getOption('title'), $changelog);
+
         $this->style->success([sprintf('Successfully released %s', $versionStr), $release['html_url']]);
     }
 
@@ -213,7 +222,7 @@ final class ReleaseHandler extends GitBaseHandler
         );
     }
 
-    private function splitRepository(string $branch, string $version): void
+    private function tagSplitRepositories(string $branch, string $version): void
     {
         $configName = ['repos', $this->github->getHostname(), $this->github->getOrganization().'/'.$this->github->getRepository()];
         $reposConfig = $this->config->get($configName);

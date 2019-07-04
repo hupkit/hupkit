@@ -19,6 +19,7 @@ use HubKit\Service\CliProcess;
 use HubKit\Service\Editor;
 use HubKit\Service\Git;
 use HubKit\Service\GitHub;
+use HubKit\Service\ReleaseHooks;
 use HubKit\Service\SplitshGit;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument as PropArgument;
@@ -105,6 +106,8 @@ labels: removed-deprecation
     private $config;
     /** @var ObjectProphecy */
     private $splitshGit;
+    /** @var ObjectProphecy|ReleaseHooks */
+    private $releaseHooks;
     /** @var BufferedIO */
     private $io;
 
@@ -142,6 +145,8 @@ labels: removed-deprecation
 
         $this->splitshGit = $this->prophesize(SplitshGit::class);
         $this->splitshGit->checkPrecondition()->shouldNotBeCalled();
+
+        $this->releaseHooks = $this->prophesize(ReleaseHooks::class);
 
         $this->io = new BufferedIO();
         $this->io->setInteractive(true);
@@ -444,7 +449,8 @@ labels: removed-deprecation
             $this->process->reveal(),
             $this->editor->reveal(),
             $this->config,
-            $this->splitshGit->reveal()
+            $this->splitshGit->reveal(),
+            $this->releaseHooks->reveal()
         );
 
         $handler->handle($args, $this->io);

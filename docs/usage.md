@@ -265,6 +265,13 @@ The `release` command has a number of special options:
 
 * `--title="A Bright New Year"`: Append a custom title to release name (after the version number);
 
+#### Release hooks
+
+The `release` command allows to executes a script prior (pre) and/or after (post) after the release
+operation. See [Release Hooks](release-hooks.md) for details.
+
+*Note:* You need at least Hubkit version 1.0.0-BETA18  
+
 #### Notes on signing
 
 The Git tag of a release is signed, *you can't disable this*. Make sure you have

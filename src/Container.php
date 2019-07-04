@@ -15,10 +15,11 @@ namespace HubKit;
 
 use GuzzleHttp\Client as GuzzleClient;
 use Http\Adapter\Guzzle6\Client as GuzzleClientAdapter;
+use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Process\ExecutableFinder;
 
-class Container extends \Pimple\Container
+class Container extends \Pimple\Container implements ContainerInterface
 {
     public function __construct(array $values = [])
     {
@@ -50,6 +51,14 @@ class Container extends \Pimple\Container
             return new Service\Git($container['process'], $container['filesystem'], $container['style']);
         };
 
+        $this['git.branch'] = function (self $container) {
+            return new Service\Git\GitBranch($container['process'], $container['style']);
+        };
+
+        $this['git.config'] = function (self $container) {
+            return new Service\Git\GitConfig($container['process'], $container['style']);
+        };
+
         $this['splitsh_git'] = function (self $container) {
             return new Service\SplitshGit(
                 $container['git'],
@@ -67,6 +76,10 @@ class Container extends \Pimple\Container
             return new Service\Editor($container['process'], $container['filesystem']);
         };
 
+        $this['release_hooks'] = function (self $container) {
+            return new Service\ReleaseHooks($container, $container['git'], $container['logger']);
+        };
+
         //
         // Third-party APIs
         //
@@ -74,5 +87,15 @@ class Container extends \Pimple\Container
         $this['github'] = function (self $container) {
             return new Service\GitHub(new GuzzleClientAdapter($container['guzzle']), $container['config']);
         };
+    }
+
+    public function get($id)
+    {
+        return $this[$id];
+    }
+
+    public function has($id): bool
+    {
+        return isset($this[$id]);
     }
 }

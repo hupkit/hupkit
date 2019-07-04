@@ -29,4 +29,19 @@ class GitBranch extends Git
     {
         $this->checkout($branch, true);
     }
+
+    public function add(string $file): void
+    {
+        $this->process->mustRun(['git', 'add', $file]);
+    }
+
+    public function commit(string $message): void
+    {
+        $this->process->mustRun(['git', 'commit', '-m', $message]);
+    }
+
+    public function commitAll(string $message): void
+    {
+        $this->process->mustRun(['git', 'commit', '-a', '-m', $message]);
+    }
 }
