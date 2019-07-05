@@ -336,15 +336,56 @@ labels: removed-deprecation
 
         $this->splitshGit->checkPrecondition()->shouldBeCalled();
         $this->expectGitSplit('src/Component/Core', '_core', 'git@github.com:park-manager/core.git', '09d103bae644592ebdc10a2665a2791c291fbea7');
-        $this->expectGitSplit('src/Component/Model', '_model', 'git@github.com:park-manager/model.git', 'b2faccdde512f226ae67e5e73a9f3259c83b933a', 0);
+        $this->expectGitSplit('src/Component/Model', '_model', 'git@github.com:park-manager/model.git', 'b2faccdde512f226ae67e5e73a9f3259c83b933a');
         $this->expectGitSplit('doc', '_doc', 'git@github.com:park-manager/doc.git', 'c526695a61c698d220f5b2c68ce7b6c689013d55');
 
         $this->splitshGit->syncTags(
             '1.0.0',
             'master',
             [
-                '_core' => ['09d103bae644592ebdc10a2665a2791c291fbea7', 'git@github.com:park-manager/core.git', 3],
-                '_model' => ['b2faccdde512f226ae67e5e73a9f3259c83b933a', 'git@github.com:park-manager/model.git', 0],
+                '_core' => ['09d103bae644592ebdc10a2665a2791c291fbea7', 'git@github.com:park-manager/core.git'],
+                '_model' => ['b2faccdde512f226ae67e5e73a9f3259c83b933a', 'git@github.com:park-manager/model.git'],
+                // doc is ignored because tag synchronization is disabled for this repository
+            ]
+        )->shouldBeCalled();
+
+        $url = $this->expectTagAndGitHubRelease('1.0.0', 'Initial release.');
+
+        $args = $this->getArgs('1.0');
+        $this->executeHandler($args);
+
+        $this->assertOutputMatches(
+            [
+                'Preparing release 1.0.0 (target branch master)',
+                'Please wait...',
+                'Starting split operation please wait...',
+                ['3/3 \[[^\]]+\] 100%', true],
+                'Successfully released 1.0.0',
+                $url,
+            ]
+        );
+    }
+
+    /** @test */
+    public function it_creates_a_new_release_for_split_repositories_with_missing_directories()
+    {
+        $this->github->getOrganization()->willReturn('park-manager');
+        $this->github->getRepository()->willReturn('park-manager');
+
+        $this->expectTags();
+        $this->expectMatchingVersionBranchNotExists();
+        $this->expectEditorReturns('Initial release.');
+
+        $this->splitshGit->checkPrecondition()->shouldBeCalled();
+        $this->expectGitSplit('src/Component/Core', '_core', 'git@github.com:park-manager/core.git', '09d103bae644592ebdc10a2665a2791c291fbea7');
+        $this->expectGitSplit('src/Component/Model', '_model', 'git@github.com:park-manager/model.git', 'b2faccdde512f226ae67e5e73a9f3259c83b933a', false);
+        $this->expectGitSplit('doc', '_doc', 'git@github.com:park-manager/doc.git', 'c526695a61c698d220f5b2c68ce7b6c689013d55');
+
+        $this->splitshGit->syncTags(
+            '1.0.0',
+            'master',
+            [
+                '_core' => ['09d103bae644592ebdc10a2665a2791c291fbea7', 'git@github.com:park-manager/core.git'],
                 // doc is ignored because tag synchronization is disabled for this repository
             ]
         )->shouldBeCalled();
@@ -492,8 +533,8 @@ labels: removed-deprecation
             ->willReturn($output ?? $input);
     }
 
-    private function expectGitSplit(string $prefix, string $remote, string $url, string $sha, int $commits = 3): void
+    private function expectGitSplit(string $prefix, string $remote, string $url, string $sha, bool $success = true): void
     {
-        $this->splitshGit->splitTo('master', $prefix, $url)->shouldBeCalled()->willReturn([$remote => [$sha, $url, $commits]]);
+        $this->splitshGit->splitTo('master', $prefix, $url)->shouldBeCalled()->willReturn($success ? [$remote => [$sha, $url]] : null);
     }
 }

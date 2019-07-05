@@ -243,7 +243,7 @@ final class ReleaseHandler extends GitBaseHandler
             $progressBar->advance();
             $split = $this->splitshGit->splitTo($branch, $prefix, \is_array($config) ? $config['url'] : $config);
 
-            if (($config['sync-tags'] ?? $reposConfig['sync-tags'] ?? true)) {
+            if ($split !== null && ($config['sync-tags'] ?? $reposConfig['sync-tags'] ?? true)) {
                 $splits += $split;
             }
         }
