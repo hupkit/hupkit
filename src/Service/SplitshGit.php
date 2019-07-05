@@ -13,20 +13,23 @@ declare(strict_types=1);
 
 namespace HubKit\Service;
 
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class SplitshGit
 {
     private $git;
     private $process;
-    private $executable;
+    private $logger;
     private $filesystem;
+    private $executable;
 
-    public function __construct(Git $git, CliProcess $process, Filesystem $filesystem, ?string $executable)
+    public function __construct(Git $git, CliProcess $process, Filesystem $filesystem, LoggerInterface $logger, ?string $executable)
     {
         $this->git = $git;
         $this->process = $process;
         $this->filesystem = $filesystem;
+        $this->logger = $logger;
         $this->executable = $executable;
     }
 
@@ -50,6 +53,8 @@ class SplitshGit
     public function splitTo(string $targetBranch, string $prefix, string $url): ?array
     {
         if (!file_exists(getcwd().'/'.$prefix) || !is_dir(getcwd().'/'.$prefix)) {
+            $this->logger->warning('Prefix directory "{prefix}" for "{url}" does not exist in the local repository', ['prefix' => $prefix, 'url' => $url]);
+
             return null;
         }
 

@@ -64,6 +64,7 @@ class Container extends \Pimple\Container implements ContainerInterface
                 $container['git'],
                 $container['process'],
                 $container['filesystem'],
+                $container['logger'],
                 (new ExecutableFinder())->find('splitsh-lite')
             );
         };

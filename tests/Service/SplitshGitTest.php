@@ -18,6 +18,7 @@ use HubKit\Service\Filesystem;
 use HubKit\Service\Git;
 use HubKit\Service\SplitshGit;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Filesystem\Filesystem as SfFilesystem;
 use Symfony\Component\Process\Process;
 
@@ -52,7 +53,7 @@ class SplitshGitTest extends TestCase
             $filesystemProphecy = $this->prophesize(Filesystem::class);
             $filesystem = $filesystemProphecy->reveal();
 
-            $service = new SplitshGit($git, $cliProcess, $filesystem, self::SPLITSH_EXECUTABLE);
+            $service = new SplitshGit($git, $cliProcess, $filesystem, $this->createMock(LoggerInterface::class), self::SPLITSH_EXECUTABLE);
 
             self::assertEquals(
                 ['_core' => ['2c00338aef823d0c0916fc1b59ef49d0bb76f02f', 'git@github.com:park-manager/core.git']],
@@ -93,7 +94,7 @@ class SplitshGitTest extends TestCase
         $filesystemProphecy->getFilesystem()->willReturn($sfFilesystemProphecy->reveal());
         $filesystem = $filesystemProphecy->reveal();
 
-        $service = new SplitshGit($git, $cliProcess, $filesystem, self::SPLITSH_EXECUTABLE);
+        $service = new SplitshGit($git, $cliProcess, $filesystem, $this->createMock(LoggerInterface::class), self::SPLITSH_EXECUTABLE);
 
         $service->syncTags(
             '1.0.0',
@@ -116,6 +117,7 @@ class SplitshGitTest extends TestCase
             $git,
             $this->createMock(CliProcess::class),
             $this->createMock(Filesystem::class),
+            $this->createMock(LoggerInterface::class),
             self::SPLITSH_EXECUTABLE
         );
         $service->checkPrecondition();
@@ -132,6 +134,7 @@ class SplitshGitTest extends TestCase
             $git,
             $this->createMock(CliProcess::class),
             $this->createMock(Filesystem::class),
+            $this->createMock(LoggerInterface::class),
             self::SPLITSH_EXECUTABLE
         );
 
