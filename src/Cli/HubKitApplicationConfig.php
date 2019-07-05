@@ -259,12 +259,15 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
                 ->addArgument('branch', Argument::OPTIONAL | Argument::STRING, 'Base branch to checkout and start with, uses current when omitted')
                 ->addOption('all', null, Option::NO_VALUE | Option::BOOLEAN, 'Merge all version branches from lowest into highest (and finally master)')
                 ->addOption('dry-run', null, Option::NO_VALUE | Option::BOOLEAN, 'Show which operations would have been performed (without actually merging)')
+                ->addOption('no-split', null, Option::NO_VALUE | Option::BOOLEAN, 'Skip splitting of repositories (when they are configured)')
                 ->setHandler(function () {
                     return new Handler\UpMergeHandler(
                         $this->container['style'],
                         $this->container['git'],
                         $this->container['github'],
-                        $this->container['process']
+                        $this->container['process'],
+                        $this->container['config'],
+                        $this->container['splitsh_git']
                     );
                 })
             ->end()

@@ -13,20 +13,26 @@ declare(strict_types=1);
 
 namespace HubKit\Cli\Handler;
 
+use HubKit\Config;
 use HubKit\Service\CliProcess;
 use HubKit\Service\Git;
 use HubKit\Service\GitHub;
+use HubKit\Service\SplitshGit;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Webmozart\Console\Api\Args\Args;
 
 final class UpMergeHandler extends GitBaseHandler
 {
     private $process;
+    private $config;
+    private $splitshGit;
 
-    public function __construct(SymfonyStyle $style, Git $git, GitHub $github, CliProcess $process)
+    public function __construct(SymfonyStyle $style, Git $git, GitHub $github, CliProcess $process, Config $config, SplitshGit $splitshGit)
     {
         parent::__construct($style, $git, $github);
         $this->process = $process;
+        $this->config = $config;
+        $this->splitshGit = $splitshGit;
     }
 
     public function handle(Args $args)
@@ -49,7 +55,7 @@ final class UpMergeHandler extends GitBaseHandler
         return $this->handleMerge($args, $branch);
     }
 
-    private function mergeAllBranches(string $branch): array
+    private function mergeAllBranches(string $branch, array $splitTargets): array
     {
         $branches = $this->git->getVersionBranches('upstream');
 
@@ -69,6 +75,7 @@ final class UpMergeHandler extends GitBaseHandler
             $this->process->mustRun(['git', 'merge', '--no-ff', '--log', $branches[$i - 1]]);
 
             $this->style->note(sprintf('Merged "%s" into "%s"', $branches[$i - 1], $branches[$i]));
+            $this->splitRepository($branches[$i], $splitTargets);
 
             $changedBranches[] = $branches[$i];
         }
@@ -78,7 +85,7 @@ final class UpMergeHandler extends GitBaseHandler
         return $changedBranches;
     }
 
-    private function mergeSingleBranch(string $branch): array
+    private function mergeSingleBranch(string $branch, array $splitTargets): array
     {
         $branches = $this->git->getVersionBranches('upstream');
 
@@ -95,6 +102,7 @@ final class UpMergeHandler extends GitBaseHandler
         $this->git->checkoutRemoteBranch('upstream', $nextVersion);
         $this->git->ensureBranchInSync('upstream', $nextVersion);
         $this->process->mustRun(['git', 'merge', '--no-ff', '--log', $branch]);
+        $this->splitRepository($nextVersion, $splitTargets);
 
         $this->style->note(sprintf('Merged "%s" into "%s"', $branch, $nextVersion));
 
@@ -155,9 +163,9 @@ final class UpMergeHandler extends GitBaseHandler
     {
         try {
             if ($args->getOption('all')) {
-                $changedBranches = $this->mergeAllBranches($branch);
+                $changedBranches = $this->mergeAllBranches($branch, $this->getSplitTargets($args));
             } else {
-                $changedBranches = $this->mergeSingleBranch($branch);
+                $changedBranches = $this->mergeSingleBranch($branch, $this->getSplitTargets($args));
             }
 
             if ([] === $changedBranches) {
@@ -213,5 +221,37 @@ final class UpMergeHandler extends GitBaseHandler
 
             return 1;
         }
+    }
+
+    private function splitRepository(string $branch, array $splitTargets): void
+    {
+        if ($splitTargets === []) {
+            return;
+        }
+
+        $this->style->section(sprintf('Starting repository split operation for %s', $branch));
+        $this->style->progressStart(\count($splitTargets));
+
+        foreach ($splitTargets as $prefix => $splitConfigs) {
+            $url = \is_array($splitConfigs) ? $splitConfigs['url'] : $splitConfigs;
+
+            $this->style->progressAdvance();
+            $this->splitshGit->splitTo($branch, $prefix, $url);
+        }
+    }
+
+    private function getSplitTargets(Args $args): array
+    {
+        $splitTargets = $this->config->get(['repos', $this->github->getHostname(), $this->github->getOrganization().'/'.$this->github->getRepository(), 'split']);
+
+        if ($args->getOption('no-split') || $splitTargets === null) {
+            return [];
+        }
+
+        if ($splitTargets !== null) {
+            $this->splitshGit->checkPrecondition();
+        }
+
+        return $splitTargets;
     }
 }

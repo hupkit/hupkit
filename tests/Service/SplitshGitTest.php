@@ -55,7 +55,7 @@ class SplitshGitTest extends TestCase
             $service = new SplitshGit($git, $cliProcess, $filesystem, self::SPLITSH_EXECUTABLE);
 
             self::assertEquals(
-                ['_core' => ['2c00338aef823d0c0916fc1b59ef49d0bb76f02f', 'git@github.com:park-manager/core.git', 5]],
+                ['_core' => ['2c00338aef823d0c0916fc1b59ef49d0bb76f02f', 'git@github.com:park-manager/core.git']],
                 $service->splitTo('master', 'src/Bundle/CoreBundle', 'git@github.com:park-manager/core.git')
             );
         } finally {
