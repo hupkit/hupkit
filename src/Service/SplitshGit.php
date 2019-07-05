@@ -54,34 +54,32 @@ class SplitshGit
         }
 
         $process = $this->process->mustRun([$this->executable, '--prefix', $prefix]);
-        $commits = (int) explode(' ', trim($process->getErrorOutput()))[0];
         $sha = trim($process->getOutput());
 
         $remoteName = '_'.Git::getGitUrlInfo($url)['repo'];
         $this->git->ensureRemoteExists($remoteName, $url);
         $tempBranchName = null;
 
-        if ($commits > 0) {
-            try {
-                $this->git->pushToRemote($remoteName, $sha.':'.$targetBranch);
-            } catch (ProcessFailedException $e) {
-                // Failed to push. If remote branch is missing Git fails.
-                if ($this->git->remoteBranchExists($remoteName, $targetBranch)) {
-                    throw $e;
-                }
+        // NOTE: Always perform the push as git-splitsh in some cases don't produce a new commit as there was already one
+        try {
+            $this->git->pushToRemote($remoteName, $sha.':'.$targetBranch);
+        } catch (ProcessFailedException $e) {
+            // Failed to push. If remote branch is missing Git fails.
+            if ($this->git->remoteBranchExists($remoteName, $targetBranch)) {
+                throw $e;
+            }
 
-                $this->git->checkout($sha);
-                $this->git->checkout($tempBranchName = '_tmp_'.$sha, true);
-                $this->git->pushToRemote($remoteName, $tempBranchName.':'.$targetBranch);
-            } finally {
-                if (null !== $tempBranchName) {
-                    $this->git->checkout($targetBranch);
-                    $this->git->deleteBranch($tempBranchName, true);
-                }
+            $this->git->checkout($sha);
+            $this->git->checkout($tempBranchName = '_tmp_'.$sha, true);
+            $this->git->pushToRemote($remoteName, $tempBranchName.':'.$targetBranch);
+        } finally {
+            if ($tempBranchName !== null) {
+                $this->git->checkout($targetBranch);
+                $this->git->deleteBranchWithForce($tempBranchName);
             }
         }
 
-        return [$remoteName => [$sha, $url, $commits]];
+        return [$remoteName => [$sha, $url]];
     }
 
     /**

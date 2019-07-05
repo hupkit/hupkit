@@ -250,6 +250,11 @@ class Git
         }
     }
 
+    public function deleteBranchWithForce(string $name)
+    {
+        $this->process->run(['git', 'branch', '-D', $name], sprintf('Could not delete branch "%s".', $name));
+    }
+
     public function addNotes(string $notes, string $commitHash, string $ref = 'github-comments')
     {
         $tmpName = $this->filesystem->newTempFilename();
