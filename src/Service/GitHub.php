@@ -129,6 +129,20 @@ class GitHub
         );
     }
 
+    public function closeIssues(int ...$numbers): void
+    {
+        // FIXME This is a good candidate for GrapQL but my knowledge is limited on this topic and searching yields a death link
+
+        foreach ($numbers as $number) {
+            $this->client->issue()->update(
+                $this->organization,
+                $this->repository,
+                $number,
+                ['state' => 'closed']
+            );
+        }
+    }
+
     public function createComment(int $id, string $message)
     {
         $api = $this->client->issue()->comments();
