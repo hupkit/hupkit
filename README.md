@@ -15,6 +15,7 @@ Feel free to use it for your own projects.
 * Merge pull-requests with preservation of all information (description and GitHub discussion).
 * (Up)Merge version branches without mistakes.
 * Create new releases with a proper changelog, and no gaps in version numbers.
+* (Automatically) Split a monolith repository into READ-ONLY repositories.
 
 This tool is designed for project maintainers with a good knowledge of Git and GitHub.
 If you have some special needs, please see the contributing section below.
@@ -81,8 +82,7 @@ Run `hubkit help` for a full list of all available commands and options.
 you are in a Git repository, and have Git remote `upstream` existing and pointing
 to the GitHub head repository (from which all work is coordinated, not your fork).
 
-See the [usage](http://www.park-manager.com/hubkit/usage.html) for all commands
-and usage instructions.
+See the [usage](https://www.park-manager.com/hubkit/usage.html) documentation for full instructions.
 
 ## Versioning
 
@@ -114,19 +114,9 @@ to bloated not all requested features will be actually accepted.
 not to replace already sufficient functionality. Creating an issue is easier
 with the web interface then using a limited CLI application.*
 
-**Support for other adapters like BitBucket or GitLab will only ever happen once
+**Support for other adapters, like BitBucket or GitLab will only ever happen once
 all adapters support the same level of functionality and stability and performance
 is not negatively affected.**
-
-### Rejected feature requests
-
-If you have some special requirements that are outside the scope of HubKit
-it's properly better to "source fork" this repository and adjust it to
-your own needs (*don't forget to change the name or indicate your providing
-a modified version. To prevent confusion.*). But always keep the original credits!
-
-*A source fork is nothing more then Git cloning the repository and then
-creating a new (GitHub) repository, rather then using the "Fork button".*
 
 ## License
 
