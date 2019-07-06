@@ -3,8 +3,6 @@ upmerge
 
 Merge the current branch to the next possible version branch (either merge 1.0 into 1.1).
 
-**Caution:** Split repositories are (currently) [not automatically updated](https://github.com/park-manager/hubkit/issues/61) after an upmerge operation.
-
 Some projects follow a 'merge bug fixes to the lowest supported branch first' approach,
 and then (up)merge the lower branches into newer branches. Usually: `1.0 -> 2.0 -> master`.
 
