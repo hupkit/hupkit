@@ -229,6 +229,83 @@ by who-else at 2014-11-23T14:50:24Z
     }
 
     /** @test */
+    public function it_merges_a_pull_request_and_does_not_fail_for_empty_issues()
+    {
+        $body = '| Q             | A
+| ------------- | ---
+| Bug fix?      | yes
+| New feature?  | no
+| BC breaks?    | no
+| Deprecations? | no
+| Tests pass?   | yes
+| Fixed tickets | 
+| License       | MIT
+
+It turned-out to me much easier to fix this than expected. When the prefix directory doesn\'t exist ignore the tagging for that repository.';
+
+        $pr = $this->expectPrInfo('sstok', [], 'open', true, $body);
+        $this->expectCommitStatus();
+        $this->expectCommits($pr);
+
+        $this->github->mergePullRequest(
+            self::PR_NUMBER,
+            'feature #42 Brand new design (sstok)',
+            PropArgument::exact(<<<BODY
+This PR was merged into the 1.0-dev branch.
+
+Discussion
+----------
+
+{$body}
+
+Commits
+-------
+
+06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
+06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
+
+BODY
+),
+            self::HEAD_SHA
+        )->willReturn(['sha' => self::MERGE_SHA]);
+
+        $this->expectNotes(
+            [
+                ['user' => ['login' => 'someone'], 'created_at' => '2014-11-23T14:39:24Z', 'body' => 'Status: reviewed'],
+                ['user' => ['login' => 'who-else'], 'created_at' => '2014-11-23T14:50:24Z', 'body' => ':+1:'],
+            ],
+            '---------------------------------------------------------------------------
+
+by someone at 2014-11-23T14:39:24Z
+
+Status: reviewed
+
+---------------------------------------------------------------------------
+
+by who-else at 2014-11-23T14:50:24Z
+
+:+1:
+');
+
+        $this->expectLocalUpdate();
+        $this->expectLocalBranchNotExists();
+
+        $args = $this->getArgs();
+        $args->setArgument('number', '42');
+        $this->executeHandler($args, 'feature', ['yes']);
+
+        $this->assertOutputMatches(
+            [
+                'master branch is aliased as 1.0-dev (detected by composer.json "extra.branch-alias.dev-master")',
+                'Pull request has been merged.',
+                'Pushing notes please wait...',
+                'Your local "master" branch is updated.',
+            ]
+        );
+        $this->assertOutputNotMatches('The following issues can be closed after merging this pull request:');
+    }
+
+    /** @test */
     public function it_merges_a_pull_request_and_does_not_closses_issues_if_not_confirmed()
     {
         $body = '| Q             | A
