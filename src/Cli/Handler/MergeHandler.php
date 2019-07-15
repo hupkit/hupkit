@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace HubKit\Cli\Handler;
 
 use GuzzleHttp\Exception\ClientException;
+use Http\Client\Exception\HttpException;
 use HubKit\Config;
 use HubKit\Helper\BranchAliasResolver;
 use HubKit\Helper\SingleLineChoiceQuestionHelper;
@@ -445,10 +446,15 @@ COMMENT;
             return;
         }
 
-        $candidates = [];
-        $issues = preg_split('/(\h+)/', trim(preg_replace('/(,|\h+|#)/', ' ', trim($matches[1]))));
+        $issueString = trim(preg_replace(['/(,|#)/', '/\h+/'], ' ', trim($matches[1])));
 
-        foreach ($issues as $issueNr) {
+        if ($issueString === '') {
+            return;
+        }
+
+        $candidates = [];
+
+        foreach (explode(' ', $issueString) as $issueNr) {
             try {
                 $issue = $this->github->getIssue((int) $issueNr);
 
@@ -456,6 +462,8 @@ COMMENT;
                     $candidates[$issue['number']] = sprintf('%s : %s', $issue['html_url'], $issue['title']);
                 }
             } catch (ClientException $e) {
+                continue;
+            } catch (HttpException $e) {
                 continue;
             }
         }
