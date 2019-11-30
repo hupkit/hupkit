@@ -411,9 +411,6 @@ class UpMergeHandlerTest extends TestCase
         ]);
     }
 
-    /**
-     * @return Args
-     */
     private function getArgs(): Args
     {
         $format = ArgsFormat::build()

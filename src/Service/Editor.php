@@ -29,10 +29,6 @@ class Editor
     /**
      * Launch an external editor and open a temporary file containing the $contents value.
      *
-     * @param string $contents
-     * @param bool   $abortOnEmpty
-     * @param string $instructions
-     *
      * @return string
      */
     public function fromString(string $contents, bool $abortOnEmpty = true, string $instructions = '')

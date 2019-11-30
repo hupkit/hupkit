@@ -28,8 +28,6 @@ class QuestionHelper extends BaseQuestionHelper
      * This method is only meant for testing, as
      * no limit hangs the test forever..
      *
-     * @param int $attempts
-     *
      * @return QuestionHelper
      */
     public function setMaxAttempts(int $attempts)

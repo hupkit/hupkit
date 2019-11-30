@@ -22,8 +22,6 @@ class StringUtil
     /**
      * Split lines to an array.
      *
-     * @param string $input
-     *
      * @return string[]
      */
     public static function splitLines(string $input): array
@@ -63,10 +61,6 @@ class StringUtil
 
     /**
      * Slugify a string.
-     *
-     * @param string $string
-     *
-     * @return string
      */
     public static function slugify(string $string): string
     {

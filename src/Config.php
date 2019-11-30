@@ -22,19 +22,12 @@ final class Config
      */
     private $config = [];
 
-    /**
-     * Constructor.
-     *
-     * @param array $configuration
-     */
     public function __construct(array $configuration)
     {
         $this->config = $configuration;
     }
 
     /**
-     * Returns a config value.
-     *
      * @param string|string[] $keys    Single level key like 'profiles' or array-path
      *                                 like ['profiles', 'symfony-bundle']
      * @param mixed           $default Default value to use when no config is found (null)
@@ -63,7 +56,7 @@ final class Config
     }
 
     /**
-     * Returns a config value or throws an exception when config is missin.
+     * Returns a config value or throws an exception when config is missing.
      *
      * @param string|string[] $keys Single level key like 'profiles' or array-path
      *                              like ['profiles', 'symfony-bundle']
@@ -107,12 +100,10 @@ final class Config
     /**
      * Checks whether the config exists.
      *
-     * @param string $keys Single level key like "profiles" or array-path
-     *                     like ['profiles', 'symfony-bundle']
-     *
-     * @return bool
+     * @param string|string[] $keys Single level key like "profiles" or array-path
+     *                              like ['profiles', 'symfony-bundle']
      */
-    public function has($keys)
+    public function has($keys): bool
     {
         $keys = (array) $keys;
 

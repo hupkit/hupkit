@@ -31,11 +31,8 @@ class Git
     protected $style;
     private $gitDir;
 
-    public function __construct(
-        CliProcess $process,
-        Filesystem $filesystemHelper,
-        StyleInterface $style
-    ) {
+    public function __construct(CliProcess $process, Filesystem $filesystemHelper, StyleInterface $style)
+    {
         $this->process = $process;
         $this->filesystem = $filesystemHelper;
         $this->style = $style;
@@ -55,10 +52,6 @@ class Git
     /**
      * Gets the diff status of the remote and local.
      *
-     * @param string $remoteName
-     * @param string $localBranch
-     * @param string $remoteBranch
-     *
      * @return string Returns the value of one of the following constants:
      *                GitHelper::STATUS_UP_TO_DATE, GitHelper::STATUS_NEED_PULL
      *                GitHelper::STATUS_NEED_PUSH, GitHelper::STATUS_DIVERGED
@@ -66,7 +59,7 @@ class Git
      * @see https://gist.github.com/WebPlatformDocs/437f763b948c926ca7ba
      * @see https://stackoverflow.com/questions/3258243/git-check-if-pull-needed
      */
-    public function getRemoteDiffStatus(string $remoteName, string $localBranch, string $remoteBranch = null): string
+    public function getRemoteDiffStatus(string $remoteName, string $localBranch, ?string $remoteBranch = null): string
     {
         if (null === $remoteBranch) {
             $remoteBranch = $localBranch;
@@ -161,9 +154,6 @@ class Git
      * - Message contains the subject followed by two new lines and the actual message-body.
      *
      * Or an empty array when there are no logs.
-     *
-     * @param string $start
-     * @param string $end
      *
      * @return array[]
      */
@@ -358,9 +348,6 @@ class Git
 
     /**
      * Checkout a remote branch or create it when it doesn't exit yet.
-     *
-     * @param string $remote
-     * @param string $branchName
      */
     public function checkoutRemoteBranch(string $remote, string $branchName)
     {
@@ -462,8 +449,6 @@ class Git
     }
 
     /**
-     * @param string $name
-     *
      * @return array [host, org, repo]
      */
     public function getRemoteInfo(string $name = 'upstream'): array
@@ -472,8 +457,6 @@ class Git
     }
 
     /**
-     * @param string $gitUri
-     *
      * @return array [host, org, repo]
      */
     public static function getGitUrlInfo(string $gitUri): array

@@ -26,8 +26,6 @@ trait SymfonyStyleTrait
     protected $output;
 
     /**
-     * @param array $input
-     *
      * @return SymfonyStyle
      */
     protected function createStyle(array $input = [])

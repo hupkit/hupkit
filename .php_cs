@@ -41,6 +41,7 @@ return PhpCsFixer\Config::create()
         'phpdoc_var_without_name' => false,
         'semicolon_after_instruction' => true,
         'single_import_per_statement' => false,
+        'single_line_throw' => false,
         'strict_comparison' => true,
         'strict_param' => true,
         'yoda_style' => false,
