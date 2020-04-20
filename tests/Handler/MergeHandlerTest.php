@@ -102,7 +102,8 @@ Commits
 
 BODY
 ),
-            self::HEAD_SHA
+            self::HEAD_SHA,
+            false
         )->willReturn(['sha' => self::MERGE_SHA]);
 
         $this->expectNotes(
@@ -178,7 +179,8 @@ Commits
 
 BODY
 ),
-            self::HEAD_SHA
+            self::HEAD_SHA,
+            false
         )->willReturn(['sha' => self::MERGE_SHA]);
 
         $this->expectNotes(
@@ -266,7 +268,8 @@ Commits
 
 BODY
 ),
-            self::HEAD_SHA
+            self::HEAD_SHA,
+            false
         )->willReturn(['sha' => self::MERGE_SHA]);
 
         $this->expectNotes(
@@ -343,7 +346,8 @@ Commits
 
 BODY
 ),
-            self::HEAD_SHA
+            self::HEAD_SHA,
+            false
         )->willReturn(['sha' => self::MERGE_SHA]);
 
         $this->expectNotes(
@@ -439,7 +443,8 @@ Commits
 
 BODY
 ),
-            self::HEAD_SHA
+            self::HEAD_SHA,
+            false
         )->willReturn(['sha' => self::MERGE_SHA]);
 
         $this->expectNotes(
@@ -519,7 +524,8 @@ Commits
 
 BODY
 ),
-            self::HEAD_SHA
+            self::HEAD_SHA,
+            false
         )->willReturn(['sha' => self::MERGE_SHA]);
 
         $this->expectNotes(
@@ -599,7 +605,8 @@ Commits
 
 BODY
 ),
-            self::HEAD_SHA
+            self::HEAD_SHA,
+            false
         )->willReturn(['sha' => self::MERGE_SHA]);
 
         $this->expectNotes(
@@ -678,7 +685,8 @@ Commits
 
 BODY
 ),
-            self::HEAD_SHA
+            self::HEAD_SHA,
+            false
         )->willReturn(['sha' => self::MERGE_SHA]);
 
         $this->expectNotes(
@@ -741,7 +749,8 @@ Commits
 
 BODY
 ),
-            self::HEAD_SHA
+            self::HEAD_SHA,
+            false
         )->willReturn(['sha' => self::MERGE_SHA]);
 
         $this->expectNotes();
@@ -782,7 +791,8 @@ Commits
 
 BODY
 ),
-            self::HEAD_SHA
+            self::HEAD_SHA,
+            false
         )->willReturn(['sha' => self::MERGE_SHA]);
 
         $this->expectNotes();
@@ -823,7 +833,8 @@ Commits
 
 BODY
 ),
-            self::HEAD_SHA
+            self::HEAD_SHA,
+            false
         )->willReturn(['sha' => self::MERGE_SHA]);
 
         $this->expectNotes();
@@ -863,7 +874,8 @@ Commits
 
 BODY
 ),
-            self::HEAD_SHA
+            self::HEAD_SHA,
+            false
         )->willReturn(['sha' => self::MERGE_SHA]);
 
         $this->expectNotes();
@@ -910,7 +922,8 @@ Commits
 
 BODY
 ),
-            self::HEAD_SHA
+            self::HEAD_SHA,
+            false
         )->willReturn(['sha' => self::MERGE_SHA]);
 
         $this->expectNotes();
@@ -958,7 +971,8 @@ Commits
 
 BODY
 ),
-            self::HEAD_SHA
+            self::HEAD_SHA,
+            false
         )->willReturn(['sha' => self::MERGE_SHA]);
 
         $this->expectNotes();
@@ -1006,7 +1020,8 @@ Commits
 
 BODY
 ),
-            self::HEAD_SHA
+            self::HEAD_SHA,
+            false
         )->willReturn(['sha' => self::MERGE_SHA]);
 
         $this->expectNotes();
@@ -1060,7 +1075,8 @@ Commits
 
 BODY
 ),
-            self::HEAD_SHA
+            self::HEAD_SHA,
+            true
         )->willReturn(['sha' => self::MERGE_SHA]);
 
         $this->expectNotes();
@@ -1101,7 +1117,8 @@ Commits
 
 BODY
 ),
-            self::HEAD_SHA
+            self::HEAD_SHA,
+            false
         )->willReturn(['sha' => self::MERGE_SHA]);
 
         $this->expectNotes(
@@ -1160,7 +1177,8 @@ Commits
 
 BODY
 ),
-            self::HEAD_SHA
+            self::HEAD_SHA,
+            false
         )->willReturn(['sha' => self::MERGE_SHA]);
 
         $this->expectNotes();
@@ -1218,7 +1236,8 @@ Commits
 
 BODY
 ),
-            self::HEAD_SHA
+            self::HEAD_SHA,
+            false
         )->willReturn(['sha' => self::MERGE_SHA]);
 
         $this->expectNotes();
@@ -1276,7 +1295,8 @@ Commits
 
 BODY
 ),
-            self::HEAD_SHA
+            self::HEAD_SHA,
+            false
         )->willReturn(['sha' => self::MERGE_SHA]);
 
         $this->expectNotes();
@@ -1326,7 +1346,8 @@ Commits
 
 BODY
 ),
-            self::HEAD_SHA
+            self::HEAD_SHA,
+            false
         )->willReturn(['sha' => self::MERGE_SHA]);
 
         $this->expectNotes();
@@ -1392,7 +1413,8 @@ Commits
 
 BODY
 ),
-            self::HEAD_SHA
+            self::HEAD_SHA,
+            true
         )->willReturn(['sha' => self::MERGE_SHA]);
 
         $this->expectNotes();
@@ -1501,7 +1523,8 @@ Commits
 
 BODY
 ),
-            self::HEAD_SHA
+            self::HEAD_SHA,
+            false
         )->willReturn(['sha' => self::MERGE_SHA]);
 
         $this->expectNotes();

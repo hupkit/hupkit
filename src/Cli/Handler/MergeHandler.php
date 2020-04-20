@@ -86,7 +86,7 @@ final class MergeHandler extends GitBaseHandler
         $message = $this->getCommitMessage($pr, $authors, $branchLabel, $args->getOption('squash'));
         $title = $this->getCommitTitle($pr, $this->getCategory($pr, $args), $authors);
 
-        $mergeHash = $this->github->mergePullRequest($id, $title, $message, $pr['head']['sha'])['sha'];
+        $mergeHash = $this->github->mergePullRequest($id, $title, $message, $pr['head']['sha'], $args->getOption('squash'))['sha'];
 
         if (!$args->getOption('no-pat')) {
             $this->patAuthor($pr, $args->getOption('pat'));
