@@ -1,0 +1,11 @@
+---------------------------------------------------------------------------
+
+by acrobat at 2020-04-20T19:50:04Z
+
+I've tested this fix with PR https://github.com/KnpLabs/php-github-api/pull/863 and it seems to work correct
+
+---------------------------------------------------------------------------
+
+by sstok at 2020-04-21T07:33:08Z
+
+Thank you @acrobat
