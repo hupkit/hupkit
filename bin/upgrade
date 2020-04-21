@@ -20,7 +20,7 @@ if [ ${branchName} == "master" ]; then
     git rebase origin/master || (echo "Something went wrong, please try again" && exit 1)
 fi
 
-latest=`git describe --tags --abbrev=0 master`
+latest=`git describe --tags --abbrev=0 origin/master`
 
 git checkout "tags/${latest}" -b "version-${latest}" || echo "Branch already exists it seems"
 
