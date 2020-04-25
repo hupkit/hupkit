@@ -1,0 +1,19 @@
+---------------------------------------------------------------------------
+
+by sstok at 2020-04-25T14:03:58Z
+
+I use `alias composer=composer.phar` 😄
+
+Would this change require a new release?
+
+---------------------------------------------------------------------------
+
+by acrobat at 2020-04-25T14:12:17Z
+
+Ah that's why 😄 For me it doesn't need a new release now, dependencies didn't change and I've locally patched the upgrade file.
+
+---------------------------------------------------------------------------
+
+by sstok at 2020-04-25T14:45:33Z
+
+Thank you @acrobat
