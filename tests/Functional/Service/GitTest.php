@@ -1,5 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
+/*
+ * This file is part of the HubKit package.
+ *
+ * (c) Sebastiaan Stok <s.stok@rollerscapes.net>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace HubKit\Tests\Functional\Service;
 
 use HubKit\Service\CliProcess;
@@ -8,13 +19,12 @@ use HubKit\Service\Git;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Style\OutputStyle;
-use Symfony\Component\Process\Process;
 
 class GitTest extends TestCase
 {
     protected function setUp(): void
     {
-        rename(__DIR__ . '/../../Fixtures/git_example_changelog_project/git', __DIR__ . '/../../Fixtures/git_example_changelog_project/.git');
+        rename(__DIR__.'/../../Fixtures/git_example_changelog_project/git', __DIR__.'/../../Fixtures/git_example_changelog_project/.git');
     }
 
     /**
@@ -37,7 +47,7 @@ class GitTest extends TestCase
             ],
         ];
 
-        chdir(__DIR__ . '/../../Fixtures/git_example_changelog_project');
+        chdir(__DIR__.'/../../Fixtures/git_example_changelog_project');
 
         $cliProcess = new CliProcess(new NullOutput());
         $fileSystemHelper = $this->prophesize(Filesystem::class);
@@ -52,6 +62,6 @@ class GitTest extends TestCase
 
     protected function tearDown(): void
     {
-        rename(__DIR__ . '/../../Fixtures/git_example_changelog_project/.git', __DIR__ . '/../../Fixtures/git_example_changelog_project/git');
+        rename(__DIR__.'/../../Fixtures/git_example_changelog_project/.git', __DIR__.'/../../Fixtures/git_example_changelog_project/git');
     }
 }

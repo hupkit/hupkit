@@ -28,8 +28,6 @@ class Editor
 
     /**
      * Launch an external editor and open a temporary file containing the $contents value.
-     *
-     * @return string
      */
     public function fromString(string $contents, bool $abortOnEmpty = true, string $instructions = ''): string
     {
