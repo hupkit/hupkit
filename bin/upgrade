@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+composerRun() {
+    # Try global composer first otherwise fallback to composer.phar
+    if hash composer 2>/dev/null; then
+        composer "$@"
+    else
+        composer.phar "$@"
+    fi
+}
+
 echo "Upgrading HubKit please wait..."
 echo ""
 
@@ -24,7 +33,8 @@ latest=`git describe --tags --abbrev=0 origin/master`
 
 git checkout "tags/${latest}" -b "version-${latest}" || echo "Branch already exists it seems"
 
-composer.phar install -o --no-dev
+composerRun install -o --no-dev
+
 ./bin/hubkit.php self-diagnose || echo "Please see UPGRADE.md if you were asked to update your configuration."
 
 echo "You are now using version ${latest}, previous was ${branchName}"

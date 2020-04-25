@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+composerRun() {
+    # Try global composer first otherwise fallback to composer.phar
+    if hash composer 2>/dev/null; then
+        composer "$@"
+    else
+        composer.phar "$@"
+    fi
+}
+
 echo "Installing HubKit please wait..."
 echo ""
 
@@ -12,7 +21,7 @@ if [ ${branchName} == "master" ]; then
     echo ""
 fi
 
-composer.phar install -o --no-dev || (echo "Composer did not succeed." && exit 1)
+composerRun install -o --no-dev || (echo "Composer did not succeed." && exit 1)
 
 if [ ! -f ./config.php ]; then
     echo -n "Copying config.php.dist to config.php"
