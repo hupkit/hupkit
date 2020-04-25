@@ -180,7 +180,6 @@ labels: removed-deprecation
     public function it_creates_a_new_release_for_current_branch_with_existing_tags_and_no_gap()
     {
         $this->expectTags(['0.1.0', '1.0.0-BETA1']);
-        $this->git->getLastTagOnBranch()->willReturn('1.0.0-BETA1');
         $this->expectMatchingVersionBranchNotExists();
 
         $this->git->getLogBetweenCommits('1.0.0-BETA1', 'master')->willReturn(self::COMMITS);
@@ -207,7 +206,6 @@ labels: removed-deprecation
     public function it_asks_confirmation_when_there_is_a_gap_and_continues_when_confirmed()
     {
         $this->expectTags(['0.1.0', '1.0.0-BETA1']);
-        $this->git->getLastTagOnBranch()->willReturn('1.0.0-BETA1');
         $this->expectMatchingVersionBranchNotExists('3.0');
 
         $this->git->getLogBetweenCommits('1.0.0-BETA1', 'master')->willReturn(self::COMMITS);
@@ -237,7 +235,6 @@ labels: removed-deprecation
     public function it_asks_confirmation_when_there_is_a_gap_and_aborts_when_rejected()
     {
         $this->expectTags(['0.1.0', '1.0.0-BETA1']);
-        $this->git->getLastTagOnBranch()->willReturn('1.0.0-BETA1');
         $this->expectMatchingVersionBranchNotExists('3.0');
 
         $this->expectException('RuntimeException');
@@ -253,7 +250,6 @@ labels: removed-deprecation
         $this->git->getActiveBranchName()->willReturn('2.0');
 
         $this->expectTags(['0.1.0', '1.0.0', '2.0.0']);
-        $this->git->getLastTagOnBranch()->willReturn('2.0.0');
         $this->expectMatchingVersionBranchExists('3.0');
 
         $this->git->ensureBranchInSync('upstream', '2.0')->shouldBeCalled();
@@ -287,7 +283,6 @@ labels: removed-deprecation
         $this->git->getActiveBranchName()->willReturn('2.0');
 
         $this->expectTags(['0.1.0', '1.0.0', '2.0.0']);
-        $this->git->getLastTagOnBranch()->willReturn('2.0.0');
         $this->expectMatchingVersionBranchExists('3.0');
 
         $this->expectException('RuntimeException');
@@ -300,8 +295,7 @@ labels: removed-deprecation
     /** @test */
     public function it_creates_a_new_release_with_a_relative_version()
     {
-        $this->expectTags(['0.1.0', '1.0.0', '2.0.0']);
-        $this->git->getLastTagOnBranch()->willReturn('2.5.0');
+        $this->expectTags(['0.1.0', '1.0.0', '2.0.0', '2.5.0']);
         $this->expectMatchingVersionBranchNotExists('3.0');
 
         $this->git->getLogBetweenCommits('2.5.0', 'master')->willReturn(self::COMMITS);
@@ -411,7 +405,6 @@ labels: removed-deprecation
     public function it_creates_a_new_release_with_a_custom_title()
     {
         $this->expectTags(['0.1.0', '1.0.0-BETA1']);
-        $this->git->getLastTagOnBranch()->willReturn('1.0.0-BETA1');
         $this->expectMatchingVersionBranchNotExists();
 
         $this->git->getLogBetweenCommits('1.0.0-BETA1', 'master')->willReturn(self::COMMITS);
@@ -439,7 +432,6 @@ labels: removed-deprecation
     public function it_fails_when_tag_already_exists()
     {
         $this->expectTags(['v0.1.0', 'v0.2.0', 'v0.3.0', '1.0.0-BETA1', '1.0.0']);
-        $this->git->getLastTagOnBranch()->willReturn('1.0.0-BETA1');
         $this->expectMatchingVersionBranchNotExists('3.0');
 
         $this->expectException('RuntimeException');
@@ -453,7 +445,6 @@ labels: removed-deprecation
     public function it_fails_when_tag_without_prefix_already_exists()
     {
         $this->expectTags(['0.1.0', '1.0.0-BETA1']);
-        $this->git->getLastTagOnBranch()->willReturn('1.0.0-BETA1');
         $this->expectMatchingVersionBranchNotExists('3.0');
 
         $this->expectException('RuntimeException');
@@ -503,6 +494,7 @@ labels: removed-deprecation
         $process->getOutput()->willReturn(implode("\n", $tags));
 
         $this->process->mustRun('git tag --list')->willReturn($process->reveal());
+        $this->git->getLastTagOnBranch()->willReturn(end($tags) ?? '');
     }
 
     private function expectMatchingVersionBranchExists(string $branch = '1.0')
