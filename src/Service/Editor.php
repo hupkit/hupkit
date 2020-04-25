@@ -41,9 +41,10 @@ class Editor
         $tmpName = $this->filesystem->newTempFilename($contents);
 
         $process = new Process([$editor, $tmpName]);
+        $process->setTty(true);
         $process->setTimeout(null);
 
-        $this->process->mustRun($process);
+        $this->process->startAndWait($process);
         $contents = file_get_contents($tmpName);
 
         if ('' !== $instructions) {

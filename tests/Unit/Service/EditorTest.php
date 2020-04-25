@@ -52,7 +52,7 @@ final class EditorTest extends TestCase
     {
         $processProphecy = $this->prophesize(CliProcess::class);
         $processProphecy
-            ->mustRun(
+            ->startAndWait(
                 Argument::that(
                     function (Process $process) use (&$processCmd) {
                         $processCmd = $process->getCommandLine();
@@ -107,7 +107,7 @@ final class EditorTest extends TestCase
     {
         $processProphecy = $this->prophesize(CliProcess::class);
         $processProphecy
-            ->mustRun(
+            ->startAndWait(
                 Argument::that(
                     function (Process $process) use (&$processCmd, &$tempFile, $contents) {
                         $processCmd = $process->getCommandLine();
