@@ -1,0 +1,11 @@
+0000000000000000000000000000000000000000 dfa12a79fc16af2b763afda1f7b9902a43b37488 example-name <name@example.com> 1587808246 +0200	commit (initial): Initial commit
+dfa12a79fc16af2b763afda1f7b9902a43b37488 dfa12a79fc16af2b763afda1f7b9902a43b37488 example-name <name@example.com> 1587808252 +0200	checkout: moving from master to test
+dfa12a79fc16af2b763afda1f7b9902a43b37488 7a9fa44f6b2ca6bba9368f84376d66b54fa7ca73 example-name <name@example.com> 1587808266 +0200	commit: Add a.txt
+7a9fa44f6b2ca6bba9368f84376d66b54fa7ca73 dfa12a79fc16af2b763afda1f7b9902a43b37488 example-name <name@example.com> 1587808273 +0200	checkout: moving from test to master
+dfa12a79fc16af2b763afda1f7b9902a43b37488 e8db760866833c07e9d2b0fd8006f1e85c85afd4 example-name <name@example.com> 1587808281 +0200	merge test: Merge made by the 'recursive' strategy.
+e8db760866833c07e9d2b0fd8006f1e85c85afd4 e8db760866833c07e9d2b0fd8006f1e85c85afd4 example-name <name@example.com> 1587808549 +0200	checkout: moving from master to test2
+e8db760866833c07e9d2b0fd8006f1e85c85afd4 07e557c5cbd8012a510875c4c3f3cc39e9367d1d example-name <name@example.com> 1587808563 +0200	commit: Add b.txt
+07e557c5cbd8012a510875c4c3f3cc39e9367d1d e8db760866833c07e9d2b0fd8006f1e85c85afd4 example-name <name@example.com> 1587808567 +0200	checkout: moving from test2 to master
+e8db760866833c07e9d2b0fd8006f1e85c85afd4 0721910237402965bc6cf88a6aab2d3bb84624ad example-name <name@example.com> 1587808570 +0200	merge test2: Merge made by the 'recursive' strategy.
+0721910237402965bc6cf88a6aab2d3bb84624ad 1f9376faffc80c43d64a6b9482359520e168952b example-name <name@example.com> 1587808626 +0200	commit: feature #3 Example subject for changelog 3 (username123)
+1f9376faffc80c43d64a6b9482359520e168952b deed1e4cf367fb7940270b5e329bad15d32b2443 example-name <name@example.com> 1587808664 +0200	commit: Just some general commit without merge or merge subject

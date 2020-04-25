@@ -167,7 +167,6 @@ class Git
                 'git',
                 '--no-pager',
                 'log',
-                '--merges',
                 '--oneline',
                 '--no-color',
                 '--format=%H',
@@ -176,7 +175,7 @@ class Git
             ]
         )->getOutput());
 
-        return array_map(
+        $results = array_map(
             function ($commitHash) {
                 // 0=author, 1=subject, anything higher then 2 is the full body
                 $commitData = StringUtil::splitLines(
@@ -193,16 +192,25 @@ class Git
                     )->getOutput()
                 );
 
+                $author = array_shift($commitData);
+                $subject = array_shift($commitData);
+
+                if (!preg_match('/^(feature|refactor|bug|minor|style|security)\s\#\d*\s.*\s\(.*\)$/', $subject)) {
+                    return null;
+                }
+
                 return [
                     'sha' => $commitHash,
-                    'author' => array_shift($commitData),
-                    'subject' => array_shift($commitData),
+                    'author' => $author,
+                    'subject' => $subject,
                     // subject + \n\n + {$commitData remaining}
                     'message' => implode("\n", $commitData),
                 ];
             },
             $commits
         );
+
+        return array_values(array_filter($results));
     }
 
     public function remoteBranchExists(string $remote, string $branch): bool
