@@ -2,11 +2,10 @@ parameters:
     autoload_files:
         - vendor/autoload.php
     ignoreErrors:
-        - '#__construct\(\) does not call parent constructor#'
-
         ## Application
         - '#Property HubKit\\Service\\CliProcess\:\:\$processHelper \(Symfony\\Component\\Console\\Helper\\ProcessHelper\) does not accept Symfony\\Component\\Console\\Helper\\HelperInterface#'
         #- '#Call to an undefined method Webmozart\\Console\\Api\\Config\\ApplicationConfig\|Webmozart\\Console\\Api\\Config\\CommandConfig\:\:end\(\)#'
+        - '#Call to an undefined method Symfony\\Component\\Console\\Helper\\TableStyle::setHorizontalBorderChar\(\)\.#'
 
         ## Tests
         #- '#Call to an undefined method Prophecy\\Prophecy\\ObjectProphecy::[a-zA-Z0-9_]+\(\)#'

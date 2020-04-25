@@ -33,7 +33,7 @@ final class EditorTest extends TestCase
 
         self::assertFileExists($tempFile);
         self::assertEquals(file_get_contents($tempFile), 'Some contents go here.');
-        self::assertEquals('vim-or-die '.escapeshellarg($tempFile), $processCmd);
+        self::assertEquals("'vim-or-die' '".$tempFile."'", $processCmd);
     }
 
     private function createFilesystemSpy(&$tempFile): Filesystem
@@ -86,7 +86,7 @@ final class EditorTest extends TestCase
 
         self::assertFileExists($tempFile);
         self::assertEquals(file_get_contents($tempFile), "# THIS LINE IS AUTOMATICALLY REMOVED; Release v2.0\n\nSome contents go here.");
-        self::assertEquals('vim-or-die '.escapeshellarg($tempFile), $processCmd);
+        self::assertEquals("'vim-or-die' '".$tempFile."'", $processCmd);
     }
 
     /** @test */
@@ -100,7 +100,7 @@ final class EditorTest extends TestCase
 
         self::assertFileExists($tempFile);
         self::assertEquals(file_get_contents($tempFile), '# THIS LINE IS Some contents go here.');
-        self::assertEquals('vim-or-die '.escapeshellarg($tempFile), $processCmd);
+        self::assertEquals("'vim-or-die' '".$tempFile."'", $processCmd);
     }
 
     private function createProcessModifierSpy(&$processCmd, &$tempFile, string $contents): CliProcess
