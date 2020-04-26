@@ -156,8 +156,6 @@ labels: removed-deprecation
     /** @test */
     public function it_creates_a_new_release_for_current_branch_without_existing_tags()
     {
-        $this->git->getLastTagOnBranch()->willThrow(ProcessFailedException::class);
-
         $this->expectTags();
         $this->expectMatchingVersionBranchNotExists();
         $this->expectEditorReturns('Initial release.');
@@ -327,8 +325,6 @@ labels: removed-deprecation
         $this->github->getOrganization()->willReturn('park-manager');
         $this->github->getRepository()->willReturn('park-manager');
 
-        $this->git->getLastTagOnBranch()->willThrow(ProcessFailedException::class);
-
         $this->expectTags();
         $this->expectMatchingVersionBranchNotExists();
         $this->expectEditorReturns('Initial release.');
@@ -370,8 +366,6 @@ labels: removed-deprecation
     {
         $this->github->getOrganization()->willReturn('park-manager');
         $this->github->getRepository()->willReturn('park-manager');
-
-        $this->git->getLastTagOnBranch()->willThrow(ProcessFailedException::class);
 
         $this->expectTags();
         $this->expectMatchingVersionBranchNotExists();
@@ -501,7 +495,12 @@ labels: removed-deprecation
         $process->getOutput()->willReturn(implode("\n", $tags));
 
         $this->process->mustRun('git tag --list')->willReturn($process->reveal());
-        $this->git->getLastTagOnBranch()->willReturn(end($tags) ?? '');
+
+        if ($tags === []) {
+            $this->git->getLastTagOnBranch()->willThrow(ProcessFailedException::class);
+        } else {
+            $this->git->getLastTagOnBranch()->willReturn(end($tags));
+        }
     }
 
     private function expectMatchingVersionBranchExists(string $branch = '1.0')
