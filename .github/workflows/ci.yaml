@@ -52,6 +52,8 @@ jobs:
                 name: Run Tests
                 run: |
                     make test
+                    cp config.php.dist config.php
+                    bin/hubkit.php self-diagnose
     lint:
         name: PHP-QA
         runs-on: ubuntu-latest
