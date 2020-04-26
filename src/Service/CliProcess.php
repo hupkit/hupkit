@@ -39,6 +39,23 @@ class CliProcess
     }
 
     /**
+     * Runs an external process and waits until it is terminated.
+     *
+     * @param Process $process
+     *
+     * @throws ProcessFailedException
+     */
+    public function startAndWait(Process $process)
+    {
+        $process->start();
+        $process->wait();
+
+        if (!$process->isSuccessful()) {
+            throw new ProcessFailedException($process);
+        }
+    }
+
+    /**
      * Runs an external process.
      *
      * @param string|array|Process $cmd       An instance of Process or an array of arguments to escape and run or a command to run

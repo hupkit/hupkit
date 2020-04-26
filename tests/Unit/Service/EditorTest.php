@@ -25,6 +25,10 @@ final class EditorTest extends TestCase
     /** @test */
     public function opens_editor_with_string_contents(): void
     {
+        if (false === $this->isTtySupported()) {
+            $this->markTestSkipped('No TTY support');
+        }
+
         $process = $this->createProcessSpy($processCmd);
         $filesystem = $this->createFilesystemSpy($tempFile);
         $editor = $this->createEditorWithMockEditor($process, $filesystem);
@@ -52,7 +56,7 @@ final class EditorTest extends TestCase
     {
         $processProphecy = $this->prophesize(CliProcess::class);
         $processProphecy
-            ->mustRun(
+            ->startAndWait(
                 Argument::that(
                     function (Process $process) use (&$processCmd) {
                         $processCmd = $process->getCommandLine();
@@ -78,6 +82,10 @@ final class EditorTest extends TestCase
     /** @test */
     public function opens_editor_with_string_contents_and_instructions(): void
     {
+        if (false === $this->isTtySupported()) {
+            $this->markTestSkipped('No TTY support');
+        }
+
         $process = $this->createProcessSpy($processCmd);
         $filesystem = $this->createFilesystemSpy($tempFile);
         $editor = $this->createEditorWithMockEditor($process, $filesystem);
@@ -92,6 +100,10 @@ final class EditorTest extends TestCase
     /** @test */
     public function opens_editor_with_string_contents_and_instructions_removed(): void
     {
+        if (false === $this->isTtySupported()) {
+            $this->markTestSkipped('No TTY support');
+        }
+
         $filesystem = $this->createFilesystemSpy($tempFile);
         $process = $this->createProcessModifierSpy($processCmd, $tempFile, '# THIS LINE IS Some contents go here.');
         $editor = $this->createEditorWithMockEditor($process, $filesystem);
@@ -107,7 +119,7 @@ final class EditorTest extends TestCase
     {
         $processProphecy = $this->prophesize(CliProcess::class);
         $processProphecy
-            ->mustRun(
+            ->startAndWait(
                 Argument::that(
                     function (Process $process) use (&$processCmd, &$tempFile, $contents) {
                         $processCmd = $process->getCommandLine();
@@ -131,5 +143,10 @@ final class EditorTest extends TestCase
         $this->expectExceptionMessage('No content found. User aborted.');
 
         $editor->abortWhenEmpty(' ');
+    }
+
+    private function isTtySupported(): bool
+    {
+        return (bool) @proc_open('echo 1 >/dev/null', [['file', '/dev/tty', 'r'], ['file', '/dev/tty', 'w'], ['file', '/dev/tty', 'w']], $pipes);
     }
 }
