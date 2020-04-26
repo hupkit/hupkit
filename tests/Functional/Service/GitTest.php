@@ -12,7 +12,7 @@ use Symfony\Component\Process\Process;
 
 class GitTest extends TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         rename(__DIR__ . '/../../Fixtures/git_example_changelog_project/git', __DIR__ . '/../../Fixtures/git_example_changelog_project/.git');
     }
@@ -50,7 +50,7 @@ class GitTest extends TestCase
         $this->assertEquals($expectedResult, $result);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         rename(__DIR__ . '/../../Fixtures/git_example_changelog_project/.git', __DIR__ . '/../../Fixtures/git_example_changelog_project/git');
     }

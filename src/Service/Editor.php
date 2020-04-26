@@ -31,7 +31,7 @@ class Editor
      *
      * @return string
      */
-    public function fromString(string $contents, bool $abortOnEmpty = true, string $instructions = '')
+    public function fromString(string $contents, bool $abortOnEmpty = true, string $instructions = ''): string
     {
         $editor = $this->getEditorExecutable();
 

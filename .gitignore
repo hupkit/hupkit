@@ -2,3 +2,4 @@
 #/composer.lock # kept to speed-up installation and ensure proper dependencies
 .php_cs.cache
 /config.php
+.phpunit.result.cache
