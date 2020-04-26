@@ -1,0 +1,17 @@
+---------------------------------------------------------------------------
+
+by sstok at 2020-04-26T07:32:43Z
+
+Tests are failing because of `Symfony\Component\Process\Exception\RuntimeException: TTY mode requires /dev/tty to be read/writable.` Not sure how to fix that 🤔
+
+---------------------------------------------------------------------------
+
+by acrobat at 2020-04-26T13:48:16Z
+
+@sstok I've skipped the tests for now (if tty support is not available) and I've [opened a topic](https://github.community/t5/GitHub-Actions/How-to-enable-tty-support/m-p/55719#M9624) at the github community forums to see if this can be enabled in github actions!
+
+---------------------------------------------------------------------------
+
+by sstok at 2020-04-26T17:54:38Z
+
+Thank you @acrobat
