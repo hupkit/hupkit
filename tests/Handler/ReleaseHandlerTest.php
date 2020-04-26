@@ -24,6 +24,7 @@ use HubKit\Service\SplitshGit;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument as PropArgument;
 use Prophecy\Prophecy\ObjectProphecy;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 use Webmozart\Console\Api\Args\Args;
 use Webmozart\Console\Api\Args\Format\ArgsFormat;
@@ -494,7 +495,12 @@ labels: removed-deprecation
         $process->getOutput()->willReturn(implode("\n", $tags));
 
         $this->process->mustRun('git tag --list')->willReturn($process->reveal());
-        $this->git->getLastTagOnBranch()->willReturn(end($tags) ?? '');
+
+        if ($tags === []) {
+            $this->git->getLastTagOnBranch()->willThrow(ProcessFailedException::class);
+        } else {
+            $this->git->getLastTagOnBranch()->willReturn(end($tags));
+        }
     }
 
     private function expectMatchingVersionBranchExists(string $branch = '1.0')

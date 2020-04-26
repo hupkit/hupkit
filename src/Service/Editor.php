@@ -28,8 +28,6 @@ class Editor
 
     /**
      * Launch an external editor and open a temporary file containing the $contents value.
-     *
-     * @return string
      */
     public function fromString(string $contents, bool $abortOnEmpty = true, string $instructions = ''): string
     {
@@ -42,7 +40,7 @@ class Editor
 
         $tmpName = $this->filesystem->newTempFilename($contents);
 
-        $process = new Process($editor.' '.escapeshellarg($tmpName));
+        $process = new Process([$editor, $tmpName]);
         $process->setTimeout(null);
 
         $this->process->mustRun($process);
