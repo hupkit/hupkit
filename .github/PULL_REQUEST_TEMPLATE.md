@@ -4,11 +4,16 @@
 | New feature?  | yes/no
 | BC breaks?    | yes/no
 | Deprecations? | yes/no
-| Tests pass?   | yes/no
-| Fixed tickets | #... <!-- #-prefixed issue number(s), if any -->
+| Tickets       | Fix #... <!-- prefix each issue number with "Fix #", if any -->
 | License       | MIT
 
 <!--
-- Please fill in this template according to the PR you're about to submit.
-- Replace this comment by a description of what your PR is solving.
+Replace this notice by a short README for your feature/bugfix. This will help people
+understand your PR.
+
+Additionally:
+ - Always add tests and ensure they pass.
+ - Never break backward compatibility.
+ - Features and deprecations must be submitted against branch master.
 -->
+
