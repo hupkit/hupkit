@@ -23,6 +23,7 @@ use HubKit\Service\SplitshGit;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument as PropArgument;
 use Prophecy\Prophecy\ObjectProphecy;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Webmozart\Console\Api\Args\Args;
 use Webmozart\Console\Api\Args\Format\ArgsFormat;
 use Webmozart\Console\Api\Args\Format\Argument;
@@ -62,6 +63,8 @@ final class MergeHandlerTest extends TestCase
         $this->github->getOrganization()->willReturn('park-manager');
         $this->github->getRepository()->willReturn('hubkit');
         $this->github->getAuthUsername()->willReturn('sstok');
+        $this->expectCommitCount(1);
+
         $this->git->getActiveBranchName()->willReturn('master');
 
         $this->aliasResolver = $this->prophesize(BranchAliasResolver::class);
@@ -1091,6 +1094,50 @@ BODY
         $this->assertOutputMatches(['Pull request has been merged.', 'Your local "master" branch is updated.']);
     }
 
+    /**
+     * @test
+     */
+    public function it_asks_for_squash_with_multiple_commits_before_merging_when_asked()
+    {
+        $pr = $this->expectPrInfo();
+        $this->expectCommitStatus();
+        $this->expectCommits($pr);
+        $this->expectCommitCount(2);
+
+        $this->github->mergePullRequest(
+            self::PR_NUMBER,
+            'feature #42 Brand new design (sstok)',
+            PropArgument::exact(<<<'BODY'
+This PR was squashed before being merged into the 1.0-dev branch.
+
+Discussion
+----------
+
+There I fixed it
+
+Commits
+-------
+
+06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
+06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
+
+BODY
+),
+            self::HEAD_SHA,
+            true
+        )->willReturn(['sha' => self::MERGE_SHA]);
+
+        $this->expectNotes();
+        $this->expectLocalUpdate();
+        $this->expectLocalBranchNotExists();
+
+        $args = $this->getArgs();
+        $args->setArgument('number', '42');
+        $this->executeHandler($args, 'feature', ['yes']);
+
+        $this->assertOutputMatches(['Pull request has been merged.', 'Your local "master" branch is updated.']);
+    }
+
     /** @test */
     public function its_merge_subject_contains_all_authors()
     {
@@ -1597,7 +1644,13 @@ BODY
             PropArgument::any(),
             PropArgument::any(),
             PropArgument::any()
-        )->willReturn($category);
+        )->will(function ($args) use ($input, $category) {
+            if ($args[2] instanceof ConfirmationQuestion) {
+                return array_pop($input) === 'yes';
+            }
+
+            return $category;
+        });
 
         $style = $this->createStyle($input);
         $handler = new MergeHandler(
@@ -1801,5 +1854,10 @@ BODY
                 'title' => $title,
             ]
         );
+    }
+
+    private function expectCommitCount(int $count): void
+    {
+        $this->github->getPullrequestCommitCount(self::PR_NUMBER)->willReturn($count);
     }
 }
