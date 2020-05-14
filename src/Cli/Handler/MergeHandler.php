@@ -25,6 +25,7 @@ use HubKit\Service\MessageValidator;
 use HubKit\Service\SplitshGit;
 use HubKit\StringUtil;
 use Symfony\Component\Console\Question\ChoiceQuestion;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Webmozart\Console\Adapter\ArgsInput;
 use Webmozart\Console\Api\Args\Args;
@@ -73,7 +74,8 @@ final class MergeHandler extends GitBaseHandler
             ]
         );
 
-        if ($args->getOption('squash')) {
+        $squash = $this->determineSquash($args, $id);
+        if ($squash) {
             $this->style->note('This pull request will be squashed before being merged.');
         }
 
@@ -83,10 +85,10 @@ final class MergeHandler extends GitBaseHandler
         $branchLabel = $this->getBaseBranchLabel($pr['base']['ref']);
         $authors = [];
 
-        $message = $this->getCommitMessage($pr, $authors, $branchLabel, $args->getOption('squash'));
+        $message = $this->getCommitMessage($pr, $authors, $branchLabel, $squash);
         $title = $this->getCommitTitle($pr, $this->getCategory($pr, $args), $authors);
 
-        $mergeHash = $this->github->mergePullRequest($id, $title, $message, $pr['head']['sha'], $args->getOption('squash'))['sha'];
+        $mergeHash = $this->github->mergePullRequest($id, $title, $message, $pr['head']['sha'], $squash)['sha'];
 
         if (!$args->getOption('no-pat')) {
             $this->patAuthor($pr, $args->getOption('pat'));
@@ -478,5 +480,27 @@ COMMENT;
         if ($this->style->confirm('Close them now?')) {
             $this->github->closeIssues(...array_keys($candidates));
         }
+    }
+
+    private function determineSquash(Args $args, $pullrequestId)
+    {
+        if ($args->getOption('squash')) {
+            return true;
+        }
+
+        try {
+            $commitCount = $this->github->getPullrequestCommitCount($pullrequestId);
+            if ($commitCount > 1) {
+                return $this->questionHelper->ask(
+                    new ArgsInput($args->getRawArgs(), $args),
+                    $this->style,
+                    new ConfirmationQuestion('<comment>The PR contains more than 1 commit, would you like to squash the commits? (Y/n)</comment>', true)
+                );
+            }
+        } catch (\Exception $e) {
+            // Unable to get pr commit count, continue with merge.
+        }
+
+        return false;
     }
 }

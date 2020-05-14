@@ -248,6 +248,30 @@ class GitHub
         )['commits'];
     }
 
+    public function getPullrequestCommitCount($id): int
+    {
+        $graphql = $this->client->graphql();
+        $query = <<<'QUERY'
+query($owner: String!, $repo: String!, $prNumber: Int!) { 
+  repository (owner: $owner, name: $repo) {
+    pullRequest (number: $prNumber) {
+      commits {
+        totalCount
+      }
+    }
+  }
+}
+QUERY;
+
+        $result = $graphql->execute($query, ['owner' => $this->organization, 'repo' => $this->repository, 'prNumber' => $id]);
+
+        if (!isset($result['data'])) {
+            throw new \RuntimeException('Unable to determine commit count for pullrequest.');
+        }
+
+        return (int) $result['data']['repository']['pullRequest']['commits']['totalCount'];
+    }
+
     public function updatePullRequest($id, array $parameters)
     {
         $api = $this->client->pullRequest();
