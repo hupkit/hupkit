@@ -220,6 +220,7 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
                 ->setDescription('Switch the base of a pull request (and perform a rebase to prevent unwanted commits)')
                 ->addArgument('number', Argument::REQUIRED | Argument::INTEGER, 'The number of the pull request to switch')
                 ->addArgument('new-base', Argument::REQUIRED | Argument::STRING, 'New base of the pull-request (must exist in remote "upstream")')
+                ->addOption('skip-help', null, Option::NO_VALUE | Option::BOOLEAN, 'Skip the help message posted to the PR.')
                 ->setHandler(function () {
                     return new Handler\SwitchBaseHandler(
                         $this->container['style'],
