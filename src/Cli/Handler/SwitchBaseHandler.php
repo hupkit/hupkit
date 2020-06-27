@@ -59,7 +59,10 @@ final class SwitchBaseHandler extends GitBaseHandler
         $this->deleteTempBranch($tmpBranch);
 
         $this->github->updatePullRequest($pullRequest['number'], ['base' => $newBase]);
-        $this->postHelpComment($pullRequest, $branch);
+
+        if (!$args->getOption('skip-help')) {
+            $this->postHelpComment($pullRequest, $branch);
+        }
 
         if ($this->git->branchExists($branch)) {
             $this->style->note(
