@@ -232,6 +232,20 @@ class GitHub
         return $pager->fetchAll($this->client->repo()->statuses(), 'combined', [$org, $repo, $hash]);
     }
 
+    public function getCheckSuitesForReference(string $org, string $repo, string $hash): array
+    {
+        $pager = new ResultPager($this->client);
+
+        return $pager->fetchAll($this->client->repo()->checkSuites(), 'allForReference', [$org, $repo, $hash]);
+    }
+
+    public function getCheckRunsForCheckSuite(string $org, string $repo, int $checkSuiteId): array
+    {
+        $pager = new ResultPager($this->client);
+
+        return $pager->fetchAll($this->client->repo()->checkRuns(), 'allForCheckSuite', [$org, $repo, $checkSuiteId]);
+    }
+
     public function getCommits(string $org, string $repo, string $base, string $head): array
     {
         $pager = new ResultPager($this->client);

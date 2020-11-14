@@ -131,13 +131,14 @@ final class MergeHandler extends GitBaseHandler
 
     private function renderStatus(array $pr)
     {
-        $status = $this->github->getCommitStatuses(
-            $pr['base']['repo']['owner']['login'],
-            $pr['base']['repo']['name'],
-            $pr['head']['sha']
-        );
+        $org = $pr['base']['repo']['owner']['login'];
+        $name = $pr['base']['repo']['name'];
+        $sha = $pr['head']['sha'];
 
-        if ('pending' === $status['state']) {
+        $status = $this->github->getCommitStatuses($org, $name, $sha);
+        $checkSuites = $this->github->getCheckSuitesForReference($org, $name, $sha);
+
+        if ('pending' === $status['state'] || $this->hasPendingCheckSuites($checkSuites['check_suites'] ?? [])) {
             $this->style->warning('Status checks are pending, merge with caution.');
         }
 
@@ -150,10 +151,17 @@ final class MergeHandler extends GitBaseHandler
             $table->addRow($label, $statusItem['state'], $statusItem['description']);
         }
 
+        foreach ($checkSuites['check_suites'] ?? [] as $checkSuite) {
+            $checkRuns = $this->github->getCheckRunsForCheckSuite($org, $name, $checkSuite['id']);
+            foreach ($checkRuns['check_runs'] ?? [] as $statusItem) {
+                $table->addRow($statusItem['name'], $statusItem['conclusion'] ?? StatusTable::STATUS_PENDING, $statusItem['output']['title']);
+            }
+        }
+
         $this->determineReviewStatus($pr, $table);
         $table->render();
 
-        if ($table->hasStatus('error') || $table->hasStatus('pending') || $table->hasStatus('failure')) {
+        if ($table->hasFailureStatus()) {
             $this->style->warning('One or more status checks did not complete or failed. Merge with caution.');
         }
     }
@@ -499,6 +507,17 @@ COMMENT;
             }
         } catch (\Exception $e) {
             // Unable to get pr commit count, continue with merge.
+        }
+
+        return false;
+    }
+
+    private function hasPendingCheckSuites(array $checkSuites): bool
+    {
+        foreach ($checkSuites as $checkSuite) {
+            if ($checkSuite['status'] !== 'completed') {
+                return true;
+            }
         }
 
         return false;
