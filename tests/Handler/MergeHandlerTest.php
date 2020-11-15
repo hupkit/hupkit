@@ -1707,6 +1707,10 @@ BODY
     {
         $this->github->getCommitStatuses('park-manager', 'hubkit', self::HEAD_SHA)
             ->willReturn(['state' => $state, 'statuses' => $status]);
+        $this->github->getCheckSuitesForReference('park-manager', 'hubkit', self::HEAD_SHA)
+            ->willReturn(['check_suites' => [['id' => 1, 'status' => $state]]]);
+        $this->github->getCheckRunsForCheckSuite('park-manager', 'hubkit', 1)
+            ->willReturn(['check_runs' => [['name' => 'test run', 'conclusion' => 'success', 'output' => ['title' => 'Extra info']]]]);
     }
 
     private function expectCommits(array $pr, $author1 = 'sstok', $author2 = 'sstok')

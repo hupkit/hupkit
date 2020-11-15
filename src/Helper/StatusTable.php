@@ -24,8 +24,13 @@ class StatusTable
         'pending' => '<fg=yellow>Pending</>',
         'warning' => '<fg=yellow>Warning</>',
         'skipped' => '<fg=cyan>Skipped</>',
+        'cancelled' => '<fg=cyan>Cancelled</>',
         'error' => '<fg=red>Error</>',
+        'timed_out' => '<fg=red>Timed out</>',
+        'action_required' => '<fg=red>Action required</>',
     ];
+
+    public const STATUS_PENDING = 'pending';
 
     private $output;
     private $rows = [];
@@ -62,5 +67,18 @@ class StatusTable
     {
         $this->rows[] = [$label, self::STATUS_LABELS[$status], wordwrap((string) $message, 38)];
         $this->statuses[$status] = true;
+    }
+
+    public function hasFailureStatus(): bool
+    {
+        $statusses = ['error', 'pending', 'failure', 'action_required', 'timed_out'];
+
+        foreach ($statusses as $status) {
+            if ($this->hasStatus($status)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
