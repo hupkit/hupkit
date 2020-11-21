@@ -88,7 +88,7 @@ class UpMergeHandlerTest extends TestCase
         $this->process->mustRun(['git', 'merge', '--no-ff', '--log', '2.3'])->shouldBeCalled();
 
         $this->git->checkout('2.3')->shouldBeCalled();
-        $this->git->pushToRemote('upstream', ['2.5'], true)->shouldBeCalled();
+        $this->git->pushToRemote('upstream', ['2.5'])->shouldBeCalled();
 
         $this->executeHandler();
 
@@ -116,7 +116,7 @@ class UpMergeHandlerTest extends TestCase
         $this->process->mustRun(['git', 'merge', '--no-ff', '--log', '2.3'])->shouldBeCalled();
 
         $this->git->checkout('2.3')->shouldBeCalled();
-        $this->git->pushToRemote('upstream', ['2.5'], true)->shouldBeCalled();
+        $this->git->pushToRemote('upstream', ['2.5'])->shouldBeCalled();
 
         $this->executeHandler();
 
@@ -139,7 +139,7 @@ class UpMergeHandlerTest extends TestCase
         $this->process->mustRun(['git', 'merge', '--no-ff', '--log', '2.3'])->shouldBeCalled();
 
         $this->git->checkout('2.3')->shouldBeCalled();
-        $this->git->pushToRemote('upstream', ['2.5'], true)->shouldBeCalled();
+        $this->git->pushToRemote('upstream', ['2.5'])->shouldBeCalled();
 
         $this->executeHandler($this->getArgs()->setOption('no-split', true));
 
@@ -160,7 +160,7 @@ class UpMergeHandlerTest extends TestCase
         $this->process->mustRun(['git', 'merge', '--no-ff', '--log', '2.3'])->shouldBeCalled();
 
         $this->git->checkout('2.3')->shouldBeCalled();
-        $this->git->pushToRemote('upstream', ['2.x'], true)->shouldBeCalled();
+        $this->git->pushToRemote('upstream', ['2.x'])->shouldBeCalled();
 
         $this->executeHandler();
 
@@ -181,7 +181,7 @@ class UpMergeHandlerTest extends TestCase
         $this->process->mustRun(['git', 'merge', '--no-ff', '--log', '2.6'])->shouldBeCalled();
 
         $this->git->checkout('2.6')->shouldBeCalled();
-        $this->git->pushToRemote('upstream', ['master'], true)->shouldBeCalled();
+        $this->git->pushToRemote('upstream', ['master'])->shouldBeCalled();
 
         $this->executeHandler();
 
@@ -212,7 +212,7 @@ class UpMergeHandlerTest extends TestCase
         $this->process->mustRun(['git', 'merge', '--no-ff', '--log', '2.3'])->shouldBeCalled();
 
         $this->git->checkout('2.3')->shouldBeCalled();
-        $this->git->pushToRemote('upstream', ['2.5'], true)->shouldBeCalled();
+        $this->git->pushToRemote('upstream', ['2.5'])->shouldBeCalled();
 
         $this->executeHandler($this->getArgs()->setArgument('branch', '2.3'));
 
@@ -246,7 +246,7 @@ class UpMergeHandlerTest extends TestCase
         $this->process->mustRun(['git', 'merge', '--no-ff', '--log', '2.x'])->shouldBeCalled();
 
         $this->git->checkout('2.3')->shouldBeCalled();
-        $this->git->pushToRemote('upstream', ['2.5', '2.6', '2.x', 'master'], true)->shouldBeCalled();
+        $this->git->pushToRemote('upstream', ['2.5', '2.6', '2.x', 'master'])->shouldBeCalled();
 
         $this->executeHandler($this->getArgs()->setOption('all', true));
 
@@ -295,7 +295,7 @@ class UpMergeHandlerTest extends TestCase
         $this->process->mustRun(['git', 'merge', '--no-ff', '--log', '2.x'])->shouldBeCalled();
 
         $this->git->checkout('2.3')->shouldBeCalled();
-        $this->git->pushToRemote('upstream', ['2.5', '2.6', '2.x', 'master'], true)->shouldBeCalled();
+        $this->git->pushToRemote('upstream', ['2.5', '2.6', '2.x', 'master'])->shouldBeCalled();
 
         $this->executeHandler($this->getArgs()->setOption('all', true));
 
@@ -336,7 +336,7 @@ class UpMergeHandlerTest extends TestCase
         $this->process->mustRun(['git', 'merge', '--no-ff', '--log', '2.x'])->shouldBeCalled();
 
         $this->git->checkout('2.3')->shouldBeCalled();
-        $this->git->pushToRemote('upstream', ['2.5', '2.6', '2.x', 'master'], true)->shouldBeCalled();
+        $this->git->pushToRemote('upstream', ['2.5', '2.6', '2.x', 'master'])->shouldBeCalled();
 
         $this->executeHandler($this->getArgs()->setOption('all', true)->setOption('no-split', true));
 

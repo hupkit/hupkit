@@ -174,7 +174,7 @@ final class UpMergeHandler extends GitBaseHandler
                 return 0;
             }
 
-            $this->git->pushToRemote('upstream', $changedBranches, true);
+            $this->git->pushToRemote('upstream', $changedBranches);
             $this->style->success('Branch(es) where merged.');
         } catch (\Exception $e) {
             $this->style->error(
