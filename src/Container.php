@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace HubKit;
 
 use GuzzleHttp\Client as GuzzleClient;
-use Http\Adapter\Guzzle6\Client as GuzzleClientAdapter;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Process\ExecutableFinder;
@@ -86,7 +85,7 @@ class Container extends \Pimple\Container implements ContainerInterface
         //
 
         $this['github'] = function (self $container) {
-            return new Service\GitHub(new GuzzleClientAdapter($container['guzzle']), $container['config']);
+            return new Service\GitHub($container['guzzle'], $container['config']);
         };
     }
 
