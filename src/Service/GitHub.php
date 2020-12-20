@@ -262,7 +262,7 @@ class GitHub
         )['commits'];
     }
 
-    public function getPullrequestCommitCount($id): int
+    public function getPullRequestCommitCount($id): int
     {
         $graphql = $this->client->graphql();
         $query = <<<'QUERY'

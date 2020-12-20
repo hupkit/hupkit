@@ -236,7 +236,12 @@ final class MergeHandler extends GitBaseHandler
         $this->validateMessages($commits);
 
         foreach ($commits as $commit) {
-            $authors[$commit['author']['login']] = $commit['author']['login'];
+            if (! isset($commit['author'])) {
+                $authors[$pr['user']['login']] = $pr['user']['login'];
+            } else {
+                $authors[$commit['author']['login']] = $commit['author']['login'];
+            }
+
             $message .= $commit['sha'].' '.explode("\n", $commit['commit']['message'], 2)[0]."\n";
         }
 
@@ -497,7 +502,7 @@ COMMENT;
         }
 
         try {
-            $commitCount = $this->github->getPullrequestCommitCount($pullrequestId);
+            $commitCount = $this->github->getPullRequestCommitCount($pullrequestId);
             if ($commitCount > 1) {
                 return $this->questionHelper->ask(
                     new ArgsInput($args->getRawArgs(), $args),
