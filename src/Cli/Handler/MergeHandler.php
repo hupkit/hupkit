@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace HubKit\Cli\Handler;
 
-use GuzzleHttp\Exception\ClientException;
-use Http\Client\Exception\HttpException;
 use HubKit\Config;
 use HubKit\Helper\BranchAliasResolver;
 use HubKit\Helper\SingleLineChoiceQuestionHelper;
@@ -234,7 +232,7 @@ final class MergeHandler extends GitBaseHandler
         $this->validateMessages($commits);
 
         foreach ($commits as $commit) {
-            if (! isset($commit['author'])) {
+            if (!isset($commit['author'])) {
                 $authors[$pr['user']['login']] = $pr['user']['login'];
             } else {
                 $authors[$commit['author']['login']] = $commit['author']['login'];

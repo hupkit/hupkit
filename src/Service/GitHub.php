@@ -16,8 +16,8 @@ namespace HubKit\Service;
 use Github\Client as GitHubClient;
 use Github\HttpClient\Builder;
 use Github\ResultPager;
-use Psr\Http\Client\ClientInterface;
 use HubKit\Config;
+use Psr\Http\Client\ClientInterface;
 
 class GitHub
 {
