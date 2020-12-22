@@ -16,7 +16,7 @@ namespace HubKit\Service;
 use Github\Client as GitHubClient;
 use Github\HttpClient\Builder;
 use Github\ResultPager;
-use Http\Client\HttpClient;
+use Psr\Http\Client\ClientInterface;
 use HubKit\Config;
 
 class GitHub
@@ -34,7 +34,7 @@ class GitHub
     private $hostname;
     private $username;
 
-    public function __construct(HttpClient $client, Config $config)
+    public function __construct(ClientInterface $client, Config $config)
     {
         $this->httpClient = $client;
         $this->config = $config;
@@ -66,7 +66,7 @@ class GitHub
             $this->clientBuilder = new Builder($this->httpClient);
 
             $this->client = new GitHubClient($this->clientBuilder, null, $apiUrl);
-            $this->client->authenticate($apiToken, null, GitHubClient::AUTH_HTTP_TOKEN);
+            $this->client->authenticate($apiToken, null, GitHubClient::AUTH_ACCESS_TOKEN);
             $this->hostname = $hostname;
         }
     }
