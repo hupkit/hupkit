@@ -18,6 +18,11 @@ repository's branch protection you may not be able to merge then.
 Once the pull request is merged your local branch (if existent) is automatically
 updated. Use the `--no-pull` option to skip pulling changes to your local base branch.
 
+If you are the author of the pull request, your "feature" branch is automatically
+removed as it's no longer needed. Use the `--no-cleanup` option to skip this.
+
+**Note:** The branch is only removed when it's fully merged to the target branch.
+
 ## Bat on the back
 
 Once the pull request is merged the author (unless you are merging your own)
@@ -37,5 +42,3 @@ to prevent expansion.
 ## Squash
 
 Use the `--squash` option to squash the pull request before merging.
-
-

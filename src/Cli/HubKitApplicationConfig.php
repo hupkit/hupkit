@@ -201,6 +201,7 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
                 ->addOption('security', null, Option::BOOLEAN, 'Merge pull request as a security patch')
                 ->addOption('squash', null, Option::BOOLEAN, 'Squash the pull request before merging')
                 ->addOption('no-pull', null, Option::BOOLEAN, 'Skip pulling changes to your local branch')
+                ->addOption('no-cleanup', null, Option::BOOLEAN, 'Skip clean-up of feature branch (if present)')
                 ->addOption('pat', null, Option::OPTIONAL_VALUE | Option::STRING, 'Thank you message, @author will be replaced with pr author(s)', 'Thank you @author')
                 ->addOption('no-pat', null, Option::NO_VALUE | Option::BOOLEAN, 'Skip thank you message, cannot be used in combination with --pat')
                 ->setHandler(function () {
