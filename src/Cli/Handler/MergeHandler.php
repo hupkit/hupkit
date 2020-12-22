@@ -103,8 +103,6 @@ final class MergeHandler extends GitBaseHandler
             $this->splitRepository($pr);
         }
 
-        $this->detectClosableIssues($pr);
-
         if (!$args->getOption('squash')) {
             $this->removeSourceBranch($pr);
         }
@@ -452,46 +450,6 @@ COMMENT;
 
         if (!$this->style->confirm('Ignore problematic commits and continue anyway?', false)) {
             throw new \InvalidArgumentException('User aborted. Please fix commits contents before continuing.');
-        }
-    }
-
-    private function detectClosableIssues(array $pr): void
-    {
-        if (!preg_match('/\|\h+Fixed tickets\h+\|\h+((?:#\d+(?:\h*,\h*|\h+))*)/i', $pr['body'], $matches)) {
-            return;
-        }
-
-        $issueString = trim(preg_replace(['/(,|#)/', '/\h+/'], ' ', trim($matches[1])));
-
-        if ($issueString === '') {
-            return;
-        }
-
-        $candidates = [];
-
-        foreach (explode(' ', $issueString) as $issueNr) {
-            try {
-                $issue = $this->github->getIssue((int) $issueNr);
-
-                if ($issue['state'] === 'open') {
-                    $candidates[$issue['number']] = sprintf('%s : %s', $issue['html_url'], $issue['title']);
-                }
-            } catch (ClientException $e) {
-                continue;
-            } catch (HttpException $e) {
-                continue;
-            }
-        }
-
-        if (\count($candidates) < 0) {
-            return;
-        }
-
-        $this->style->section('The following issues can be closed after merging this pull request:');
-        $this->style->listing($candidates);
-
-        if ($this->style->confirm('Close them now?')) {
-            $this->github->closeIssues(...array_keys($candidates));
         }
     }
 
