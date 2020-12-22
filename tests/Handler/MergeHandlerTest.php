@@ -1199,6 +1199,66 @@ by who-else at 2014-11-23T14:50:24Z
     }
 
     /** @test */
+    public function its_merge_subject_correct_author_when_commit_has_no_author()
+    {
+        $pr = $this->expectPrInfo();
+        $this->expectCommitStatus();
+        $this->expectCommitsWithoutAuthor($pr);
+
+        $this->github->mergePullRequest(
+            self::PR_NUMBER,
+            'feature #42 Brand new design (sstok)',
+            PropArgument::exact(<<<'BODY'
+This PR was merged into the 1.0-dev branch.
+
+Discussion
+----------
+
+There I fixed it
+
+Commits
+-------
+
+06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
+06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
+
+BODY
+),
+            self::HEAD_SHA,
+            false
+        )->willReturn(['sha' => self::MERGE_SHA]);
+
+        $this->expectNotes(
+            [
+                ['user' => ['login' => 'someone'], 'created_at' => '2014-11-23T14:39:24Z', 'body' => 'Status: reviewed'],
+                ['user' => ['login' => 'who-else'], 'created_at' => '2014-11-23T14:50:24Z', 'body' => ':+1:'],
+            ],
+            '---------------------------------------------------------------------------
+
+by someone at 2014-11-23T14:39:24Z
+
+Status: reviewed
+
+---------------------------------------------------------------------------
+
+by who-else at 2014-11-23T14:50:24Z
+
+:+1:
+');
+
+        $this->expectLocalUpdate();
+        $this->expectLocalBranchNotExists();
+
+        $args = $this->getArgs();
+        $args->setArgument('number', '42');
+        $this->executeHandler($args);
+
+        $this->assertOutputMatches(
+            ['Pull request has been merged.', 'Pushing notes please wait...', 'Your local "master" branch is updated.']
+        );
+    }
+
+    /** @test */
     public function it_merges_a_pull_request_with_pending_status()
     {
         $pr = $this->expectPrInfo();
@@ -1713,7 +1773,7 @@ BODY
             ->willReturn(['check_runs' => [['name' => 'test run', 'conclusion' => 'success', 'output' => ['title' => 'Extra info']]]]);
     }
 
-    private function expectCommits(array $pr, $author1 = 'sstok', $author2 = 'sstok')
+    private function expectCommits(array $pr, string $author1 = 'sstok', string $author2 = 'sstok')
     {
         $this->github->getCommits(
             $pr['head']['user']['login'],
@@ -1729,6 +1789,33 @@ BODY
                 ],
                 [
                     'author' => ['login' => $author2],
+                    'sha' => '06f57b45415f0456719d578ca5003f9683b941fe',
+                    'commit' => [
+                        'message' => 'PullRequestMergeHandler was already committed'."\n\n".
+                                     'Anyway, moved some stuff to a base Handler class, '.
+                                     'review status (if any) and fixes for broken command',
+                    ],
+                ],
+            ]
+        );
+    }
+
+    private function expectCommitsWithoutAuthor(array $pr): void
+    {
+        $this->github->getCommits(
+            $pr['head']['user']['login'],
+            $pr['head']['repo']['name'],
+            $pr['base']['repo']['owner']['login'].':'.$pr['base']['ref'],
+            $pr['head']['ref']
+        )->willReturn(
+            [
+                [
+                    'author' => null,
+                    'sha' => '06f57b45415f0456719d578ca5003f9683b941fb',
+                    'commit' => ['message' => 'Properly handle repository requirement'],
+                ],
+                [
+                    'author' => null,
                     'sha' => '06f57b45415f0456719d578ca5003f9683b941fe',
                     'commit' => [
                         'message' => 'PullRequestMergeHandler was already committed'."\n\n".
