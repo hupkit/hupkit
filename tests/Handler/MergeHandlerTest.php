@@ -145,34 +145,42 @@ by who-else at 2014-11-23T14:50:24Z
     }
 
     /** @test */
-    public function it_merges_a_pull_request_and_does_not_fail_for_empty_issues()
+    public function it_merges_a_pull_request_and_splits_repository_when_confirmed()
     {
-        $body = '| Q             | A
-| ------------- | ---
-| Bug fix?      | yes
-| New feature?  | no
-| BC breaks?    | no
-| Deprecations? | no
-| Tests pass?   | yes
-| Fixed tickets | 
-| License       | MIT
+        $this->config = new Config([
+            'repos' => [
+                'github.com' => [
+                    'park-manager/hubkit' => [
+                        'sync-tags' => true,
+                        'split' => [
+                            'src/Component/Core' => 'git@github.com:park-manager/core.git',
+                            'src/Component/Model' => 'git@github.com:park-manager/model.git',
+                            'doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => false],
+                        ],
+                    ],
+                ],
+            ],
+        ]);
 
-It turned-out to me much easier to fix this than expected. When the prefix directory doesn\'t exist ignore the tagging for that repository.';
+        $this->splitshGit->checkPrecondition()->shouldBeCalled();
+        $this->expectGitSplit('src/Component/Core', '_core', 'git@github.com:park-manager/core.git', '09d103bae644592ebdc10a2665a2791c291fbea7');
+        $this->expectGitSplit('src/Component/Model', '_model', 'git@github.com:park-manager/model.git', 'b2faccdde512f226ae67e5e73a9f3259c83b933a', 0);
+        $this->expectGitSplit('doc', '_doc', 'git@github.com:park-manager/doc.git', 'c526695a61c698d220f5b2c68ce7b6c689013d55');
 
-        $pr = $this->expectPrInfo('sstok', [], 'open', true, $body);
+        $pr = $this->expectPrInfo();
         $this->expectCommitStatus();
         $this->expectCommits($pr);
 
         $this->github->mergePullRequest(
             self::PR_NUMBER,
             'feature #42 Brand new design (sstok)',
-            PropArgument::exact(<<<BODY
+            PropArgument::exact(<<<'BODY'
 This PR was merged into the 1.0-dev branch.
 
 Discussion
 ----------
 
-{$body}
+There I fixed it
 
 Commits
 -------
@@ -211,15 +219,15 @@ by who-else at 2014-11-23T14:50:24Z
         $args->setArgument('number', '42');
         $this->executeHandler($args, 'feature', ['yes']);
 
-        $this->assertOutputMatches(
-            [
-                'master branch is aliased as 1.0-dev (detected by composer.json "extra.branch-alias.dev-master")',
-                'Pull request has been merged.',
-                'Pushing notes please wait...',
-                'Your local "master" branch is updated.',
-            ]
-        );
-        $this->assertOutputNotMatches('The following issues can be closed after merging this pull request:');
+        $this->assertOutputMatches([
+            'master branch is aliased as 1.0-dev (detected by composer.json "extra.branch-alias.dev-master")',
+            'Pull request has been merged.',
+            'Pushing notes please wait...',
+            'Your local "master" branch is updated.',
+            'Split repository now?',
+            'Starting split operation please wait...',
+            ['3/3 \[[^\]]+\] 100%', true],
+        ]);
     }
 
     /** @test */
