@@ -41,8 +41,6 @@ class CliProcess
     /**
      * Runs an external process and waits until it is terminated.
      *
-     * @param Process $process
-     *
      * @throws ProcessFailedException
      */
     public function startAndWait(Process $process)

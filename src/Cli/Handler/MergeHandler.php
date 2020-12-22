@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace HubKit\Cli\Handler;
 
-use GuzzleHttp\Exception\ClientException;
-use Http\Client\Exception\HttpException;
 use HubKit\Config;
 use HubKit\Helper\BranchAliasResolver;
 use HubKit\Helper\SingleLineChoiceQuestionHelper;
@@ -102,8 +100,6 @@ final class MergeHandler extends GitBaseHandler
         if (!$args->getOption('no-pull') && $this->updateLocalBranch($pr['base']['ref'])) {
             $this->splitRepository($pr);
         }
-
-        $this->detectClosableIssues($pr);
 
         if (!$args->getOption('squash')) {
             $this->removeSourceBranch($pr);
@@ -236,7 +232,7 @@ final class MergeHandler extends GitBaseHandler
         $this->validateMessages($commits);
 
         foreach ($commits as $commit) {
-            if (! isset($commit['author'])) {
+            if (!isset($commit['author'])) {
                 $authors[$pr['user']['login']] = $pr['user']['login'];
             } else {
                 $authors[$commit['author']['login']] = $commit['author']['login'];
@@ -452,46 +448,6 @@ COMMENT;
 
         if (!$this->style->confirm('Ignore problematic commits and continue anyway?', false)) {
             throw new \InvalidArgumentException('User aborted. Please fix commits contents before continuing.');
-        }
-    }
-
-    private function detectClosableIssues(array $pr): void
-    {
-        if (!preg_match('/\|\h+Fixed tickets\h+\|\h+((?:#\d+(?:\h*,\h*|\h+))*)/i', $pr['body'], $matches)) {
-            return;
-        }
-
-        $issueString = trim(preg_replace(['/(,|#)/', '/\h+/'], ' ', trim($matches[1])));
-
-        if ($issueString === '') {
-            return;
-        }
-
-        $candidates = [];
-
-        foreach (explode(' ', $issueString) as $issueNr) {
-            try {
-                $issue = $this->github->getIssue((int) $issueNr);
-
-                if ($issue['state'] === 'open') {
-                    $candidates[$issue['number']] = sprintf('%s : %s', $issue['html_url'], $issue['title']);
-                }
-            } catch (ClientException $e) {
-                continue;
-            } catch (HttpException $e) {
-                continue;
-            }
-        }
-
-        if (\count($candidates) < 0) {
-            return;
-        }
-
-        $this->style->section('The following issues can be closed after merging this pull request:');
-        $this->style->listing($candidates);
-
-        if ($this->style->confirm('Close them now?')) {
-            $this->github->closeIssues(...array_keys($candidates));
         }
     }
 
