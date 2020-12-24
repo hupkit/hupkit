@@ -101,7 +101,7 @@ final class MergeHandler extends GitBaseHandler
             $this->splitRepository($pr);
         }
 
-        if (!$args->getOption('squash')) {
+        if (!$args->getOption('squash') && !$args->getOption('no-cleanup')) {
             $this->removeSourceBranch($pr);
         }
     }
@@ -400,9 +400,7 @@ COMMENT;
 
         $branch = $pr['head']['ref'];
 
-        if (!$this->git->branchExists($branch) ||
-            !$this->style->confirm(sprintf('Delete branch "%s" (origin and local)', $branch), true)
-        ) {
+        if (!$this->git->branchExists($branch)) {
             return;
         }
 

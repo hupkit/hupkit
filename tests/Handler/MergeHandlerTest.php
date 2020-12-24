@@ -596,7 +596,7 @@ BODY
     }
 
     /** @test */
-    public function it_keeps_local_and_remote_branch_when_not_confirmed()
+    public function it_keeps_local_and_remote_branch_when_auto_clean_disabled()
     {
         $pr = $this->expectPrInfo();
         $this->expectCommitStatus();
@@ -631,20 +631,20 @@ BODY
 
         $args = $this->getArgs();
         $args->setArgument('number', '42');
-        $this->executeHandler($args, 'feature', ['no']);
+        $args->setOption('no-cleanup', true);
+        $this->executeHandler($args, 'feature');
 
         $this->assertOutputNotMatches('Branch "feature-something" was deleted.');
         $this->assertOutputMatches(
             [
                 'Pull request has been merged.',
-                'Delete branch "feature-something" (origin and local) (yes/no)',
                 'Your local "master" branch is updated.',
             ]
         );
     }
 
     /** @test */
-    public function it_cleans_local_and_remote_branch_when_confirmed()
+    public function it_cleans_local_and_remote_branch()
     {
         $pr = $this->expectPrInfo();
         $this->expectCommitStatus();
@@ -679,13 +679,12 @@ BODY
 
         $args = $this->getArgs();
         $args->setArgument('number', '42');
-        $this->executeHandler($args, 'feature', ['yes']);
+        $this->executeHandler($args, 'feature');
 
         $this->assertOutputNotMatches('No remote configured for branch "feature-something", skipping deletion.');
         $this->assertOutputMatches(
             [
                 'Pull request has been merged.',
-                'Delete branch "feature-something" (origin and local) (yes/no)',
                 'Branch "feature-something" was deleted.',
                 'Your local "master" branch is updated.',
             ]
@@ -728,12 +727,11 @@ BODY
 
         $args = $this->getArgs();
         $args->setArgument('number', '42');
-        $this->executeHandler($args, 'feature', ['yes']);
+        $this->executeHandler($args, 'feature');
 
         $this->assertOutputMatches(
             [
                 'Pull request has been merged.',
-                'Delete branch "feature-something" (origin and local) (yes/no)',
                 'Branch "feature-something" was deleted.',
                 'No remote configured for branch "feature-something", skipping deletion.',
                 'Your local "master" branch is updated.',
@@ -1432,6 +1430,7 @@ BODY
             ->addOption(new Option('no-pull', null, Option::BOOLEAN))
             ->addOption(new Option('pat', null, Option::OPTIONAL_VALUE | Option::STRING, null, 'Thank you @author'))
             ->addOption(new Option('no-pat', null, Option::NO_VALUE | Option::BOOLEAN))
+            ->addOption(new Option('no-cleanup', null, Option::NO_VALUE | Option::BOOLEAN))
             ->addArgument(new Argument('number', Argument::REQUIRED | Argument::INTEGER))
             ->getFormat()
         ;
@@ -1677,18 +1676,6 @@ BODY
     private function expectGitSplit(string $prefix, string $remote, string $url, string $sha, int $commits = 3): void
     {
         $this->splitshGit->splitTo('master', $prefix, $url)->shouldBeCalled()->willReturn([$remote => [$sha, $url, $commits]]);
-    }
-
-    private function expectIssueProvides(int $id, string $title, string $state = 'open'): void
-    {
-        $this->github->getIssue($id)->willReturn(
-            [
-                'number' => $id,
-                'state' => $state,
-                'html_url' => 'https://github.com/park-manager/park-manager/issues/'.$id,
-                'title' => $title,
-            ]
-        );
     }
 
     private function expectCommitCount(int $count): void
