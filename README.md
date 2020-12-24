@@ -5,7 +5,7 @@
 [![Build Status](https://travis-ci.org/park-manager/hubkit.svg?branch=master)](https://travis-ci.org/park-manager/hubkit)
 
 HubKit was created to ease the development workflow of the Park-Manager project.
-In short HubKit allows project(s) maintainers to easily manage there GitHub repositories.
+In short HubKit allows project(s) maintainers to easily manage their GitHub repositories.
 
 Feel free to use it for your own projects.
 
