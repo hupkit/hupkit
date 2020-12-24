@@ -4,7 +4,7 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/park-manager/hubkit/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/park-manager/hubkit/?branch=master)
 [![Build Status](https://travis-ci.org/park-manager/hubkit.svg?branch=master)](https://travis-ci.org/park-manager/hubkit)
 
-HubKit was created to ease the development workflow of the Park-Manger project.
+HubKit was created to ease the development workflow of the Park-Manager project.
 In short HubKit allows project(s) maintainers to easily manage there GitHub repositories.
 
 Feel free to use it for your own projects.
