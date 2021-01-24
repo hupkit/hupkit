@@ -22,14 +22,14 @@ git fetch origin
 branchName=`git rev-parse --abbrev-ref HEAD`
 curDir=`pwd`
 
-if [ ${branchName} == "master" ]; then
-    echo "[WARNING] You are using the master version, please checkout the latest version instead."
+if [ ${branchName} == "1.x" ]; then
+    echo "[WARNING] You are using the 1.x version, please checkout the latest version instead."
     echo ""
 
-    git rebase origin/master || (echo "Something went wrong, please try again" && exit 1)
+    git rebase origin/1.x || (echo "Something went wrong, please try again" && exit 1)
 fi
 
-latest=`git describe --tags --abbrev=0 origin/master`
+latest=`git describe --tags --abbrev=0 origin/1.x`
 
 git checkout "tags/${latest}" -b "version-${latest}" || echo "Branch already exists it seems"
 
