@@ -222,6 +222,10 @@ final class MergeHandler extends GitBaseHandler
         $message .= $pr['body'];
         $message .= "\n\nCommits\n-------\n\n";
 
+        if (null === $pr['head']['repo']) {
+            throw new \RuntimeException('Can\'t merge this PR as the source repository (fork) was deleted.');
+        }
+
         $commits = $this->github->getCommits(
             $pr['head']['user']['login'],
             $pr['head']['repo']['name'],
