@@ -58,6 +58,8 @@ class UpMergeHandlerTest extends TestCase
         $this->github->getOrganization()->willReturn('park-manager');
         $this->github->getRepository()->willReturn('hubkit');
 
+        $this->github->getDefaultBranch()->willReturn('master');
+
         $this->process = $this->prophesize(CliProcess::class);
 
         $this->expectConfigHasSplits();
@@ -408,6 +410,42 @@ class UpMergeHandlerTest extends TestCase
             '[DRY-RUN] Merged "2.5" into "2.6"',
             '[DRY-RUN] Merged "2.6" into "2.x"',
             '[DRY-RUN] Merged "2.x" into "master"',
+        ]);
+    }
+
+    /** @test */
+    public function it_merges_current_branch_into_next_version_branches_without_master_branch()
+    {
+        $this->github->getDefaultBranch()->willReturn('2.x');
+
+        $this->git->getActiveBranchName()->willReturn('2.3');
+        $this->git->remoteUpdate('upstream')->shouldBeCalled();
+
+        $this->git->getVersionBranches('upstream')->willReturn(['2.2', '2.3', '2.5', '2.6', '2.x']);
+
+        $this->git->ensureBranchInSync('upstream', '2.3')->shouldBeCalled();
+
+        $this->git->checkoutRemoteBranch('upstream', '2.5')->shouldBeCalled();
+        $this->git->ensureBranchInSync('upstream', '2.5')->shouldBeCalled();
+        $this->process->mustRun(['git', 'merge', '--no-ff', '--log', '2.3'])->shouldBeCalled();
+
+        $this->git->checkoutRemoteBranch('upstream', '2.6')->shouldBeCalled();
+        $this->git->ensureBranchInSync('upstream', '2.6')->shouldBeCalled();
+        $this->process->mustRun(['git', 'merge', '--no-ff', '--log', '2.5'])->shouldBeCalled();
+
+        $this->git->checkoutRemoteBranch('upstream', '2.x')->shouldBeCalled();
+        $this->git->ensureBranchInSync('upstream', '2.x')->shouldBeCalled();
+        $this->process->mustRun(['git', 'merge', '--no-ff', '--log', '2.6'])->shouldBeCalled();
+
+        $this->git->checkout('2.3')->shouldBeCalled();
+        $this->git->pushToRemote('upstream', ['2.5', '2.6', '2.x'])->shouldBeCalled();
+
+        $this->executeHandler($this->getArgs()->setOption('all', true));
+
+        $this->assertOutputMatches([
+            'Merged "2.3" into "2.5"',
+            'Merged "2.5" into "2.6"',
+            'Merged "2.6" into "2.x"',
         ]);
     }
 

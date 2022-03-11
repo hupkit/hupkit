@@ -55,7 +55,7 @@ final class UpMergeHandler extends GitBaseHandler
         return $this->handleMerge($args, $branch);
     }
 
-    private function mergeAllBranches(string $branch, array $splitTargets): array
+    private function mergeAllBranches(string $branch, array $splitTargets, string $defaultBranch): array
     {
         $branches = $this->git->getVersionBranches('upstream');
 
@@ -66,7 +66,9 @@ final class UpMergeHandler extends GitBaseHandler
 
         $this->git->ensureBranchInSync('upstream', $branch);
 
-        $branches[] = 'master';
+        if (!\in_array($defaultBranch, $branches, true)) {
+            $branches[] = $defaultBranch;
+        }
         $changedBranches = [];
 
         for ($i = $idx + 1, $c = \count($branches); $i < $c; ++$i) {
@@ -111,7 +113,7 @@ final class UpMergeHandler extends GitBaseHandler
         return [$nextVersion];
     }
 
-    private function dryMergeAllBranches(string $branch): array
+    private function dryMergeAllBranches(string $branch, string $defaultBranch): array
     {
         $branches = $this->git->getVersionBranches('upstream');
 
@@ -124,7 +126,9 @@ final class UpMergeHandler extends GitBaseHandler
 
         $this->git->ensureBranchInSync('upstream', $branch);
 
-        $branches[] = 'master';
+        if (!\in_array($defaultBranch, $branches, true)) {
+            $branches[] = $defaultBranch;
+        }
         $changedBranches = [];
 
         for ($i = $idx + 1, $c = \count($branches); $i < $c; ++$i) {
@@ -163,7 +167,9 @@ final class UpMergeHandler extends GitBaseHandler
     {
         try {
             if ($args->getOption('all')) {
-                $changedBranches = $this->mergeAllBranches($branch, $this->getSplitTargets($args));
+                $defaultBranch = $this->github->getDefaultBranch();
+
+                $changedBranches = $this->mergeAllBranches($branch, $this->getSplitTargets($args), $defaultBranch);
             } else {
                 $changedBranches = $this->mergeSingleBranch($branch, $this->getSplitTargets($args));
             }
@@ -195,7 +201,9 @@ final class UpMergeHandler extends GitBaseHandler
     {
         try {
             if ($args->getOption('all')) {
-                $changedBranches = $this->dryMergeAllBranches($branch);
+                $defaultBranch = $this->github->getDefaultBranch();
+
+                $changedBranches = $this->dryMergeAllBranches($branch, $defaultBranch);
             } else {
                 $changedBranches = $this->dryMergeSingleBranch($branch);
             }
