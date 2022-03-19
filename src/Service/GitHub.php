@@ -329,6 +329,13 @@ QUERY;
         );
     }
 
+    public function getDefaultBranch(): string
+    {
+        $repo = $this->client->repo()->show($this->getOrganization(), $this->getRepository());
+
+        return $repo['default_branch'];
+    }
+
     private static function getValuesFromNestedArray(array $array, string $key)
     {
         $values = [];
