@@ -192,7 +192,7 @@ final class SelfDiagnoseHandler
     private function getGitVersion(): string
     {
         return explode(' ', trim($this->process->mustRun(
-                   'git --version',
+                   ['git', '--version'],
                    'Git is not installed or PATH is not properly configured.'
                )->getOutput()
            )

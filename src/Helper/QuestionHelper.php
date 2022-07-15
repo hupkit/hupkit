@@ -40,7 +40,7 @@ class QuestionHelper extends BaseQuestionHelper
     /**
      * {@inheritdoc}
      */
-    public function ask(InputInterface $input, OutputInterface $output, Question $question)
+    public function ask(InputInterface $input, OutputInterface $output, Question $question): mixed
     {
         if (null !== $this->maxAttempts) {
             $question->setMaxAttempts($this->maxAttempts);

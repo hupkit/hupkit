@@ -10,12 +10,12 @@
         }
     ],
     "require": {
-        "php": "^7.2|^8.0",
-        "symfony/process": "~3.4",
-        "symfony/event-dispatcher": "~3.4",
-        "symfony/filesystem": "~3.4",
-        "symfony/console": "^3.4",
-        "webmozart/console": "dev-master@dev",
+        "php": "^8.1",
+        "symfony/process": "^6.0",
+        "symfony/event-dispatcher": "^6.0",
+        "symfony/filesystem": "^6.0",
+        "symfony/console": "^6.0",
+        "webmozart/console": "^2.0",
         "pimple/pimple": "^3.0",
         "guzzlehttp/psr7": "^1.2",
         "guzzlehttp/guzzle": "^7.0.1",
@@ -26,9 +26,10 @@
         "composer/semver": "^1.5"
     },
     "require-dev": {
-        "phpunit/phpunit": "^7.3.1|^8.5.12",
-        "symfony/phpunit-bridge": "^4.1",
-        "symfony/debug": "^3.4"
+        "phpunit/phpunit": "^9.5.21",
+        "phpspec/prophecy-phpunit": "^v2.0.1",
+        "symfony/phpunit-bridge": "^6.0",
+        "symfony/error-handler": "^6.0"
     },
     "autoload": {
         "psr-4": {
@@ -45,7 +46,18 @@
     "extra": {
         "branch-alias": {
             "dev-master": "1.0-dev",
-            "dev-1.x": "1.1-dev"
+            "dev-1.x": "1.2-dev"
+        }
+    },
+    "repositories": [
+        {
+            "url": "https://github.com/park-manager/webmozart-console.git",
+            "type": "github"
+        }
+    ],
+    "config": {
+        "allow-plugins": {
+            "symfony/flex": true
         }
     }
 }

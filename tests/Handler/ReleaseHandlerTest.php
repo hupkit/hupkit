@@ -23,6 +23,7 @@ use HubKit\Service\ReleaseHooks;
 use HubKit\Service\SplitshGit;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument as PropArgument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
@@ -36,6 +37,7 @@ use Webmozart\Console\IO\BufferedIO;
 final class ReleaseHandlerTest extends TestCase
 {
     use SymfonyStyleTrait;
+    use ProphecyTrait;
 
     private const COMMITS = [
         [
@@ -494,7 +496,7 @@ labels: removed-deprecation
         $process = $this->prophesize(Process::class);
         $process->getOutput()->willReturn(implode("\n", $tags));
 
-        $this->process->mustRun('git tag --list')->willReturn($process->reveal());
+        $this->process->mustRun(['git', 'tag','--list'])->willReturn($process->reveal());
 
         if ($tags === []) {
             $this->git->getLastTagOnBranch()->willThrow(ProcessFailedException::class);

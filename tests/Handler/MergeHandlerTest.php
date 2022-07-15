@@ -83,7 +83,7 @@ final class MergeHandlerTest extends TestCase
     public function it_merges_a_pull_request_opened_by_merger()
     {
         $pr = $this->expectPrInfo();
-        $this->expectCommitStatus();
+        $this->expectCommitStatus([], 'pending');
         $this->expectCommits($pr);
 
         $this->github->mergePullRequest(
@@ -136,11 +136,70 @@ by who-else at 2014-11-23T14:50:24Z
 
         $this->assertOutputMatches(
             [
+                'Status checks are pending, merge with caution.',
                 'master branch is aliased as 1.0-dev (detected by composer.json "extra.branch-alias.dev-master")',
                 'Pull request has been merged.',
                 'Pushing notes please wait...',
                 'Your local "master" branch is updated.',
             ]
+        );
+    }
+
+    /** @test */
+    public function it_shows_ci_information()
+    {
+        $pr = $this->expectPrInfo();
+        $this->expectCommits($pr);
+        $this->expectNotes();
+
+        $this->expectCommitStatus([
+            ['description' => 'Run tests', 'state' => 'success', 'context' => 'github/ci-tests-PHP6'],
+            ['description' => 'Lower button must not be buttoned', 'state' => 'failure', 'context' => 'Gentlemans-gazette'],
+        ]);
+
+        $this->github->mergePullRequest(
+            self::PR_NUMBER,
+            'feature #42 Brand new design (sstok)',
+            PropArgument::exact(<<<'BODY'
+This PR was merged into the 1.0-dev branch.
+
+Discussion
+----------
+
+There I fixed it
+
+Commits
+-------
+
+06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
+06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
+
+BODY
+),
+            self::HEAD_SHA,
+            false
+        )->willReturn(['sha' => self::MERGE_SHA]);
+
+        $this->expectLocalUpdate();
+        $this->expectLocalBranchNotExists();
+
+        $args = $this->getArgs();
+        $args->setArgument('number', '42');
+        $this->executeHandler($args);
+
+        $this->assertOutputNotMatches('Status checks are pending, merge with caution.');
+
+        self::assertStringContainsString(
+            <<<'TABLE'
+            ---------------------------------------------------------------------
+              Item                  Status    Details                            
+            ---------------------------------------------------------------------
+              Ci-tests-PHP6         OK        Run tests                          
+              Gentlemans-gazette    FAIL      Lower button must not be buttoned  
+              test run              OK        Extra info                         
+            ---------------------------------------------------------------------
+            TABLE,
+            $this->getDisplay()
         );
     }
 
@@ -1506,10 +1565,10 @@ BODY
         return $pr;
     }
 
-    private function expectCommitStatus(array $status = [], string $state = 'success')
+    private function expectCommitStatus(array $statuses = [], string $state = 'success')
     {
         $this->github->getCommitStatuses('park-manager', 'hubkit', self::HEAD_SHA)
-            ->willReturn(['state' => $state, 'statuses' => $status]);
+            ->willReturn(['state' => $state, 'statuses' => $statuses]);
         $this->github->getCheckSuitesForReference('park-manager', 'hubkit', self::HEAD_SHA)
             ->willReturn(['check_suites' => [['id' => 1, 'status' => $state]]]);
         $this->github->getCheckRunsForCheckSuite('park-manager', 'hubkit', 1)

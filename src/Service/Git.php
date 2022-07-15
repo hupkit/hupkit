@@ -18,6 +18,7 @@ use HubKit\Exception\WorkingTreeIsNotReady;
 use HubKit\StringUtil;
 use Rollerworks\Component\Version\Version;
 use Symfony\Component\Console\Style\StyleInterface;
+use Symfony\Component\Process\Process;
 
 class Git
 {
@@ -86,7 +87,7 @@ class Git
 
     public function getActiveBranchName(): string
     {
-        $activeBranch = trim($this->process->mustRun('git rev-parse --abbrev-ref HEAD')->getOutput());
+        $activeBranch = trim($this->process->mustRun(['git', 'rev-parse', '--abbrev-ref', 'HEAD'])->getOutput());
 
         if ('HEAD' === $activeBranch) {
             throw new \RuntimeException(
@@ -195,7 +196,7 @@ class Git
                 $author = array_shift($commitData);
                 $subject = array_shift($commitData);
 
-                if (!preg_match('/^(feature|refactor|bug|minor|style|security)\s\#\d*\s.*\s\(.*\)$/', $subject)) {
+                if (!preg_match('/^(feature|refactor|bug|minor|style|security)\s#\d*\s.*\s\(.*\)$/', $subject)) {
                     return null;
                 }
 
@@ -228,7 +229,7 @@ class Git
     public function branchExists(string $branch): bool
     {
         $branches = StringUtil::splitLines(
-            $this->process->mustRun("git for-each-ref --format='%(refname:short)' refs/heads/")->getOutput()
+            $this->process->mustRun(['git', 'for-each-ref', '--format', '%(refname:short)', 'refs/heads/'])->getOutput()
         );
 
         return \in_array($branch, $branches, true);
@@ -330,11 +331,11 @@ class Git
 
     public function isWorkingTreeReady()
     {
-        if ('' !== trim($this->process->mustRun('git status --porcelain --untracked-files=no')->getOutput())) {
+        if ('' !== trim($this->process->mustRun(['git', 'status', '--porcelain', '--untracked-files=no'])->getOutput())) {
             return false;
         }
 
-        if ('' !== trim($this->process->run('ls `git rev-parse --git-dir` | grep rebase')->getOutput())) {
+        if ('' !== trim($this->process->run(Process::fromShellCommandline('ls `git rev-parse --git-dir` | grep rebase'))->getOutput())) {
             return false;
         }
 
@@ -519,7 +520,8 @@ class Git
     public function getGitDirectory(): string
     {
         if (null === $this->gitDir) {
-            $gitDir = trim($this->process->run('git rev-parse --git-dir')->getOutput());
+            $gitDir = trim($this->process->run(['git', 'rev-parse', '--git-dir'])->getOutput());
+
             if ('.git' === $gitDir) {
                 $gitDir = $this->getCwd().'/.git';
             }

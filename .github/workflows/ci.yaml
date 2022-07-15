@@ -14,7 +14,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                php-versions: ['7.2', '7.3', '7.4', '8.0']
+                php-versions: ['8.1']
 
         steps:
             # —— Setup Github actions 🐙 —————————————————————————————————————————————
@@ -44,7 +44,6 @@ jobs:
                     git config --global user.email s.stok@rollerscapes.net
 
                     rm -f composer.lock
-                    composer global require symfony/flex
                     composer install --no-progress --no-interaction --no-suggest --optimize-autoloader --ansi
 
             ## —— Tests ✅ ———————————————————————————————————————————————————————————
@@ -69,7 +68,7 @@ jobs:
                 name: Setup PHP, extensions and composer with shivammathur/setup-php
                 uses: shivammathur/setup-php@v2
                 with:
-                    php-version: '7.4'
+                    php-version: '8.1'
                     extensions: mbstring, ctype, iconv, bcmath, filter, json
                     coverage: none
 
@@ -78,7 +77,6 @@ jobs:
                 name: Install Composer dependencies
                 run: |
                     rm -f composer.lock
-                    composer global require symfony/flex
                     composer install --no-progress --no-interaction --no-suggest --optimize-autoloader --ansi
 
             -

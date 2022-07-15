@@ -45,9 +45,19 @@ class StatusTable
     {
         $table = new Table($this->output);
         $table->getStyle()
-            ->setHorizontalBorderChar('-')
-            ->setVerticalBorderChar('')
-            ->setCrossingChar('')
+            ->setCrossingChars(
+                cross: '',
+                topLeft: '',
+                topMid: '',
+                topRight: '',
+                midRight: '',
+                bottomRight: '',
+                bottomMid: '',
+                bottomLeft: '',
+                midLeft: '',
+            )
+            ->setHorizontalBorderChars('-', '-')
+            ->setVerticalBorderChars(outside: '', inside: '')
             ->setCellRowContentFormat('  %s  ');
 
         $table->setHeaders(['Item', 'Status', 'Details']);

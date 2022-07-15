@@ -89,7 +89,7 @@ trait SymfonyStyleTrait
                 $line = preg_replace('#\s+#', '\\s+', preg_quote($line, '#'));
             }
 
-            Assert::assertRegExp('#'.$line.'#m', $output);
+            Assert::assertMatchesRegularExpression('#'.$line.'#m', $output);
         }
     }
 
@@ -115,7 +115,7 @@ trait SymfonyStyleTrait
                 $line = preg_replace('#\s+#', '\\s+', preg_quote($line, '#'));
             }
 
-            Assert::assertNotRegExp('#'.$line.'#m', $output);
+            Assert::assertDoesNotMatchRegularExpression('#'.$line.'#m', $output);
         }
     }
 

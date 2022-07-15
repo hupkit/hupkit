@@ -478,7 +478,7 @@ COMMENT;
     private function hasPendingCheckSuites(array $checkSuites): bool
     {
         foreach ($checkSuites as $checkSuite) {
-            if ($checkSuite['status'] !== 'completed') {
+            if ($checkSuite['status'] === 'pending') {
                 return true;
             }
         }

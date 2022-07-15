@@ -48,7 +48,7 @@ trait GitTesterTrait
             mkdir($directory, 0777, true);
             $this->cwd = $directory;
 
-            $this->runCliCommand(['git', 'init']);
+            $this->runCliCommand(['git', 'init', '-b', 'master']);
         } finally {
             $this->cwd = $currentCwd;
         }
@@ -64,7 +64,7 @@ trait GitTesterTrait
             mkdir($directory, 0777, true);
             $this->cwd = $directory;
 
-            $this->runCliCommand(['git', 'init', '--bare']);
+            $this->runCliCommand(['git', 'init', '--bare', '-b', 'master']);
         } finally {
             $this->cwd = $currentCwd;
         }

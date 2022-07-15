@@ -34,7 +34,7 @@ final class FilesystemTest extends TestCase
     public function setUpTempDirectoryPath()
     {
         $this->tempDir = realpath(sys_get_temp_dir()).'/hbk-fs/'.substr(hash('sha256', (random_bytes(8))), 0, 10);
-        self::assertDirectoryNotExists($this->tempDir); // Pre-condition
+        self::assertDirectoryDoesNotExist($this->tempDir); // Pre-condition
     }
 
     /** @test */
