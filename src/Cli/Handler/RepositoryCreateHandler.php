@@ -31,15 +31,15 @@ final class RepositoryCreateHandler
         $this->github = $github;
     }
 
-    public function handle(Args $args)
+    public function handle(Args $args): void
     {
-        list($organization, $name) = explode('/', $args->getArgument('full-name'), 2);
+        [$organization, $name] = explode('/', $args->getArgument('full-name'), 2);
 
         $repo = $this->github->createRepo(
             $organization,
             $name,
-            !$args->getOption('private'),
-            !$args->getOption('no-issues')
+            ! $args->getOption('private'),
+            ! $args->getOption('no-issues')
         );
 
         $this->style->success(
@@ -49,8 +49,8 @@ final class RepositoryCreateHandler
                     $organization,
                     $name
                 ),
-                'Git: '.$repo['ssh_url'],
-                'Web: '.$repo['html_url'],
+                'Git: ' . $repo['ssh_url'],
+                'Web: ' . $repo['html_url'],
             ]
         );
 

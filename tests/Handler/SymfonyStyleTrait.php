@@ -45,7 +45,7 @@ trait SymfonyStyleTrait
 
     protected function getInputStream(array $input)
     {
-        $input = implode(PHP_EOL, $input);
+        $input = implode(\PHP_EOL, $input);
 
         $stream = fopen('php://memory', 'b+r', false);
         fwrite($stream, $input);
@@ -61,15 +61,15 @@ trait SymfonyStyleTrait
         $display = stream_get_contents($this->output->getStream());
 
         if ($normalize) {
-            $display = str_replace(PHP_EOL, "\n", $display);
+            $display = str_replace(\PHP_EOL, "\n", $display);
         }
 
         return $display;
     }
 
-    protected function assertOutputMatches($expectedLines, string $output = null, $regex = false)
+    protected function assertOutputMatches($expectedLines, string $output = null, $regex = false): void
     {
-        if (null === $output) {
+        if ($output === null) {
             $output = $this->getDisplay();
         }
 
@@ -85,17 +85,17 @@ trait SymfonyStyleTrait
                 $lineRegex = $regex;
             }
 
-            if (!$lineRegex) {
+            if (! $lineRegex) {
                 $line = preg_replace('#\s+#', '\\s+', preg_quote($line, '#'));
             }
 
-            Assert::assertMatchesRegularExpression('#'.$line.'#m', $output);
+            Assert::assertMatchesRegularExpression('#' . $line . '#m', $output);
         }
     }
 
-    protected function assertOutputNotMatches($lines, string $output = null, $regex = false)
+    protected function assertOutputNotMatches($lines, string $output = null, $regex = false): void
     {
-        if (null === $output) {
+        if ($output === null) {
             $output = $this->getDisplay();
         }
 
@@ -111,17 +111,17 @@ trait SymfonyStyleTrait
                 $lineRegex = $regex;
             }
 
-            if (!$lineRegex) {
+            if (! $lineRegex) {
                 $line = preg_replace('#\s+#', '\\s+', preg_quote($line, '#'));
             }
 
-            Assert::assertDoesNotMatchRegularExpression('#'.$line.'#m', $output);
+            Assert::assertDoesNotMatchRegularExpression('#' . $line . '#m', $output);
         }
     }
 
-    protected function assertNoOutput(string $output = null)
+    protected function assertNoOutput(string $output = null): void
     {
-        if (null === $output) {
+        if ($output === null) {
             $output = $this->getDisplay();
         }
 

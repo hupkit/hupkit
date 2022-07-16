@@ -33,9 +33,9 @@ class Editor
     {
         $editor = $this->getEditorExecutable();
 
-        if ('' !== $instructions) {
-            $instructions = "# THIS LINE IS AUTOMATICALLY REMOVED; $instructions\n\n";
-            $contents = $instructions.$contents;
+        if ($instructions !== '') {
+            $instructions = "# THIS LINE IS AUTOMATICALLY REMOVED; {$instructions}\n\n";
+            $contents = $instructions . $contents;
         }
 
         $tmpName = $this->filesystem->newTempFilename($contents);
@@ -47,7 +47,7 @@ class Editor
         $this->process->startAndWait($process);
         $contents = file_get_contents($tmpName);
 
-        if ('' !== $instructions) {
+        if ($instructions !== '') {
             $contents = preg_replace("/^# THIS LINE IS AUTOMATICALLY REMOVED;(.++)(\r?\n)/i", '', $contents);
         }
 
@@ -65,7 +65,7 @@ class Editor
 
     public function abortWhenEmpty(string $contents): string
     {
-        if ('' === trim($contents)) {
+        if (trim($contents) === '') {
             throw new \RuntimeException('No content found. User aborted.');
         }
 
@@ -76,7 +76,7 @@ class Editor
     {
         $editor = getenv('EDITOR');
 
-        if (false === $editor) {
+        if ($editor === false) {
             throw new \RuntimeException('No EDITOR environment variable set.');
         }
 

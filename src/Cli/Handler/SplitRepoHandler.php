@@ -37,10 +37,10 @@ final class SplitRepoHandler extends GitBaseHandler
         $this->git->guardWorkingTreeReady();
         $this->git->remoteUpdate('upstream');
 
-        $configName = ['repos', $this->github->getHostname(), $this->github->getOrganization().'/'.$this->github->getRepository(), 'split'];
+        $configName = ['repos', $this->github->getHostname(), $this->github->getOrganization() . '/' . $this->github->getRepository(), 'split'];
         $config = $this->config->get($configName);
 
-        if (null === $config) {
+        if ($config === null) {
             $this->style->error(
                 sprintf('Unable to split repository: No targets were found in config "[%s]", update the configuration file.', implode('][', $configName))
             );

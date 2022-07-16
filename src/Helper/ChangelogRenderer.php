@@ -30,7 +30,7 @@ class ChangelogRenderer
 
     public function renderChangelogOneLine(string $base, string $head): string
     {
-        $url = 'https://'.$this->github->getHostname().'/'.$this->github->getOrganization().'/'.$this->github->getRepository();
+        $url = 'https://' . $this->github->getHostname() . '/' . $this->github->getOrganization() . '/' . $this->github->getRepository();
         $changelog = '';
 
         foreach ($this->git->getLogBetweenCommits($base, $head) as $commit) {
@@ -45,12 +45,12 @@ class ChangelogRenderer
 
     public function renderChangelogByCategories(string $base, string $head, bool $skipEmptyLists = true): string
     {
-        $url = 'https://'.$this->github->getHostname().'/'.$this->github->getOrganization().'/'.$this->github->getRepository();
+        $url = 'https://' . $this->github->getHostname() . '/' . $this->github->getOrganization() . '/' . $this->github->getRepository();
         $changelog = '';
 
         foreach ($this->getItemsPerCategories($base, $head) as $category => $items) {
-            if (!\count($items)) {
-                if (!$skipEmptyLists) {
+            if (! \count($items)) {
+                if (! $skipEmptyLists) {
                     $changelog .= "### {$category}\n- nothing\n\n";
                 }
 
@@ -71,8 +71,8 @@ class ChangelogRenderer
 
     private function extractInfoFromSubject(string $subject, &$matches): bool
     {
-        return 0 !== stripos($subject, 'Merge pull request #') &&
-               preg_match('/^(?P<category>\w+) #(?P<number>\d+) (?P<title>.+?)$/', $subject, $matches);
+        return mb_stripos($subject, 'Merge pull request #') !== 0
+               && preg_match('/^(?P<category>\w+) #(?P<number>\d+) (?P<title>.+?)$/', $subject, $matches);
     }
 
     private function formatLine(array $item, string $url): string
@@ -81,19 +81,19 @@ class ChangelogRenderer
         $pos = mb_strrpos($title, '(');
 
         // Replace authors with links
-        $title = mb_substr($title, 0, $pos).
+        $title = mb_substr($title, 0, $pos) .
             preg_replace(
                 '#([\w\-_]+)#',
-                '[$1](https://'.$this->github->getHostname().'/$1)',
+                '[$1](https://' . $this->github->getHostname() . '/$1)',
                 mb_substr($title, $pos)
             )
         ;
 
         if (\in_array('bc-break', $item['labels'], true)) {
-            $title = '[BC BREAK] '.$title;
+            $title = '[BC BREAK] ' . $title;
         }
 
-        return sprintf('- %s [#%d](%s/issues/%2$d)', trim($title), $item['number'], $url)."\n";
+        return sprintf('- %s [#%d](%s/issues/%2$d)', trim($title), $item['number'], $url) . "\n";
     }
 
     private function getItemsPerCategories(string $base, string $head): array
@@ -108,7 +108,7 @@ class ChangelogRenderer
         ];
 
         foreach ($this->git->getLogBetweenCommits($base, $head) as $commit) {
-            if (!$this->extractInfoFromSubject($commit['subject'], $matches)) {
+            if (! $this->extractInfoFromSubject($commit['subject'], $matches)) {
                 continue;
             }
 
@@ -123,7 +123,7 @@ class ChangelogRenderer
     private function getCategoryForCommit(array $commit, array $labels): string
     {
         // Security can only ever be related about security.
-        if ('security' === $commit['category']) {
+        if ($commit['category'] === 'security') {
             return 'Security';
         }
 
@@ -146,11 +146,11 @@ class ChangelogRenderer
 
     private function getLabels(string $message): array
     {
-        list(, $labelsStr) = StringUtil::splitLines(ltrim($message));
+        [, $labelsStr] = StringUtil::splitLines(ltrim($message));
 
         // Detect labels eg. `labels: deprecation`
-        if (0 === strpos($labelsStr, 'labels: ')) {
-            return preg_split('/\s*,\s*/', substr($labelsStr, 8));
+        if (str_starts_with($labelsStr, 'labels: ')) {
+            return preg_split('/\s*,\s*/', mb_substr($labelsStr, 8));
         }
 
         return [];

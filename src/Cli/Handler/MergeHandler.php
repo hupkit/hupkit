@@ -52,9 +52,9 @@ final class MergeHandler extends GitBaseHandler
         $this->splitshGit = $splitshGit;
     }
 
-    public function handle(Args $args, IO $io)
+    public function handle(Args $args, IO $io): void
     {
-        if (!$io->isInteractive()) {
+        if (! $io->isInteractive()) {
             throw new \RuntimeException('This command can only be run in interactive mode.');
         }
 
@@ -67,12 +67,13 @@ final class MergeHandler extends GitBaseHandler
         $this->style->writeln(
             [
                 sprintf('Merging Pull Request <fg=yellow>%d: %s</>', $pr['number'], $pr['title']),
-                '<fg=yellow>'.$pr['html_url'].'</>',
+                '<fg=yellow>' . $pr['html_url'] . '</>',
                 '',
             ]
         );
 
         $squash = $this->determineSquash($args, $id);
+
         if ($squash) {
             $this->style->note('This pull request will be squashed before being merged.');
         }
@@ -88,7 +89,7 @@ final class MergeHandler extends GitBaseHandler
 
         $mergeHash = $this->github->mergePullRequest($id, $title, $message, $pr['head']['sha'], $squash)['sha'];
 
-        if (!$args->getOption('no-pat')) {
+        if (! $args->getOption('no-pat')) {
             $this->patAuthor($pr, $args->getOption('pat'));
         }
 
@@ -97,35 +98,35 @@ final class MergeHandler extends GitBaseHandler
 
         $this->style->success('Pull request has been merged.');
 
-        if (!$args->getOption('no-pull') && $this->updateLocalBranch($pr['base']['ref'])) {
+        if (! $args->getOption('no-pull') && $this->updateLocalBranch($pr['base']['ref'])) {
             $this->splitRepository($pr);
         }
 
-        if (!$args->getOption('squash') && !$args->getOption('no-cleanup')) {
+        if (! $args->getOption('squash') && ! $args->getOption('no-cleanup')) {
             $this->removeSourceBranch($pr);
         }
     }
 
-    private function guardMergeStatus(array $pr)
+    private function guardMergeStatus(array $pr): void
     {
-        if ('closed' === $pr['state']) {
+        if ($pr['state'] === 'closed') {
             throw new \InvalidArgumentException('Cannot merge closed pull request.');
         }
 
-        if (null === $pr['mergeable']) {
+        if ($pr['mergeable'] === null) {
             throw new \InvalidArgumentException(
                 'Pull request is not processed yet. Please try again in a few seconds.'
             );
         }
 
-        if (true === $pr['mergeable']) {
+        if ($pr['mergeable'] === true) {
             return;
         }
 
         throw new \InvalidArgumentException('Pull request has conflicts which need to be resolved first.');
     }
 
-    private function renderStatus(array $pr)
+    private function renderStatus(array $pr): void
     {
         $org = $pr['base']['repo']['owner']['login'];
         $name = $pr['base']['repo']['name'];
@@ -134,7 +135,7 @@ final class MergeHandler extends GitBaseHandler
         $status = $this->github->getCommitStatuses($org, $name, $sha);
         $checkSuites = $this->github->getCheckSuitesForReference($org, $name, $sha);
 
-        if ('pending' === $status['state'] || $this->hasPendingCheckSuites($checkSuites['check_suites'] ?? [])) {
+        if ($status['state'] === 'pending' || $this->hasPendingCheckSuites($checkSuites['check_suites'] ?? [])) {
             $this->style->warning('Status checks are pending, merge with caution.');
         }
 
@@ -149,6 +150,7 @@ final class MergeHandler extends GitBaseHandler
 
         foreach ($checkSuites['check_suites'] ?? [] as $checkSuite) {
             $checkRuns = $this->github->getCheckRunsForCheckSuite($org, $name, $checkSuite['id']);
+
             foreach ($checkRuns['check_runs'] ?? [] as $statusItem) {
                 $table->addRow($statusItem['name'], $statusItem['conclusion'] ?? StatusTable::STATUS_PENDING, $statusItem['output']['title']);
             }
@@ -162,9 +164,9 @@ final class MergeHandler extends GitBaseHandler
         }
     }
 
-    private function determineReviewStatus(array $pr, StatusTable $table)
+    private function determineReviewStatus(array $pr, StatusTable $table): void
     {
-        if (!\count($pr['labels'])) {
+        if (! \count($pr['labels'])) {
             return;
         }
 
@@ -177,7 +179,7 @@ final class MergeHandler extends GitBaseHandler
         ];
 
         foreach ($pr['labels'] as $label) {
-            $name = strtolower($label['name']);
+            $name = mb_strtolower($label['name']);
 
             if (isset($expects[$name])) {
                 $table->addRow('Reviewed', $expects[$name], $label['name']);
@@ -190,7 +192,7 @@ final class MergeHandler extends GitBaseHandler
     private function getBaseBranchLabel(string $ref): string
     {
         // Only the master branch is aliased.
-        if ('master' !== $ref) {
+        if ($ref !== 'master') {
             return $ref;
         }
 
@@ -212,9 +214,9 @@ final class MergeHandler extends GitBaseHandler
     private function getCommitMessage(array $pr, array &$authors, string $branchLabel, bool $squash = false): string
     {
         if ($squash) {
-            $message = sprintf('This PR was squashed before being merged into the %s branch.', $branchLabel)."\n";
+            $message = sprintf('This PR was squashed before being merged into the %s branch.', $branchLabel) . "\n";
         } else {
-            $message = sprintf('This PR was merged into the %s branch.', $branchLabel)."\n";
+            $message = sprintf('This PR was merged into the %s branch.', $branchLabel) . "\n";
         }
 
         $message .= $this->prLabelsToMergeMessage($pr['labels']);
@@ -222,27 +224,27 @@ final class MergeHandler extends GitBaseHandler
         $message .= $pr['body'];
         $message .= "\n\nCommits\n-------\n\n";
 
-        if (null === $pr['head']['repo']) {
+        if ($pr['head']['repo'] === null) {
             throw new \RuntimeException('Can\'t merge this PR as the source repository (fork) was deleted.');
         }
 
         $commits = $this->github->getCommits(
             $pr['head']['user']['login'],
             $pr['head']['repo']['name'],
-            $pr['base']['repo']['owner']['login'].':'.$pr['base']['ref'],
+            $pr['base']['repo']['owner']['login'] . ':' . $pr['base']['ref'],
             $pr['head']['ref']
         );
 
         $this->validateMessages($commits);
 
         foreach ($commits as $commit) {
-            if (!isset($commit['author'])) {
+            if (! isset($commit['author'])) {
                 $authors[$pr['user']['login']] = $pr['user']['login'];
             } else {
                 $authors[$commit['author']['login']] = $commit['author']['login'];
             }
 
-            $message .= $commit['sha'].' '.explode("\n", $commit['commit']['message'], 2)[0]."\n";
+            $message .= $commit['sha'] . ' ' . explode("\n", $commit['commit']['message'], 2)[0] . "\n";
         }
 
         return $message;
@@ -268,7 +270,7 @@ final class MergeHandler extends GitBaseHandler
         ];
 
         foreach ($pr['labels'] as $label) {
-            $labelName = strtolower($label['name']);
+            $labelName = mb_strtolower($label['name']);
 
             if (isset($categories[$labelName])) {
                 $guessedCat = $labelName;
@@ -294,7 +296,7 @@ final class MergeHandler extends GitBaseHandler
         ];
 
         foreach ($prLabels as $label) {
-            $labelName = strtolower($label['name']);
+            $labelName = mb_strtolower($label['name']);
 
             if (isset($labelToMergeLabel[$labelName])) {
                 $labels[] = $labelToMergeLabel[$labelName];
@@ -302,33 +304,33 @@ final class MergeHandler extends GitBaseHandler
         }
 
         if ($labels) {
-            return 'labels: '.implode(',', $labels)."\n\n";
+            return 'labels: ' . implode(',', $labels) . "\n\n";
         }
 
         return "\n";
     }
 
-    private function patAuthor(array $pr, string $message = null)
+    private function patAuthor(array $pr, string $message = null): void
     {
         if ($this->github->getAuthUsername() === $pr['user']['login']) {
             return;
         }
 
-        $this->github->createComment($pr['number'], str_replace('@author', '@'.$pr['user']['login'], $message));
+        $this->github->createComment($pr['number'], str_replace('@author', '@' . $pr['user']['login'], $message));
     }
 
-    private function addCommentsToMergeCommit(array $pr, $sha)
+    private function addCommentsToMergeCommit(array $pr, $sha): void
     {
         $commentText = '';
 
         $commentTemplate = <<<COMMENT
----------------------------------------------------------------------------
+            ---------------------------------------------------------------------------
 
-by %s at %s
+            by %s at %s
 
-%s
-\n
-COMMENT;
+            %s
+            \n
+            COMMENT;
 
         foreach ($this->github->getComments($pr['number']) as $comment) {
             $commentText .= sprintf(
@@ -347,18 +349,18 @@ COMMENT;
         $this->git->remoteUpdate('upstream');
         $this->git->addNotes($commentText, $sha, 'github-comments');
 
-        if ('' !== $commentText) {
+        if ($commentText !== '') {
             $this->git->pushToRemote('upstream', 'refs/notes/github-comments');
         }
     }
 
     private function updateLocalBranch(string $branch): bool
     {
-        if (!$this->git->branchExists($branch)) {
+        if (! $this->git->branchExists($branch)) {
             return false;
         }
 
-        if (!$this->git->isWorkingTreeReady()) {
+        if (! $this->git->isWorkingTreeReady()) {
             $this->style->warning('The Git working tree has uncommitted changes, unable to update your local branch.');
 
             return false;
@@ -372,12 +374,12 @@ COMMENT;
         return true;
     }
 
-    private function splitRepository(array $pr)
+    private function splitRepository(array $pr): void
     {
-        $configName = ['repos', $this->github->getHostname(), $this->github->getOrganization().'/'.$this->github->getRepository()];
+        $configName = ['repos', $this->github->getHostname(), $this->github->getOrganization() . '/' . $this->github->getRepository()];
         $reposConfig = $this->config->get($configName);
 
-        if (empty($reposConfig['split']) || !$this->style->confirm('Split repository now?')) {
+        if (empty($reposConfig['split']) || ! $this->style->confirm('Split repository now?')) {
             return;
         }
 
@@ -393,24 +395,24 @@ COMMENT;
         }
     }
 
-    private function removeSourceBranch(array $pr)
+    private function removeSourceBranch(array $pr): void
     {
-        if (!$this->git->isWorkingTreeReady() ||
-            $this->github->getAuthUsername() !== $pr['user']['login'] ||
-            !$this->git->branchExists($pr['base']['ref'])
+        if (! $this->git->isWorkingTreeReady()
+            || $this->github->getAuthUsername() !== $pr['user']['login']
+            || ! $this->git->branchExists($pr['base']['ref'])
         ) {
             return;
         }
 
         $branch = $pr['head']['ref'];
 
-        if (!$this->git->branchExists($branch)) {
+        if (! $this->git->branchExists($branch)) {
             return;
         }
 
         $this->git->checkout($pr['base']['ref']);
 
-        if ('' !== $remote = $this->git->getGitConfig('branch.'.$branch.'.remote')) {
+        if ('' !== $remote = $this->git->getGitConfig('branch.' . $branch . '.remote')) {
             $this->git->deleteRemoteBranch($remote, $branch);
         } else {
             $this->style->note(sprintf('No remote configured for branch "%s", skipping deletion.', $branch));
@@ -438,9 +440,7 @@ COMMENT;
 
         $this->style->warning('On or more commits are problematic, make sure this is correct.');
         $this->style->writeln(
-            array_map(function ($element) {
-                return sprintf(' * <fg=yellow>%s</>', implode("\n   ", StringUtil::splitLines($element)));
-            }, $messages)
+            array_map(static fn ($element) => sprintf(' * <fg=yellow>%s</>', implode("\n   ", StringUtil::splitLines($element))), $messages)
         );
         $this->style->newLine();
 
@@ -448,7 +448,7 @@ COMMENT;
             throw new \InvalidArgumentException('Please fix the commits contents before continuing.');
         }
 
-        if (!$this->style->confirm('Ignore problematic commits and continue anyway?', false)) {
+        if (! $this->style->confirm('Ignore problematic commits and continue anyway?', false)) {
             throw new \InvalidArgumentException('User aborted. Please fix commits contents before continuing.');
         }
     }
@@ -461,6 +461,7 @@ COMMENT;
 
         try {
             $commitCount = $this->github->getPullRequestCommitCount($pullrequestId);
+
             if ($commitCount > 1) {
                 return $this->questionHelper->ask(
                     new ArgsInput($args->getRawArgs(), $args),
@@ -468,7 +469,7 @@ COMMENT;
                     new ConfirmationQuestion('<comment>The PR contains more than 1 commit, would you like to squash the commits? (Y/n)</comment>', true)
                 );
             }
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             // Unable to get pr commit count, continue with merge.
         }
 

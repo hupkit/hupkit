@@ -22,6 +22,7 @@ use HubKit\Service\GitHub;
 use HubKit\Service\SplitshGit;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument as PropArgument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Webmozart\Console\Api\Args\Args;
@@ -31,9 +32,14 @@ use Webmozart\Console\Api\Args\Format\Option;
 use Webmozart\Console\Args\StringArgs;
 use Webmozart\Console\IO\BufferedIO;
 
+/**
+ * @internal
+ */
 final class MergeHandlerTest extends TestCase
 {
+    use ProphecyTrait;
     use SymfonyStyleTrait;
+
     private const PR_NUMBER = 42;
     private const PR_BRANCH = 'feature-something';
     private const HEAD_SHA = '1b04532c8a09d9084abce36f8d9daf675f89eacc';
@@ -53,10 +59,10 @@ final class MergeHandlerTest extends TestCase
     private $io;
 
     /** @before */
-    public function setUpCommandHandler()
+    public function setUpCommandHandler(): void
     {
         $this->git = $this->prophesize(Git::class);
-        $this->git->guardWorkingTreeReady()->willReturn(null);
+//        $this->git->guardWorkingTreeReady()->willReturn(null);
 
         $this->github = $this->prophesize(GitHub::class);
         $this->github->getHostname()->willReturn('github.com');
@@ -80,7 +86,7 @@ final class MergeHandlerTest extends TestCase
     }
 
     /** @test */
-    public function it_merges_a_pull_request_opened_by_merger()
+    public function it_merges_a_pull_request_opened_by_merger(): void
     {
         $pr = $this->expectPrInfo();
         $this->expectCommitStatus([], 'pending');
@@ -90,21 +96,21 @@ final class MergeHandlerTest extends TestCase
             self::PR_NUMBER,
             'feature #42 Brand new design (sstok)',
             PropArgument::exact(<<<'BODY'
-This PR was merged into the 1.0-dev branch.
+                This PR was merged into the 1.0-dev branch.
 
-Discussion
-----------
+                Discussion
+                ----------
 
-There I fixed it
+                There I fixed it
 
-Commits
--------
+                Commits
+                -------
 
-06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
-06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
+                06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
+                06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
 
-BODY
-),
+                BODY
+            ),
             self::HEAD_SHA,
             false
         )->willReturn(['sha' => self::MERGE_SHA]);
@@ -146,7 +152,7 @@ by who-else at 2014-11-23T14:50:24Z
     }
 
     /** @test */
-    public function it_shows_ci_information()
+    public function it_shows_ci_information(): void
     {
         $pr = $this->expectPrInfo();
         $this->expectCommits($pr);
@@ -161,21 +167,21 @@ by who-else at 2014-11-23T14:50:24Z
             self::PR_NUMBER,
             'feature #42 Brand new design (sstok)',
             PropArgument::exact(<<<'BODY'
-This PR was merged into the 1.0-dev branch.
+                This PR was merged into the 1.0-dev branch.
 
-Discussion
-----------
+                Discussion
+                ----------
 
-There I fixed it
+                There I fixed it
 
-Commits
--------
+                Commits
+                -------
 
-06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
-06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
+                06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
+                06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
 
-BODY
-),
+                BODY
+            ),
             self::HEAD_SHA,
             false
         )->willReturn(['sha' => self::MERGE_SHA]);
@@ -189,22 +195,24 @@ BODY
 
         $this->assertOutputNotMatches('Status checks are pending, merge with caution.');
 
-        self::assertStringContainsString(
+        self::assertMatchesRegularExpression(
             <<<'TABLE'
-            ---------------------------------------------------------------------
-              Item                  Status    Details                            
-            ---------------------------------------------------------------------
-              Ci-tests-PHP6         OK        Run tests                          
-              Gentlemans-gazette    FAIL      Lower button must not be buttoned  
-              test run              OK        Extra info                         
-            ---------------------------------------------------------------------
-            TABLE,
+                {
+                ---------------------------------------------------------------------
+                \s+Item\s+Status\h+Details\h+
+                ---------------------------------------------------------------------
+                \h+Ci-tests-PHP6\h+OK\h+Run\h+tests\h+
+                \h+Gentlemans-gazette\h+FAIL\h+Lower\h+button\h+must\h+not\h+be\h+buttoned\h+
+                \h+test\h+run\h+OK\h+Extra\h+info\h+
+                ---------------------------------------------------------------------
+                }
+                TABLE,
             $this->getDisplay()
         );
     }
 
     /** @test */
-    public function it_merges_a_pull_request_and_splits_repository_when_confirmed()
+    public function it_merges_a_pull_request_and_splits_repository_when_confirmed(): void
     {
         $this->config = new Config([
             'repos' => [
@@ -234,21 +242,21 @@ BODY
             self::PR_NUMBER,
             'feature #42 Brand new design (sstok)',
             PropArgument::exact(<<<'BODY'
-This PR was merged into the 1.0-dev branch.
+                This PR was merged into the 1.0-dev branch.
 
-Discussion
-----------
+                Discussion
+                ----------
 
-There I fixed it
+                There I fixed it
 
-Commits
--------
+                Commits
+                -------
 
-06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
-06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
+                06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
+                06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
 
-BODY
-),
+                BODY
+            ),
             self::HEAD_SHA,
             false
         )->willReturn(['sha' => self::MERGE_SHA]);
@@ -290,7 +298,7 @@ by who-else at 2014-11-23T14:50:24Z
     }
 
     /** @test */
-    public function it_merges_a_pull_request_and_skips_repository_split_when_confirm_is_rejected()
+    public function it_merges_a_pull_request_and_skips_repository_split_when_confirm_is_rejected(): void
     {
         $this->config = new Config([
             'repos' => [
@@ -315,21 +323,21 @@ by who-else at 2014-11-23T14:50:24Z
             self::PR_NUMBER,
             'feature #42 Brand new design (sstok)',
             PropArgument::exact(<<<'BODY'
-This PR was merged into the 1.0-dev branch.
+                This PR was merged into the 1.0-dev branch.
 
-Discussion
-----------
+                Discussion
+                ----------
 
-There I fixed it
+                There I fixed it
 
-Commits
--------
+                Commits
+                -------
 
-06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
-06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
+                06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
+                06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
 
-BODY
-),
+                BODY
+            ),
             self::HEAD_SHA,
             false
         )->willReturn(['sha' => self::MERGE_SHA]);
@@ -371,7 +379,7 @@ by who-else at 2014-11-23T14:50:24Z
     }
 
     /** @test */
-    public function it_merges_a_pull_request_and_skips_repository_split_when_local_branch_is_not_ready()
+    public function it_merges_a_pull_request_and_skips_repository_split_when_local_branch_is_not_ready(): void
     {
         $this->config = new Config([
             'repos' => [
@@ -396,21 +404,21 @@ by who-else at 2014-11-23T14:50:24Z
             self::PR_NUMBER,
             'feature #42 Brand new design (sstok)',
             PropArgument::exact(<<<'BODY'
-This PR was merged into the 1.0-dev branch.
+                This PR was merged into the 1.0-dev branch.
 
-Discussion
-----------
+                Discussion
+                ----------
 
-There I fixed it
+                There I fixed it
 
-Commits
--------
+                Commits
+                -------
 
-06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
-06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
+                06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
+                06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
 
-BODY
-),
+                BODY
+            ),
             self::HEAD_SHA,
             false
         )->willReturn(['sha' => self::MERGE_SHA]);
@@ -451,7 +459,7 @@ by who-else at 2014-11-23T14:50:24Z
     }
 
     /** @test */
-    public function it_merges_a_pull_request_and_skips_repository_split_when_local_branch_does_exist()
+    public function it_merges_a_pull_request_and_skips_repository_split_when_local_branch_does_exist(): void
     {
         $this->config = new Config([
             'repos' => [
@@ -476,21 +484,21 @@ by who-else at 2014-11-23T14:50:24Z
             self::PR_NUMBER,
             'feature #42 Brand new design (sstok)',
             PropArgument::exact(<<<'BODY'
-This PR was merged into the 1.0-dev branch.
+                This PR was merged into the 1.0-dev branch.
 
-Discussion
-----------
+                Discussion
+                ----------
 
-There I fixed it
+                There I fixed it
 
-Commits
--------
+                Commits
+                -------
 
-06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
-06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
+                06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
+                06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
 
-BODY
-),
+                BODY
+            ),
             self::HEAD_SHA,
             false
         )->willReturn(['sha' => self::MERGE_SHA]);
@@ -530,7 +538,7 @@ by who-else at 2014-11-23T14:50:24Z
     }
 
     /** @test */
-    public function it_skips_updating_base_when_missing()
+    public function it_skips_updating_base_when_missing(): void
     {
         $pr = $this->expectPrInfo();
         $this->expectCommitStatus();
@@ -540,21 +548,21 @@ by who-else at 2014-11-23T14:50:24Z
             self::PR_NUMBER,
             'feature #42 Brand new design (sstok)',
             PropArgument::exact(<<<'BODY'
-This PR was merged into the 1.0-dev branch.
+                This PR was merged into the 1.0-dev branch.
 
-Discussion
-----------
+                Discussion
+                ----------
 
-There I fixed it
+                There I fixed it
 
-Commits
--------
+                Commits
+                -------
 
-06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
-06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
+                06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
+                06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
 
-BODY
-),
+                BODY
+            ),
             self::HEAD_SHA,
             false
         )->willReturn(['sha' => self::MERGE_SHA]);
@@ -572,7 +580,7 @@ BODY
     }
 
     /** @test */
-    public function it_skips_updating_base_when_wc_not_ready()
+    public function it_skips_updating_base_when_wc_not_ready(): void
     {
         $pr = $this->expectPrInfo();
         $this->expectCommitStatus();
@@ -582,21 +590,21 @@ BODY
             self::PR_NUMBER,
             'feature #42 Brand new design (sstok)',
             PropArgument::exact(<<<'BODY'
-This PR was merged into the 1.0-dev branch.
+                This PR was merged into the 1.0-dev branch.
 
-Discussion
-----------
+                Discussion
+                ----------
 
-There I fixed it
+                There I fixed it
 
-Commits
--------
+                Commits
+                -------
 
-06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
-06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
+                06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
+                06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
 
-BODY
-),
+                BODY
+            ),
             self::HEAD_SHA,
             false
         )->willReturn(['sha' => self::MERGE_SHA]);
@@ -614,7 +622,7 @@ BODY
     }
 
     /** @test */
-    public function it_merges_a_pull_request_with_comments()
+    public function it_merges_a_pull_request_with_comments(): void
     {
         $pr = $this->expectPrInfo();
         $this->expectCommitStatus();
@@ -624,21 +632,21 @@ BODY
             self::PR_NUMBER,
             'feature #42 Brand new design (sstok)',
             PropArgument::exact(<<<'BODY'
-This PR was merged into the 1.0-dev branch.
+                This PR was merged into the 1.0-dev branch.
 
-Discussion
-----------
+                Discussion
+                ----------
 
-There I fixed it
+                There I fixed it
 
-Commits
--------
+                Commits
+                -------
 
-06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
-06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
+                06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
+                06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
 
-BODY
-),
+                BODY
+            ),
             self::HEAD_SHA,
             false
         )->willReturn(['sha' => self::MERGE_SHA]);
@@ -655,7 +663,7 @@ BODY
     }
 
     /** @test */
-    public function it_keeps_local_and_remote_branch_when_auto_clean_disabled()
+    public function it_keeps_local_and_remote_branch_when_auto_clean_disabled(): void
     {
         $pr = $this->expectPrInfo();
         $this->expectCommitStatus();
@@ -665,21 +673,21 @@ BODY
             self::PR_NUMBER,
             'feature #42 Brand new design (sstok)',
             PropArgument::exact(<<<'BODY'
-This PR was merged into the 1.0-dev branch.
+                This PR was merged into the 1.0-dev branch.
 
-Discussion
-----------
+                Discussion
+                ----------
 
-There I fixed it
+                There I fixed it
 
-Commits
--------
+                Commits
+                -------
 
-06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
-06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
+                06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
+                06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
 
-BODY
-),
+                BODY
+            ),
             self::HEAD_SHA,
             false
         )->willReturn(['sha' => self::MERGE_SHA]);
@@ -703,7 +711,7 @@ BODY
     }
 
     /** @test */
-    public function it_cleans_local_and_remote_branch()
+    public function it_cleans_local_and_remote_branch(): void
     {
         $pr = $this->expectPrInfo();
         $this->expectCommitStatus();
@@ -713,21 +721,21 @@ BODY
             self::PR_NUMBER,
             'feature #42 Brand new design (sstok)',
             PropArgument::exact(<<<'BODY'
-This PR was merged into the 1.0-dev branch.
+                This PR was merged into the 1.0-dev branch.
 
-Discussion
-----------
+                Discussion
+                ----------
 
-There I fixed it
+                There I fixed it
 
-Commits
--------
+                Commits
+                -------
 
-06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
-06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
+                06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
+                06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
 
-BODY
-),
+                BODY
+            ),
             self::HEAD_SHA,
             false
         )->willReturn(['sha' => self::MERGE_SHA]);
@@ -751,7 +759,7 @@ BODY
     }
 
     /** @test */
-    public function it_cleans_only_local_branch_when_confirmed_and_no_remote_is_set()
+    public function it_cleans_only_local_branch_when_confirmed_and_no_remote_is_set(): void
     {
         $pr = $this->expectPrInfo();
         $this->expectCommitStatus();
@@ -761,21 +769,21 @@ BODY
             self::PR_NUMBER,
             'feature #42 Brand new design (sstok)',
             PropArgument::exact(<<<'BODY'
-This PR was merged into the 1.0-dev branch.
+                This PR was merged into the 1.0-dev branch.
 
-Discussion
-----------
+                Discussion
+                ----------
 
-There I fixed it
+                There I fixed it
 
-Commits
--------
+                Commits
+                -------
 
-06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
-06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
+                06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
+                06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
 
-BODY
-),
+                BODY
+            ),
             self::HEAD_SHA,
             false
         )->willReturn(['sha' => self::MERGE_SHA]);
@@ -799,7 +807,7 @@ BODY
     }
 
     /** @test */
-    public function it_skips_cleaning_local_and_or_branch_when_not_owned()
+    public function it_skips_cleaning_local_and_or_branch_when_not_owned(): void
     {
         $pr = $this->expectPrInfo('doctor-who');
         $this->expectCommitStatus();
@@ -809,21 +817,21 @@ BODY
             self::PR_NUMBER,
             'feature #42 Brand new design (sstok)',
             PropArgument::exact(<<<'BODY'
-This PR was merged into the 1.0-dev branch.
+                This PR was merged into the 1.0-dev branch.
 
-Discussion
-----------
+                Discussion
+                ----------
 
-There I fixed it
+                There I fixed it
 
-Commits
--------
+                Commits
+                -------
 
-06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
-06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
+                06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
+                06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
 
-BODY
-),
+                BODY
+            ),
             self::HEAD_SHA,
             false
         )->willReturn(['sha' => self::MERGE_SHA]);
@@ -854,7 +862,7 @@ BODY
     }
 
     /** @test */
-    public function it_squashes_before_merging_when_asked()
+    public function it_squashes_before_merging_when_asked(): void
     {
         $pr = $this->expectPrInfo();
         $this->expectCommitStatus();
@@ -864,21 +872,21 @@ BODY
             self::PR_NUMBER,
             'feature #42 Brand new design (sstok)',
             PropArgument::exact(<<<'BODY'
-This PR was squashed before being merged into the 1.0-dev branch.
+                This PR was squashed before being merged into the 1.0-dev branch.
 
-Discussion
-----------
+                Discussion
+                ----------
 
-There I fixed it
+                There I fixed it
 
-Commits
--------
+                Commits
+                -------
 
-06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
-06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
+                06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
+                06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
 
-BODY
-),
+                BODY
+            ),
             self::HEAD_SHA,
             true
         )->willReturn(['sha' => self::MERGE_SHA]);
@@ -898,7 +906,7 @@ BODY
     /**
      * @test
      */
-    public function it_asks_for_squash_with_multiple_commits_before_merging_when_asked()
+    public function it_asks_for_squash_with_multiple_commits_before_merging_when_asked(): void
     {
         $pr = $this->expectPrInfo();
         $this->expectCommitStatus();
@@ -909,21 +917,21 @@ BODY
             self::PR_NUMBER,
             'feature #42 Brand new design (sstok)',
             PropArgument::exact(<<<'BODY'
-This PR was squashed before being merged into the 1.0-dev branch.
+                This PR was squashed before being merged into the 1.0-dev branch.
 
-Discussion
-----------
+                Discussion
+                ----------
 
-There I fixed it
+                There I fixed it
 
-Commits
--------
+                Commits
+                -------
 
-06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
-06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
+                06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
+                06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
 
-BODY
-),
+                BODY
+            ),
             self::HEAD_SHA,
             true
         )->willReturn(['sha' => self::MERGE_SHA]);
@@ -940,7 +948,7 @@ BODY
     }
 
     /** @test */
-    public function its_merge_subject_contains_all_authors()
+    public function its_merge_subject_contains_all_authors(): void
     {
         $pr = $this->expectPrInfo();
         $this->expectCommitStatus();
@@ -950,21 +958,21 @@ BODY
             self::PR_NUMBER,
             'feature #42 Brand new design (doctor-wo, sstok)',
             PropArgument::exact(<<<'BODY'
-This PR was merged into the 1.0-dev branch.
+                This PR was merged into the 1.0-dev branch.
 
-Discussion
-----------
+                Discussion
+                ----------
 
-There I fixed it
+                There I fixed it
 
-Commits
--------
+                Commits
+                -------
 
-06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
-06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
+                06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
+                06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
 
-BODY
-),
+                BODY
+            ),
             self::HEAD_SHA,
             false
         )->willReturn(['sha' => self::MERGE_SHA]);
@@ -1000,7 +1008,7 @@ by who-else at 2014-11-23T14:50:24Z
     }
 
     /** @test */
-    public function its_merge_subject_correct_author_when_commit_has_no_author()
+    public function its_merge_subject_correct_author_when_commit_has_no_author(): void
     {
         $pr = $this->expectPrInfo();
         $this->expectCommitStatus();
@@ -1010,21 +1018,21 @@ by who-else at 2014-11-23T14:50:24Z
             self::PR_NUMBER,
             'feature #42 Brand new design (sstok)',
             PropArgument::exact(<<<'BODY'
-This PR was merged into the 1.0-dev branch.
+                This PR was merged into the 1.0-dev branch.
 
-Discussion
-----------
+                Discussion
+                ----------
 
-There I fixed it
+                There I fixed it
 
-Commits
--------
+                Commits
+                -------
 
-06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
-06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
+                06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
+                06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
 
-BODY
-),
+                BODY
+            ),
             self::HEAD_SHA,
             false
         )->willReturn(['sha' => self::MERGE_SHA]);
@@ -1060,7 +1068,7 @@ by who-else at 2014-11-23T14:50:24Z
     }
 
     /** @test */
-    public function it_merges_a_pull_request_with_pending_status()
+    public function it_merges_a_pull_request_with_pending_status(): void
     {
         $pr = $this->expectPrInfo();
         $this->expectCommitStatus([], 'pending');
@@ -1070,21 +1078,21 @@ by who-else at 2014-11-23T14:50:24Z
             self::PR_NUMBER,
             'feature #42 Brand new design (sstok)',
             PropArgument::exact(<<<'BODY'
-This PR was merged into the 1.0-dev branch.
+                This PR was merged into the 1.0-dev branch.
 
-Discussion
-----------
+                Discussion
+                ----------
 
-There I fixed it
+                There I fixed it
 
-Commits
--------
+                Commits
+                -------
 
-06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
-06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
+                06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
+                06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
 
-BODY
-),
+                BODY
+            ),
             self::HEAD_SHA,
             false
         )->willReturn(['sha' => self::MERGE_SHA]);
@@ -1108,7 +1116,7 @@ BODY
     }
 
     /** @test */
-    public function it_shows_status_table_with_warning_for_pending()
+    public function it_shows_status_table_with_warning_for_pending(): void
     {
         $pr = $this->expectPrInfo();
         $this->expectCommitStatus([
@@ -1129,21 +1137,21 @@ BODY
             self::PR_NUMBER,
             'feature #42 Brand new design (sstok)',
             PropArgument::exact(<<<'BODY'
-This PR was merged into the 1.0-dev branch.
+                This PR was merged into the 1.0-dev branch.
 
-Discussion
-----------
+                Discussion
+                ----------
 
-There I fixed it
+                There I fixed it
 
-Commits
--------
+                Commits
+                -------
 
-06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
-06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
+                06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
+                06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
 
-BODY
-),
+                BODY
+            ),
             self::HEAD_SHA,
             false
         )->willReturn(['sha' => self::MERGE_SHA]);
@@ -1167,7 +1175,7 @@ BODY
     }
 
     /** @test */
-    public function it_shows_status_table_with_all_success()
+    public function it_shows_status_table_with_all_success(): void
     {
         $pr = $this->expectPrInfo();
         $this->expectCommitStatus([
@@ -1188,21 +1196,21 @@ BODY
             self::PR_NUMBER,
             'feature #42 Brand new design (sstok)',
             PropArgument::exact(<<<'BODY'
-This PR was merged into the 1.0-dev branch.
+                This PR was merged into the 1.0-dev branch.
 
-Discussion
-----------
+                Discussion
+                ----------
 
-There I fixed it
+                There I fixed it
 
-Commits
--------
+                Commits
+                -------
 
-06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
-06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
+                06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
+                06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
 
-BODY
-),
+                BODY
+            ),
             self::HEAD_SHA,
             false
         )->willReturn(['sha' => self::MERGE_SHA]);
@@ -1229,7 +1237,7 @@ BODY
      * @test
      * @dataProvider provideStatusLabels
      */
-    public function it_shows_status_table_with_review_status(array $labels, bool $success = true, string $row = '')
+    public function it_shows_status_table_with_review_status(array $labels, bool $success = true, string $row = ''): void
     {
         $pr = $this->expectPrInfo('sstok', $labels);
         $this->expectCommitStatus();
@@ -1239,21 +1247,21 @@ BODY
             self::PR_NUMBER,
             'feature #42 Brand new design (sstok)',
             PropArgument::exact(<<<'BODY'
-This PR was merged into the 1.0-dev branch.
+                This PR was merged into the 1.0-dev branch.
 
-Discussion
-----------
+                Discussion
+                ----------
 
-There I fixed it
+                There I fixed it
 
-Commits
--------
+                Commits
+                -------
 
-06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
-06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
+                06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
+                06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
 
-BODY
-),
+                BODY
+            ),
             self::HEAD_SHA,
             false
         )->willReturn(['sha' => self::MERGE_SHA]);
@@ -1272,7 +1280,7 @@ BODY
             $expected[] = $row;
         }
 
-        if (!$success) {
+        if (! $success) {
             $expected[] = 'One or more status checks did not complete or failed. Merge with caution.';
         } else {
             $this->assertOutputNotMatches('One or more status checks did not complete or failed. Merge with caution.');
@@ -1295,7 +1303,7 @@ BODY
     }
 
     /** @test */
-    public function it_includes_info_labels_in_merge_commit_message()
+    public function it_includes_info_labels_in_merge_commit_message(): void
     {
         $pr = $this->expectPrInfo('sstok', ['Bug', 'Deprecation', 'BC Break']);
         $this->expectCommitStatus();
@@ -1305,22 +1313,22 @@ BODY
             self::PR_NUMBER,
             'feature #42 Brand new design (sstok)',
             PropArgument::exact(<<<'BODY'
-This PR was squashed before being merged into the 1.0-dev branch.
-labels: deprecation,bc-break
+                This PR was squashed before being merged into the 1.0-dev branch.
+                labels: deprecation,bc-break
 
-Discussion
-----------
+                Discussion
+                ----------
 
-There I fixed it
+                There I fixed it
 
-Commits
--------
+                Commits
+                -------
 
-06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
-06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
+                06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
+                06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
 
-BODY
-),
+                BODY
+            ),
             self::HEAD_SHA,
             true
         )->willReturn(['sha' => self::MERGE_SHA]);
@@ -1338,7 +1346,7 @@ BODY
     }
 
     /** @test */
-    public function it_checks_pr_is_open()
+    public function it_checks_pr_is_open(): void
     {
         $this->expectPrInfo('sstok', [], 'closed');
 
@@ -1352,7 +1360,7 @@ BODY
     }
 
     /** @test */
-    public function it_checks_commit_messages_contents_and_fails_for_high_severity()
+    public function it_checks_commit_messages_contents_and_fails_for_high_severity(): void
     {
         $pr = $this->expectPrInfo();
         $this->expectCommitStatus();
@@ -1364,7 +1372,7 @@ BODY
         try {
             $this->executeHandler($args, 'feature', ['yes']);
 
-            $this->fail('Should have throw an exception.');
+            self::fail('Should have throw an exception.');
         } catch (\InvalidArgumentException $e) {
             self::assertEquals('Please fix the commits contents before continuing.', $e->getMessage());
 
@@ -1379,7 +1387,7 @@ BODY
     }
 
     /** @test */
-    public function it_checks_commit_messages_contents_rejects_acceptance()
+    public function it_checks_commit_messages_contents_rejects_acceptance(): void
     {
         $pr = $this->expectPrInfo();
         $this->expectCommitStatus();
@@ -1391,7 +1399,7 @@ BODY
         try {
             $this->executeHandler($args, 'feature', ['no']);
 
-            $this->fail('Should have throw an exception.');
+            self::fail('Should have throw an exception.');
         } catch (\InvalidArgumentException $e) {
             self::assertEquals('User aborted. Please fix commits contents before continuing.', $e->getMessage());
 
@@ -1406,7 +1414,7 @@ BODY
     }
 
     /** @test */
-    public function it_checks_commit_messages_contents_allows_acceptance()
+    public function it_checks_commit_messages_contents_allows_acceptance(): void
     {
         $pr = $this->expectPrInfo();
         $this->expectCommitStatus();
@@ -1416,21 +1424,21 @@ BODY
             self::PR_NUMBER,
             'feature #42 Brand new design (sstok)',
             PropArgument::exact(<<<'BODY'
-This PR was merged into the 1.0-dev branch.
+                This PR was merged into the 1.0-dev branch.
 
-Discussion
-----------
+                Discussion
+                ----------
 
-There I fixed it
+                There I fixed it
 
-Commits
--------
+                Commits
+                -------
 
-06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
-06f57b45415f0456719d578ca5003f9683b941fe OH: PullRequestMergeHandler was already committed
+                06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
+                06f57b45415f0456719d578ca5003f9683b941fe OH: PullRequestMergeHandler was already committed
 
-BODY
-),
+                BODY
+            ),
             self::HEAD_SHA,
             false
         )->willReturn(['sha' => self::MERGE_SHA]);
@@ -1455,7 +1463,7 @@ BODY
     }
 
     /** @test */
-    public function it_checks_pr_is_mergeable()
+    public function it_checks_pr_is_mergeable(): void
     {
         $this->expectPrInfo('sstok', [], 'open', null);
 
@@ -1469,7 +1477,7 @@ BODY
     }
 
     /** @test */
-    public function it_checks_pr_is_mergeable_with_false()
+    public function it_checks_pr_is_mergeable_with_false(): void
     {
         $this->expectPrInfo('sstok', [], 'open', false);
 
@@ -1497,7 +1505,7 @@ BODY
         return new Args($format, new StringArgs(''));
     }
 
-    private function executeHandler(Args $args, string $category = 'feature', array $input = [])
+    private function executeHandler(Args $args, string $category = 'feature', array $input = []): void
     {
         // XXX Ugly comment: This was the only way to make this work for now, in the feature I plan to
         // use an adapter/replacement for SymfonyStyle where all styling takes place. - Sebastiaan Stok
@@ -1506,7 +1514,7 @@ BODY
             PropArgument::any(),
             PropArgument::any(),
             PropArgument::any()
-        )->will(function ($args) use ($input, $category) {
+        )->will(static function ($args) use ($input, $category) {
             if ($args[2] instanceof ConfirmationQuestion) {
                 return array_pop($input) === 'yes';
             }
@@ -1543,7 +1551,7 @@ BODY
                 'state' => $state,
                 'title' => 'Brand new design',
                 'body' => $body,
-                'html_url' => 'https://github.com/park-manager/hubkit/pull/'.$number,
+                'html_url' => 'https://github.com/park-manager/hubkit/pull/' . $number,
                 'base' => ['ref' => 'master', 'repo' => ['name' => 'hubkit', 'owner' => ['login' => 'park-manager']]],
                 'head' => [
                     'ref' => self::PR_BRANCH,
@@ -1554,9 +1562,7 @@ BODY
                 'mergeable' => $mergeable,
                 'user' => ['login' => $author],
                 'labels' => array_map(
-                    function ($label) {
-                        return ['name' => $label, 'color' => '#ffff'];
-                    },
+                    static fn ($label) => ['name' => $label, 'color' => '#ffff'],
                     $labels
                 ),
             ]
@@ -1565,22 +1571,25 @@ BODY
         return $pr;
     }
 
-    private function expectCommitStatus(array $statuses = [], string $state = 'success')
+    private function expectCommitStatus(array $statuses = [], string $state = 'success'): void
     {
         $this->github->getCommitStatuses('park-manager', 'hubkit', self::HEAD_SHA)
-            ->willReturn(['state' => $state, 'statuses' => $statuses]);
+            ->willReturn(['state' => $state, 'statuses' => $statuses])
+        ;
         $this->github->getCheckSuitesForReference('park-manager', 'hubkit', self::HEAD_SHA)
-            ->willReturn(['check_suites' => [['id' => 1, 'status' => $state]]]);
+            ->willReturn(['check_suites' => [['id' => 1, 'status' => $state]]])
+        ;
         $this->github->getCheckRunsForCheckSuite('park-manager', 'hubkit', 1)
-            ->willReturn(['check_runs' => [['name' => 'test run', 'conclusion' => 'success', 'output' => ['title' => 'Extra info']]]]);
+            ->willReturn(['check_runs' => [['name' => 'test run', 'conclusion' => 'success', 'output' => ['title' => 'Extra info']]]])
+        ;
     }
 
-    private function expectCommits(array $pr, string $author1 = 'sstok', string $author2 = 'sstok')
+    private function expectCommits(array $pr, string $author1 = 'sstok', string $author2 = 'sstok'): void
     {
         $this->github->getCommits(
             $pr['head']['user']['login'],
             $pr['head']['repo']['name'],
-            $pr['base']['repo']['owner']['login'].':'.$pr['base']['ref'],
+            $pr['base']['repo']['owner']['login'] . ':' . $pr['base']['ref'],
             $pr['head']['ref']
         )->willReturn(
             [
@@ -1593,8 +1602,8 @@ BODY
                     'author' => ['login' => $author2],
                     'sha' => '06f57b45415f0456719d578ca5003f9683b941fe',
                     'commit' => [
-                        'message' => 'PullRequestMergeHandler was already committed'."\n\n".
-                                     'Anyway, moved some stuff to a base Handler class, '.
+                        'message' => 'PullRequestMergeHandler was already committed' . "\n\n" .
+                                     'Anyway, moved some stuff to a base Handler class, ' .
                                      'review status (if any) and fixes for broken command',
                     ],
                 ],
@@ -1607,7 +1616,7 @@ BODY
         $this->github->getCommits(
             $pr['head']['user']['login'],
             $pr['head']['repo']['name'],
-            $pr['base']['repo']['owner']['login'].':'.$pr['base']['ref'],
+            $pr['base']['repo']['owner']['login'] . ':' . $pr['base']['ref'],
             $pr['head']['ref']
         )->willReturn(
             [
@@ -1620,8 +1629,8 @@ BODY
                     'author' => null,
                     'sha' => '06f57b45415f0456719d578ca5003f9683b941fe',
                     'commit' => [
-                        'message' => 'PullRequestMergeHandler was already committed'."\n\n".
-                                     'Anyway, moved some stuff to a base Handler class, '.
+                        'message' => 'PullRequestMergeHandler was already committed' . "\n\n" .
+                                     'Anyway, moved some stuff to a base Handler class, ' .
                                      'review status (if any) and fixes for broken command',
                     ],
                 ],
@@ -1629,12 +1638,12 @@ BODY
         );
     }
 
-    private function expectUnacceptableCommits(array $pr)
+    private function expectUnacceptableCommits(array $pr): void
     {
         $this->github->getCommits(
             $pr['head']['user']['login'],
             $pr['head']['repo']['name'],
-            $pr['base']['repo']['owner']['login'].':'.$pr['base']['ref'],
+            $pr['base']['repo']['owner']['login'] . ':' . $pr['base']['ref'],
             $pr['head']['ref']
         )->willReturn(
             [
@@ -1647,8 +1656,8 @@ BODY
                     'author' => ['login' => 'sstok'],
                     'sha' => '06f57b45415f0456719d578ca5003f9683b941fe',
                     'commit' => [
-                        'message' => 'OH: PullRequestMergeHandler was already committed'."\n\n".
-                                     'Anyway, moved some stuff to a base Handler class, '.
+                        'message' => 'OH: PullRequestMergeHandler was already committed' . "\n\n" .
+                                     'Anyway, moved some stuff to a base Handler class, ' .
                                      'review status (if any) and fixes for broken command',
                     ],
                 ],
@@ -1656,12 +1665,12 @@ BODY
         );
     }
 
-    private function expectLessAcceptableCommits(array $pr)
+    private function expectLessAcceptableCommits(array $pr): void
     {
         $this->github->getCommits(
             $pr['head']['user']['login'],
             $pr['head']['repo']['name'],
-            $pr['base']['repo']['owner']['login'].':'.$pr['base']['ref'],
+            $pr['base']['repo']['owner']['login'] . ':' . $pr['base']['ref'],
             $pr['head']['ref']
         )->willReturn(
             [
@@ -1674,8 +1683,8 @@ BODY
                     'author' => ['login' => 'sstok'],
                     'sha' => '06f57b45415f0456719d578ca5003f9683b941fe',
                     'commit' => [
-                        'message' => 'OH: PullRequestMergeHandler was already committed'."\n\n".
-                                     'Anyway, moved some stuff to a base Handler class, '.
+                        'message' => 'OH: PullRequestMergeHandler was already committed' . "\n\n" .
+                                     'Anyway, moved some stuff to a base Handler class, ' .
                                      'review status (if any) and fixes for broken command',
                     ],
                 ],
@@ -1683,17 +1692,17 @@ BODY
         );
     }
 
-    private function expectLocalBranchNotExists()
+    private function expectLocalBranchNotExists(): void
     {
         $this->git->branchExists(self::PR_BRANCH)->willReturn(false);
     }
 
-    private function expectLocalBranchExists(bool $remove = true, $removeRemote = true)
+    private function expectLocalBranchExists(bool $remove = true, $removeRemote = true): void
     {
         $this->git->branchExists(self::PR_BRANCH)->willReturn(true);
-        $this->git->getGitConfig('branch.'.self::PR_BRANCH.'.remote')->willReturn($removeRemote ? 'origin' : '');
+        $this->git->getGitConfig('branch.' . self::PR_BRANCH . '.remote')->willReturn($removeRemote ? 'origin' : '');
 
-        if (!$remove) {
+        if (! $remove) {
             return;
         }
 
@@ -1704,7 +1713,7 @@ BODY
         }
     }
 
-    private function expectNotes(array $notes = [], string $notesMessage = '')
+    private function expectNotes(array $notes = [], string $notesMessage = ''): void
     {
         $this->github->getComments(self::PR_NUMBER)->willReturn($notes);
 
@@ -1712,17 +1721,17 @@ BODY
         $this->git->remoteUpdate('upstream')->shouldBeCalled();
         $this->git->addNotes($notesMessage ? PropArgument::containingString($notesMessage) : '', self::MERGE_SHA, 'github-comments')->shouldBeCalled();
 
-        if ('' !== $notesMessage) {
+        if ($notesMessage !== '') {
             $this->git->pushToRemote('upstream', 'refs/notes/github-comments')->shouldBeCalled();
         }
     }
 
-    private function expectLocalUpdate(bool $ready = true, bool $branchExists = true)
+    private function expectLocalUpdate(bool $ready = true, bool $branchExists = true): void
     {
         $this->git->branchExists('master')->willReturn($branchExists);
         $this->git->isWorkingTreeReady()->willReturn($ready);
 
-        if (!$ready) {
+        if (! $ready) {
             return;
         }
 

@@ -20,12 +20,9 @@ use Symfony\Component\Console\Question\Question;
 
 class SingleLineChoiceQuestionHelper extends QuestionHelper
 {
-    /**
-     * {@inheritdoc}
-     */
-    protected function writePrompt(OutputInterface $output, Question $question)
+    protected function writePrompt(OutputInterface $output, Question $question): void
     {
-        if (!$question instanceof ChoiceQuestion) {
+        if (! $question instanceof ChoiceQuestion) {
             parent::writePrompt($output, $question);
 
             return;
@@ -37,12 +34,12 @@ class SingleLineChoiceQuestionHelper extends QuestionHelper
         $default = $question->getDefault();
         $defaultLabel = '';
 
-        if (null !== $default) {
+        if ($default !== null) {
             $defaultLabel = sprintf(' [<comment>%s</comment>] ', OutputFormatter::escape($default));
         }
 
         $output->write($text);
-        $output->writeln('<info>('.implode(', ', array_values($question->getChoices())).')?</>'.$defaultLabel);
+        $output->writeln('<info>(' . implode(', ', array_values($question->getChoices())) . ')?</>' . $defaultLabel);
         $output->write(' > ');
     }
 }

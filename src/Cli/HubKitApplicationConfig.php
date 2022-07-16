@@ -46,16 +46,16 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
      */
     public function __construct(Container $container = null)
     {
-        if (null === $container) {
-            if (!file_exists(__DIR__.'/../../config.php') && file_exists(__DIR__.'/../../config.php.dist')) {
+        if ($container === null) {
+            if (! file_exists(__DIR__ . '/../../config.php') && file_exists(__DIR__ . '/../../config.php.dist')) {
                 throw new \InvalidArgumentException(
-                    sprintf('Please copy "%s.dist" to "%1$s" and change the API token.', __DIR__.'/../../config.php')
+                    sprintf('Please copy "%s.dist" to "%1$s" and change the API token.', __DIR__ . '/../../config.php')
                 );
             }
 
             $parameters = [];
-            $parameters['current_dir'] = getcwd().'/';
-            $parameters['config_dir'] = realpath(__DIR__.'/../../config.php');
+            $parameters['current_dir'] = getcwd() . '/';
+            $parameters['config_dir'] = realpath(__DIR__ . '/../../config.php');
 
             $container = new Container($parameters);
         }
@@ -65,10 +65,7 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
         parent::__construct();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setEventDispatcher(new EventDispatcher());
 
@@ -78,7 +75,7 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
             ->setName('hubkit')
             ->setDisplayName('HubKit')
             ->setVersion(self::VERSION)
-            ->setDebug('true' === getenv('HUBKIT_DEBUG'))
+            ->setDebug(getenv('HUBKIT_DEBUG') === 'true')
             ->addStyle(Style::tag('good')->fgGreen())
             ->addStyle(Style::tag('bad')->fgRed())
             ->addStyle(Style::tag('warn')->fgYellow())
@@ -87,9 +84,9 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
 
         $this->addEventListener(
             ConsoleEvents::PRE_HANDLE,
-            function (PreHandleEvent $event) {
+            function (PreHandleEvent $event): void {
                 // Set-up the IO for the Symfony Helper classes.
-                if (!isset($this->container['console_io'])) {
+                if (! isset($this->container['console_io'])) {
                     $io = $event->getIO();
                     $args = $event->getArgs();
 
@@ -107,11 +104,11 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
 
         $this->addEventListener(
             ConsoleEvents::PRE_HANDLE,
-            function (PreHandleEvent $event) {
+            function (PreHandleEvent $event): void {
                 $handler = $event->getCommand()->getConfig()->getHandler();
                 $isGit = $this->container['git']->isGitDir();
 
-                if ($handler instanceof RequiresGitRepository && !$isGit) {
+                if ($handler instanceof RequiresGitRepository && ! $isGit) {
                     throw new \RuntimeException(
                         'This Command can only be executed from the root of a Git repository.'
                     );
@@ -128,171 +125,171 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
 
         $this
             ->beginCommand('self-diagnose')
-                ->setDescription('Checks your system is ready to use HubKit and gives recommendations about changes you should make.')
-                ->setHandler(function () {
-                    return new Handler\SelfDiagnoseHandler(
-                        $this->container['style'],
-                        $this->container['config'],
-                        $this->container['git'],
-                        $this->container['github'],
-                        $this->container['process']
-                    );
-                })
+            ->setDescription('Checks your system is ready to use HubKit and gives recommendations about changes you should make.')
+            ->setHandler(function () {
+                return new Handler\SelfDiagnoseHandler(
+                    $this->container['style'],
+                    $this->container['config'],
+                    $this->container['git'],
+                    $this->container['github'],
+                    $this->container['process']
+                );
+            })
             ->end()
 
             ->beginCommand('repo-create')
-                ->setDescription('Create a new empty GitHub repository. Wiki and Downloads are disabled by default')
-                ->addArgument('full-name', Argument::REQUIRED, 'The user (org) and repository name. Eg. acme/my-repo')
-                ->addOption('no-issues', null, Option::BOOLEAN, 'Disable issues, when a global issue tracker is used')
-                ->addOption('private', null, Option::BOOLEAN, 'Create private repository (requires paid plan)')
-                ->setHandler(function () {
-                    return new Handler\RepositoryCreateHandler(
-                        $this->container['style'],
-                        $this->container['git'],
-                        $this->container['github']
-                    );
-                })
+            ->setDescription('Create a new empty GitHub repository. Wiki and Downloads are disabled by default')
+            ->addArgument('full-name', Argument::REQUIRED, 'The user (org) and repository name. Eg. acme/my-repo')
+            ->addOption('no-issues', null, Option::BOOLEAN, 'Disable issues, when a global issue tracker is used')
+            ->addOption('private', null, Option::BOOLEAN, 'Create private repository (requires paid plan)')
+            ->setHandler(function () {
+                return new Handler\RepositoryCreateHandler(
+                    $this->container['style'],
+                    $this->container['git'],
+                    $this->container['github']
+                );
+            })
             ->end()
 
             ->beginCommand('split-repo')
-                ->setDescription('Split the repository into configured targets. Requires "repos" is configured in config.php')
-                ->addArgument('branch', Argument::OPTIONAL | Argument::STRING, 'Branch to checkout and split from, uses current when omitted')
-                ->addOption('dry-run', null, Option::NO_VALUE | Option::BOOLEAN, 'Show which operations would have been performed (without actually splitting)')
-                ->setHandler(function () {
-                    return new Handler\SplitRepoHandler(
-                        $this->container['style'],
-                        $this->container['splitsh_git'],
-                        $this->container['git'],
-                        $this->container['github'],
-                        $this->container['config']
-                    );
-                })
+            ->setDescription('Split the repository into configured targets. Requires "repos" is configured in config.php')
+            ->addArgument('branch', Argument::OPTIONAL | Argument::STRING, 'Branch to checkout and split from, uses current when omitted')
+            ->addOption('dry-run', null, Option::NO_VALUE | Option::BOOLEAN, 'Show which operations would have been performed (without actually splitting)')
+            ->setHandler(function () {
+                return new Handler\SplitRepoHandler(
+                    $this->container['style'],
+                    $this->container['splitsh_git'],
+                    $this->container['git'],
+                    $this->container['github'],
+                    $this->container['config']
+                );
+            })
             ->end()
 
             ->beginCommand('take')
-                ->setDescription('Take an issue to work on, checks out the issue as new branch.')
-                ->addArgument('number', Argument::INTEGER, 'Number of the issue to take')
-                ->addOption('base', 'b', Option::STRING | Option::OPTIONAL_VALUE, 'Base branch to checkout', 'master')
-                ->setHandler(function () {
-                    return new Handler\TakeHandler(
-                        $this->container['style'],
-                        $this->container['git'],
-                        $this->container['github']
-                    );
-                })
+            ->setDescription('Take an issue to work on, checks out the issue as new branch.')
+            ->addArgument('number', Argument::INTEGER, 'Number of the issue to take')
+            ->addOption('base', 'b', Option::STRING | Option::OPTIONAL_VALUE, 'Base branch to checkout', 'master')
+            ->setHandler(function () {
+                return new Handler\TakeHandler(
+                    $this->container['style'],
+                    $this->container['git'],
+                    $this->container['github']
+                );
+            })
             ->end()
 
             ->beginCommand('checkout')
-                ->setDescription('Checkout a pull request as local branch. Allows to push changes (unless disabled by author)')
-                ->addArgument('number', Argument::INTEGER, 'Number of the pull request to checkout')
-                ->setHandler(function () {
-                    return new Handler\CheckoutHandler(
-                        $this->container['style'],
-                        $this->container['git'],
-                        $this->container['process'],
-                        $this->container['github']
-                    );
-                })
+            ->setDescription('Checkout a pull request as local branch. Allows to push changes (unless disabled by author)')
+            ->addArgument('number', Argument::INTEGER, 'Number of the pull request to checkout')
+            ->setHandler(function () {
+                return new Handler\CheckoutHandler(
+                    $this->container['style'],
+                    $this->container['git'],
+                    $this->container['process'],
+                    $this->container['github']
+                );
+            })
             ->end()
 
             ->beginCommand('merge')
-                ->setDescription('Merge a pull request with preservation of the original title/description and comments.')
-                ->addArgument('number', Argument::REQUIRED | Argument::INTEGER, 'The number of the pull request to merge')
-                ->addOption('security', null, Option::BOOLEAN, 'Merge pull request as a security patch')
-                ->addOption('squash', null, Option::BOOLEAN, 'Squash the pull request before merging')
-                ->addOption('no-pull', null, Option::BOOLEAN, 'Skip pulling changes to your local branch')
-                ->addOption('no-cleanup', null, Option::BOOLEAN, 'Skip clean-up of feature branch (if present)')
-                ->addOption('pat', null, Option::OPTIONAL_VALUE | Option::STRING, 'Thank you message, @author will be replaced with pr author(s)', 'Thank you @author')
-                ->addOption('no-pat', null, Option::NO_VALUE | Option::BOOLEAN, 'Skip thank you message, cannot be used in combination with --pat')
-                ->setHandler(function () {
-                    return new Handler\MergeHandler(
-                        $this->container['style'],
-                        $this->container['git'],
-                        $this->container['github'],
-                        new BranchAliasResolver($this->container['style'], $this->container['git'], getcwd()),
-                        new SingleLineChoiceQuestionHelper(),
-                        $this->container['config'],
-                        $this->container['splitsh_git']
-                    );
-                })
+            ->setDescription('Merge a pull request with preservation of the original title/description and comments.')
+            ->addArgument('number', Argument::REQUIRED | Argument::INTEGER, 'The number of the pull request to merge')
+            ->addOption('security', null, Option::BOOLEAN, 'Merge pull request as a security patch')
+            ->addOption('squash', null, Option::BOOLEAN, 'Squash the pull request before merging')
+            ->addOption('no-pull', null, Option::BOOLEAN, 'Skip pulling changes to your local branch')
+            ->addOption('no-cleanup', null, Option::BOOLEAN, 'Skip clean-up of feature branch (if present)')
+            ->addOption('pat', null, Option::OPTIONAL_VALUE | Option::STRING, 'Thank you message, @author will be replaced with pr author(s)', 'Thank you @author')
+            ->addOption('no-pat', null, Option::NO_VALUE | Option::BOOLEAN, 'Skip thank you message, cannot be used in combination with --pat')
+            ->setHandler(function () {
+                return new Handler\MergeHandler(
+                    $this->container['style'],
+                    $this->container['git'],
+                    $this->container['github'],
+                    new BranchAliasResolver($this->container['style'], $this->container['git'], getcwd()),
+                    new SingleLineChoiceQuestionHelper(),
+                    $this->container['config'],
+                    $this->container['splitsh_git']
+                );
+            })
             ->end()
 
             ->beginCommand('switch-base')
-                ->setDescription('Switch the base of a pull request (and perform a rebase to prevent unwanted commits)')
-                ->addArgument('number', Argument::REQUIRED | Argument::INTEGER, 'The number of the pull request to switch')
-                ->addArgument('new-base', Argument::REQUIRED | Argument::STRING, 'New base of the pull-request (must exist in remote "upstream")')
-                ->addOption('skip-help', null, Option::NO_VALUE | Option::BOOLEAN, 'Skip the help message posted to the PR.')
-                ->setHandler(function () {
-                    return new Handler\SwitchBaseHandler(
-                        $this->container['style'],
-                        $this->container['git'],
-                        $this->container['process'],
-                        $this->container['github']
-                    );
-                })
+            ->setDescription('Switch the base of a pull request (and perform a rebase to prevent unwanted commits)')
+            ->addArgument('number', Argument::REQUIRED | Argument::INTEGER, 'The number of the pull request to switch')
+            ->addArgument('new-base', Argument::REQUIRED | Argument::STRING, 'New base of the pull-request (must exist in remote "upstream")')
+            ->addOption('skip-help', null, Option::NO_VALUE | Option::BOOLEAN, 'Skip the help message posted to the PR.')
+            ->setHandler(function () {
+                return new Handler\SwitchBaseHandler(
+                    $this->container['style'],
+                    $this->container['git'],
+                    $this->container['process'],
+                    $this->container['github']
+                );
+            })
             ->end()
 
             ->beginCommand('branch-alias')
-                ->setDescription('Set/get the "master" branch-alias. Omit alias argument to get the current alias.')
-                ->addArgument('alias', Argument::OPTIONAL | Argument::STRING, 'New alias to assign (omit to get the current alias)')
-                ->setHandler(function () {
-                    return new Handler\BranchAliasHandler(
-                        $this->container['git']
-                    );
-                })
+            ->setDescription('Set/get the "master" branch-alias. Omit alias argument to get the current alias.')
+            ->addArgument('alias', Argument::OPTIONAL | Argument::STRING, 'New alias to assign (omit to get the current alias)')
+            ->setHandler(function () {
+                return new Handler\BranchAliasHandler(
+                    $this->container['git']
+                );
+            })
             ->end()
 
             ->beginCommand('changelog')
-                ->setDescription('Generate a changelog with all changes between commits')
-                ->addArgument('ref', Argument::OPTIONAL | Argument::STRING, 'Range reference as `base..head`')
-                ->addOption('all', null, Option::NO_VALUE | Option::BOOLEAN, 'Show all categories (including empty)')
-                ->addOption('oneline', null, Option::NO_VALUE | Option::BOOLEAN, 'Show changelog as singe lines without sections')
-                ->setHandler(function () {
-                    return new Handler\ChangelogHandler(
-                        $this->container['style'],
-                        $this->container['git'],
-                        $this->container['github']
-                    );
-                })
+            ->setDescription('Generate a changelog with all changes between commits')
+            ->addArgument('ref', Argument::OPTIONAL | Argument::STRING, 'Range reference as `base..head`')
+            ->addOption('all', null, Option::NO_VALUE | Option::BOOLEAN, 'Show all categories (including empty)')
+            ->addOption('oneline', null, Option::NO_VALUE | Option::BOOLEAN, 'Show changelog as singe lines without sections')
+            ->setHandler(function () {
+                return new Handler\ChangelogHandler(
+                    $this->container['style'],
+                    $this->container['git'],
+                    $this->container['github']
+                );
+            })
             ->end()
 
             ->beginCommand('upmerge')
-                ->setDescription('Merges current branch to the next version branch (eg. 1.0 into 1.1)')
-                ->addArgument('branch', Argument::OPTIONAL | Argument::STRING, 'Base branch to checkout and start with, uses current when omitted')
-                ->addOption('all', null, Option::NO_VALUE | Option::BOOLEAN, 'Merge all version branches from lowest into highest (and finally master)')
-                ->addOption('dry-run', null, Option::NO_VALUE | Option::BOOLEAN, 'Show which operations would have been performed (without actually merging)')
-                ->addOption('no-split', null, Option::NO_VALUE | Option::BOOLEAN, 'Skip splitting of repositories (when they are configured)')
-                ->setHandler(function () {
-                    return new Handler\UpMergeHandler(
-                        $this->container['style'],
-                        $this->container['git'],
-                        $this->container['github'],
-                        $this->container['process'],
-                        $this->container['config'],
-                        $this->container['splitsh_git']
-                    );
-                })
+            ->setDescription('Merges current branch to the next version branch (eg. 1.0 into 1.1)')
+            ->addArgument('branch', Argument::OPTIONAL | Argument::STRING, 'Base branch to checkout and start with, uses current when omitted')
+            ->addOption('all', null, Option::NO_VALUE | Option::BOOLEAN, 'Merge all version branches from lowest into highest (and finally master)')
+            ->addOption('dry-run', null, Option::NO_VALUE | Option::BOOLEAN, 'Show which operations would have been performed (without actually merging)')
+            ->addOption('no-split', null, Option::NO_VALUE | Option::BOOLEAN, 'Skip splitting of repositories (when they are configured)')
+            ->setHandler(function () {
+                return new Handler\UpMergeHandler(
+                    $this->container['style'],
+                    $this->container['git'],
+                    $this->container['github'],
+                    $this->container['process'],
+                    $this->container['config'],
+                    $this->container['splitsh_git']
+                );
+            })
             ->end()
 
             ->beginCommand('release')
-                ->setDescription('Make a new release for the current branch')
-                ->addArgument('version', Argument::REQUIRED | Argument::STRING, 'Version to make (supports relative, eg. minor, alpha, ...)')
-                ->addOption('all-categories', null, Option::NO_VALUE | Option::BOOLEAN, 'Show all categories (including empty)')
-                ->addOption('no-edit', null, Option::NO_VALUE | Option::BOOLEAN, 'Don\'t open the editor for editing the release page')
-                ->addOption('title', null, Option::REQUIRED_VALUE | Option::NULLABLE | Option::STRING, 'Custom title for the release (added after version)')
-                ->addOption('pre-release', null, Option::NO_VALUE | Option::BOOLEAN, 'Mark as pre-release (not production ready)')
-                ->setHandler(function () {
-                    return new Handler\ReleaseHandler(
-                        $this->container['style'],
-                        $this->container['git'],
-                        $this->container['github'],
-                        $this->container['process'],
-                        $this->container['editor'],
-                        $this->container['config'],
-                        $this->container['splitsh_git'],
-                        $this->container['release_hooks']
-                    );
-                })
+            ->setDescription('Make a new release for the current branch')
+            ->addArgument('version', Argument::REQUIRED | Argument::STRING, 'Version to make (supports relative, eg. minor, alpha, ...)')
+            ->addOption('all-categories', null, Option::NO_VALUE | Option::BOOLEAN, 'Show all categories (including empty)')
+            ->addOption('no-edit', null, Option::NO_VALUE | Option::BOOLEAN, 'Don\'t open the editor for editing the release page')
+            ->addOption('title', null, Option::REQUIRED_VALUE | Option::NULLABLE | Option::STRING, 'Custom title for the release (added after version)')
+            ->addOption('pre-release', null, Option::NO_VALUE | Option::BOOLEAN, 'Mark as pre-release (not production ready)')
+            ->setHandler(function () {
+                return new Handler\ReleaseHandler(
+                    $this->container['style'],
+                    $this->container['git'],
+                    $this->container['github'],
+                    $this->container['process'],
+                    $this->container['editor'],
+                    $this->container['config'],
+                    $this->container['splitsh_git'],
+                    $this->container['release_hooks']
+                );
+            })
             ->end()
         ;
     }

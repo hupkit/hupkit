@@ -32,7 +32,7 @@ class BranchAliasResolver
 
     public function getAlias(): string
     {
-        if (file_exists($this->cwd.'/composer.json') && '' !== $alias = $this->getAliasByComposer()) {
+        if (file_exists($this->cwd . '/composer.json') && '' !== $alias = $this->getAliasByComposer()) {
             $this->detectedBy = 'composer.json "extra.branch-alias.dev-master"';
 
             return $alias;
@@ -54,16 +54,16 @@ class BranchAliasResolver
 
     private function getAliasByComposer(): string
     {
-        $composer = json_decode(file_get_contents($this->cwd.'/composer.json'), true);
+        $composer = json_decode(file_get_contents($this->cwd . '/composer.json'), true);
 
-        if (!isset($composer['extra']['branch-alias']['dev-master'])) {
+        if (! isset($composer['extra']['branch-alias']['dev-master'])) {
             return '';
         }
 
         $label = $composer['extra']['branch-alias']['dev-master'];
 
         // Unstable releases are known to change often so use `1.0-dev` as final destination
-        if ('0' === $label[0]) {
+        if ($label[0] === '0') {
             $label = '1.0-dev';
         }
 
@@ -83,14 +83,14 @@ class BranchAliasResolver
         $label = (string) $this->style->ask(
             'Branch alias',
             null,
-            function ($value) {
-                if (!preg_match('/^\d+\.\d+$/', $value)) {
+            static function ($value) {
+                if (! preg_match('/^\d+\.\d+$/', $value)) {
                     throw new \InvalidArgumentException(
                         'A branch alias consists of major and minor version without any prefix or suffix. like: 1.2'
                     );
                 }
 
-                return $value.'-dev';
+                return $value . '-dev';
             }
         );
 

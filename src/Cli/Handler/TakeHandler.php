@@ -18,7 +18,7 @@ use Webmozart\Console\Api\Args\Args;
 
 final class TakeHandler extends GitBaseHandler
 {
-    public function handle(Args $args)
+    public function handle(Args $args): void
     {
         $this->informationHeader();
 
@@ -30,14 +30,14 @@ final class TakeHandler extends GitBaseHandler
             throw new \InvalidArgumentException('Cannot take pull-request issue.');
         }
 
-        if ('closed' === $issue['state']) {
+        if ($issue['state'] === 'closed') {
             throw new \InvalidArgumentException('Cannot take closed issue.');
         }
 
         $slugTitle = StringUtil::slugify(sprintf('%s %s', $issue['number'], $issue['title']));
 
         $this->git->remoteUpdate('upstream');
-        $this->git->checkout('upstream/'.$args->getOption('base'));
+        $this->git->checkout('upstream/' . $args->getOption('base'));
         $this->git->checkout($slugTitle, true);
 
         $this->style->success(sprintf('Issue %s taken!', $issue['html_url']));

@@ -48,17 +48,17 @@ class ReleaseHooks
 
     private function executeScript(string $type, Version $version, string $branch, ?string $releaseTitle, string $changelog): ?string
     {
-        $scriptFile = $this->cwd.'/.hubkit/'.$type.'.php';
+        $scriptFile = $this->cwd . '/.hubkit/' . $type . '.php';
 
-        if (!file_exists($scriptFile)) {
-            $this->logger->debug('File {script} was not found. '.$type.' script will not be executed.', ['script' => $scriptFile]);
+        if (! file_exists($scriptFile)) {
+            $this->logger->debug('File {script} was not found. ' . $type . ' script will not be executed.', ['script' => $scriptFile]);
 
             return '';
         }
 
         $hookCallback = include $scriptFile;
 
-        if (!\is_callable($hookCallback)) {
+        if (! \is_callable($hookCallback)) {
             throw new \InvalidArgumentException(
                 sprintf(
                     'Expected script file "%s" to return a callable, got "%s" instead.',
@@ -70,7 +70,7 @@ class ReleaseHooks
 
         $result = $hookCallback($this->container, $version, $branch, $releaseTitle, $changelog);
 
-        if (!$this->git->isWorkingTreeReady()) {
+        if (! $this->git->isWorkingTreeReady()) {
             throw new \InvalidArgumentException(
                 sprintf(
                     'Expected script file "%s" to leave a clean state after execution. Changed files must be committed by the script.',

@@ -16,10 +16,16 @@ namespace HubKit\Tests\Unit\Service;
 use HubKit\Service\Filesystem;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Symfony\Component\Filesystem\Filesystem as SfFilesystem;
 
+/**
+ * @internal
+ */
 final class FilesystemTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * This can never be valid, which ensures the actual FS is not affected.
      *
@@ -31,14 +37,14 @@ final class FilesystemTest extends TestCase
     private $tempDir;
 
     /** @before */
-    public function setUpTempDirectoryPath()
+    public function setUpTempDirectoryPath(): void
     {
-        $this->tempDir = realpath(sys_get_temp_dir()).'/hbk-fs/'.substr(hash('sha256', (random_bytes(8))), 0, 10);
+        $this->tempDir = realpath(sys_get_temp_dir()) . '/hbk-fs/' . mb_substr(hash('sha256', random_bytes(8)), 0, 10);
         self::assertDirectoryDoesNotExist($this->tempDir); // Pre-condition
     }
 
     /** @test */
-    public function it_creates_a_temp_file_with_no_contents()
+    public function it_creates_a_temp_file_with_no_contents(): void
     {
         $filesystem = new Filesystem($this->tempDir);
 
@@ -52,7 +58,7 @@ final class FilesystemTest extends TestCase
     }
 
     /** @test */
-    public function it_creates_a_temp_file_with_contents()
+    public function it_creates_a_temp_file_with_contents(): void
     {
         $filesystem = new Filesystem($this->tempDir);
 
@@ -66,7 +72,7 @@ final class FilesystemTest extends TestCase
     }
 
     /** @test */
-    public function it_creates_temp_directory_when_not_existing()
+    public function it_creates_temp_directory_when_not_existing(): void
     {
         $path = $this->getTempdirPath('split');
 
@@ -82,11 +88,11 @@ final class FilesystemTest extends TestCase
 
     private function getTempdirPath(string $name): string
     {
-        return self::MOCK_TMP_DIR.\DIRECTORY_SEPARATOR.'hubkit'.\DIRECTORY_SEPARATOR.$name;
+        return self::MOCK_TMP_DIR . \DIRECTORY_SEPARATOR . 'hubkit' . \DIRECTORY_SEPARATOR . $name;
     }
 
     /** @test */
-    public function it_clears_temp_directory_when_existing()
+    public function it_clears_temp_directory_when_existing(): void
     {
         $path = $this->getTempdirPath('split');
 
@@ -101,7 +107,7 @@ final class FilesystemTest extends TestCase
     }
 
     /** @test */
-    public function it_clears_temp_files()
+    public function it_clears_temp_files(): void
     {
         $recordedRemovals = [];
 
@@ -109,7 +115,7 @@ final class FilesystemTest extends TestCase
         $sfFilesystem->exists(Argument::any())->willReturn(false);
         $sfFilesystem->mkdir(
             Argument::that(
-                function ($path) {
+                static function ($path) {
                     (new SfFilesystem())->mkdir($path);
 
                     return true;
@@ -118,7 +124,7 @@ final class FilesystemTest extends TestCase
         )->shouldBeCalled();
         $sfFilesystem->remove(
             Argument::that(
-                function ($paths) use (&$recordedRemovals) {
+                static function ($paths) use (&$recordedRemovals) {
                     $recordedRemovals = array_merge($recordedRemovals, $paths);
 
                     return true;
@@ -133,11 +139,11 @@ final class FilesystemTest extends TestCase
 
         $filesystem->clearTempFiles();
 
-        $path = $this->tempDir.\DIRECTORY_SEPARATOR.'hubkit'.\DIRECTORY_SEPARATOR;
+        $path = $this->tempDir . \DIRECTORY_SEPARATOR . 'hubkit' . \DIRECTORY_SEPARATOR;
         self::assertEquals(
             [
-                $path.'split1',
-                $path.'split2',
+                $path . 'split1',
+                $path . 'split2',
                 $filename,
             ],
             $recordedRemovals

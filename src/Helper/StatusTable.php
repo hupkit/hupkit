@@ -41,7 +41,7 @@ class StatusTable
         $this->output = $output;
     }
 
-    public function render()
+    public function render(): void
     {
         $table = new Table($this->output);
         $table->getStyle()
@@ -58,7 +58,8 @@ class StatusTable
             )
             ->setHorizontalBorderChars('-', '-')
             ->setVerticalBorderChars(outside: '', inside: '')
-            ->setCellRowContentFormat('  %s  ');
+            ->setCellRowContentFormat('  %s  ')
+        ;
 
         $table->setHeaders(['Item', 'Status', 'Details']);
         $table->setRows($this->rows);
@@ -73,7 +74,7 @@ class StatusTable
     }
 
     // make other methods none static
-    public function addRow(string $label, string $status, ?string $message = null)
+    public function addRow(string $label, string $status, ?string $message = null): void
     {
         $this->rows[] = [$label, self::STATUS_LABELS[$status], wordwrap((string) $message, 38)];
         $this->statuses[$status] = true;

@@ -30,21 +30,21 @@ final class ChangelogHandler extends GitBaseHandler
         $this->renderer = new ChangelogRenderer($git, $github);
     }
 
-    public function handle(Args $args, IO $io)
+    public function handle(Args $args, IO $io): void
     {
-        list($base, $head) = $this->resolveCommitRange($args);
+        [$base, $head] = $this->resolveCommitRange($args);
         $this->informationHeader($head);
 
         if ($args->getOption('oneline')) {
             $io->writeLine($this->renderer->renderChangelogOneLine($base, $head));
         } else {
-            $io->writeLine($this->renderer->renderChangelogByCategories($base, $head, !$args->getOption('all')));
+            $io->writeLine($this->renderer->renderChangelogByCategories($base, $head, ! $args->getOption('all')));
         }
     }
 
     private function resolveCommitRange(Args $args): array
     {
-        if (!($ref = $args->getArgument('ref'))) {
+        if (! ($ref = $args->getArgument('ref'))) {
             $base = $this->git->getLastTagOnBranch();
             $head = $this->git->getActiveBranchName();
 
@@ -56,7 +56,7 @@ final class ChangelogHandler extends GitBaseHandler
 
     private function getRefRange(string $ref): array
     {
-        if (false === strpos($ref, '..', 1) || 2 !== \count($points = explode('..', $ref))) {
+        if (mb_strpos($ref, '..', 1) === false || \count($points = explode('..', $ref)) !== 2) {
             throw new \InvalidArgumentException('missing ref range `base..head` or illegal offset given');
         }
 

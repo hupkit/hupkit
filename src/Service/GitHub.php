@@ -40,11 +40,11 @@ class GitHub
         $this->config = $config;
     }
 
-    public function autoConfigure(Git $git)
+    public function autoConfigure(Git $git): void
     {
         $repo = $git->getRemoteInfo('upstream');
 
-        if ('' === $repo['org']) {
+        if ($repo['org'] === '') {
             throw new \RuntimeException('Remote "upstream" is missing, unable to configure GitHub gateway.');
         }
 
@@ -52,13 +52,13 @@ class GitHub
         $this->setRepository($repo['org'], $repo['repo']);
     }
 
-    public function initializeForHost(string $hostname = null)
+    public function initializeForHost(string $hostname = null): void
     {
-        if (null === $hostname) {
+        if ($hostname === null) {
             $hostname = self::DEFAULT_HOST;
         }
 
-        if (null === $this->client || $hostname !== $this->hostname) {
+        if ($this->client === null || $hostname !== $this->hostname) {
             $apiToken = $this->config->getOrFail(['github', $hostname, 'api_token']);
             $this->username = $this->config->getOrFail(['github', $hostname, 'username']);
             $apiUrl = $this->config->get(['github', $hostname, 'api_url'], null);
@@ -71,7 +71,7 @@ class GitHub
         }
     }
 
-    public function setRepository(string $organization, string $repository)
+    public function setRepository(string $organization, string $repository): void
     {
         $this->organization = $organization;
         $this->repository = $repository;
@@ -211,7 +211,7 @@ class GitHub
         );
 
         // Still better then BitBucket...
-        if ($withLabels && !isset($pr['labels'])) {
+        if ($withLabels && ! isset($pr['labels'])) {
             $api = $this->client->issues();
             $issue = $api->show(
                 $this->organization,
@@ -266,27 +266,27 @@ class GitHub
     {
         $graphql = $this->client->graphql();
         $query = <<<'QUERY'
-query($owner: String!, $repo: String!, $prNumber: Int!) { 
-  repository (owner: $owner, name: $repo) {
-    pullRequest (number: $prNumber) {
-      commits {
-        totalCount
-      }
-    }
-  }
-}
-QUERY;
+            query($owner: String!, $repo: String!, $prNumber: Int!) {
+              repository (owner: $owner, name: $repo) {
+                pullRequest (number: $prNumber) {
+                  commits {
+                    totalCount
+                  }
+                }
+              }
+            }
+            QUERY;
 
         $result = $graphql->execute($query, ['owner' => $this->organization, 'repo' => $this->repository, 'prNumber' => $id]);
 
-        if (!isset($result['data'])) {
+        if (! isset($result['data'])) {
             throw new \RuntimeException('Unable to determine commit count for pullrequest.');
         }
 
         return (int) $result['data']['repository']['pullRequest']['commits']['totalCount'];
     }
 
-    public function updatePullRequest($id, array $parameters)
+    public function updatePullRequest($id, array $parameters): void
     {
         $api = $this->client->pullRequest();
 
@@ -322,7 +322,7 @@ QUERY;
             $this->repository,
             [
                 'tag_name' => $name,
-                'name' => 'Release '.$name.(null !== $title ? ' '.$title : ''),
+                'name' => 'Release ' . $name . ($title !== null ? ' ' . $title : ''),
                 'body' => $body,
                 'prerelease' => $preRelease,
             ]

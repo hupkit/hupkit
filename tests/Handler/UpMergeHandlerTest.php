@@ -20,14 +20,19 @@ use HubKit\Service\Git;
 use HubKit\Service\GitHub;
 use HubKit\Service\SplitshGit;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Webmozart\Console\Api\Args\Args;
 use Webmozart\Console\Api\Args\Format\ArgsFormat;
 use Webmozart\Console\Api\Args\Format\Argument;
 use Webmozart\Console\Api\Args\Format\Option;
 
-class UpMergeHandlerTest extends TestCase
+/**
+ * @internal
+ */
+final class UpMergeHandlerTest extends TestCase
 {
+    use ProphecyTrait;
     use SymfonyStyleTrait;
 
     /** @var ObjectProphecy */
@@ -48,10 +53,10 @@ class UpMergeHandlerTest extends TestCase
     private $config;
 
     /** @before */
-    public function setUpCommandHandler()
+    public function setUpCommandHandler(): void
     {
         $this->git = $this->prophesize(Git::class);
-        $this->git->guardWorkingTreeReady()->willReturn(null);
+        $this->git->guardWorkingTreeReady()->will(static function (): void {});
 
         $this->github = $this->prophesize(GitHub::class);
         $this->github->getHostname()->willReturn('github.com');
@@ -77,7 +82,7 @@ class UpMergeHandlerTest extends TestCase
     }
 
     /** @test */
-    public function it_merges_current_branch_into_next_version_branch()
+    public function it_merges_current_branch_into_next_version_branch(): void
     {
         $this->git->getActiveBranchName()->willReturn('2.3');
         $this->git->remoteUpdate('upstream')->shouldBeCalled();
@@ -98,7 +103,7 @@ class UpMergeHandlerTest extends TestCase
     }
 
     /** @test */
-    public function it_merges_current_branch_into_next_version_branch_and_splits_repository()
+    public function it_merges_current_branch_into_next_version_branch_and_splits_repository(): void
     {
         $this->expectConfigHasSplits();
 
@@ -126,7 +131,7 @@ class UpMergeHandlerTest extends TestCase
     }
 
     /** @test */
-    public function it_merges_current_branch_into_next_version_branch_and_skips_splitting_if_option_is_provided()
+    public function it_merges_current_branch_into_next_version_branch_and_skips_splitting_if_option_is_provided(): void
     {
         $this->expectConfigHasSplits();
 
@@ -149,7 +154,7 @@ class UpMergeHandlerTest extends TestCase
     }
 
     /** @test */
-    public function it_merges_current_branch_into_next_relative_version_branch()
+    public function it_merges_current_branch_into_next_relative_version_branch(): void
     {
         $this->git->getActiveBranchName()->willReturn('2.3');
         $this->git->remoteUpdate('upstream')->shouldBeCalled();
@@ -170,7 +175,7 @@ class UpMergeHandlerTest extends TestCase
     }
 
     /** @test */
-    public function it_merges_to_master_when_current_branch_is_last_version()
+    public function it_merges_to_master_when_current_branch_is_last_version(): void
     {
         $this->git->getActiveBranchName()->willReturn('2.6');
         $this->git->remoteUpdate('upstream')->shouldBeCalled();
@@ -191,7 +196,7 @@ class UpMergeHandlerTest extends TestCase
     }
 
     /** @test */
-    public function it_does_nothing_when_current_branch_is_not_a_version()
+    public function it_does_nothing_when_current_branch_is_not_a_version(): void
     {
         $this->git->getActiveBranchName()->willReturn('master');
         $this->git->remoteUpdate('upstream')->shouldBeCalled();
@@ -201,7 +206,7 @@ class UpMergeHandlerTest extends TestCase
     }
 
     /** @test */
-    public function it_merges_custom_branch_into_next_version_branch()
+    public function it_merges_custom_branch_into_next_version_branch(): void
     {
         $this->git->remoteUpdate('upstream')->shouldBeCalled();
 
@@ -222,7 +227,7 @@ class UpMergeHandlerTest extends TestCase
     }
 
     /** @test */
-    public function it_merges_current_branch_into_next_version_branches()
+    public function it_merges_current_branch_into_next_version_branches(): void
     {
         $this->git->getActiveBranchName()->willReturn('2.3');
         $this->git->remoteUpdate('upstream')->shouldBeCalled();
@@ -261,7 +266,7 @@ class UpMergeHandlerTest extends TestCase
     }
 
     /** @test */
-    public function it_merges_current_branch_into_next_version_branches_and_updates_split()
+    public function it_merges_current_branch_into_next_version_branches_and_updates_split(): void
     {
         $this->expectConfigHasSplits();
 
@@ -310,7 +315,7 @@ class UpMergeHandlerTest extends TestCase
     }
 
     /** @test */
-    public function it_merges_current_branch_into_next_version_branches_and_skips_splitting_if_option_is_provided()
+    public function it_merges_current_branch_into_next_version_branches_and_skips_splitting_if_option_is_provided(): void
     {
         $this->expectConfigHasSplits();
 
@@ -351,7 +356,7 @@ class UpMergeHandlerTest extends TestCase
     }
 
     /** @test */
-    public function it_does_nothing_with_all_when_current_branch_is_not_a_version()
+    public function it_does_nothing_with_all_when_current_branch_is_not_a_version(): void
     {
         $this->git->getActiveBranchName()->willReturn('master');
         $this->git->remoteUpdate('upstream')->shouldBeCalled();
@@ -361,7 +366,7 @@ class UpMergeHandlerTest extends TestCase
     }
 
     /** @test */
-    public function error_message_contains_original_exception_message()
+    public function error_message_contains_original_exception_message(): void
     {
         $this->git->remoteUpdate('upstream')->shouldBeCalled();
 
@@ -376,7 +381,7 @@ class UpMergeHandlerTest extends TestCase
     }
 
     /** @test */
-    public function it_dry_merges_current_branch_into_next_version_branch()
+    public function it_dry_merges_current_branch_into_next_version_branch(): void
     {
         $this->git->getActiveBranchName()->willReturn('2.3');
         $this->git->remoteUpdate('upstream')->shouldBeCalled();
@@ -391,7 +396,7 @@ class UpMergeHandlerTest extends TestCase
     }
 
     /** @test */
-    public function it_dry_merges_current_branch_into_next_version_branches()
+    public function it_dry_merges_current_branch_into_next_version_branches(): void
     {
         $this->git->getActiveBranchName()->willReturn('2.3');
         $this->git->remoteUpdate('upstream')->shouldBeCalled();
@@ -414,7 +419,7 @@ class UpMergeHandlerTest extends TestCase
     }
 
     /** @test */
-    public function it_merges_current_branch_into_next_version_branches_without_master_branch()
+    public function it_merges_current_branch_into_next_version_branches_without_master_branch(): void
     {
         $this->github->getDefaultBranch()->willReturn('2.x');
 
@@ -462,7 +467,7 @@ class UpMergeHandlerTest extends TestCase
         return new Args($format);
     }
 
-    private function executeHandler(Args $args = null)
+    private function executeHandler(Args $args = null): void
     {
         $style = $this->createStyle();
 

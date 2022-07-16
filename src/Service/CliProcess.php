@@ -20,9 +20,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
-/**
- * @author Sebastiaan Stok <s.stok@rollerscapes.net>
- */
 class CliProcess
 {
     /**
@@ -43,12 +40,12 @@ class CliProcess
      *
      * @throws ProcessFailedException
      */
-    public function startAndWait(Process $process)
+    public function startAndWait(Process $process): void
     {
         $process->start();
         $process->wait();
 
-        if (!$process->isSuccessful()) {
+        if (! $process->isSuccessful()) {
             throw new ProcessFailedException($process);
         }
     }
@@ -56,15 +53,15 @@ class CliProcess
     /**
      * Runs an external process.
      *
-     * @param array|Process $cmd  An instance of Process or an array of arguments to escape and run or a command to run
-     * @param string|null         $error     An error message that must be displayed if something went wrong
-     * @param callable|null       $callback  A PHP callback to run whenever there is some
-     *                                       output available on STDOUT or STDERR
-     * @param int                 $verbosity The threshold for verbosity
+     * @param array|Process $cmd       An instance of Process or an array of arguments to escape and run or a command to run
+     * @param string|null   $error     An error message that must be displayed if something went wrong
+     * @param callable|null $callback  A PHP callback to run whenever there is some
+     *                                 output available on STDOUT or STDERR
+     * @param int           $verbosity The threshold for verbosity
      *
      * @return Process The process that ran
      */
-    public function run(array|Process $cmd, ?string $error = null, callable $callback = null, int $verbosity = OutputInterface::VERBOSITY_VERY_VERBOSE): ?Process
+    public function run(array | Process $cmd, ?string $error = null, callable $callback = null, int $verbosity = OutputInterface::VERBOSITY_VERY_VERBOSE): ?Process
     {
         return $this->processHelper->run($this->output, $cmd, $error, $callback, $verbosity);
     }
@@ -80,13 +77,13 @@ class CliProcess
      * @param callable|null $callback A PHP callback to run whenever there is some
      *                                output available on STDOUT or STDERR
      *
-     * @return Process The process that ran
-     *
      * @throws ProcessFailedException
+     *
+     * @return Process The process that ran
      *
      * @see run()
      */
-    public function mustRun(array|Process $cmd, string $error = null, callable $callback = null): ?Process
+    public function mustRun(array | Process $cmd, string $error = null, callable $callback = null): ?Process
     {
         return $this->processHelper->mustRun($this->output, $cmd, $error, $callback);
     }
@@ -96,8 +93,6 @@ class CliProcess
      *
      * @param Process       $process  The Process
      * @param callable|null $callback A PHP callable
-     *
-     * @return callable
      */
     public function wrapCallback(Process $process, callable $callback = null): callable
     {
