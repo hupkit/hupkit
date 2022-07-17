@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "33c4e0eff73d5e65e6f7aa1f97f99569",
+    "content-hash": "03b47755c456a85cebe3c2b647eb28d1",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -2928,6 +2928,71 @@
             "time": "2022-03-03T08:28:38+00:00"
         },
         {
+            "name": "jangregor/phpstan-prophecy",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Jan0707/phpstan-prophecy.git",
+                "reference": "2bc7ca9460395690c6bf7332bdfb2f25d5cae8e0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Jan0707/phpstan-prophecy/zipball/2bc7ca9460395690c6bf7332bdfb2f25d5cae8e0",
+                "reference": "2bc7ca9460395690c6bf7332bdfb2f25d5cae8e0",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1 || ^8.0",
+                "phpstan/phpstan": "^1.0.0"
+            },
+            "conflict": {
+                "phpspec/prophecy": "<1.7.0,>=2.0.0",
+                "phpunit/phpunit": "<6.0.0,>=10.0.0"
+            },
+            "require-dev": {
+                "ergebnis/composer-normalize": "^2.1.1",
+                "ergebnis/license": "^1.0.0",
+                "ergebnis/php-cs-fixer-config": "~2.2.0",
+                "phpspec/prophecy": "^1.7.0",
+                "phpunit/phpunit": "^6.0.0 || ^7.0.0 || ^8.0.0 || ^9.0.0"
+            },
+            "type": "phpstan-extension",
+            "extra": {
+                "phpstan": {
+                    "includes": [
+                        "extension.neon"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "JanGregor\\Prophecy\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jan Gregor Emge-Triebel",
+                    "email": "jan@jangregor.me"
+                }
+            ],
+            "description": "Provides a phpstan/phpstan extension for phpspec/prophecy",
+            "support": {
+                "issues": "https://github.com/Jan0707/phpstan-prophecy/issues",
+                "source": "https://github.com/Jan0707/phpstan-prophecy/tree/1.0.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/localheinz",
+                    "type": "github"
+                }
+            ],
+            "time": "2021-11-08T16:37:47+00:00"
+        },
+        {
             "name": "myclabs/deep-copy",
             "version": "1.11.0",
             "source": {
@@ -3431,6 +3496,117 @@
                 "source": "https://github.com/phpspec/prophecy-phpunit/tree/v2.0.1"
             },
             "time": "2020-07-09T08:33:42+00:00"
+        },
+        {
+            "name": "phpstan/phpstan",
+            "version": "1.8.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpstan/phpstan.git",
+                "reference": "8dbba631fa32f4b289404469c2afd6122fd61d67"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/8dbba631fa32f4b289404469c2afd6122fd61d67",
+                "reference": "8dbba631fa32f4b289404469c2afd6122fd61d67",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.2|^8.0"
+            },
+            "conflict": {
+                "phpstan/phpstan-shim": "*"
+            },
+            "bin": [
+                "phpstan",
+                "phpstan.phar"
+            ],
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "bootstrap.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "PHPStan - PHP Static Analysis Tool",
+            "support": {
+                "issues": "https://github.com/phpstan/phpstan/issues",
+                "source": "https://github.com/phpstan/phpstan/tree/1.8.1"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/ondrejmirtes",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/phpstan",
+                    "type": "github"
+                },
+                {
+                    "url": "https://www.patreon.com/phpstan",
+                    "type": "patreon"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/phpstan/phpstan",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2022-07-12T16:08:06+00:00"
+        },
+        {
+            "name": "phpstan/phpstan-phpunit",
+            "version": "1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpstan/phpstan-phpunit.git",
+                "reference": "4a3c437c09075736285d1cabb5c75bf27ed0bc84"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpstan/phpstan-phpunit/zipball/4a3c437c09075736285d1cabb5c75bf27ed0bc84",
+                "reference": "4a3c437c09075736285d1cabb5c75bf27ed0bc84",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.2 || ^8.0",
+                "phpstan/phpstan": "^1.5.0"
+            },
+            "conflict": {
+                "phpunit/phpunit": "<7.0"
+            },
+            "require-dev": {
+                "nikic/php-parser": "^4.13.0",
+                "php-parallel-lint/php-parallel-lint": "^1.2",
+                "phpstan/phpstan-strict-rules": "^1.0",
+                "phpunit/phpunit": "^9.5"
+            },
+            "type": "phpstan-extension",
+            "extra": {
+                "phpstan": {
+                    "includes": [
+                        "extension.neon",
+                        "rules.neon"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "PHPStan\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "PHPUnit extensions and rules for PHPStan",
+            "support": {
+                "issues": "https://github.com/phpstan/phpstan-phpunit/issues",
+                "source": "https://github.com/phpstan/phpstan-phpunit/tree/1.1.1"
+            },
+            "time": "2022-04-20T15:24:25+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
