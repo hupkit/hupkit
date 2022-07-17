@@ -23,6 +23,7 @@ use HubKit\Service\ReleaseHooks;
 use HubKit\Service\SplitshGit;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument as PropArgument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
@@ -33,8 +34,12 @@ use Webmozart\Console\Api\Args\Format\Option;
 use Webmozart\Console\Args\StringArgs;
 use Webmozart\Console\IO\BufferedIO;
 
+/**
+ * @internal
+ */
 final class ReleaseHandlerTest extends TestCase
 {
+    use ProphecyTrait;
     use SymfonyStyleTrait;
 
     private const COMMITS = [
@@ -46,7 +51,7 @@ final class ReleaseHandlerTest extends TestCase
 
                 Discussion
                 ----------
-            
+
                 |Q            |A  |
                 |---          |---|
                 |Bug Fix?     |no |
@@ -55,10 +60,10 @@ final class ReleaseHandlerTest extends TestCase
                 |Deprecations?|yes|
                 |Fixed Tickets|   |
                 |License      |MIT|
-            
+
                 Commits
                 -------
-            
+
                 1b04532c8a09d9084abce36f8d9daf675f89eacc Introduce a new API for ValuesBag',
         ],
         [
@@ -113,11 +118,11 @@ labels: removed-deprecation
     private $io;
 
     /** @before */
-    public function setUpCommandHandler()
+    public function setUpCommandHandler(): void
     {
         $this->git = $this->prophesize(Git::class);
         $this->git->getActiveBranchName()->willReturn('master');
-        $this->git->ensureBranchInSync('upstream', 'master')->willReturn(true);
+        $this->git->ensureBranchInSync('upstream', 'master')->will(static function (): void {});
 
         $this->github = $this->prophesize(GitHub::class);
         $this->github->getHostname()->willReturn('github.com');
@@ -154,7 +159,7 @@ labels: removed-deprecation
     }
 
     /** @test */
-    public function it_creates_a_new_release_for_current_branch_without_existing_tags()
+    public function it_creates_a_new_release_for_current_branch_without_existing_tags(): void
     {
         $this->expectTags();
         $this->expectMatchingVersionBranchNotExists();
@@ -178,7 +183,7 @@ labels: removed-deprecation
     }
 
     /** @test */
-    public function it_creates_a_new_release_for_current_branch_with_existing_tags_and_no_gap()
+    public function it_creates_a_new_release_for_current_branch_with_existing_tags_and_no_gap(): void
     {
         $this->expectTags(['0.1.0', '1.0.0-BETA1']);
         $this->expectMatchingVersionBranchNotExists();
@@ -204,7 +209,7 @@ labels: removed-deprecation
     }
 
     /** @test */
-    public function it_asks_confirmation_when_there_is_a_gap_and_continues_when_confirmed()
+    public function it_asks_confirmation_when_there_is_a_gap_and_continues_when_confirmed(): void
     {
         $this->expectTags(['0.1.0', '1.0.0-BETA1']);
         $this->expectMatchingVersionBranchNotExists('3.0');
@@ -233,7 +238,7 @@ labels: removed-deprecation
     }
 
     /** @test */
-    public function it_asks_confirmation_when_there_is_a_gap_and_aborts_when_rejected()
+    public function it_asks_confirmation_when_there_is_a_gap_and_aborts_when_rejected(): void
     {
         $this->expectTags(['0.1.0', '1.0.0-BETA1']);
         $this->expectMatchingVersionBranchNotExists('3.0');
@@ -246,7 +251,7 @@ labels: removed-deprecation
     }
 
     /** @test */
-    public function it_asks_confirmation_when_target_branch_has_a_mismatch_and_continues_when_confirmed()
+    public function it_asks_confirmation_when_target_branch_has_a_mismatch_and_continues_when_confirmed(): void
     {
         $this->git->getActiveBranchName()->willReturn('2.0');
 
@@ -278,7 +283,7 @@ labels: removed-deprecation
     }
 
     /** @test */
-    public function it_asks_confirmation_when_target_branch_has_a_mismatch_and_aborts_when_rejected()
+    public function it_asks_confirmation_when_target_branch_has_a_mismatch_and_aborts_when_rejected(): void
     {
         $this->git->getActiveBranchName()->willReturn('2.0');
         $this->git->getActiveBranchName()->willReturn('2.0');
@@ -294,7 +299,7 @@ labels: removed-deprecation
     }
 
     /** @test */
-    public function it_creates_a_new_release_with_a_relative_version()
+    public function it_creates_a_new_release_with_a_relative_version(): void
     {
         $this->expectTags(['0.1.0', '1.0.0', '2.0.0', '2.5.0']);
         $this->expectMatchingVersionBranchNotExists('3.0');
@@ -320,7 +325,7 @@ labels: removed-deprecation
     }
 
     /** @test */
-    public function it_creates_a_new_release_for_split_repositories()
+    public function it_creates_a_new_release_for_split_repositories(): void
     {
         $this->github->getOrganization()->willReturn('park-manager');
         $this->github->getRepository()->willReturn('park-manager');
@@ -362,7 +367,7 @@ labels: removed-deprecation
     }
 
     /** @test */
-    public function it_creates_a_new_release_for_split_repositories_with_missing_directories()
+    public function it_creates_a_new_release_for_split_repositories_with_missing_directories(): void
     {
         $this->github->getOrganization()->willReturn('park-manager');
         $this->github->getRepository()->willReturn('park-manager');
@@ -403,7 +408,7 @@ labels: removed-deprecation
     }
 
     /** @test */
-    public function it_creates_a_new_release_with_a_custom_title()
+    public function it_creates_a_new_release_with_a_custom_title(): void
     {
         $this->expectTags(['0.1.0', '1.0.0-BETA1']);
         $this->expectMatchingVersionBranchNotExists();
@@ -430,7 +435,7 @@ labels: removed-deprecation
     }
 
     /** @test */
-    public function it_fails_when_tag_already_exists()
+    public function it_fails_when_tag_already_exists(): void
     {
         $this->expectTags(['v0.1.0', 'v0.2.0', 'v0.3.0', '1.0.0-BETA1', '1.0.0']);
         $this->expectMatchingVersionBranchNotExists('3.0');
@@ -443,7 +448,7 @@ labels: removed-deprecation
     }
 
     /** @test */
-    public function it_fails_when_tag_without_prefix_already_exists()
+    public function it_fails_when_tag_without_prefix_already_exists(): void
     {
         $this->expectTags(['0.1.0', '1.0.0-BETA1']);
         $this->expectMatchingVersionBranchNotExists('3.0');
@@ -472,7 +477,7 @@ labels: removed-deprecation
         return $args;
     }
 
-    private function executeHandler(Args $args, array $input = ['no'])
+    private function executeHandler(Args $args, array $input = ['no']): void
     {
         $style = $this->createStyle($input);
         $handler = new ReleaseHandler(
@@ -489,12 +494,12 @@ labels: removed-deprecation
         $handler->handle($args, $this->io);
     }
 
-    private function expectTags(array $tags = [])
+    private function expectTags(array $tags = []): void
     {
         $process = $this->prophesize(Process::class);
         $process->getOutput()->willReturn(implode("\n", $tags));
 
-        $this->process->mustRun('git tag --list')->willReturn($process->reveal());
+        $this->process->mustRun(['git', 'tag', '--list'])->willReturn($process->reveal());
 
         if ($tags === []) {
             $this->git->getLastTagOnBranch()->willThrow(ProcessFailedException::class);
@@ -503,32 +508,33 @@ labels: removed-deprecation
         }
     }
 
-    private function expectMatchingVersionBranchExists(string $branch = '1.0')
+    private function expectMatchingVersionBranchExists(string $branch = '1.0'): void
     {
         $this->git->remoteBranchExists('upstream', $branch)->willReturn(true);
     }
 
-    private function expectMatchingVersionBranchNotExists(string $branch = '1.0')
+    private function expectMatchingVersionBranchNotExists(string $branch = '1.0'): void
     {
         $this->git->remoteBranchExists('upstream', $branch)->willReturn(false);
     }
 
     private function expectTagAndGitHubRelease(string $version, string $message, ?string $title = null): string
     {
-        $this->process->mustRun(['git', 'tag', '-s', 'v'.$version, '-m', 'Release '.$version])->shouldBeCalled();
-        $this->process->mustRun(['git', 'push', 'upstream', 'v'.$version])->shouldBeCalled();
+        $this->process->mustRun(['git', 'tag', '-s', 'v' . $version, '-m', 'Release ' . $version])->shouldBeCalled();
+        $this->process->mustRun(['git', 'push', 'upstream', 'v' . $version])->shouldBeCalled();
 
-        $this->github->createRelease('v'.$version, $message, false, $title)->willReturn(
-            ['html_url' => $url = 'https://github.com/park-manager/hubkit/releases/tag/v'.$version]
+        $this->github->createRelease('v' . $version, $message, false, $title)->willReturn(
+            ['html_url' => $url = 'https://github.com/park-manager/hubkit/releases/tag/v' . $version]
         );
 
         return $url;
     }
 
-    private function expectEditorReturns(string $input, string $output = null)
+    private function expectEditorReturns(string $input, string $output = null): void
     {
         $this->editor->fromString(PropArgument::containingString($input), true, PropArgument::containingString('Leave file empty to abort operation.'))
-            ->willReturn($output ?? $input);
+            ->willReturn($output ?? $input)
+        ;
     }
 
     private function expectGitSplit(string $prefix, string $remote, string $url, string $sha, bool $success = true): void

@@ -24,11 +24,9 @@ class Container extends \Pimple\Container implements ContainerInterface
     {
         parent::__construct($values);
 
-        $this['config'] = function (self $container) {
-            return (new ConfigFactory($container['current_dir'], $container['config_file']))->create();
-        };
+        $this['config'] = static fn (self $container) => (new ConfigFactory($container['current_dir'], $container['config_file']))->create();
 
-        $this['guzzle'] = function (self $container) {
+        $this['guzzle'] = static function (self $container) {
             $options = [];
 
             if ($container['console_io']->isDebug()) {
@@ -38,27 +36,17 @@ class Container extends \Pimple\Container implements ContainerInterface
             return new GuzzleClient($options);
         };
 
-        $this['style'] = function (self $container) {
-            return new SymfonyStyle($container['sf.console_input'], $container['sf.console_output']);
-        };
+        $this['style'] = static fn (self $container) => new SymfonyStyle($container['sf.console_input'], $container['sf.console_output']);
 
-        $this['process'] = function (self $container) {
-            return new Service\CliProcess($container['sf.console_output']);
-        };
+        $this['process'] = static fn (self $container) => new Service\CliProcess($container['sf.console_output']);
 
-        $this['git'] = function (self $container) {
-            return new Service\Git($container['process'], $container['filesystem'], $container['style']);
-        };
+        $this['git'] = static fn (self $container) => new Service\Git($container['process'], $container['filesystem'], $container['style']);
 
-        $this['git.branch'] = function (self $container) {
-            return new Service\Git\GitBranch($container['process'], $container['style']);
-        };
+        $this['git.branch'] = static fn (self $container) => new Service\Git\GitBranch($container['process'], $container['style']);
 
-        $this['git.config'] = function (self $container) {
-            return new Service\Git\GitConfig($container['process'], $container['style']);
-        };
+        $this['git.config'] = static fn (self $container) => new Service\Git\GitConfig($container['process'], $container['style']);
 
-        $this['splitsh_git'] = function (self $container) {
+        $this['splitsh_git'] = static function (self $container) {
             return new Service\SplitshGit(
                 $container['git'],
                 $container['process'],
@@ -68,25 +56,17 @@ class Container extends \Pimple\Container implements ContainerInterface
             );
         };
 
-        $this['filesystem'] = function () {
-            return new Service\Filesystem();
-        };
+        $this['filesystem'] = static fn () => new Service\Filesystem();
 
-        $this['editor'] = function (self $container) {
-            return new Service\Editor($container['process'], $container['filesystem']);
-        };
+        $this['editor'] = static fn (self $container) => new Service\Editor($container['process'], $container['filesystem']);
 
-        $this['release_hooks'] = function (self $container) {
-            return new Service\ReleaseHooks($container, $container['git'], $container['logger']);
-        };
+        $this['release_hooks'] = static fn (self $container) => new Service\ReleaseHooks($container, $container['git'], $container['logger']);
 
         //
         // Third-party APIs
         //
 
-        $this['github'] = function (self $container) {
-            return new Service\GitHub($container['guzzle'], $container['config']);
-        };
+        $this['github'] = static fn (self $container) => new Service\GitHub($container['guzzle'], $container['config']);
     }
 
     public function get($id)

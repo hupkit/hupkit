@@ -17,20 +17,26 @@ use HubKit\Service\CliProcess;
 use HubKit\Service\Filesystem;
 use HubKit\Service\Git;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Style\OutputStyle;
 
-class GitTest extends TestCase
+/**
+ * @internal
+ */
+final class GitTest extends TestCase
 {
+    use ProphecyTrait;
+
     protected function setUp(): void
     {
-        rename(__DIR__.'/../../Fixtures/git_example_changelog_project/git', __DIR__.'/../../Fixtures/git_example_changelog_project/.git');
+        rename(__DIR__ . '/../../Fixtures/git_example_changelog_project/git', __DIR__ . '/../../Fixtures/git_example_changelog_project/.git');
     }
 
     /**
      * @test
      */
-    public function it_returns_all_hubkit_merge_commits()
+    public function it_returns_all_hubkit_merge_commits(): void
     {
         $expectedResult = [
             [
@@ -47,7 +53,7 @@ class GitTest extends TestCase
             ],
         ];
 
-        chdir(__DIR__.'/../../Fixtures/git_example_changelog_project');
+        chdir(__DIR__ . '/../../Fixtures/git_example_changelog_project');
 
         $cliProcess = new CliProcess(new NullOutput());
         $fileSystemHelper = $this->prophesize(Filesystem::class);
@@ -57,11 +63,11 @@ class GitTest extends TestCase
 
         $result = $git->getLogBetweenCommits('dfa12a79fc16af2b763afda1f7b9902a43b37488', 'HEAD');
 
-        $this->assertEquals($expectedResult, $result);
+        self::assertEquals($expectedResult, $result);
     }
 
     protected function tearDown(): void
     {
-        rename(__DIR__.'/../../Fixtures/git_example_changelog_project/.git', __DIR__.'/../../Fixtures/git_example_changelog_project/git');
+        rename(__DIR__ . '/../../Fixtures/git_example_changelog_project/.git', __DIR__ . '/../../Fixtures/git_example_changelog_project/git');
     }
 }

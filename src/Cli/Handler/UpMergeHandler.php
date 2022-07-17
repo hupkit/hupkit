@@ -66,7 +66,7 @@ final class UpMergeHandler extends GitBaseHandler
 
         $this->git->ensureBranchInSync('upstream', $branch);
 
-        if (!\in_array($defaultBranch, $branches, true)) {
+        if (! \in_array($defaultBranch, $branches, true)) {
             $branches[] = $defaultBranch;
         }
         $changedBranches = [];
@@ -126,7 +126,7 @@ final class UpMergeHandler extends GitBaseHandler
 
         $this->git->ensureBranchInSync('upstream', $branch);
 
-        if (!\in_array($defaultBranch, $branches, true)) {
+        if (! \in_array($defaultBranch, $branches, true)) {
             $branches[] = $defaultBranch;
         }
         $changedBranches = [];
@@ -174,7 +174,7 @@ final class UpMergeHandler extends GitBaseHandler
                 $changedBranches = $this->mergeSingleBranch($branch, $this->getSplitTargets($args));
             }
 
-            if ([] === $changedBranches) {
+            if ($changedBranches === []) {
                 $this->style->success('Nothing to do here or not a version branch.');
 
                 return 0;
@@ -208,9 +208,9 @@ final class UpMergeHandler extends GitBaseHandler
                 $changedBranches = $this->dryMergeSingleBranch($branch);
             }
 
-            if ([] === $changedBranches) {
+            if ($changedBranches === []) {
                 $this->style->success(
-                    'This operation would not perform anything, '.
+                    'This operation would not perform anything, ' .
                     'everything is up-to-date or current branch is not a version branch.'
                 );
 
@@ -250,7 +250,7 @@ final class UpMergeHandler extends GitBaseHandler
 
     private function getSplitTargets(Args $args): array
     {
-        $splitTargets = $this->config->get(['repos', $this->github->getHostname(), $this->github->getOrganization().'/'.$this->github->getRepository(), 'split']);
+        $splitTargets = $this->config->get(['repos', $this->github->getHostname(), $this->github->getOrganization() . '/' . $this->github->getRepository(), 'split']);
 
         if ($args->getOption('no-split') || $splitTargets === null) {
             return [];

@@ -17,14 +17,20 @@ use HubKit\Service\Git;
 use HubKit\Service\ReleaseHooks;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Rollerworks\Component\Version\Version;
 
+/**
+ * @internal
+ */
 final class ReleaseHooksTest extends TestCase
 {
+    use ProphecyTrait;
+
     /** @test */
-    public function it_does_nothing_when_there_are_hooks()
+    public function it_does_nothing_when_there_are_hooks(): void
     {
         $gitProphecy = $this->prophesize(Git::class);
         $gitProphecy->isWorkingTreeReady()->willReturn(true);
@@ -35,7 +41,7 @@ final class ReleaseHooksTest extends TestCase
         $loggerProphecy->debug('File {script} was not found. post-release script will not be executed.', Argument::any())->shouldBeCalled();
         $logger = $loggerProphecy->reveal();
 
-        $hooks = new ReleaseHooks($this->createMock(ContainerInterface::class), $git, $logger, __DIR__.'/Fixtures/project-without-hooks');
+        $hooks = new ReleaseHooks($this->createMock(ContainerInterface::class), $git, $logger, __DIR__ . '/Fixtures/project-without-hooks');
 
         $version = Version::fromString('1.0');
 
@@ -44,7 +50,7 @@ final class ReleaseHooksTest extends TestCase
     }
 
     /** @test */
-    public function it_executes_pre_hook()
+    public function it_executes_pre_hook(): void
     {
         $gitProphecy = $this->prophesize(Git::class);
         $gitProphecy->isWorkingTreeReady()->willReturn(true);
@@ -55,7 +61,7 @@ final class ReleaseHooksTest extends TestCase
         $loggerProphecy->debug('File {script} was not found. post-release script will not be executed.', Argument::any())->shouldBeCalled();
         $logger = $loggerProphecy->reveal();
 
-        $hooks = new ReleaseHooks($this->createMock(ContainerInterface::class), $git, $logger, __DIR__.'/Fixtures/project-pre-release');
+        $hooks = new ReleaseHooks($this->createMock(ContainerInterface::class), $git, $logger, __DIR__ . '/Fixtures/project-pre-release');
 
         $version = Version::fromString('1.0');
 
@@ -64,7 +70,7 @@ final class ReleaseHooksTest extends TestCase
     }
 
     /** @test */
-    public function it_executes_post_hook()
+    public function it_executes_post_hook(): void
     {
         $gitProphecy = $this->prophesize(Git::class);
         $gitProphecy->isWorkingTreeReady()->willReturn(true);
@@ -75,7 +81,7 @@ final class ReleaseHooksTest extends TestCase
         $loggerProphecy->debug('File {script} was not found. post-release script will not be executed.', Argument::any())->shouldNotBeCalled();
         $logger = $loggerProphecy->reveal();
 
-        $hooks = new ReleaseHooks($this->createMock(ContainerInterface::class), $git, $logger, __DIR__.'/Fixtures/project-post-release');
+        $hooks = new ReleaseHooks($this->createMock(ContainerInterface::class), $git, $logger, __DIR__ . '/Fixtures/project-post-release');
 
         $version = Version::fromString('1.0');
 
@@ -84,7 +90,7 @@ final class ReleaseHooksTest extends TestCase
     }
 
     /** @test */
-    public function it_executes_pre_post_hook()
+    public function it_executes_pre_post_hook(): void
     {
         $gitProphecy = $this->prophesize(Git::class);
         $gitProphecy->isWorkingTreeReady()->willReturn(true);
@@ -95,7 +101,7 @@ final class ReleaseHooksTest extends TestCase
         $loggerProphecy->debug('File {script} was not found. post-release script will not be executed.', Argument::any())->shouldNotBeCalled();
         $logger = $loggerProphecy->reveal();
 
-        $hooks = new ReleaseHooks($this->createMock(ContainerInterface::class), $git, $logger, __DIR__.'/Fixtures/project-pre-post-release');
+        $hooks = new ReleaseHooks($this->createMock(ContainerInterface::class), $git, $logger, __DIR__ . '/Fixtures/project-pre-post-release');
 
         $version = Version::fromString('1.0');
 

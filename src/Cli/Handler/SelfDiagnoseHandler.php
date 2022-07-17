@@ -47,7 +47,7 @@ final class SelfDiagnoseHandler
         $this->process = $process;
     }
 
-    public function handle()
+    public function handle(): void
     {
         $this->style->title('HubKit diagnoses');
 
@@ -110,7 +110,7 @@ final class SelfDiagnoseHandler
         }
     }
 
-    private function testGitHubConfigurations(StatusTable $table)
+    private function testGitHubConfigurations(StatusTable $table): void
     {
         foreach ($this->config->get('github', []) as $hostname => $authentication) {
             $label = sprintf('GitHub "%s" authentication', $hostname);
@@ -119,24 +119,24 @@ final class SelfDiagnoseHandler
                 $this->github->initializeForHost($hostname);
                 $table->addRow($label, $this->github->isAuthenticated() ? 'success' : 'failure', $authentication['username']);
             } catch (\Exception $e) {
-                $table->addRow($label, 'failure', \get_class($e).': '.$e->getMessage());
+                $table->addRow($label, 'failure', $e::class . ': ' . $e->getMessage());
             }
         }
     }
 
-    private function testRequiredGitConfig(StatusTable $table, string $config)
+    private function testRequiredGitConfig(StatusTable $table, string $config): void
     {
         $result = $this->git->getGitConfig($config, 'global');
         $label = sprintf('Git "%s" configured', $config);
 
-        if ('' !== $result) {
+        if ($result !== '') {
             $table->addRow($label, 'success', $result);
         } else {
             $table->addRow($label, 'failure', sprintf('Missing "%s" in global Git config', $config));
         }
     }
 
-    private function testAdvisedGitConfigValue(StatusTable $table, string $config, string $expected, string $message)
+    private function testAdvisedGitConfigValue(StatusTable $table, string $config, string $expected, string $message): void
     {
         $result = (string) $this->git->getGitConfig($config, 'global');
         $label = sprintf('Git "%s" configured', $config);
@@ -144,58 +144,58 @@ final class SelfDiagnoseHandler
         if ($expected === $result) {
             $table->addRow($label, 'success', $result);
         } else {
-            $table->addRow($label, 'warning', strpos($message, '%s') !== false ? sprintf($message, $result) : $message);
+            $table->addRow($label, 'warning', str_contains($message, '%s') ? sprintf($message, $result) : $message);
         }
     }
 
-    private function testOptionalGitConfig(StatusTable $table, string $config, string $message)
+    private function testOptionalGitConfig(StatusTable $table, string $config, string $message): void
     {
         $result = $this->git->getGitConfig($config, 'global');
         $label = sprintf('Git "%s" configured', $config);
 
-        if ('' !== $result) {
+        if ($result !== '') {
             $table->addRow($label, 'success', $result);
         } else {
             $table->addRow($label, 'warning', $message);
         }
     }
 
-    private function testUpstreamRemoteSet(StatusTable $table)
+    private function testUpstreamRemoteSet(StatusTable $table): void
     {
-        if (!$this->git->isGitDir()) {
+        if (! $this->git->isGitDir()) {
             return;
         }
 
         $result = $this->git->getGitConfig('remote.upstream.url');
-        $label = sprintf('Git remote "upstream" configured');
+        $label = 'Git remote "upstream" configured';
 
-        if ('' !== $result) {
+        if ($result !== '') {
             $table->addRow($label, 'success', $result);
         } else {
             $table->addRow($label, 'failure', 'Git remote "upstream" should be configured');
         }
     }
 
-    private function testExecutableFound(StatusTable $table, string $executable, string $message)
+    private function testExecutableFound(StatusTable $table, string $executable, string $message): void
     {
         $finder = new ExecutableFinder();
         $result = $finder->find($executable, '');
         $label = sprintf('Executable "%s" found in PATH', $executable);
 
-        if ('' !== $result) {
+        if ($result !== '') {
             $table->addRow($label, 'success', $result);
         } else {
-            $table->addRow($label, 'warning', strpos($message, '%s') !== false ? sprintf($message, $result) : $message);
+            $table->addRow($label, 'warning', str_contains($message, '%s') ? sprintf($message, $result) : $message);
         }
     }
 
     private function getGitVersion(): string
     {
-        return explode(' ', trim($this->process->mustRun(
-                   'git --version',
-                   'Git is not installed or PATH is not properly configured.'
-               )->getOutput()
-           )
+        return explode(
+            ' ',
+            trim(
+                $this->process->mustRun(['git', '--version'], 'Git is not installed or PATH is not properly configured.')->getOutput()
+            )
         )[2];
     }
 }

@@ -28,12 +28,12 @@ class TestCliProcess extends CliProcess
         return $this;
     }
 
-    public function run($cmd, $error = null, callable $callback = null, $verbosity = OutputInterface::VERBOSITY_VERY_VERBOSE)
+    public function run($cmd, $error = null, callable $callback = null, $verbosity = OutputInterface::VERBOSITY_VERY_VERBOSE): ?Process
     {
         return parent::run($this->wrapProcessorForCmd($cmd), $error, $callback, $verbosity);
     }
 
-    public function mustRun($cmd, $error = null, callable $callback = null)
+    public function mustRun(array | Process $cmd, string $error = null, callable $callback = null): ?Process
     {
         return parent::mustRun($this->wrapProcessorForCmd($cmd), $error, $callback);
     }

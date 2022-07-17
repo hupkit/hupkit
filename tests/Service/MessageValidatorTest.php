@@ -16,15 +16,18 @@ namespace HubKit\Tests\Service;
 use HubKit\Service\MessageValidator;
 use PHPUnit\Framework\TestCase;
 
-class MessageValidatorTest extends TestCase
+/**
+ * @internal
+ */
+final class MessageValidatorTest extends TestCase
 {
     /** @test */
-    public function it_validates_messages()
+    public function it_validates_messages(): void
     {
         self::assertEquals([], MessageValidator::validateCommitsMessages([$this->createMessage('This is a fine message')]));
         self::assertEquals(
             [
-                 [MessageValidator::SEVERITY_HIGH, 'Description contains unacceptable contents', 'But this. is fucked-up.'],
+                [MessageValidator::SEVERITY_HIGH, 'Description contains unacceptable contents', 'But this. is fucked-up.'],
             ],
             MessageValidator::validateCommitsMessages([
                 $this->createMessage('This is a fine message'),
@@ -34,7 +37,7 @@ class MessageValidatorTest extends TestCase
     }
 
     /** @test */
-    public function it_validates_message()
+    public function it_validates_message(): void
     {
         // Please. Don't judge by my swearing.
         $this->assertSeverityHigh('Fuck this piece of....');

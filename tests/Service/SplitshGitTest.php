@@ -18,21 +18,27 @@ use HubKit\Service\Filesystem;
 use HubKit\Service\Git;
 use HubKit\Service\SplitshGit;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Filesystem\Filesystem as SfFilesystem;
 use Symfony\Component\Process\Process;
 
-class SplitshGitTest extends TestCase
+/**
+ * @internal
+ */
+final class SplitshGitTest extends TestCase
 {
+    use ProphecyTrait;
+
     private const SPLITSH_EXECUTABLE = '/usr/locale/bin/splitsh-lite';
 
     /** @test */
-    public function it_splits_source_into_target()
+    public function it_splits_source_into_target(): void
     {
         $pwd = getcwd();
 
         try {
-            chdir(__DIR__.'/Fixtures');
+            chdir(__DIR__ . '/Fixtures');
 
             $gitProphecy = $this->prophesize(Git::class);
             $gitProphecy->isGitDir()->willReturn(true);
@@ -65,7 +71,7 @@ class SplitshGitTest extends TestCase
     }
 
     /** @test */
-    public function it_syncs_tag_into_targets()
+    public function it_syncs_tag_into_targets(): void
     {
         $gitProphecy = $this->prophesize(Git::class);
         $gitProphecy->getGitConfig('remote._core.url')->willReturn('git@github.com:park-manager/core.git');
@@ -107,7 +113,7 @@ class SplitshGitTest extends TestCase
     }
 
     /** @test */
-    public function it_checks_precondition()
+    public function it_checks_precondition(): void
     {
         $gitProphecy = $this->prophesize(Git::class);
         $gitProphecy->isGitDir()->willReturn(true);
@@ -124,7 +130,7 @@ class SplitshGitTest extends TestCase
     }
 
     /** @test */
-    public function it_requires_root_directory_as_precondition()
+    public function it_requires_root_directory_as_precondition(): void
     {
         $gitProphecy = $this->prophesize(Git::class);
         $gitProphecy->isGitDir()->willReturn(false);

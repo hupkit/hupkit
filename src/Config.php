@@ -31,8 +31,6 @@ final class Config
      * @param string|string[] $keys    Single level key like 'profiles' or array-path
      *                                 like ['profiles', 'symfony-bundle']
      * @param mixed           $default Default value to use when no config is found (null)
-     *
-     * @return mixed
      */
     public function get($keys, $default = null)
     {
@@ -45,7 +43,7 @@ final class Config
         $current = $this->config;
 
         foreach ($keys as $key) {
-            if (!\is_array($current) || !\array_key_exists($key, $current)) {
+            if (! \is_array($current) || ! \array_key_exists($key, $current)) {
                 return $default;
             }
 
@@ -60,8 +58,6 @@ final class Config
      *
      * @param string|string[] $keys Single level key like 'profiles' or array-path
      *                              like ['profiles', 'symfony-bundle']
-     *
-     * @return mixed
      */
     public function getOrFail($keys)
     {
@@ -81,15 +77,13 @@ final class Config
      * @param string[] $keys    Array of single level keys like "adapters" or array-path
      *                          like ['profiles', 'symfony-bundle'] to check
      * @param mixed    $default Default value to use when no config is found (null)
-     *
-     * @return mixed
      */
     public function getFirstNotNull(array $keys, $default = null)
     {
         foreach ($keys as $key) {
             $value = $this->get($key);
 
-            if (null !== $value) {
+            if ($value !== null) {
                 return $value;
             }
         }
@@ -114,7 +108,7 @@ final class Config
         $current = $this->config;
 
         foreach ($keys as $key) {
-            if (!\is_array($current) || !\array_key_exists($key, $current)) {
+            if (! \is_array($current) || ! \array_key_exists($key, $current)) {
                 return false;
             }
 

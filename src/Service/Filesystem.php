@@ -36,13 +36,13 @@ class Filesystem
      */
     public function newTempFilename(string $content = null): string
     {
-        $dir = $this->tempdir.\DIRECTORY_SEPARATOR.'hubkit';
+        $dir = $this->tempdir . \DIRECTORY_SEPARATOR . 'hubkit';
         $this->fs->mkdir($dir);
 
         $tmpName = tempnam($dir, '');
         $this->tempFilenames[] = $tmpName;
 
-        if (null !== $content) {
+        if ($content !== null) {
             file_put_contents($tmpName, $content);
         }
 
@@ -61,7 +61,7 @@ class Filesystem
      */
     public function tempDirectory(string $name, bool $clearExisting = true): string
     {
-        $tmpName = $this->tempdir.\DIRECTORY_SEPARATOR.'hubkit'.\DIRECTORY_SEPARATOR.$name;
+        $tmpName = $this->tempdir . \DIRECTORY_SEPARATOR . 'hubkit' . \DIRECTORY_SEPARATOR . $name;
 
         if ($clearExisting && $this->fs->exists($tmpName)) {
             $this->fs->remove($tmpName);

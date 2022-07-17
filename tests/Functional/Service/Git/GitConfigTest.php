@@ -17,11 +17,16 @@ use HubKit\Service\Git\GitConfig;
 use HubKit\Tests\Functional\GitTesterTrait;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Symfony\Component\Console\Style\StyleInterface;
 
+/**
+ * @internal
+ */
 final class GitConfigTest extends TestCase
 {
     use GitTesterTrait;
+    use ProphecyTrait;
 
     /** @var string */
     private $localRepository;
@@ -37,17 +42,17 @@ final class GitConfigTest extends TestCase
     /** @before */
     public function setUpLocalRepository(): void
     {
-        $this->cwd = $this->localRepository = $this->createGitDirectory($this->getTempDir().'/git');
+        $this->cwd = $this->localRepository = $this->createGitDirectory($this->getTempDir() . '/git');
         $this->commitFileToRepository('foo.txt', $this->localRepository);
 
-        $this->remoteRepository = $this->createBareGitDirectory($this->getTempDir().'/git2');
+        $this->remoteRepository = $this->createBareGitDirectory($this->getTempDir() . '/git2');
         $this->addRemote('origin', $this->remoteRepository, $this->localRepository);
         $this->runCliCommand(['git', 'push', 'origin', 'master'], $this->localRepository);
 
         $test = $this; // Come-on Prophecy :'(
         $this->style = $this->prophesize(StyleInterface::class);
         $this->style->note(Argument::any())->will(
-            function ($text) use ($test) {
+            static function ($text) use ($test): void {
                 $test->output .= implode('', $text);
             }
         );
@@ -55,7 +60,7 @@ final class GitConfigTest extends TestCase
     }
 
     /** @test */
-    public function it_ensures_notes_are_fetched()
+    public function it_ensures_notes_are_fetched(): void
     {
         $this->runCliCommand(['git', 'config', '--replace-all', '--local', 'remote.origin.fetch', '+refs/heads/*:refs/remotes/upstream/*']);
 
@@ -69,7 +74,7 @@ final class GitConfigTest extends TestCase
     }
 
     /** @test */
-    public function it_ensures_notes_are_fetched_once()
+    public function it_ensures_notes_are_fetched_once(): void
     {
         $this->runCliCommand(['git', 'config', '--replace-all', '--local', 'remote.origin.fetch', '+refs/heads/*:refs/remotes/upstream/*']);
         $this->runCliCommand(['git', 'config', '--add', '--local', 'remote.origin.fetch', '+refs/notes/*:refs/notes/*']);
@@ -84,24 +89,24 @@ final class GitConfigTest extends TestCase
     }
 
     /** @test */
-    public function it_ensures_remote_exists()
+    public function it_ensures_remote_exists(): void
     {
         $this->git->ensureRemoteExists('upstream', 'https://github.com/park-manager/hubkit');
 
         $this->assertGitConfigEquals('https://github.com/park-manager/hubkit', 'remote.upstream.url');
-        $this->assertGitConfigEquals('file://'.$this->remoteRepository, 'remote.origin.url');
+        $this->assertGitConfigEquals('file://' . $this->remoteRepository, 'remote.origin.url');
         self::assertEquals('Adding remote "upstream" with "https://github.com/park-manager/hubkit".', $this->output);
     }
 
     /** @test */
-    public function it_ensures_remote_exists_with_correct_url()
+    public function it_ensures_remote_exists_with_correct_url(): void
     {
         $this->runCliCommand(['git', 'remote', 'add', 'upstream', 'https://github.com/park-manager/gubmit']);
 
         $this->git->ensureRemoteExists('upstream', 'https://github.com/park-manager/hubkit');
 
         $this->assertGitConfigEquals('https://github.com/park-manager/hubkit', 'remote.upstream.url');
-        $this->assertGitConfigEquals('file://'.$this->remoteRepository, 'remote.origin.url');
+        $this->assertGitConfigEquals('file://' . $this->remoteRepository, 'remote.origin.url');
         self::assertEquals('Adding remote "upstream" with "https://github.com/park-manager/hubkit".', $this->output);
     }
 
@@ -114,7 +119,7 @@ final class GitConfigTest extends TestCase
     }
 
     /** @test */
-    public function it_sets_local_configuration()
+    public function it_sets_local_configuration(): void
     {
         $this->git->setLocal('branch.master.alias', '2.0', true);
 
@@ -123,7 +128,7 @@ final class GitConfigTest extends TestCase
     }
 
     /** @test */
-    public function it_gets_global_configuration()
+    public function it_gets_global_configuration(): void
     {
         $this->git->setLocal('branch.master.alias', '2.0', true);
 
@@ -132,7 +137,7 @@ final class GitConfigTest extends TestCase
     }
 
     /** @test */
-    public function it_gets_remote_info()
+    public function it_gets_remote_info(): void
     {
         $this->git->ensureRemoteExists('upstream', 'https://github.com/park-manager/hubkit');
 
@@ -167,7 +172,7 @@ final class GitConfigTest extends TestCase
      * @test
      * @dataProvider provideGitUrls
      */
-    public function it_gets_git_url_info(string $url)
+    public function it_gets_git_url_info(string $url): void
     {
         self::assertEquals(['host' => 'github.com', 'org' => 'park-manager', 'repo' => 'hubkit'], $this->git::getGitUrlInfo($url));
     }

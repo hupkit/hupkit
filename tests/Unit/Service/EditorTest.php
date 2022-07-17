@@ -18,15 +18,21 @@ use HubKit\Service\Editor;
 use HubKit\Service\Filesystem;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use Symfony\Component\Process\Process;
 
+/**
+ * @internal
+ */
 final class EditorTest extends TestCase
 {
+    use ProphecyTrait;
+
     /** @test */
     public function opens_editor_with_string_contents(): void
     {
-        if (false === $this->isTtySupported()) {
-            $this->markTestSkipped('No TTY support');
+        if ($this->isTtySupported() === false) {
+            self::markTestSkipped('No TTY support');
         }
 
         $process = $this->createProcessSpy($processCmd);
@@ -37,14 +43,14 @@ final class EditorTest extends TestCase
 
         self::assertFileExists($tempFile);
         self::assertEquals(file_get_contents($tempFile), 'Some contents go here.');
-        self::assertEquals("'vim-or-die' '".$tempFile."'", $processCmd);
+        self::assertEquals("'vim-or-die' '" . $tempFile . "'", $processCmd);
     }
 
     private function createFilesystemSpy(&$tempFile): Filesystem
     {
         $filesystemProphecy = $this->prophesize(Filesystem::class);
         $filesystemProphecy->newTempFilename(Argument::any())->will(
-            function ($args) use (&$tempFile) {
+            static function ($args) use (&$tempFile) {
                 return $tempFile = (new Filesystem())->newTempFilename($args[0]);
             }
         );
@@ -58,7 +64,7 @@ final class EditorTest extends TestCase
         $processProphecy
             ->startAndWait(
                 Argument::that(
-                    function (Process $process) use (&$processCmd) {
+                    static function (Process $process) use (&$processCmd) {
                         $processCmd = $process->getCommandLine();
 
                         return true;
@@ -82,8 +88,8 @@ final class EditorTest extends TestCase
     /** @test */
     public function opens_editor_with_string_contents_and_instructions(): void
     {
-        if (false === $this->isTtySupported()) {
-            $this->markTestSkipped('No TTY support');
+        if ($this->isTtySupported() === false) {
+            self::markTestSkipped('No TTY support');
         }
 
         $process = $this->createProcessSpy($processCmd);
@@ -94,14 +100,14 @@ final class EditorTest extends TestCase
 
         self::assertFileExists($tempFile);
         self::assertEquals(file_get_contents($tempFile), "# THIS LINE IS AUTOMATICALLY REMOVED; Release v2.0\n\nSome contents go here.");
-        self::assertEquals("'vim-or-die' '".$tempFile."'", $processCmd);
+        self::assertEquals("'vim-or-die' '" . $tempFile . "'", $processCmd);
     }
 
     /** @test */
     public function opens_editor_with_string_contents_and_instructions_removed(): void
     {
-        if (false === $this->isTtySupported()) {
-            $this->markTestSkipped('No TTY support');
+        if ($this->isTtySupported() === false) {
+            self::markTestSkipped('No TTY support');
         }
 
         $filesystem = $this->createFilesystemSpy($tempFile);
@@ -112,7 +118,7 @@ final class EditorTest extends TestCase
 
         self::assertFileExists($tempFile);
         self::assertEquals(file_get_contents($tempFile), '# THIS LINE IS Some contents go here.');
-        self::assertEquals("'vim-or-die' '".$tempFile."'", $processCmd);
+        self::assertEquals("'vim-or-die' '" . $tempFile . "'", $processCmd);
     }
 
     private function createProcessModifierSpy(&$processCmd, &$tempFile, string $contents): CliProcess
@@ -121,7 +127,7 @@ final class EditorTest extends TestCase
         $processProphecy
             ->startAndWait(
                 Argument::that(
-                    function (Process $process) use (&$processCmd, &$tempFile, $contents) {
+                    static function (Process $process) use (&$processCmd, &$tempFile, $contents) {
                         $processCmd = $process->getCommandLine();
 
                         file_put_contents($tempFile, $contents);

@@ -56,7 +56,7 @@ final class ReleaseHandler extends GitBaseHandler
         $this->releaseHooks = $releaseHooks;
     }
 
-    public function handle(Args $args, IO $io)
+    public function handle(Args $args, IO $io): void
     {
         $branch = $this->git->getActiveBranchName();
 
@@ -82,7 +82,7 @@ final class ReleaseHandler extends GitBaseHandler
 
         $changelog = $this->getChangelog($branch);
 
-        if (!$args->getOption('no-edit')) {
+        if (! $args->getOption('no-edit')) {
             $changelog = $this->editor->fromString(
                 $changelog,
                 true,
@@ -96,27 +96,27 @@ final class ReleaseHandler extends GitBaseHandler
         // then being able to re-run the release command on the source repository.
         $this->tagSplitRepositories($branch, $versionStr);
 
-        $this->process->mustRun(['git', 'tag', '-s', 'v'.$versionStr, '-m', 'Release '.$versionStr]);
-        $this->process->mustRun(['git', 'push', 'upstream', 'v'.$versionStr]);
+        $this->process->mustRun(['git', 'tag', '-s', 'v' . $versionStr, '-m', 'Release ' . $versionStr]);
+        $this->process->mustRun(['git', 'push', 'upstream', 'v' . $versionStr]);
 
-        $release = $this->github->createRelease('v'.$versionStr, $changelog, $args->getOption('pre-release'), $args->getOption('title'));
+        $release = $this->github->createRelease('v' . $versionStr, $changelog, $args->getOption('pre-release'), $args->getOption('title'));
 
         $this->releaseHooks->postRelease($version, $branch, $args->getOption('title'), $changelog);
 
         $this->style->success([sprintf('Successfully released %s', $versionStr), $release['html_url']]);
     }
 
-    private function validateBranchCompatibility(string $branch, Version $version)
+    private function validateBranchCompatibility(string $branch, Version $version): void
     {
-        if (!$this->io->isInteractive()) {
+        if (! $this->io->isInteractive()) {
             return;
         }
 
-        if ($branch === $version->major.'.'.$version->minor) {
+        if ($branch === $version->major . '.' . $version->minor) {
             return;
         }
 
-        if ($this->git->remoteBranchExists('upstream', $expected = $version->major.'.'.$version->minor)) {
+        if ($this->git->remoteBranchExists('upstream', $expected = $version->major . '.' . $version->minor)) {
             $this->style->warning(
                 [
                     sprintf('This release will be created for the "%s" branch.', $branch),
@@ -136,28 +136,28 @@ final class ReleaseHandler extends GitBaseHandler
 
     private function validateVersion(string $providedVersion): Version
     {
-        if (\in_array(strtolower($providedVersion), ['alpha', 'beta', 'rc', 'stable', 'major', 'minor', 'next', 'patch'], true)) {
-            $version = Version::fromString($this->git->getLastTagOnBranch())->getNextIncreaseOf(strtolower($providedVersion));
+        if (\in_array(mb_strtolower($providedVersion), ['alpha', 'beta', 'rc', 'stable', 'major', 'minor', 'next', 'patch'], true)) {
+            $version = Version::fromString($this->git->getLastTagOnBranch())->getNextIncreaseOf(mb_strtolower($providedVersion));
         } else {
             $version = Version::fromString($providedVersion);
         }
 
-        $this->style->text('Provided version: '.$version);
+        $this->style->text('Provided version: ' . $version);
 
-        $tags = StringUtil::splitLines($this->process->mustRun('git tag --list')->getOutput());
+        $tags = StringUtil::splitLines($this->process->mustRun(['git', 'tag', '--list'])->getOutput());
         $this->guardTagDoesNotExist($version, $tags);
 
-        if (!$this->io->isInteractive()) {
+        if (! $this->io->isInteractive()) {
             return $version;
         }
 
         $validator = new ContinuesVersionsValidator(...array_map([Version::class, 'fromString'], $tags));
 
-        if (!$validator->isContinues($version)) {
+        if (! $validator->isContinues($version)) {
             $this->style->warning(
                 [
                     'It appears there is a gap compared to the last version.',
-                    'Expected one of: '.implode(', ', $validator->getPossibleVersions()),
+                    'Expected one of: ' . implode(', ', $validator->getPossibleVersions()),
                 ]
             );
 
@@ -167,9 +167,9 @@ final class ReleaseHandler extends GitBaseHandler
         return $version;
     }
 
-    private function confirmPossibleError()
+    private function confirmPossibleError(): void
     {
-        if (!$this->style->confirm('Please confirm your input is correct.', false)) {
+        if (! $this->style->confirm('Please confirm your input is correct.', false)) {
             throw new \RuntimeException('User aborted.');
         }
     }
@@ -183,23 +183,21 @@ final class ReleaseHandler extends GitBaseHandler
             $base = null;
         }
 
-        if (null !== $base) {
+        if ($base !== null) {
             return (new ChangelogRenderer($this->git, $this->github))->renderChangelogByCategories($base, $branch);
         }
 
         return 'Initial release.';
     }
 
-    private function guardTagDoesNotExist(Version $version, array $tags)
+    private function guardTagDoesNotExist(Version $version, array $tags): void
     {
         $tags = array_map(
-            function ($tag) {
-                return ltrim($tag, 'vV');
-            },
+            static fn ($tag) => ltrim($tag, 'vV'),
             $tags
         );
 
-        if (!\in_array((string) $version, $tags, true)) {
+        if (! \in_array((string) $version, $tags, true)) {
             return;
         }
 
@@ -208,9 +206,7 @@ final class ReleaseHandler extends GitBaseHandler
 
         $suggested = array_filter(
             $validator->getPossibleVersions(),
-            function (Version $version) use ($tags) {
-                return !\in_array((string) $version, $tags, true);
-            }
+            static fn (Version $version) => ! \in_array((string) $version, $tags, true)
         );
 
         throw new \RuntimeException(
@@ -224,7 +220,7 @@ final class ReleaseHandler extends GitBaseHandler
 
     private function tagSplitRepositories(string $branch, string $version): void
     {
-        $configName = ['repos', $this->github->getHostname(), $this->github->getOrganization().'/'.$this->github->getRepository()];
+        $configName = ['repos', $this->github->getHostname(), $this->github->getOrganization() . '/' . $this->github->getRepository()];
         $reposConfig = $this->config->get($configName);
 
         if (empty($reposConfig['split'])) {

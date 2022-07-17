@@ -52,7 +52,7 @@ class SplitshGit
      */
     public function splitTo(string $targetBranch, string $prefix, string $url): ?array
     {
-        if (!file_exists(getcwd().'/'.$prefix) || !is_dir(getcwd().'/'.$prefix)) {
+        if (! file_exists(getcwd() . '/' . $prefix) || ! is_dir(getcwd() . '/' . $prefix)) {
             $this->logger->warning('Prefix directory "{prefix}" for "{url}" does not exist in the local repository', ['prefix' => $prefix, 'url' => $url]);
 
             return null;
@@ -61,13 +61,13 @@ class SplitshGit
         $process = $this->process->mustRun([$this->executable, '--prefix', $prefix]);
         $sha = trim($process->getOutput());
 
-        $remoteName = '_'.Git::getGitUrlInfo($url)['repo'];
+        $remoteName = '_' . Git::getGitUrlInfo($url)['repo'];
         $this->git->ensureRemoteExists($remoteName, $url);
         $tempBranchName = null;
 
         // NOTE: Always perform the push as git-splitsh in some cases don't produce a new commit as there was already one
         try {
-            $this->git->pushToRemote($remoteName, $sha.':'.$targetBranch);
+            $this->git->pushToRemote($remoteName, $sha . ':' . $targetBranch);
         } catch (ProcessFailedException $e) {
             // Failed to push. If remote branch is missing Git fails.
             if ($this->git->remoteBranchExists($remoteName, $targetBranch)) {
@@ -75,8 +75,8 @@ class SplitshGit
             }
 
             $this->git->checkout($sha);
-            $this->git->checkout($tempBranchName = '_tmp_'.$sha, true);
-            $this->git->pushToRemote($remoteName, $tempBranchName.':'.$targetBranch);
+            $this->git->checkout($tempBranchName = '_tmp_' . $sha, true);
+            $this->git->pushToRemote($remoteName, $tempBranchName . ':' . $targetBranch);
         } finally {
             if ($tempBranchName !== null) {
                 $this->git->checkout($targetBranch);
@@ -105,10 +105,10 @@ class SplitshGit
         // Create a temp clone of the split-repository and tag a release (specific to the split).
         // All temp directories are automatically removed afterwards.
 
-        foreach ($targets as $remote => list($targetCommit, $url)) {
-            $filesystem->mkdir($tempDir.'/'.$remote);
+        foreach ($targets as $remote => [$targetCommit, $url]) {
+            $filesystem->mkdir($tempDir . '/' . $remote);
 
-            if (!$this->filesystem->chdir($tempDir.'/'.$remote)) {
+            if (! $this->filesystem->chdir($tempDir . '/' . $remote)) {
                 throw new \RuntimeException('Unable to change to temp repository. Aborting.');
             }
 
@@ -116,12 +116,12 @@ class SplitshGit
             $this->git->checkout($branch);
 
             try {
-                $this->process->mustRun(['git', 'tag', 'v'.$versionStr, $targetCommit, '-s', '-m', 'Release '.$versionStr]);
+                $this->process->mustRun(['git', 'tag', 'v' . $versionStr, $targetCommit, '-s', '-m', 'Release ' . $versionStr]);
             } catch (\Exception $e) {
                 // no-op. Ignore and try to push.
             }
 
-            $this->process->run(['git', 'push', 'origin', 'v'.$versionStr]);
+            $this->process->run(['git', 'push', 'origin', 'v' . $versionStr]);
         }
 
         $this->filesystem->chdir($currentDir);
@@ -129,11 +129,11 @@ class SplitshGit
 
     public function checkPrecondition(): void
     {
-        if (null === $this->executable) {
+        if ($this->executable === null) {
             throw new \RuntimeException('Unable to find "splitsh-lite" in PATH.');
         }
 
-        if (!$this->git->isGitDir()) {
+        if (! $this->git->isGitDir()) {
             throw new \RuntimeException(
                 'Unable to perform split operation. Requires Git root directory of the repository.'
             );

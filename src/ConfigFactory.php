@@ -47,7 +47,7 @@ final class ConfigFactory
                     'Config schema-version mismatch, expected %s got "%s". ',
                     self::SCHEMA_VERSION,
                     $config['schema_version']
-                )."\n".'If expected number is lower update HubKit else update the configuration.'
+                ) . "\n" . 'If expected number is lower update HubKit else update the configuration.'
             );
         }
 
@@ -56,7 +56,7 @@ final class ConfigFactory
 
     private static function normalizePath(string $path = null)
     {
-        if (null === $path) {
+        if ($path === null) {
             return;
         }
 

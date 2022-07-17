@@ -14,20 +14,24 @@ declare(strict_types=1);
 
 use HubKit\Cli\HubKitApplicationConfig;
 use HubKit\Container;
+use Symfony\Component\ErrorHandler\DebugClassLoader;
+use Symfony\Component\ErrorHandler\ErrorHandler;
+use Webmozart\Console\ConsoleApplication;
 
-require __DIR__.'/../vendor/autoload.php';
+require __DIR__ . '/../vendor/autoload.php';
 
-\Symfony\Component\Debug\ErrorHandler::register();
-\Symfony\Component\Debug\DebugClassLoader::enable();
+ErrorHandler::register();
+DebugClassLoader::enable();
 
-if (!file_exists(__DIR__.'/../config.php') && file_exists(__DIR__.'/../config.php.dist')) {
-    echo sprintf('Please copy "%s.dist" to "%1$s" and configure your credentials.', __DIR__.'/../config.php');
+if (! file_exists(__DIR__ . '/../config.php') && file_exists(__DIR__ . '/../config.php.dist')) {
+    echo sprintf('Please copy "%s.dist" to "%1$s" and configure your credentials.', __DIR__ . '/../config.php');
+
     exit(1);
 }
 
 $parameters = [];
-$parameters['current_dir'] = getcwd().'/';
-$parameters['config_file'] = dirname(__DIR__).'/config.php';
+$parameters['current_dir'] = getcwd() . '/';
+$parameters['config_file'] = dirname(__DIR__) . '/config.php';
 
-$cli = new \Webmozart\Console\ConsoleApplication(new HubKitApplicationConfig(new Container($parameters)));
+$cli = new ConsoleApplication(new HubKitApplicationConfig(new Container($parameters)));
 $cli->run();

@@ -31,14 +31,14 @@ abstract class GitBaseHandler implements RequiresGitRepository
         $this->github = $github;
     }
 
-    protected function informationHeader(string $branch = null)
+    protected function informationHeader(string $branch = null): void
     {
         $hostname = $this->github->getHostname();
 
         $this->style->writeln(
             sprintf(
                 '<fg=cyan>Working on</> <fg=yellow>%s%s/%s</> <fg=cyan>(branch</> <fg=yellow>%s</><fg=cyan>)</>',
-                GitHub::DEFAULT_HOST === $hostname ? '' : $hostname.':',
+                $hostname === GitHub::DEFAULT_HOST ? '' : $hostname . ':',
                 $this->github->getOrganization(),
                 $this->github->getRepository(),
                 $branch ?? $this->git->getActiveBranchName()

@@ -18,23 +18,28 @@ use HubKit\Service\Git\GitConfig;
 use HubKit\Tests\Handler\SymfonyStyleTrait;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
+/**
+ * @internal
+ */
 final class BranchAliasResolverTest extends TestCase
 {
+    use ProphecyTrait;
     use SymfonyStyleTrait;
 
-    public const FIXTURES_DIR = __DIR__.'/../../Fixtures';
+    public const FIXTURES_DIR = __DIR__ . '/../../Fixtures';
 
     /** @var string */
     public $outputString = '';
 
     /** @test */
-    public function it_get_alias_from_composer()
+    public function it_get_alias_from_composer(): void
     {
         $style = $this->createStyle();
         $git = $this->givenGitAliasIsNotCalled();
 
-        $resolver = new BranchAliasResolver($style, $git, self::FIXTURES_DIR.'/project_with_composer_alias');
+        $resolver = new BranchAliasResolver($style, $git, self::FIXTURES_DIR . '/project_with_composer_alias');
 
         self::assertEquals('1.0-dev', $resolver->getAlias());
         self::assertEquals('composer.json "extra.branch-alias.dev-master"', $resolver->getDetectedBy());
@@ -50,12 +55,12 @@ final class BranchAliasResolverTest extends TestCase
     }
 
     /** @test */
-    public function it_get_alias_as_stable_when_alias_is_pre_release()
+    public function it_get_alias_as_stable_when_alias_is_pre_release(): void
     {
         $style = $this->createStyle();
         $git = $this->givenGitAliasIsNotCalled();
 
-        $resolver = new BranchAliasResolver($style, $git, self::FIXTURES_DIR.'/project_with_composer_unstable_alias');
+        $resolver = new BranchAliasResolver($style, $git, self::FIXTURES_DIR . '/project_with_composer_unstable_alias');
 
         self::assertEquals('1.0-dev', $resolver->getAlias());
         self::assertEquals('composer.json "extra.branch-alias.dev-master"', $resolver->getDetectedBy());
@@ -63,7 +68,7 @@ final class BranchAliasResolverTest extends TestCase
     }
 
     /** @test */
-    public function it_get_alias_from_git()
+    public function it_get_alias_from_git(): void
     {
         $style = $this->createStyle();
         $git = $this->givenGitAliasIs('2.0-dev');
@@ -76,12 +81,12 @@ final class BranchAliasResolverTest extends TestCase
     }
 
     /** @test */
-    public function it_get_alias_from_git_if_composer_alias_is_absent()
+    public function it_get_alias_from_git_if_composer_alias_is_absent(): void
     {
         $style = $this->createStyle();
         $git = $this->givenGitAliasIs('2.0-dev');
 
-        $resolver = new BranchAliasResolver($style, $git, self::FIXTURES_DIR.'/project_with_composer');
+        $resolver = new BranchAliasResolver($style, $git, self::FIXTURES_DIR . '/project_with_composer');
 
         self::assertEquals('2.0-dev', $resolver->getAlias());
         self::assertEquals('Git config "branch.master.alias"', $resolver->getDetectedBy());
@@ -96,7 +101,7 @@ final class BranchAliasResolverTest extends TestCase
     }
 
     /** @test */
-    public function it_sets_alias_for_git()
+    public function it_sets_alias_for_git(): void
     {
         $style = $this->createStyle(['3.0']);
         $git = $this->createGitConfigSpy();
@@ -135,7 +140,7 @@ final class BranchAliasResolverTest extends TestCase
     }
 
     /** @test */
-    public function it_validates_alias_for_git()
+    public function it_validates_alias_for_git(): void
     {
         $style = $this->createStyle(['stable', '4.0']);
         $git = $this->createGitConfigSpy();

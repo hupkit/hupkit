@@ -29,18 +29,18 @@ final class CheckoutHandler extends GitBaseHandler
         $this->process = $process;
     }
 
-    public function handle(Args $args)
+    public function handle(Args $args): void
     {
         $this->informationHeader();
 
         $pullRequest = $this->github->getPullRequest($args->getArgument('number'));
 
-        if ('open' !== $pullRequest['state']) {
+        if ($pullRequest['state'] !== 'open') {
             throw new \InvalidArgumentException('Cannot checkout closed/merged pull-request.');
         }
 
         $remote = $pullRequest['head']['user']['login'];
-        $branch = $remote.'--'.$pullRequest['head']['ref'];
+        $branch = $remote . '--' . $pullRequest['head']['ref'];
 
         $this->git->guardWorkingTreeReady();
         $this->git->ensureRemoteExists($remote, $pullRequest['head']['repo']['ssh_url']);
@@ -52,9 +52,9 @@ final class CheckoutHandler extends GitBaseHandler
             $this->git->checkout($branch);
             $this->ensureBranchInSync($remote, $branch, $pullRequest['head']['ref']);
         } else {
-            $this->git->checkout($remote.'/'.$pullRequest['head']['ref']);
+            $this->git->checkout($remote . '/' . $pullRequest['head']['ref']);
             $this->git->checkout($branch, true);
-            $this->process->run(['git', 'branch', '--set-upstream-to', $remote.'/'.$pullRequest['head']['ref'], $branch]);
+            $this->process->run(['git', 'branch', '--set-upstream-to', $remote . '/' . $pullRequest['head']['ref'], $branch]);
         }
 
         $this->style->success(sprintf('Pull request %s is checked out!', $pullRequest['html_url']));

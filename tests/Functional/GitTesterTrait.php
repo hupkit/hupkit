@@ -25,9 +25,9 @@ trait GitTesterTrait
     /** @var BufferedOutput|null */
     private $cliOutput;
 
-    protected function setUpTempDirectory()
+    protected function setUpTempDirectory(): void
     {
-        $this->tempDir = realpath(sys_get_temp_dir()).'/hbk-sut/'.substr(hash('sha256', (random_bytes(8))), 0, 10);
+        $this->tempDir = realpath(sys_get_temp_dir()) . '/hbk-sut/' . mb_substr(hash('sha256', random_bytes(8)), 0, 10);
         mkdir($this->tempDir, 0777, true);
     }
 
@@ -48,7 +48,7 @@ trait GitTesterTrait
             mkdir($directory, 0777, true);
             $this->cwd = $directory;
 
-            $this->runCliCommand(['git', 'init']);
+            $this->runCliCommand(['git', 'init', '-b', 'master']);
         } finally {
             $this->cwd = $currentCwd;
         }
@@ -64,7 +64,7 @@ trait GitTesterTrait
             mkdir($directory, 0777, true);
             $this->cwd = $directory;
 
-            $this->runCliCommand(['git', 'init', '--bare']);
+            $this->runCliCommand(['git', 'init', '--bare', '-b', 'master']);
         } finally {
             $this->cwd = $currentCwd;
         }
@@ -103,7 +103,7 @@ trait GitTesterTrait
 
     protected function addRemote(string $remoteName, string $remoteRepository, ?string $sourceRepository = null): void
     {
-        $this->runCliCommand(['git', 'remote', 'add', $remoteName, 'file://'.$remoteRepository], $sourceRepository);
+        $this->runCliCommand(['git', 'remote', 'add', $remoteName, 'file://' . $remoteRepository], $sourceRepository);
     }
 
     protected function givenRemoteBranchesExist(iterable $branches, string $remote = 'origin'): void
@@ -122,7 +122,7 @@ trait GitTesterTrait
 
     protected function setUpstreamRepository(): void
     {
-        $upstreamRepos = $this->createBareGitDirectory($this->getTempDir().'/git3');
+        $upstreamRepos = $this->createBareGitDirectory($this->getTempDir() . '/git3');
         $this->addRemote('upstream', $upstreamRepos, $this->localRepository);
         $this->runCliCommand(['git', 'push', 'upstream', 'master'], $this->localRepository);
     }
