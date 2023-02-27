@@ -1235,6 +1235,7 @@ by who-else at 2014-11-23T14:50:24Z
 
     /**
      * @test
+     *
      * @dataProvider provideStatusLabels
      */
     public function it_shows_status_table_with_review_status(array $labels, bool $success = true, string $row = ''): void

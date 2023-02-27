@@ -77,9 +77,9 @@ class CliProcess
      * @param callable|null $callback A PHP callback to run whenever there is some
      *                                output available on STDOUT or STDERR
      *
-     * @throws ProcessFailedException
-     *
      * @return Process The process that ran
+     *
+     * @throws ProcessFailedException
      *
      * @see run()
      */

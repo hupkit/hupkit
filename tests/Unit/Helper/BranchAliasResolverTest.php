@@ -115,7 +115,7 @@ final class BranchAliasResolverTest extends TestCase
 
     private function createGitConfigSpy()
     {
-        $git = new class() extends GitConfig {
+        return new class() extends GitConfig {
             public $configsSet = [];
 
             public function __construct()
@@ -135,8 +135,6 @@ final class BranchAliasResolverTest extends TestCase
                 $this->configsSet[$config] = $value;
             }
         };
-
-        return $git;
     }
 
     /** @test */

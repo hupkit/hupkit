@@ -170,6 +170,7 @@ final class GitConfigTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider provideGitUrls
      */
     public function it_gets_git_url_info(string $url): void

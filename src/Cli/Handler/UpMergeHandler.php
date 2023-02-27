@@ -250,13 +250,15 @@ final class UpMergeHandler extends GitBaseHandler
 
     private function getSplitTargets(Args $args): array
     {
-        $splitTargets = $this->config->get(['repos', $this->github->getHostname(), $this->github->getOrganization() . '/' . $this->github->getRepository(), 'split']);
+        $branch = $args->getArgument('branch') ?? $this->git->getActiveBranchName();
+        $branchConfig = $this->config->getBranchConfig($this->github->getHostname(), $this->github->getOrganization() . '/' . $this->github->getRepository(), $branch);
+        $splitTargets = $branchConfig->config['split'] ?? [];
 
-        if ($args->getOption('no-split') || $splitTargets === null) {
+        if ($args->getOption('no-split') || $splitTargets === []) {
             return [];
         }
 
-        if ($splitTargets !== null) {
+        if ($splitTargets !== []) {
             $this->splitshGit->checkPrecondition();
         }
 

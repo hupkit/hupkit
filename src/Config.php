@@ -15,16 +15,19 @@ namespace HubKit;
 
 final class Config
 {
-    /**
-     * Configuration tree.
-     *
-     * @var array
-     */
-    private $config = [];
+    private array $config;
+    public ?string $activeHost = null;
+    public ?string $activeRepository = null;
 
     public function __construct(array $configuration)
     {
         $this->config = $configuration;
+    }
+
+    public function setActiveRepository(?string $host, ?string $repository): void
+    {
+        $this->activeHost = $host;
+        $this->activeRepository = $repository;
     }
 
     /**
@@ -74,9 +77,9 @@ final class Config
     /**
      * Returns the first none-null configuration value.
      *
-     * @param string[] $keys    Array of single level keys like "adapters" or array-path
-     *                          like ['profiles', 'symfony-bundle'] to check
-     * @param mixed    $default Default value to use when no config is found (null)
+     * @param array<int, string|string[]> $keys    Array of single level keys like "adapters" or array-path
+     *                                             like ['profiles', 'symfony-bundle'] to check
+     * @param mixed                       $default Default value to use when no config is found (null)
      */
     public function getFirstNotNull(array $keys, $default = null)
     {
@@ -116,5 +119,22 @@ final class Config
         }
 
         return true;
+    }
+
+    public function getForRepository(string $host, string $repository, &$isLocal = false): array
+    {
+        return $this->get(['repos', $host, $repository], []);
+    }
+
+    public function getBranchConfig(string $host, string $repository, string $branchName): BranchConfig
+    {
+        $repoConfig = $this->getForRepository($host, $repository, $isLocal);
+
+        return new BranchConfig(
+            $branchName,
+            $repoConfig,
+            configName: $branchName,
+            configPath: ['repos', $host, $repository],
+        );
     }
 }
