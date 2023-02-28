@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace HubKit\Cli\Handler;
 
+use HubKit\Config;
 use HubKit\Helper\ChangelogRenderer;
 use HubKit\Service\Git;
 use HubKit\Service\GitHub;
@@ -24,9 +25,9 @@ final class ChangelogHandler extends GitBaseHandler
 {
     private $renderer;
 
-    public function __construct(SymfonyStyle $style, Git $git, GitHub $github)
+    public function __construct(SymfonyStyle $style, Git $git, GitHub $github, Config $config)
     {
-        parent::__construct($style, $git, $github);
+        parent::__construct($style, $git, $github, $config);
         $this->renderer = new ChangelogRenderer($git, $github);
     }
 

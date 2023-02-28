@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace HubKit\Cli\Handler;
 
+use HubKit\Config;
 use HubKit\Service\CliProcess;
 use HubKit\Service\Git;
 use HubKit\Service\GitHub;
@@ -23,9 +24,9 @@ final class CheckoutHandler extends GitBaseHandler
 {
     private $process;
 
-    public function __construct(SymfonyStyle $style, Git $git, CliProcess $process, GitHub $github)
+    public function __construct(SymfonyStyle $style, Git $git, CliProcess $process, GitHub $github, Config $config)
     {
-        parent::__construct($style, $git, $github);
+        parent::__construct($style, $git, $github, $config);
         $this->process = $process;
     }
 

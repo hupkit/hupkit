@@ -73,7 +73,6 @@ class StatusTable
         return isset($this->statuses[$status]);
     }
 
-    // make other methods none static
     public function addRow(string $label, string $status, ?string $message = null): void
     {
         $this->rows[] = [$label, self::STATUS_LABELS[$status], wordwrap((string) $message, 38)];

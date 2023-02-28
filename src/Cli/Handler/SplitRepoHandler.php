@@ -23,11 +23,10 @@ use Webmozart\Console\Api\Args\Args;
 final class SplitRepoHandler extends GitBaseHandler
 {
     private $splitshGit;
-    private $config;
 
     public function __construct(SymfonyStyle $style, SplitshGit $splitshGit, Git $git, GitHub $github, Config $config)
     {
-        parent::__construct($style, $git, $github);
+        parent::__construct($style, $git, $github, $config);
         $this->splitshGit = $splitshGit;
         $this->config = $config;
     }
@@ -82,10 +81,12 @@ final class SplitRepoHandler extends GitBaseHandler
         $this->style->section(sprintf('%s sources to split', \count($repos)));
 
         foreach ($repos as $prefix => $config) {
-            $url = \is_array($config) ? $config['url'] : $config;
+            if ($config['url'] === false) {
+                continue;
+            }
 
-            $this->style->writeln(sprintf('<fg=default;bg=default> Splitting %s to %s</>', $prefix, $url));
-            $this->splitshGit->splitTo($branch, $prefix, $url);
+            $this->style->writeln(sprintf('<fg=default;bg=default> Splitting %s to %s</>', $prefix, $config['url']));
+            $this->splitshGit->splitTo($branch, $prefix, $config['url']);
         }
 
         $this->style->success('Repository directories were split into there destination.');
@@ -101,9 +102,11 @@ final class SplitRepoHandler extends GitBaseHandler
         $this->style->section(sprintf('%s sources to split', \count($repos)));
 
         foreach ($repos as $prefix => $config) {
-            $this->style->writeln(sprintf('<fg=default;bg=default> [DRY-RUN] Splitting %s to %s</>', $prefix,
-                \is_array($config) ? $config['url'] : $config
-            ));
+            if ($config['url'] === false) {
+                continue;
+            }
+
+            $this->style->writeln(sprintf('<fg=default;bg=default> [DRY-RUN] Splitting %s to %s</>', $prefix, $config['url']));
         }
 
         $this->style->newLine();

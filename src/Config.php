@@ -121,20 +121,96 @@ final class Config
         return true;
     }
 
-    public function getForRepository(string $host, string $repository, &$isLocal = false): array
+    /**
+     * @return array<string, mixed>
+     */
+    public function getForRepository(string $host, string $repository, bool | null &$isLocal = false): array
     {
-        return $this->get(['repos', $host, $repository], []);
+        $globalConfig = $this->get(['repositories', $host, 'repos', $repository], ['branches' => []]);
+
+        if ($this->activeHost === $host && $this->activeRepository === $repository) {
+            $isLocal = true;
+
+            return $this->get(['_local'], $globalConfig);
+        }
+
+        return $globalConfig;
     }
 
     public function getBranchConfig(string $host, string $repository, string $branchName): BranchConfig
     {
         $repoConfig = $this->getForRepository($host, $repository, $isLocal);
+        $configPath = $isLocal ? ['_local', 'branches'] : ['repositories', $host, 'repos', $repository, 'branches'];
+
+        $branches = $repoConfig['branches'];
+        $default = $branches[':default'] ?? [];
+
+        if (isset($branches['#' . $branchName]) && str_ends_with($branchName, '.x')) {
+            $branchName = '#' . $branchName;
+        }
+
+        if (isset($branches[$branchName])) {
+            return new BranchConfig(
+                $branchName,
+                $this->branchesConfig($default, $branches[$branchName]),
+                configPath: array_merge($configPath, [$branchName])
+            );
+        }
+
+        foreach ($branches as $configName => $config) {
+            if ($configName[0] === '/') {
+                $normalizedName = trim($configName, '/');
+
+                if (preg_match(sprintf('/^(%s)$/', $normalizedName), $branchName) === 1) {
+                    return new BranchConfig(
+                        $branchName,
+                        $this->branchesConfig($default, $config),
+                        $configName,
+                        array_merge($configPath, [$configName])
+                    );
+                }
+            } elseif (preg_match('{^\d+\.([x*]|\d+)$}', $configName) === 1) {
+                $normalizedName = str_replace(['x', '*', '.'], ['\d+', '\d+', '\\.'], mb_strtolower($configName));
+
+                if (preg_match(sprintf('/^%s$/', $normalizedName), $branchName) === 1) {
+                    return new BranchConfig(
+                        $branchName,
+                        $this->branchesConfig($default, $config),
+                        $configName,
+                        array_merge($configPath, [$configName])
+                    );
+                }
+            }
+        }
+
+        $configName = isset($branches[':default']) ? ':default' : $branchName;
 
         return new BranchConfig(
             $branchName,
-            $repoConfig,
-            configName: $branchName,
-            configPath: ['repos', $host, $repository],
+            $default,
+            configName: $configName,
+            configPath: array_merge($configPath, [$configName]),
         );
+    }
+
+    /**
+     * @param array<string, mixed> $default
+     * @param array<string, mixed> $config
+     *
+     * @return array<string, mixed>
+     */
+    private function branchesConfig(array $default, array $config, bool $ignoreDefault = false): array
+    {
+        if (($config['ignore-default'] ?? false) || \count($default) === 0) {
+            return $config;
+        }
+
+        unset($config['ignore-default']);
+
+        foreach ($config as $name => $value) {
+            $default[$name] = \is_array($value) ? array_merge($default[$name], $value) : $value;
+        }
+
+        return $default;
     }
 }

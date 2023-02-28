@@ -49,6 +49,15 @@ class Filesystem
         return $tmpName;
     }
 
+    public function dumpFile(string $filename, $content): void
+    {
+        if (str_starts_with($filename, './')) {
+            $filename = substr_replace($filename, $this->getCwd(), 0, 1);
+        }
+
+        $this->fs->dumpFile($filename, $content);
+    }
+
     /**
      * Creates a (new) or overwrites a temporary directory.
      *
@@ -59,16 +68,38 @@ class Filesystem
      *
      * @return string The full path to the temporary directory
      */
-    public function tempDirectory(string $name, bool $clearExisting = true): string
+    public function tempDirectory(string $name, bool $clearExisting = true, ?bool &$exists = null): string
     {
-        $tmpName = $this->tempdir . \DIRECTORY_SEPARATOR . 'hubkit' . \DIRECTORY_SEPARATOR . $name;
+        $tmpName = $this->tempdir . \DIRECTORY_SEPARATOR . 'hubkit' . \DIRECTORY_SEPARATOR . 'temp' . \DIRECTORY_SEPARATOR . $name;
+        $exists = $this->fs->exists($tmpName);
 
-        if ($clearExisting && $this->fs->exists($tmpName)) {
+        if ($clearExisting && $exists) {
             $this->fs->remove($tmpName);
         }
 
         $this->fs->mkdir($tmpName);
         $this->tempFilenames[] = $tmpName;
+
+        return $tmpName;
+    }
+
+    /**
+     * Creates a (new) or overwrites a temporary directory.
+     *
+     * Note: Unlike the tempDirectory() method this doesn't clear the directory at clearTempFiles().
+     *
+     * @return string The full path to the temporary directory
+     */
+    public function storageTempDirectory(string $name, bool $clearExisting = true, ?bool &$exists = null): string
+    {
+        $tmpName = $this->tempdir . \DIRECTORY_SEPARATOR . 'hubkit' . \DIRECTORY_SEPARATOR . 'stor' . \DIRECTORY_SEPARATOR . $name;
+        $exists = $this->fs->exists($tmpName);
+
+        if ($clearExisting && $exists) {
+            $this->fs->remove($tmpName);
+        }
+
+        $this->fs->mkdir($tmpName);
 
         return $tmpName;
     }
@@ -80,6 +111,7 @@ class Filesystem
     public function clearTempFiles(): void
     {
         $this->fs->remove($this->tempFilenames);
+        $this->tempFilenames = [];
     }
 
     public function getFilesystem(): SfFilesystem
@@ -90,5 +122,10 @@ class Filesystem
     public function chdir(string $directory): bool
     {
         return chdir($directory);
+    }
+
+    public function getCwd(): string | false
+    {
+        return getcwd();
     }
 }

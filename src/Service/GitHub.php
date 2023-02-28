@@ -29,10 +29,11 @@ class GitHub
     private $clientBuilder;
     /** @var GitHubClient */
     private $client;
-    private $organization;
-    private $repository;
-    private $hostname;
-    private $username;
+
+    private $organization = '';
+    private $repository = '';
+    private $hostname = '';
+    private $username = '';
 
     public function __construct(ClientInterface $client, Config $config)
     {
@@ -75,6 +76,8 @@ class GitHub
     {
         $this->organization = $organization;
         $this->repository = $repository;
+
+        $this->config->setActiveRepository($this->hostname, $organization . '/' . $repository);
     }
 
     public function isAuthenticated()

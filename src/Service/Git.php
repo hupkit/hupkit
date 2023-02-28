@@ -41,7 +41,13 @@ class Git
 
     public function isGitDir(): bool
     {
-        $directory = trim($this->process->run(['git', 'rev-parse', '--show-toplevel'])->getOutput());
+        $process = $this->process->run(['git', 'rev-parse', '--show-toplevel']);
+
+        if (! $process->isSuccessful()) {
+            return false;
+        }
+
+        $directory = trim($process->getOutput());
 
         if ($directory === '') {
             return false;
@@ -101,6 +107,32 @@ class Git
         }
 
         return $activeBranch;
+    }
+
+    /**
+     * @return string either main or master
+     */
+    public function getPrimaryBranch(): string
+    {
+        $branch = $this->getGitConfig('init.defaultbranch');
+
+        if ($branch !== '') {
+            return $branch;
+        }
+
+        if ($this->branchExists('main')) {
+            $branch = 'main';
+        } elseif ($this->branchExists('master')) {
+            $branch = 'master';
+        } else {
+            throw new \RuntimeException(
+                'Unable to determine primary-branch , expected either "master" or "main". But neither one was found, set the "init.defaultbranch" Git local config to resolve this.'
+            );
+        }
+
+        $this->setGitConfig('init.defaultbranch', $branch);
+
+        return $branch;
     }
 
     public function getLastTagOnBranch(string $ref = 'HEAD'): string
@@ -434,7 +466,7 @@ class Git
 
     public function setGitConfig(string $config, $value, bool $overwrite = false, string $section = 'local'): void
     {
-        if (! $overwrite && $this->getGitConfig($config, $section, $value) !== '') {
+        if (! $overwrite && $this->getGitConfig($config, $section) !== '') {
             throw new \RuntimeException(
                 sprintf(
                     'Unable to set git config "%s" at %s, because the value is already set.',

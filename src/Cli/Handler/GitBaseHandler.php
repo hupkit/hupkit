@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace HubKit\Cli\Handler;
 
 use HubKit\Cli\RequiresGitRepository;
+use HubKit\Config;
 use HubKit\Service\Git;
 use HubKit\Service\GitHub;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -24,7 +25,7 @@ abstract class GitBaseHandler implements RequiresGitRepository
     protected $git;
     protected $github;
 
-    public function __construct(SymfonyStyle $style, Git $git, GitHub $github)
+    public function __construct(SymfonyStyle $style, Git $git, GitHub $github, protected Config $config)
     {
         $this->style = $style;
         $this->git = $git;
@@ -45,5 +46,9 @@ abstract class GitBaseHandler implements RequiresGitRepository
             )
         );
         $this->style->newLine();
+
+        if ($this->config->has('_local')) {
+            $this->style->note('Using local configuration from branch "_hubkit".');
+        }
     }
 }

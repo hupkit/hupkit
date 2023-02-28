@@ -16,10 +16,20 @@ namespace HubKit;
 class BranchConfig
 {
     public string $configName;
+
+    /** @var array<int, string> */
     public array $configPath;
 
-    public function __construct(public string $name, public array $config, ?string $configName = null, array $configPath = null)
-    {
+    /**
+     * @param array<string, mixed>    $config
+     * @param array<int, string>|null $configPath
+     */
+    public function __construct(
+        public string $name,
+        public array $config,
+        ?string $configName = null,
+        array $configPath = null
+    ) {
         $this->configName = $configName ?? $name;
         $this->configPath = $configPath ?? [];
     }

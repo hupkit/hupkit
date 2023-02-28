@@ -33,7 +33,6 @@ final class MergeHandler extends GitBaseHandler
 {
     private $aliasResolver;
     private $questionHelper;
-    private $config;
     private $splitshGit;
 
     public function __construct(
@@ -45,10 +44,9 @@ final class MergeHandler extends GitBaseHandler
         Config $config,
         SplitshGit $splitshGit
     ) {
-        parent::__construct($style, $git, $github);
+        parent::__construct($style, $git, $github, $config);
         $this->aliasResolver = $aliasResolver;
         $this->questionHelper = $questionHelper;
-        $this->config = $config;
         $this->splitshGit = $splitshGit;
     }
 
@@ -391,7 +389,12 @@ final class MergeHandler extends GitBaseHandler
 
         foreach ($splitsConfig as $prefix => $config) {
             $progressBar->advance();
-            $this->splitshGit->splitTo($pr['base']['ref'], $prefix, \is_array($config) ? $config['url'] : $config);
+
+            if ($config['url'] === false) {
+                continue;
+            }
+
+            $this->splitshGit->splitTo($pr['base']['ref'], $prefix, $config['url']);
         }
     }
 

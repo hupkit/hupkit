@@ -88,7 +88,7 @@ final class FilesystemTest extends TestCase
 
     private function getTempdirPath(string $name): string
     {
-        return self::MOCK_TMP_DIR . \DIRECTORY_SEPARATOR . 'hubkit' . \DIRECTORY_SEPARATOR . $name;
+        return self::MOCK_TMP_DIR . \DIRECTORY_SEPARATOR . 'hubkit' . \DIRECTORY_SEPARATOR . 'temp' . \DIRECTORY_SEPARATOR . $name;
     }
 
     /** @test */
@@ -139,7 +139,7 @@ final class FilesystemTest extends TestCase
 
         $filesystem->clearTempFiles();
 
-        $path = $this->tempDir . \DIRECTORY_SEPARATOR . 'hubkit' . \DIRECTORY_SEPARATOR;
+        $path = $this->tempDir . \DIRECTORY_SEPARATOR . 'hubkit' . \DIRECTORY_SEPARATOR . 'temp' . \DIRECTORY_SEPARATOR;
         self::assertEquals(
             [
                 $path . 'split1',

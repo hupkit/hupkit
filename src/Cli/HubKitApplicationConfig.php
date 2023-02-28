@@ -132,7 +132,8 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
                     $this->container['config'],
                     $this->container['git'],
                     $this->container['github'],
-                    $this->container['process']
+                    $this->container['process'],
+                    $this->container['git.file_reader'],
                 );
             })
             ->end()
@@ -174,7 +175,8 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
                 return new Handler\TakeHandler(
                     $this->container['style'],
                     $this->container['git'],
-                    $this->container['github']
+                    $this->container['github'],
+                    $this->container['config']
                 );
             })
             ->end()
@@ -187,7 +189,36 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
                     $this->container['style'],
                     $this->container['git'],
                     $this->container['process'],
-                    $this->container['github']
+                    $this->container['github'],
+                    $this->container['config']
+                );
+            })
+            ->end()
+
+            ->beginCommand('init-config')
+            ->setDescription('Initialize "_hubkit" configuration branch')
+            ->setHandler(function () {
+                return new Handler\InitConfigHandler(
+                    $this->container['style'],
+                    $this->container['git'],
+                    $this->container['github'],
+                    $this->container['config'],
+                    $this->container['filesystem'],
+                    $this->container['process'],
+                    $this->container['git.file_reader']
+                );
+            })
+            ->end()
+
+            ->beginCommand('sync-config')
+            ->setDescription('Synchronizes "_hubkit" configuration branch with the upstream')
+            ->setHandler(function () {
+                return new Handler\SynchronizeConfigHandler(
+                    $this->container['style'],
+                    $this->container['git'],
+                    $this->container['github'],
+                    $this->container['config'],
+                    $this->container['git.file_reader']
                 );
             })
             ->end()
@@ -224,7 +255,8 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
                     $this->container['style'],
                     $this->container['git'],
                     $this->container['process'],
-                    $this->container['github']
+                    $this->container['github'],
+                    $this->container['config']
                 );
             })
             ->end()
@@ -248,7 +280,8 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
                 return new Handler\ChangelogHandler(
                     $this->container['style'],
                     $this->container['git'],
-                    $this->container['github']
+                    $this->container['github'],
+                    $this->container['config']
                 );
             })
             ->end()
