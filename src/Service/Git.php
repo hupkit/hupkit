@@ -364,7 +364,7 @@ class Git
             return;
         }
 
-        $this->process->mustRun(['git', 'checkout', $remote . '/' . $branchName, '-b', $branchName]);
+        $this->process->mustRun(['git', 'checkout', 'remotes/' . $remote . '/' . $branchName, '-b', $branchName]);
     }
 
     public function guardWorkingTreeReady(): void

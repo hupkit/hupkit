@@ -112,8 +112,8 @@ class SplitshGit
                 throw new \RuntimeException('Unable to change to temp repository. Aborting.');
             }
 
-            $this->git->clone($url, 'origin', 200);
-            $this->git->checkout($branch);
+            $this->git->clone($url, 'origin');
+            $this->git->checkoutRemoteBranch('origin', $branch);
 
             try {
                 $this->process->mustRun(['git', 'tag', 'v' . $versionStr, $targetCommit, '-s', '-m', 'Release ' . $versionStr]);

@@ -76,9 +76,9 @@ final class SplitshGitTest extends TestCase
         $gitProphecy = $this->prophesize(Git::class);
         $gitProphecy->getGitConfig('remote._core.url')->willReturn('git@github.com:park-manager/core.git');
         $gitProphecy->getGitConfig('remote._user.url')->willReturn('git@github.com:park-manager/user.git');
-        $gitProphecy->clone('git@github.com:park-manager/core.git', 'origin', 200)->shouldBeCalledTimes(1);
-        $gitProphecy->clone('git@github.com:park-manager/user.git', 'origin', 200)->shouldBeCalledTimes(1);
-        $gitProphecy->checkout('1.0')->shouldBeCalledTimes(2);
+        $gitProphecy->clone('git@github.com:park-manager/core.git', 'origin')->shouldBeCalledTimes(1);
+        $gitProphecy->clone('git@github.com:park-manager/user.git', 'origin')->shouldBeCalledTimes(1);
+        $gitProphecy->checkoutRemoteBranch('origin', '1.0')->shouldBeCalledTimes(2);
 
         $git = $gitProphecy->reveal();
 
