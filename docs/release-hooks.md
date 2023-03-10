@@ -98,7 +98,7 @@ return function (Container $container, Version $version, string $branch, ?string
     $gitBranch = $container->get('git.branch');
 
     if ($gitBranch->isWorkingTreeReady()) {
-        return; // Nothing to, composer is already up-to-date
+        return; // Nothing to commit, composer is already up-to-date
     }
 
     $gitBranch->add('composer.json');
