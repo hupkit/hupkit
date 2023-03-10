@@ -63,6 +63,12 @@ final class GitBranchTest extends TestCase
     }
 
     /** @test */
+    public function it_returns_needs_push_when_remote_branch_is_missing(): void
+    {
+        self::assertEquals(GitBranch::STATUS_NEED_PUSH, $this->git->getRemoteDiffStatus('origin', '2.0'));
+    }
+
+    /** @test */
     public function it_returns_needs_pull_when_remote_is_ahead(): void
     {
         $this->runCliCommand(['git', 'reset', '--hard', 'HEAD@{1}'], $this->localRepository);
