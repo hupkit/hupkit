@@ -70,19 +70,19 @@ return function (Container $container, Version $version, string $branch, ?string
     $gitBranch->commit('Update composer branch-alias');
 
     /** @var \HubKit\Service\Git $git */
-    $git = $container->get('git.branch');
+    $git = $container->get('git');
     $git->pushToRemote('upstream', $branch);
 };
 ```
 
-### Updating the `composer.json` branch-alias
+### Updating the `composer.json` branch-alias (post-release)
 
 ```php
 <?php
 
 declare(strict_types=1);
 
-// .hubkit/pre-release.php
+// .hubkit/post-release.php
 
 use Psr\Container\ContainerInterface as Container;
 use Rollerworks\Component\Version\Version;
@@ -105,7 +105,7 @@ return function (Container $container, Version $version, string $branch, ?string
     $gitBranch->commit('Update composer branch-alias');
 
     /** @var \HubKit\Service\Git $git */
-    $git = $container->get('git.branch');
+    $git = $container->get('git');
     $git->pushToRemote('upstream', $branch);
 };
 ```
