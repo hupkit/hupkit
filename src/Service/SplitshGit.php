@@ -66,23 +66,7 @@ class SplitshGit
         $tempBranchName = null;
 
         // NOTE: Always perform the push as git-splitsh in some cases don't produce a new commit as there was already one
-        try {
-            $this->git->pushToRemote($remoteName, $sha . ':' . $targetBranch);
-        } catch (ProcessFailedException $e) {
-            // Failed to push. If remote branch is missing Git fails.
-            if ($this->git->remoteBranchExists($remoteName, $targetBranch)) {
-                throw $e;
-            }
-
-            $this->git->checkout($sha);
-            $this->git->checkout($tempBranchName = '_tmp_' . $sha, true);
-            $this->git->pushToRemote($remoteName, $tempBranchName . ':' . $targetBranch);
-        } finally {
-            if ($tempBranchName !== null) {
-                $this->git->checkout($targetBranch);
-                $this->git->deleteBranchWithForce($tempBranchName);
-            }
-        }
+        $this->git->pushToRemote($remoteName, $sha . ':refs/heads/' . $targetBranch);
 
         return [$remoteName => [$sha, $url]];
     }
@@ -112,8 +96,8 @@ class SplitshGit
                 throw new \RuntimeException('Unable to change to temp repository. Aborting.');
             }
 
-            $this->git->clone($url, 'origin', 200);
-            $this->git->checkout($branch);
+            $this->git->clone($url, 'origin');
+            $this->git->checkoutRemoteBranch('origin', $branch);
 
             try {
                 $this->process->mustRun(['git', 'tag', 'v' . $versionStr, $targetCommit, '-s', '-m', 'Release ' . $versionStr]);

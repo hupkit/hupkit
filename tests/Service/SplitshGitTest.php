@@ -43,7 +43,7 @@ final class SplitshGitTest extends TestCase
             $gitProphecy = $this->prophesize(Git::class);
             $gitProphecy->isGitDir()->willReturn(true);
             $gitProphecy->ensureRemoteExists('_core', 'git@github.com:park-manager/core.git')->shouldBeCalled();
-            $gitProphecy->pushToRemote('_core', '2c00338aef823d0c0916fc1b59ef49d0bb76f02f:master')->shouldBeCalled();
+            $gitProphecy->pushToRemote('_core', '2c00338aef823d0c0916fc1b59ef49d0bb76f02f:refs/heads/master')->shouldBeCalled();
             $git = $gitProphecy->reveal();
 
             $processProphecy = $this->prophesize(Process::class);
@@ -76,9 +76,9 @@ final class SplitshGitTest extends TestCase
         $gitProphecy = $this->prophesize(Git::class);
         $gitProphecy->getGitConfig('remote._core.url')->willReturn('git@github.com:park-manager/core.git');
         $gitProphecy->getGitConfig('remote._user.url')->willReturn('git@github.com:park-manager/user.git');
-        $gitProphecy->clone('git@github.com:park-manager/core.git', 'origin', 200)->shouldBeCalledTimes(1);
-        $gitProphecy->clone('git@github.com:park-manager/user.git', 'origin', 200)->shouldBeCalledTimes(1);
-        $gitProphecy->checkout('1.0')->shouldBeCalledTimes(2);
+        $gitProphecy->clone('git@github.com:park-manager/core.git', 'origin')->shouldBeCalledTimes(1);
+        $gitProphecy->clone('git@github.com:park-manager/user.git', 'origin')->shouldBeCalledTimes(1);
+        $gitProphecy->checkoutRemoteBranch('origin', '1.0')->shouldBeCalledTimes(2);
 
         $git = $gitProphecy->reveal();
 

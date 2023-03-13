@@ -66,6 +66,10 @@ class Git
             $remoteBranch = $localBranch;
         }
 
+        if (! $this->remoteBranchExists($remoteName, $remoteBranch)) {
+            return self::STATUS_NEED_PUSH;
+        }
+
         $localRef = $this->process->mustRun(['git', 'rev-parse', $localBranch])->getOutput();
         $remoteRef = $this->process->mustRun(['git', 'rev-parse', 'refs/remotes/' . $remoteName . '/' . $remoteBranch])->getOutput();
         $baseRef = $this->process->mustRun(['git', 'merge-base', $localBranch, 'refs/remotes/' . $remoteName . '/' . $remoteBranch])->getOutput();
@@ -364,7 +368,7 @@ class Git
             return;
         }
 
-        $this->process->mustRun(['git', 'checkout', $remote . '/' . $branchName, '-b', $branchName]);
+        $this->process->mustRun(['git', 'checkout', 'remotes/' . $remote . '/' . $branchName, '-b', $branchName]);
     }
 
     public function guardWorkingTreeReady(): void
