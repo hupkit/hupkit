@@ -24,7 +24,12 @@ class Container extends \Pimple\Container implements ContainerInterface
     {
         parent::__construct($values);
 
-        $this['config'] = static fn (self $container) => (new ConfigFactory($container['current_dir'], $container['config_file']))->create();
+        $this['config'] = static fn (self $container) => (new ConfigFactory(
+            $container['current_dir'],
+            $container['config_file'],
+            $container['style'],
+            $container['git.file_reader']
+        ))->create();
 
         $this['guzzle'] = static function (self $container) {
             $options = [];
@@ -45,6 +50,8 @@ class Container extends \Pimple\Container implements ContainerInterface
         $this['git.branch'] = static fn (self $container) => new Service\Git\GitBranch($container['process'], $container['style']);
 
         $this['git.config'] = static fn (self $container) => new Service\Git\GitConfig($container['process'], $container['style']);
+
+        $this['git.file_reader'] = static fn (self $container) => new Service\Git\GitFileReader($container['git.branch'], $container['git.config'], $container['process'], $container['filesystem']);
 
         $this['splitsh_git'] = static function (self $container) {
             return new Service\SplitshGit(

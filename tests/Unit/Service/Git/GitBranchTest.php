@@ -17,7 +17,6 @@ use HubKit\Service\CliProcess;
 use HubKit\Service\Git\GitBranch;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
-use RuntimeException;
 use Symfony\Component\Console\Style\StyleInterface;
 use Symfony\Component\Process\Process;
 
@@ -44,6 +43,7 @@ final class GitBranchTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider provideExpectedVersions
      */
     public function it_gets_versioned_branches_in_correct_order(array $branches, array $expectedVersions): void
@@ -106,7 +106,7 @@ final class GitBranchTest extends TestCase
     {
         $git = $this->givenGitRemoteDiffStatus(GitBranch::STATUS_NEED_PUSH);
 
-        $this->expectException(RuntimeException::class);
+        $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage(
             'Branch "master" contains commits not existing in the remote version.Push is prohibited for this operation.'
         );
@@ -119,7 +119,7 @@ final class GitBranchTest extends TestCase
     {
         $git = $this->givenGitRemoteDiffStatus(GitBranch::STATUS_DIVERGED);
 
-        $this->expectException(RuntimeException::class);
+        $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage(
             'Cannot safely perform the operation. ' .
             'Your local and remote version of branch "master" have differed.' .

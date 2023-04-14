@@ -4,7 +4,8 @@ Usage
 ## Configuration
 
 HubKit works by a number of conventions which cannot be changed, the configuration
-mainly contains your authentication credentials and some personal preferences.
+contains your authentication credentials, and set-up for special operations like
+repository splitting and upmerge.
 
 Assuming you already copied `config.php.dist` to `config.php`. Open `config.php`
 and fill-in your authentication credentials.
@@ -21,7 +22,7 @@ hub configurations by there hostname. The default one is `github.com`.
 <?php
 
 return [
-    'schema_version' => 1, // Config-schema version, only change this when requested
+    'schema_version' => 2, // Config-schema version, only change this when requested
 
     // HubKit supports GitHub Enterprise, and therefor you can add multiple
     // hub configurations by there hostname. The default one is `github.com`.
@@ -51,7 +52,7 @@ hub configuration to your `config.php` file:
 <?php
 
 return [
-    'schema_version' => 1, // Config-schema version, only change this when requested
+    'schema_version' => 2, // Config-schema version, only change this when requested
 
     // HubKit supports GitHub Enterprise, and therefor you can add multiple
     // hub configurations by there hostname. The default one is `github.com`.

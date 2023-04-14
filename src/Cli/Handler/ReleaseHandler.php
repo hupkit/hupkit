@@ -32,7 +32,6 @@ final class ReleaseHandler extends GitBaseHandler
 {
     private $process;
     private $editor;
-    private $config;
     private $splitshGit;
     /** @var IO */
     private $io;
@@ -48,10 +47,9 @@ final class ReleaseHandler extends GitBaseHandler
         SplitshGit $splitshGit,
         ReleaseHooks $releaseHooks
     ) {
-        parent::__construct($style, $git, $github);
+        parent::__construct($style, $git, $github, $config);
         $this->process = $process;
         $this->editor = $editor;
-        $this->config = $config;
         $this->splitshGit = $splitshGit;
         $this->releaseHooks = $releaseHooks;
     }
@@ -129,8 +127,6 @@ final class ReleaseHandler extends GitBaseHandler
             );
 
             $this->confirmPossibleError();
-
-            return;
         }
     }
 
@@ -220,10 +216,10 @@ final class ReleaseHandler extends GitBaseHandler
 
     private function tagSplitRepositories(string $branch, string $version): void
     {
-        $configName = ['repos', $this->github->getHostname(), $this->github->getOrganization() . '/' . $this->github->getRepository()];
-        $reposConfig = $this->config->get($configName);
+        $branchConfig = $this->config->getBranchConfig($this->github->getHostname(), $this->github->getOrganization() . '/' . $this->github->getRepository(), $branch);
+        $splitsConfig = $branchConfig->config['split'] ?? [];
 
-        if (empty($reposConfig['split'])) {
+        if (empty($splitsConfig)) {
             return;
         }
 
@@ -231,15 +227,20 @@ final class ReleaseHandler extends GitBaseHandler
 
         $this->style->text('Starting split operation please wait...');
         $progressBar = $this->style->createProgressBar();
-        $progressBar->start(\count($reposConfig['split']));
+        $progressBar->start(\count($splitsConfig));
 
         $splits = [];
 
-        foreach ($reposConfig['split'] as $prefix => $config) {
+        foreach ($splitsConfig as $prefix => $config) {
             $progressBar->advance();
-            $split = $this->splitshGit->splitTo($branch, $prefix, \is_array($config) ? $config['url'] : $config);
 
-            if ($split !== null && ($config['sync-tags'] ?? $reposConfig['sync-tags'] ?? true)) {
+            if ($config['url'] === false) {
+                continue;
+            }
+
+            $split = $this->splitshGit->splitTo($branch, $prefix, $config['url']);
+
+            if ($split !== null && ($config['sync-tags'] ?? $config->config['sync-tags'] ?? true)) {
                 $splits += $split;
             }
         }

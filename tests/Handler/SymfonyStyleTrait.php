@@ -15,6 +15,7 @@ namespace HubKit\Tests\Handler;
 
 use PHPUnit\Framework\Assert;
 use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\StreamOutput;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -22,13 +23,13 @@ trait SymfonyStyleTrait
 {
     /** @var ArrayInput */
     protected $input;
-    /** @var ArrayInput */
+    /** @var StreamOutput */
     protected $output;
 
     /**
      * @return SymfonyStyle
      */
-    protected function createStyle(array $input = [])
+    protected function createStyle(array $input = [], ?OutputInterface $output = null)
     {
         $this->input = new ArrayInput([]);
         $this->input->setInteractive(true);
@@ -37,8 +38,12 @@ trait SymfonyStyleTrait
             $this->input->setStream($this->getInputStream($input));
         }
 
-        $this->output = new StreamOutput(fopen('php://memory', 'w', false));
-        $this->output->setDecorated(false);
+        if ($output === null) {
+            $output = new StreamOutput(fopen('php://memory', 'w'));
+            $output->setDecorated(false);
+        }
+
+        $this->output = $output;
 
         return new SymfonyStyle($this->input, $this->output);
     }
@@ -47,7 +52,7 @@ trait SymfonyStyleTrait
     {
         $input = implode(\PHP_EOL, $input);
 
-        $stream = fopen('php://memory', 'b+r', false);
+        $stream = fopen('php://memory', 'rb+');
         fwrite($stream, $input);
         rewind($stream);
 

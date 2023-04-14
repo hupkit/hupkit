@@ -1,0 +1,50 @@
+<?php
+
+return [
+    'schema_version' => 2,
+    'github' => [
+        'github.com' => [
+            'username' => 'test',
+            'api_token' => 'test',
+        ],
+    ],
+    'repositories' => [
+        'github.com' => [
+            'park-manager/park-manager' => [
+                'branches' => [
+                    ':default' => [
+                        'sync-tags' => true,
+                        'split' => [
+                            'src/Module/CoreModule' => 'git@github.com:hubkit-sandbox/core-module.git',
+                            'src/Module/WebhostingModule' => 'git@github.com:hubkit-sandbox/webhosting-module.git',
+                            'docs' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => false],
+                        ],
+                    ],
+                    '1.0' => false,
+                    '2.x' => [
+                        'upmerge' => false,
+                        'split' => [
+                            'src/Module/DomainRegModule' => 'git@github.com:hubkit-sandbox/webhosting-module.git',
+                        ],
+                    ],
+                    '3.x' => [
+                        'sync-tags' => null,
+                        'split' => [
+                            'src/Module/WebhostingModule' => false,
+                            'src/Module/DomainRegModule' => 'git@github.com:hubkit-sandbox/webhosting-module.git',
+                        ],
+                    ],
+                    '4.1' => [
+                        'ignore-default' => true,
+                        'sync-tags' => false,
+                        'split' => [
+                            'src/Bundle/CoreBundle' => 'git@github.com:hubkit-sandbox/core-module.git',
+                            'src/Bundle/WebhostingBundle' => 'git@github.com:hubkit-sandbox/webhosting-module.git',
+                            'docs' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => false],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+];

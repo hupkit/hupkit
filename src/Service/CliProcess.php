@@ -61,7 +61,7 @@ class CliProcess
      *
      * @return Process The process that ran
      */
-    public function run(array | Process $cmd, ?string $error = null, callable $callback = null, int $verbosity = OutputInterface::VERBOSITY_VERY_VERBOSE): ?Process
+    public function run(array | Process $cmd, ?string $error = null, callable $callback = null, int $verbosity = OutputInterface::VERBOSITY_VERY_VERBOSE): Process
     {
         return $this->processHelper->run($this->output, $cmd, $error, $callback, $verbosity);
     }
@@ -77,13 +77,13 @@ class CliProcess
      * @param callable|null $callback A PHP callback to run whenever there is some
      *                                output available on STDOUT or STDERR
      *
-     * @throws ProcessFailedException
-     *
      * @return Process The process that ran
+     *
+     * @throws ProcessFailedException
      *
      * @see run()
      */
-    public function mustRun(array | Process $cmd, string $error = null, callable $callback = null): ?Process
+    public function mustRun(array | Process $cmd, string $error = null, callable $callback = null): Process
     {
         return $this->processHelper->mustRun($this->output, $cmd, $error, $callback);
     }

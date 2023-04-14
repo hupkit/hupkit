@@ -17,9 +17,11 @@ use HubKit\Config;
 use HubKit\Helper\StatusTable;
 use HubKit\Service\CliProcess;
 use HubKit\Service\Git;
+use HubKit\Service\Git\GitFileReader;
 use HubKit\Service\GitHub;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Process\ExecutableFinder;
+use Symfony\Component\VarExporter\VarExporter;
 
 final class SelfDiagnoseHandler
 {
@@ -38,7 +40,8 @@ final class SelfDiagnoseHandler
         Config $config,
         Git $git,
         GitHub $github,
-        CliProcess $process
+        CliProcess $process,
+        private GitFileReader $gitFileReader
     ) {
         $this->style = $style;
         $this->config = $config;
@@ -47,9 +50,9 @@ final class SelfDiagnoseHandler
         $this->process = $process;
     }
 
-    public function handle(): void
+    public function handle(): int
     {
-        $this->style->title('HubKit diagnoses');
+        $this->style->title('HubKit Diagnoses');
 
         $version = $this->getGitVersion();
         $table = new StatusTable($this->style);
@@ -58,6 +61,11 @@ final class SelfDiagnoseHandler
             $table->addRow('Git version', 'failure', sprintf('Git version "%s" should be upgraded to at least 2.10.0', $version));
         } else {
             $table->addRow('Git version', 'success', $version);
+        }
+
+        if (! $this->git->isGitDir()) {
+            $this->style->text('<fg=yellow>💡 Run this command in a Git repository for more information.</>');
+            $this->style->newLine();
         }
 
         $this->testRequiredGitConfig($table, 'user.name');
@@ -95,12 +103,19 @@ final class SelfDiagnoseHandler
         }
 
         $this->testGitHubConfigurations($table);
-        $this->testUpstreamRemoteSet($table);
         $this->testExecutableFound(
             $table,
             'splitsh-lite',
             'Unable to find splitsh-lite in your PATH. Must be set for the `split-repo` command'
         );
+
+        try {
+            $this->github->autoConfigure($this->git);
+        } catch (\Exception) {
+        }
+
+        $this->testUpstreamRemoteSet($table);
+        $this->testConfigFilePresence($table);
         $table->render();
 
         if ($table->hasStatus('error')) {
@@ -108,6 +123,23 @@ final class SelfDiagnoseHandler
         } else {
             $this->style->success('All seems to be good.');
         }
+
+        if ($this->github->getOrganization() !== '') {
+            $this->style->comment('Repository Configuration');
+            $this->style->text(
+                explode(
+                    "\n",
+                    VarExporter::export(
+                        $this->config->getForRepository(
+                            $this->github->getHostname(),
+                            sprintf('%s/%s', $this->github->getOrganization(), $this->github->getRepository())
+                        )
+                    )
+                )
+            );
+        }
+
+        return $table->hasStatus('failure') ? 1 : 0;
     }
 
     private function testGitHubConfigurations(StatusTable $table): void
@@ -138,7 +170,7 @@ final class SelfDiagnoseHandler
 
     private function testAdvisedGitConfigValue(StatusTable $table, string $config, string $expected, string $message): void
     {
-        $result = (string) $this->git->getGitConfig($config, 'global');
+        $result = $this->git->getGitConfig($config, 'global');
         $label = sprintf('Git "%s" configured', $config);
 
         if ($expected === $result) {
@@ -160,22 +192,6 @@ final class SelfDiagnoseHandler
         }
     }
 
-    private function testUpstreamRemoteSet(StatusTable $table): void
-    {
-        if (! $this->git->isGitDir()) {
-            return;
-        }
-
-        $result = $this->git->getGitConfig('remote.upstream.url');
-        $label = 'Git remote "upstream" configured';
-
-        if ($result !== '') {
-            $table->addRow($label, 'success', $result);
-        } else {
-            $table->addRow($label, 'failure', 'Git remote "upstream" should be configured');
-        }
-    }
-
     private function testExecutableFound(StatusTable $table, string $executable, string $message): void
     {
         $finder = new ExecutableFinder();
@@ -187,6 +203,78 @@ final class SelfDiagnoseHandler
         } else {
             $table->addRow($label, 'warning', str_contains($message, '%s') ? sprintf($message, $result) : $message);
         }
+    }
+
+    private function testUpstreamRemoteSet(StatusTable $table): void
+    {
+        $label = 'Git remote "upstream" configured';
+
+        if (! $this->git->isGitDir()) {
+            $table->addRow($label, 'skipped', 'This is not a Git repository');
+
+            return;
+        }
+
+        $result = $this->git->getGitConfig('remote.upstream.url');
+
+        if ($result !== '') {
+            $table->addRow($label, 'success', $result);
+        } else {
+            $table->addRow($label, 'failure', 'Git remote "upstream" should be configured');
+        }
+    }
+
+    private function testConfigFilePresence(StatusTable $table): void
+    {
+        $label = 'Repository Configuration';
+
+        if (! $this->git->isGitDir()) {
+            $table->addRow($label, 'skipped', 'This is not a Git repository');
+
+            return;
+        }
+
+        if ($this->git->getGitConfig('remote.upstream.url') === '' || $this->github->getHostname() === null) {
+            $table->addRow($label, 'skipped', 'Unable to detect host and repository');
+
+            return;
+        }
+
+        if ($this->git->branchExists('_hubkit')) {
+            if (! $this->gitFileReader->fileExists('_hubkit', 'config.php')) {
+                $table->addRow($label, 'failure', 'Branch "_hubkit" exists but config.php was not found');
+
+                return;
+            }
+
+            if ($this->gitFileReader->fileExistsAtRemote('upstream', '_hubkit', 'config.php')) {
+                $status = $this->git->getRemoteDiffStatus('upstream', '_hubkit');
+
+                if ($status !== Git::STATUS_UP_TO_DATE) {
+                    $table->addRow($label, 'warning',
+                        sprintf('Branch "_hubkit" is diverged with upstream: %s%sRun sync-config to update', $status, "\n")
+                    );
+
+                    return;
+                }
+            }
+
+            $table->addRow($label, 'success', 'Found config.php in branch "_hubkit"');
+
+            return;
+        }
+
+        if ($this->git->remoteBranchExists('upstream', '_hubkit')) {
+            if ($this->gitFileReader->fileExistsAtRemote('upstream', '_hubkit', 'config.php')) {
+                $table->addRow($label, 'info', 'Found config.php in branch "_hubkit" at remote "upstream", but not local');
+            } else {
+                $table->addRow($label, 'failure', 'Branch "_hubkit" at upstream exists but config.php was not found');
+            }
+
+            return;
+        }
+
+        $table->addRow($label, 'skipped', 'Branch _hubkit" was neither found locally or at remote "upstream"');
     }
 
     private function getGitVersion(): string

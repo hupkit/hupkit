@@ -1,7 +1,9 @@
 <?php
 
+// See https://www.park-manager.com/hubkit/config.html
+
 return [
-    'schema_version' => 1, // Config-schema version, only change this when requested
+    'schema_version' => 2, // Config-schema version, only change this when requested.
 
     // HubKit supports GitHub Enterprise, and therefor you can add multiple
     // hub configurations by there hostname. The default one is `github.com`.
@@ -23,23 +25,43 @@ return [
     ],
 
     // Configuration for repository splitting.
-    // Structure is expected to be: [hostname][organization/source-repository]
-    // With 'split' being a list of paths (relative to repository root, and no patterns)
-    //    and the value e.g. an 'push url' or `['url' => 'push url', 'sync-tags' => false]`.
-    //
-    // All configured targets are split when requested. Missing directories are ignored.
-    //
-    // The push remote is automatically registered.
-    // The 'sync-tags' can be configured for all split targets, and per target.
-    //
-//    'repos' => [
+
+//    'repositories' => [
 //        'github.com' => [
 //            'park-manager/park-manager' => [
-//                'sync-tags' => true,
-//                'split' => [
-//                    'src/Bundle/CoreBundle' => 'git@github.com:park-manager/core-bundle.git',
-//                    'src/Bundle/UserBundle' => 'git@github.com:park-manager/user-bundle.git',
-//                    'doc' => ['git@github.com:park-manager/doc.git', 'sync-tags' => false],
+//                'branches' => [
+//                    ':default' => [
+//                        'sync-tags' => true,
+//                        'split' => [
+//                            'src/Module/CoreModule' => 'git@github.com:hubkit-sandbox/core-module.git',
+//                            'src/Module/WebhostingModule' => 'git@github.com:hubkit-sandbox/webhosting-module.git',
+//                            'docs' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => false],
+//                        ],
+//                    ],
+//                    '1.0' => false, // Disabled
+//                    '2.x' => [
+//                        'upmerge' => false,
+//                        // Split's is inherited and merged from ':default'
+//                        'split' => [
+//                            'src/Module/DomainRegModule' => 'git@github.com:hubkit-sandbox/webhosting-module.git',
+//                        ],
+//                    ],
+//                    '3.x' => [
+//                        'sync-tags' => null, // Inherit from the root configuration.
+//                        'split' => [
+//                            'src/Module/WebhostingModule' => false,
+//                            'src/Module/DomainRegModule' => 'git@github.com:hubkit-sandbox/webhosting-module.git',
+//                        ],
+//                    ],
+//                    '4.1' => [
+//                        'ignore-default' => true, // Nothing is inherited from ':default'
+//                        'sync-tags' => false,
+//                        'split' => [
+//                            'src/Bundle/CoreBundle' => 'git@github.com:hubkit-sandbox/core-module.git',
+//                            'src/Bundle/WebhostingBundle' => 'git@github.com:hubkit-sandbox/webhosting-module.git',
+//                            'docs' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => false],
+//                        ],
+//                    ],
 //                ],
 //            ],
 //        ],

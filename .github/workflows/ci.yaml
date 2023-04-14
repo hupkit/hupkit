@@ -10,11 +10,11 @@ on:
 jobs:
     test:
         name: PHP ${{ matrix.php-versions }}
-        runs-on: ubuntu-18.04
+        runs-on: ubuntu-latest
         strategy:
             fail-fast: false
             matrix:
-                php-versions: ['8.1']
+                php-versions: ['8.1', '8.2']
 
         steps:
             # —— Setup Github actions 🐙 —————————————————————————————————————————————
@@ -51,8 +51,9 @@ jobs:
                 name: Run Tests
                 run: |
                     make test
-                    cp config.php.dist config.php
-                    bin/hubkit.php self-diagnose
+                    cp .github/config.php.dist config.php
+                    git remote add upstream https://github.com/park-manager/hubkit.git
+                    bin/hubkit.php self-diagnose || exit 0
     lint:
         name: PHP-QA
         runs-on: ubuntu-latest

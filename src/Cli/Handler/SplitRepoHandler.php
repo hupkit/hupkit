@@ -23,11 +23,10 @@ use Webmozart\Console\Api\Args\Args;
 final class SplitRepoHandler extends GitBaseHandler
 {
     private $splitshGit;
-    private $config;
 
     public function __construct(SymfonyStyle $style, SplitshGit $splitshGit, Git $git, GitHub $github, Config $config)
     {
-        parent::__construct($style, $git, $github);
+        parent::__construct($style, $git, $github, $config);
         $this->splitshGit = $splitshGit;
         $this->config = $config;
     }
@@ -37,31 +36,41 @@ final class SplitRepoHandler extends GitBaseHandler
         $this->git->guardWorkingTreeReady();
         $this->git->remoteUpdate('upstream');
 
-        $configName = ['repos', $this->github->getHostname(), $this->github->getOrganization() . '/' . $this->github->getRepository(), 'split'];
-        $config = $this->config->get($configName);
+        $branch = $args->getArgument('branch');
 
-        if ($config === null) {
+        if ($branch !== null) {
+            $useCurrentBranch = false;
+        } else {
+            $branch = $this->git->getActiveBranchName();
+            $useCurrentBranch = true;
+        }
+
+        $config = $this->config->getBranchConfig($this->github->getHostname(), $this->github->getOrganization() . '/' . $this->github->getRepository(), $branch);
+        $split = $config->config['split'] ?? [];
+
+        if ($split === []) {
+            $configName = $config->configPath ?? [];
+
             $this->style->error(
-                sprintf('Unable to split repository: No targets were found in config "[%s]", update the configuration file.', implode('][', $configName))
+                sprintf('Unable to split repository: No targets were found in config "[%s][split]", update the (local) configuration file.', implode('][', $configName))
             );
 
             return 2;
         }
 
-        if (null === $branch = $args->getArgument('branch')) {
-            $branch = $this->git->getActiveBranchName();
-        } else {
+        if (! $useCurrentBranch) {
             $this->git->checkoutRemoteBranch('upstream', $branch);
         }
 
         $this->style->title('Repository Split');
         $this->informationHeader($branch);
+        $this->style->text(sprintf('Split configuration resolved from branch <fg=yellow>%s</>.', $config->configName));
 
         if ($args->getOption('dry-run')) {
-            return $this->drySplitRepository($branch, $config);
+            return $this->drySplitRepository($branch, $split);
         }
 
-        return $this->splitRepository($branch, $config);
+        return $this->splitRepository($branch, $split);
     }
 
     private function splitRepository(string $branch, array $repos): int
@@ -72,10 +81,12 @@ final class SplitRepoHandler extends GitBaseHandler
         $this->style->section(sprintf('%s sources to split', \count($repos)));
 
         foreach ($repos as $prefix => $config) {
-            $url = \is_array($config) ? $config['url'] : $config;
+            if ($config['url'] === false) {
+                continue;
+            }
 
-            $this->style->writeln(sprintf('<fg=default;bg=default> Splitting %s to %s</>', $prefix, $url));
-            $this->splitshGit->splitTo($branch, $prefix, $url);
+            $this->style->writeln(sprintf('<fg=default;bg=default> Splitting %s to %s</>', $prefix, $config['url']));
+            $this->splitshGit->splitTo($branch, $prefix, $config['url']);
         }
 
         $this->style->success('Repository directories were split into there destination.');
@@ -91,9 +102,11 @@ final class SplitRepoHandler extends GitBaseHandler
         $this->style->section(sprintf('%s sources to split', \count($repos)));
 
         foreach ($repos as $prefix => $config) {
-            $this->style->writeln(sprintf('<fg=default;bg=default> [DRY-RUN] Splitting %s to %s</>', $prefix,
-                \is_array($config) ? $config['url'] : $config
-            ));
+            if ($config['url'] === false) {
+                continue;
+            }
+
+            $this->style->writeln(sprintf('<fg=default;bg=default> [DRY-RUN] Splitting %s to %s</>', $prefix, $config['url']));
         }
 
         $this->style->newLine();

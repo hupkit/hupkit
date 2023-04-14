@@ -141,11 +141,6 @@ parameters:
 			path: src/Cli/Handler/MergeHandler.php
 
 		-
-			message: "#^Property HubKit\\\\Cli\\\\Handler\\\\MergeHandler\\:\\:\\$config has no type specified\\.$#"
-			count: 1
-			path: src/Cli/Handler/MergeHandler.php
-
-		-
 			message: "#^Property HubKit\\\\Cli\\\\Handler\\\\MergeHandler\\:\\:\\$questionHelper has no type specified\\.$#"
 			count: 1
 			path: src/Cli/Handler/MergeHandler.php
@@ -157,11 +152,6 @@ parameters:
 
 		-
 			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\ReleaseHandler\\:\\:guardTagDoesNotExist\\(\\) has parameter \\$tags with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Cli/Handler/ReleaseHandler.php
-
-		-
-			message: "#^Property HubKit\\\\Cli\\\\Handler\\\\ReleaseHandler\\:\\:\\$config has no type specified\\.$#"
 			count: 1
 			path: src/Cli/Handler/ReleaseHandler.php
 
@@ -201,11 +191,6 @@ parameters:
 			path: src/Cli/Handler/RepositoryCreateHandler.php
 
 		-
-			message: "#^Cannot call method getOutput\\(\\) on Symfony\\\\Component\\\\Process\\\\Process\\|null\\.$#"
-			count: 1
-			path: src/Cli/Handler/SelfDiagnoseHandler.php
-
-		-
 			message: "#^Property HubKit\\\\Cli\\\\Handler\\\\SelfDiagnoseHandler\\:\\:\\$config has no type specified\\.$#"
 			count: 1
 			path: src/Cli/Handler/SelfDiagnoseHandler.php
@@ -232,11 +217,6 @@ parameters:
 
 		-
 			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\SplitRepoHandler\\:\\:splitRepository\\(\\) has parameter \\$repos with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Cli/Handler/SplitRepoHandler.php
-
-		-
-			message: "#^Property HubKit\\\\Cli\\\\Handler\\\\SplitRepoHandler\\:\\:\\$config has no type specified\\.$#"
 			count: 1
 			path: src/Cli/Handler/SplitRepoHandler.php
 
@@ -331,11 +311,6 @@ parameters:
 			path: src/Cli/Handler/UpMergeHandler.php
 
 		-
-			message: "#^Property HubKit\\\\Cli\\\\Handler\\\\UpMergeHandler\\:\\:\\$config has no type specified\\.$#"
-			count: 1
-			path: src/Cli/Handler/UpMergeHandler.php
-
-		-
 			message: "#^Property HubKit\\\\Cli\\\\Handler\\\\UpMergeHandler\\:\\:\\$process has no type specified\\.$#"
 			count: 1
 			path: src/Cli/Handler/UpMergeHandler.php
@@ -347,7 +322,7 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method Webmozart\\\\Console\\\\Api\\\\Config\\\\ApplicationConfig\\|Webmozart\\\\Console\\\\Api\\\\Config\\\\CommandConfig\\:\\:end\\(\\)\\.$#"
-			count: 11
+			count: 13
 			path: src/Cli/HubKitApplicationConfig.php
 
 		-
@@ -566,12 +541,22 @@ parameters:
 			path: src/Service/Editor.php
 
 		-
+			message: "#^Method HubKit\\\\Service\\\\Filesystem\\:\\:dumpFile\\(\\) has parameter \\$content with no type specified\\.$#"
+			count: 1
+			path: src/Service/Filesystem.php
+
+		-
 			message: "#^Method HubKit\\\\Service\\\\Filesystem\\:\\:newTempFilename\\(\\) should return string but returns string\\|false\\.$#"
 			count: 1
 			path: src/Service/Filesystem.php
 
 		-
 			message: "#^Parameter \\#1 \\$filename of function file_put_contents expects string, string\\|false given\\.$#"
+			count: 1
+			path: src/Service/Filesystem.php
+
+		-
+			message: "#^Parameter \\#2 \\$replace of function substr_replace expects array\\|string, string\\|false given\\.$#"
 			count: 1
 			path: src/Service/Filesystem.php
 
@@ -689,6 +674,11 @@ parameters:
 			message: "#^Method HubKit\\\\Service\\\\Git\\\\GitConfig\\:\\:setLocal\\(\\) has parameter \\$value with no type specified\\.$#"
 			count: 1
 			path: src/Service/Git/GitConfig.php
+
+		-
+			message: "#^PHPDoc tag @param for parameter \\$branch with type array\\<int, string\\>\\|string is not subtype of native type string\\.$#"
+			count: 1
+			path: src/Service/Git/GitFileReader.php
 
 		-
 			message: "#^Cannot assign offset 'labels' to array\\|string\\.$#"
@@ -896,6 +886,81 @@ parameters:
 			path: src/StringUtil.php
 
 		-
+			message: "#^Method HubKit\\\\Tests\\\\ConfigFactoryTest\\:\\:assertOutputMatches\\(\\) has parameter \\$expectedLines with no type specified\\.$#"
+			count: 1
+			path: tests/ConfigFactoryTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\ConfigFactoryTest\\:\\:assertOutputMatches\\(\\) has parameter \\$regex with no type specified\\.$#"
+			count: 1
+			path: tests/ConfigFactoryTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\ConfigFactoryTest\\:\\:assertOutputNotMatches\\(\\) has parameter \\$lines with no type specified\\.$#"
+			count: 1
+			path: tests/ConfigFactoryTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\ConfigFactoryTest\\:\\:assertOutputNotMatches\\(\\) has parameter \\$regex with no type specified\\.$#"
+			count: 1
+			path: tests/ConfigFactoryTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\ConfigFactoryTest\\:\\:createStyle\\(\\) has parameter \\$input with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/ConfigFactoryTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\ConfigFactoryTest\\:\\:getDisplay\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/ConfigFactoryTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\ConfigFactoryTest\\:\\:getInputStream\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/ConfigFactoryTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\ConfigFactoryTest\\:\\:getInputStream\\(\\) has parameter \\$input with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/ConfigFactoryTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
+			count: 1
+			path: tests/ConfigFactoryTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$stream of function fwrite expects resource, resource\\|false given\\.$#"
+			count: 1
+			path: tests/ConfigFactoryTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$stream of function rewind expects resource, resource\\|false given\\.$#"
+			count: 1
+			path: tests/ConfigFactoryTest.php
+
+		-
+			message: "#^Parameter \\#2 \\$string of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertDoesNotMatchRegularExpression\\(\\) expects string, string\\|null given\\.$#"
+			count: 1
+			path: tests/ConfigFactoryTest.php
+
+		-
+			message: "#^Parameter \\#2 \\$string of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertMatchesRegularExpression\\(\\) expects string, string\\|null given\\.$#"
+			count: 1
+			path: tests/ConfigFactoryTest.php
+
+		-
+			message: "#^Parameter \\#3 \\$subject of function str_replace expects array\\|string, string\\|false given\\.$#"
+			count: 1
+			path: tests/ConfigFactoryTest.php
+
+		-
+			message: "#^Property HubKit\\\\Tests\\\\ConfigFactoryTest\\:\\:\\$output \\(Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput\\) does not accept Symfony\\\\Component\\\\Console\\\\Output\\\\OutputInterface\\.$#"
+			count: 1
+			path: tests/ConfigFactoryTest.php
+
+		-
 			message: "#^Access to an undefined property HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitBaseTest\\:\\:\\$localRepository\\.$#"
 			count: 3
 			path: tests/Functional/Service/Git/GitBaseTest.php
@@ -916,7 +981,12 @@ parameters:
 			path: tests/Functional/Service/Git/GitBaseTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitBaseTest\\:\\:runCliCommand\\(\\) has parameter \\$cmd with no value type specified in iterable type array\\.$#"
+			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
+			count: 1
+			path: tests/Functional/Service/Git/GitBaseTest.php
+
+		-
+			message: "#^Property HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitBaseTest\\:\\:\\$cliOutput \\(Symfony\\\\Component\\\\Console\\\\Output\\\\BufferedOutput\\|null\\) does not accept Symfony\\\\Component\\\\Console\\\\Output\\\\BufferedOutput\\|Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput\\.$#"
 			count: 1
 			path: tests/Functional/Service/Git/GitBaseTest.php
 
@@ -941,7 +1011,12 @@ parameters:
 			path: tests/Functional/Service/Git/GitBranchTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitBranchTest\\:\\:runCliCommand\\(\\) has parameter \\$cmd with no value type specified in iterable type array\\.$#"
+			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
+			count: 1
+			path: tests/Functional/Service/Git/GitBranchTest.php
+
+		-
+			message: "#^Property HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitBranchTest\\:\\:\\$cliOutput \\(Symfony\\\\Component\\\\Console\\\\Output\\\\BufferedOutput\\|null\\) does not accept Symfony\\\\Component\\\\Console\\\\Output\\\\BufferedOutput\\|Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput\\.$#"
 			count: 1
 			path: tests/Functional/Service/Git/GitBranchTest.php
 
@@ -971,7 +1046,12 @@ parameters:
 			path: tests/Functional/Service/Git/GitConfigTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitConfigTest\\:\\:runCliCommand\\(\\) has parameter \\$cmd with no value type specified in iterable type array\\.$#"
+			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
+			count: 1
+			path: tests/Functional/Service/Git/GitConfigTest.php
+
+		-
+			message: "#^Property HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitConfigTest\\:\\:\\$cliOutput \\(Symfony\\\\Component\\\\Console\\\\Output\\\\BufferedOutput\\|null\\) does not accept Symfony\\\\Component\\\\Console\\\\Output\\\\BufferedOutput\\|Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput\\.$#"
 			count: 1
 			path: tests/Functional/Service/Git/GitConfigTest.php
 
@@ -984,6 +1064,126 @@ parameters:
 			message: "#^Property HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitConfigTest\\:\\:\\$style \\(Symfony\\\\Component\\\\Console\\\\Style\\\\StyleInterface\\) does not accept Prophecy\\\\Prophecy\\\\ObjectProphecy\\<Symfony\\\\Component\\\\Console\\\\Style\\\\StyleInterface\\>\\.$#"
 			count: 1
 			path: tests/Functional/Service/Git/GitConfigTest.php
+
+		-
+			message: "#^Access to an undefined property HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitFileReaderTest\\:\\:\\$localRepository\\.$#"
+			count: 3
+			path: tests/Functional/Service/Git/GitFileReaderTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitFileReaderTest\\:\\:assertOutputMatches\\(\\) has parameter \\$expectedLines with no type specified\\.$#"
+			count: 1
+			path: tests/Functional/Service/Git/GitFileReaderTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitFileReaderTest\\:\\:assertOutputMatches\\(\\) has parameter \\$regex with no type specified\\.$#"
+			count: 1
+			path: tests/Functional/Service/Git/GitFileReaderTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitFileReaderTest\\:\\:assertOutputNotMatches\\(\\) has parameter \\$lines with no type specified\\.$#"
+			count: 1
+			path: tests/Functional/Service/Git/GitFileReaderTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitFileReaderTest\\:\\:assertOutputNotMatches\\(\\) has parameter \\$regex with no type specified\\.$#"
+			count: 1
+			path: tests/Functional/Service/Git/GitFileReaderTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitFileReaderTest\\:\\:createStyle\\(\\) has parameter \\$input with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/Functional/Service/Git/GitFileReaderTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitFileReaderTest\\:\\:getDisplay\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/Functional/Service/Git/GitFileReaderTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitFileReaderTest\\:\\:getInputStream\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/Functional/Service/Git/GitFileReaderTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitFileReaderTest\\:\\:getInputStream\\(\\) has parameter \\$input with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/Functional/Service/Git/GitFileReaderTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitFileReaderTest\\:\\:getTempDir\\(\\) should return string but returns string\\|null\\.$#"
+			count: 1
+			path: tests/Functional/Service/Git/GitFileReaderTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitFileReaderTest\\:\\:givenLocalBranchesExist\\(\\) has parameter \\$branches with no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: tests/Functional/Service/Git/GitFileReaderTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitFileReaderTest\\:\\:givenRemoteBranchesExist\\(\\) has parameter \\$branches with no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: tests/Functional/Service/Git/GitFileReaderTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$directory of function chdir expects string, string\\|null given\\.$#"
+			count: 1
+			path: tests/Functional/Service/Git/GitFileReaderTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
+			count: 2
+			path: tests/Functional/Service/Git/GitFileReaderTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$stream of function fwrite expects resource, resource\\|false given\\.$#"
+			count: 1
+			path: tests/Functional/Service/Git/GitFileReaderTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$stream of function rewind expects resource, resource\\|false given\\.$#"
+			count: 1
+			path: tests/Functional/Service/Git/GitFileReaderTest.php
+
+		-
+			message: "#^Parameter \\#2 \\$string of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertDoesNotMatchRegularExpression\\(\\) expects string, string\\|null given\\.$#"
+			count: 1
+			path: tests/Functional/Service/Git/GitFileReaderTest.php
+
+		-
+			message: "#^Parameter \\#2 \\$string of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertMatchesRegularExpression\\(\\) expects string, string\\|null given\\.$#"
+			count: 1
+			path: tests/Functional/Service/Git/GitFileReaderTest.php
+
+		-
+			message: "#^Parameter \\#3 \\$subject of function str_replace expects array\\|string, string\\|false given\\.$#"
+			count: 1
+			path: tests/Functional/Service/Git/GitFileReaderTest.php
+
+		-
+			message: "#^Property HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitFileReaderTest\\:\\:\\$cliOutput \\(Symfony\\\\Component\\\\Console\\\\Output\\\\BufferedOutput\\|null\\) does not accept Symfony\\\\Component\\\\Console\\\\Output\\\\BufferedOutput\\|Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput\\.$#"
+			count: 1
+			path: tests/Functional/Service/Git/GitFileReaderTest.php
+
+		-
+			message: "#^Property HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitFileReaderTest\\:\\:\\$cwd has no type specified\\.$#"
+			count: 1
+			path: tests/Functional/Service/Git/GitFileReaderTest.php
+
+		-
+			message: "#^Property HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitFileReaderTest\\:\\:\\$origCwd \\(string\\|null\\) does not accept string\\|false\\.$#"
+			count: 1
+			path: tests/Functional/Service/Git/GitFileReaderTest.php
+
+		-
+			message: "#^Property HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitFileReaderTest\\:\\:\\$output \\(Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput\\) does not accept Symfony\\\\Component\\\\Console\\\\Output\\\\OutputInterface\\.$#"
+			count: 1
+			path: tests/Functional/Service/Git/GitFileReaderTest.php
+
+		-
+			message: "#^Property HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitFileReaderTest\\:\\:\\$style is unused\\.$#"
+			count: 1
+			path: tests/Functional/Service/Git/GitFileReaderTest.php
 
 		-
 			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\TestCliProcess\\:\\:mustRun\\(\\) has parameter \\$cmd with no value type specified in iterable type array\\.$#"
@@ -1146,16 +1346,6 @@ parameters:
 			path: tests/Handler/MergeHandlerTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$stream of function rewind expects resource, resource\\|null given\\.$#"
-			count: 1
-			path: tests/Handler/MergeHandlerTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$stream of function stream_get_contents expects resource, resource\\|null given\\.$#"
-			count: 1
-			path: tests/Handler/MergeHandlerTest.php
-
-		-
 			message: "#^Parameter \\#2 \\$git of class HubKit\\\\Cli\\\\Handler\\\\MergeHandler constructor expects HubKit\\\\Service\\\\Git, object given\\.$#"
 			count: 1
 			path: tests/Handler/MergeHandlerTest.php
@@ -1206,7 +1396,7 @@ parameters:
 			path: tests/Handler/MergeHandlerTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\MergeHandlerTest\\:\\:\\$output \\(Symfony\\\\Component\\\\Console\\\\Input\\\\ArrayInput\\) does not accept Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput\\.$#"
+			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\MergeHandlerTest\\:\\:\\$output \\(Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput\\) does not accept Symfony\\\\Component\\\\Console\\\\Output\\\\OutputInterface\\.$#"
 			count: 1
 			path: tests/Handler/MergeHandlerTest.php
 
@@ -1281,16 +1471,6 @@ parameters:
 			path: tests/Handler/ReleaseHandlerTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$stream of function rewind expects resource, resource\\|null given\\.$#"
-			count: 1
-			path: tests/Handler/ReleaseHandlerTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$stream of function stream_get_contents expects resource, resource\\|null given\\.$#"
-			count: 1
-			path: tests/Handler/ReleaseHandlerTest.php
-
-		-
 			message: "#^Parameter \\#2 \\$git of class HubKit\\\\Cli\\\\Handler\\\\ReleaseHandler constructor expects HubKit\\\\Service\\\\Git, object given\\.$#"
 			count: 1
 			path: tests/Handler/ReleaseHandlerTest.php
@@ -1346,7 +1526,7 @@ parameters:
 			path: tests/Handler/ReleaseHandlerTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\ReleaseHandlerTest\\:\\:\\$output \\(Symfony\\\\Component\\\\Console\\\\Input\\\\ArrayInput\\) does not accept Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput\\.$#"
+			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\ReleaseHandlerTest\\:\\:\\$output \\(Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput\\) does not accept Symfony\\\\Component\\\\Console\\\\Output\\\\OutputInterface\\.$#"
 			count: 1
 			path: tests/Handler/ReleaseHandlerTest.php
 
@@ -1359,6 +1539,126 @@ parameters:
 			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\ReleaseHandlerTest\\:\\:\\$splitshGit with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
 			count: 1
 			path: tests/Handler/ReleaseHandlerTest.php
+
+		-
+			message: "#^Constant HubKit\\\\Tests\\\\Handler\\\\SplitRepoHandlerTest\\:\\:HEAD_SHA is unused\\.$#"
+			count: 1
+			path: tests/Handler/SplitRepoHandlerTest.php
+
+		-
+			message: "#^Constant HubKit\\\\Tests\\\\Handler\\\\SplitRepoHandlerTest\\:\\:MERGE_SHA is unused\\.$#"
+			count: 1
+			path: tests/Handler/SplitRepoHandlerTest.php
+
+		-
+			message: "#^Constant HubKit\\\\Tests\\\\Handler\\\\SplitRepoHandlerTest\\:\\:PR_BRANCH is unused\\.$#"
+			count: 1
+			path: tests/Handler/SplitRepoHandlerTest.php
+
+		-
+			message: "#^Constant HubKit\\\\Tests\\\\Handler\\\\SplitRepoHandlerTest\\:\\:PR_NUMBER is unused\\.$#"
+			count: 1
+			path: tests/Handler/SplitRepoHandlerTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\SplitRepoHandlerTest\\:\\:assertOutputMatches\\(\\) has parameter \\$expectedLines with no type specified\\.$#"
+			count: 1
+			path: tests/Handler/SplitRepoHandlerTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\SplitRepoHandlerTest\\:\\:assertOutputMatches\\(\\) has parameter \\$regex with no type specified\\.$#"
+			count: 1
+			path: tests/Handler/SplitRepoHandlerTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\SplitRepoHandlerTest\\:\\:assertOutputNotMatches\\(\\) has parameter \\$lines with no type specified\\.$#"
+			count: 1
+			path: tests/Handler/SplitRepoHandlerTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\SplitRepoHandlerTest\\:\\:assertOutputNotMatches\\(\\) has parameter \\$regex with no type specified\\.$#"
+			count: 1
+			path: tests/Handler/SplitRepoHandlerTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\SplitRepoHandlerTest\\:\\:createStyle\\(\\) has parameter \\$input with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/Handler/SplitRepoHandlerTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\SplitRepoHandlerTest\\:\\:executeHandler\\(\\) has parameter \\$input with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/Handler/SplitRepoHandlerTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\SplitRepoHandlerTest\\:\\:expectGitSplit\\(\\) has parameter \\$targetBranch with no type specified\\.$#"
+			count: 1
+			path: tests/Handler/SplitRepoHandlerTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\SplitRepoHandlerTest\\:\\:getDisplay\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/Handler/SplitRepoHandlerTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\SplitRepoHandlerTest\\:\\:getInputStream\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/Handler/SplitRepoHandlerTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\SplitRepoHandlerTest\\:\\:getInputStream\\(\\) has parameter \\$input with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/Handler/SplitRepoHandlerTest.php
+
+		-
+			message: "#^PHPDoc tag @var for property HubKit\\\\Tests\\\\Handler\\\\SplitRepoHandlerTest\\:\\:\\$git contains unresolvable type\\.$#"
+			count: 1
+			path: tests/Handler/SplitRepoHandlerTest.php
+
+		-
+			message: "#^PHPDoc tag @var for property HubKit\\\\Tests\\\\Handler\\\\SplitRepoHandlerTest\\:\\:\\$github contains unresolvable type\\.$#"
+			count: 1
+			path: tests/Handler/SplitRepoHandlerTest.php
+
+		-
+			message: "#^PHPDoc tag @var for property HubKit\\\\Tests\\\\Handler\\\\SplitRepoHandlerTest\\:\\:\\$splitshGit contains unresolvable type\\.$#"
+			count: 1
+			path: tests/Handler/SplitRepoHandlerTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
+			count: 1
+			path: tests/Handler/SplitRepoHandlerTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$stream of function fwrite expects resource, resource\\|false given\\.$#"
+			count: 1
+			path: tests/Handler/SplitRepoHandlerTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$stream of function rewind expects resource, resource\\|false given\\.$#"
+			count: 1
+			path: tests/Handler/SplitRepoHandlerTest.php
+
+		-
+			message: "#^Parameter \\#2 \\$string of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertDoesNotMatchRegularExpression\\(\\) expects string, string\\|null given\\.$#"
+			count: 1
+			path: tests/Handler/SplitRepoHandlerTest.php
+
+		-
+			message: "#^Parameter \\#2 \\$string of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertMatchesRegularExpression\\(\\) expects string, string\\|null given\\.$#"
+			count: 1
+			path: tests/Handler/SplitRepoHandlerTest.php
+
+		-
+			message: "#^Parameter \\#3 \\$subject of function str_replace expects array\\|string, string\\|false given\\.$#"
+			count: 1
+			path: tests/Handler/SplitRepoHandlerTest.php
+
+		-
+			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\SplitRepoHandlerTest\\:\\:\\$output \\(Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput\\) does not accept Symfony\\\\Component\\\\Console\\\\Output\\\\OutputInterface\\.$#"
+			count: 1
+			path: tests/Handler/SplitRepoHandlerTest.php
 
 		-
 			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\UpMergeHandlerTest\\:\\:assertOutputMatches\\(\\) has parameter \\$expectedLines with no type specified\\.$#"
@@ -1416,16 +1716,6 @@ parameters:
 			path: tests/Handler/UpMergeHandlerTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$stream of function rewind expects resource, resource\\|null given\\.$#"
-			count: 1
-			path: tests/Handler/UpMergeHandlerTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$stream of function stream_get_contents expects resource, resource\\|null given\\.$#"
-			count: 1
-			path: tests/Handler/UpMergeHandlerTest.php
-
-		-
 			message: "#^Parameter \\#2 \\$git of class HubKit\\\\Cli\\\\Handler\\\\UpMergeHandler constructor expects HubKit\\\\Service\\\\Git, object given\\.$#"
 			count: 1
 			path: tests/Handler/UpMergeHandlerTest.php
@@ -1466,7 +1756,7 @@ parameters:
 			path: tests/Handler/UpMergeHandlerTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\UpMergeHandlerTest\\:\\:\\$output \\(Symfony\\\\Component\\\\Console\\\\Input\\\\ArrayInput\\) does not accept Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput\\.$#"
+			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\UpMergeHandlerTest\\:\\:\\$output \\(Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput\\) does not accept Symfony\\\\Component\\\\Console\\\\Output\\\\OutputInterface\\.$#"
 			count: 1
 			path: tests/Handler/UpMergeHandlerTest.php
 
@@ -1576,16 +1866,6 @@ parameters:
 			path: tests/Unit/Helper/BranchAliasResolverTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$stream of function rewind expects resource, resource\\|null given\\.$#"
-			count: 1
-			path: tests/Unit/Helper/BranchAliasResolverTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$stream of function stream_get_contents expects resource, resource\\|null given\\.$#"
-			count: 1
-			path: tests/Unit/Helper/BranchAliasResolverTest.php
-
-		-
 			message: "#^Parameter \\#2 \\$string of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertDoesNotMatchRegularExpression\\(\\) expects string, string\\|null given\\.$#"
 			count: 1
 			path: tests/Unit/Helper/BranchAliasResolverTest.php
@@ -1601,7 +1881,7 @@ parameters:
 			path: tests/Unit/Helper/BranchAliasResolverTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Unit\\\\Helper\\\\BranchAliasResolverTest\\:\\:\\$output \\(Symfony\\\\Component\\\\Console\\\\Input\\\\ArrayInput\\) does not accept Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput\\.$#"
+			message: "#^Property HubKit\\\\Tests\\\\Unit\\\\Helper\\\\BranchAliasResolverTest\\:\\:\\$output \\(Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput\\) does not accept Symfony\\\\Component\\\\Console\\\\Output\\\\OutputInterface\\.$#"
 			count: 1
 			path: tests/Unit/Helper/BranchAliasResolverTest.php
 

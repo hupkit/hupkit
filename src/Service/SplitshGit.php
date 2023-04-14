@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace HubKit\Service;
 
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class SplitshGit
 {

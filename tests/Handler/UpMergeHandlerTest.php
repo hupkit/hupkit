@@ -70,9 +70,11 @@ final class UpMergeHandlerTest extends TestCase
         $this->expectConfigHasSplits();
 
         $this->config = new Config([
-            'repos' => [
+            'repositories' => [
                 'github.com' => [
-                    'park-manager/park-manager' => [],
+                    'repos' => [
+                        'park-manager/park-manager' => [],
+                    ],
                 ],
             ],
         ]);
@@ -111,6 +113,7 @@ final class UpMergeHandlerTest extends TestCase
         $this->splitshGit->splitTo('2.5', 'src/Component/Core', 'git@github.com:park-manager/core.git')->shouldBeCalled();
         $this->splitshGit->splitTo('2.5', 'src/Component/Model', 'git@github.com:park-manager/model.git')->shouldBeCalled();
         $this->splitshGit->splitTo('2.5', 'doc', 'git@github.com:park-manager/doc.git')->shouldBeCalled();
+        $this->splitshGit->splitTo('2.5', 'lobster', 'git@github.com:park-manager/pinchy.git')->shouldBeCalled();
 
         $this->git->getActiveBranchName()->willReturn('2.3');
         $this->git->remoteUpdate('upstream')->shouldBeCalled();
@@ -276,6 +279,7 @@ final class UpMergeHandlerTest extends TestCase
             $this->splitshGit->splitTo($branchTarget, 'src/Component/Core', 'git@github.com:park-manager/core.git')->shouldBeCalled();
             $this->splitshGit->splitTo($branchTarget, 'src/Component/Model', 'git@github.com:park-manager/model.git')->shouldBeCalled();
             $this->splitshGit->splitTo($branchTarget, 'doc', 'git@github.com:park-manager/doc.git')->shouldBeCalled();
+            $this->splitshGit->splitTo($branchTarget, 'lobster', 'git@github.com:park-manager/pinchy.git')->shouldBeCalled();
         }
 
         $this->git->getActiveBranchName()->willReturn('2.3');
@@ -477,21 +481,62 @@ final class UpMergeHandlerTest extends TestCase
 
     private function expectConfigHasSplits(): void
     {
-        $this->config = new Config(
-            [
-                'repos' => [
-                    'github.com' => [
+        $this->config = new Config([
+            'schema_version' => 2,
+            'github' => [
+                'github.com' => [
+                    'username' => 'sstok',
+                    'api_token' => 'CHANGE-ME',
+                ],
+            ],
+            'repositories' => [
+                'github.com' => [
+                    'repos' => [
                         'park-manager/hubkit' => [
-                            'sync-tags' => true,
-                            'split' => [
-                                'src/Component/Core' => 'git@github.com:park-manager/core.git',
-                                'src/Component/Model' => 'git@github.com:park-manager/model.git',
-                                'doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => false],
+                            'branches' => [
+                                ':default' => [
+                                    'sync-tags' => false,
+                                    'split' => [
+                                        'src/Component/Core' => ['url' => 'git@github.com:park-manager/core.git', 'sync-tags' => null],
+                                        'src/Component/Model' => ['url' => 'git@github.com:park-manager/model.git', 'sync-tags' => null],
+                                        'doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => false],
+                                    ],
+                                ],
+                                'master' => [
+                                    'sync-tags' => true,
+                                    'split' => [
+                                        'docs' => ['url' => 'git@github.com:park-manager/docs.git'],
+                                        'noop' => ['url' => 'git@github.com:park-manager/noop.git', 'sync-tags' => false],
+                                    ],
+                                ],
+                                '1.x' => [
+                                    'sync-tags' => true,
+                                    'upmerge' => false,
+                                    'split' => [],
+                                ],
+                                '2.x' => [
+                                    'sync-tags' => true,
+                                    'split' => [
+                                        'lobster' => ['url' => 'git@github.com:park-manager/pinchy.git'],
+                                    ],
+                                ],
+                                '3.x' => [
+                                    'sync-tags' => true,
+                                    'ignore-default' => true,
+                                    'split' => [],
+                                ],
+                            ],
+                        ],
+                        'park-manager/website' => [
+                            'branches' => [
+                                '1.0' => [
+                                    'sync-tags' => false,
+                                ],
                             ],
                         ],
                     ],
                 ],
-            ]
-        );
+            ],
+        ]);
     }
 }

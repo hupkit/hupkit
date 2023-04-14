@@ -134,14 +134,23 @@ labels: removed-deprecation
 
         $this->config = new Config(
             [
-                'repos' => [
+                'repositories' => [
                     'github.com' => [
-                        'park-manager/park-manager' => [
-                            'sync-tags' => true,
-                            'split' => [
-                                'src/Component/Core' => 'git@github.com:park-manager/core.git',
-                                'src/Component/Model' => 'git@github.com:park-manager/model.git',
-                                'doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => false],
+                        'repos' => [
+                            'park-manager/park-manager' => [
+                                'sync-tags' => true,
+                                'branches' => [
+                                    ':default' => [
+                                        'split' => [
+                                            'src/Component/Core' => ['url' => 'git@github.com:park-manager/core.git'],
+                                            'src/Component/Model' => ['url' => 'git@github.com:park-manager/model.git'],
+                                            'doc' => [
+                                                'url' => 'git@github.com:park-manager/doc.git',
+                                                'sync-tags' => false,
+                                            ],
+                                        ],
+                                    ],
+                                ],
                             ],
                         ],
                     ],

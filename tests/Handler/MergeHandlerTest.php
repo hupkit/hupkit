@@ -215,14 +215,20 @@ by who-else at 2014-11-23T14:50:24Z
     public function it_merges_a_pull_request_and_splits_repository_when_confirmed(): void
     {
         $this->config = new Config([
-            'repos' => [
+            'repositories' => [
                 'github.com' => [
-                    'park-manager/hubkit' => [
-                        'sync-tags' => true,
-                        'split' => [
-                            'src/Component/Core' => 'git@github.com:park-manager/core.git',
-                            'src/Component/Model' => 'git@github.com:park-manager/model.git',
-                            'doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => false],
+                    'repos' => [
+                        'park-manager/hubkit' => [
+                            'branches' => [
+                                ':default' => [
+                                    'sync-tags' => true,
+                                    'split' => [
+                                        'src/Component/Core' => ['url' => 'git@github.com:park-manager/core.git'],
+                                        'src/Component/Model' => ['url' => 'git@github.com:park-manager/model.git'],
+                                        'doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => false],
+                                    ],
+                                ],
+                            ],
                         ],
                     ],
                 ],
@@ -301,14 +307,20 @@ by who-else at 2014-11-23T14:50:24Z
     public function it_merges_a_pull_request_and_skips_repository_split_when_confirm_is_rejected(): void
     {
         $this->config = new Config([
-            'repos' => [
+            'repositories' => [
                 'github.com' => [
-                    'park-manager/hubkit' => [
-                        'sync-tags' => true,
-                        'split' => [
-                            'src/Component/Core' => 'git@github.com:park-manager/core.git',
-                            'src/Component/Model' => 'git@github.com:park-manager/model.git',
-                            'doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => false],
+                    'repos' => [
+                        'park-manager/hubkit' => [
+                            'branches' => [
+                                ':default' => [
+                                    'sync-tags' => true,
+                                    'split' => [
+                                        'src/Component/Core' => ['url' => 'git@github.com:park-manager/core.git'],
+                                        'src/Component/Model' => ['url' => 'git@github.com:park-manager/model.git'],
+                                        'doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => false],
+                                    ],
+                                ],
+                            ],
                         ],
                     ],
                 ],
@@ -1235,6 +1247,7 @@ by who-else at 2014-11-23T14:50:24Z
 
     /**
      * @test
+     *
      * @dataProvider provideStatusLabels
      */
     public function it_shows_status_table_with_review_status(array $labels, bool $success = true, string $row = ''): void

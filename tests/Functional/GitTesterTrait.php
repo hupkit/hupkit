@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace HubKit\Tests\Functional;
 
 use Symfony\Component\Console\Output\BufferedOutput;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Output\StreamOutput;
 use Symfony\Component\Process\Process;
 
 trait GitTesterTrait
@@ -27,7 +29,7 @@ trait GitTesterTrait
 
     protected function setUpTempDirectory(): void
     {
-        $this->tempDir = realpath(sys_get_temp_dir()) . '/hbk-sut/' . mb_substr(hash('sha256', random_bytes(8)), 0, 10);
+        $this->tempDir = realpath(sys_get_temp_dir()) . '/hbk-sut/' . mb_substr(hash('sha256', random_bytes(14)), 0, 16);
         mkdir($this->tempDir, 0777, true);
     }
 
@@ -42,36 +44,23 @@ trait GitTesterTrait
 
     protected function createGitDirectory(string $directory): string
     {
-        $currentCwd = $this->cwd;
-
-        try {
-            mkdir($directory, 0777, true);
-            $this->cwd = $directory;
-
-            $this->runCliCommand(['git', 'init', '-b', 'master']);
-        } finally {
-            $this->cwd = $currentCwd;
-        }
+        mkdir($directory, 0777, true);
+        $this->runCliCommand(['git', 'init', '-b', 'master'], $directory);
 
         return str_replace('\\', '/', $directory);
     }
 
     protected function createBareGitDirectory(string $directory): string
     {
-        $currentCwd = $this->cwd;
-
-        try {
-            mkdir($directory, 0777, true);
-            $this->cwd = $directory;
-
-            $this->runCliCommand(['git', 'init', '--bare', '-b', 'master']);
-        } finally {
-            $this->cwd = $currentCwd;
-        }
+        mkdir($directory, 0777, true);
+        $this->runCliCommand(['git', 'init', '--bare', '-b', 'master'], $directory);
 
         return str_replace('\\', '/', $directory);
     }
 
+    /**
+     * @param array<int, string> $cmd
+     */
     protected function runCliCommand(array $cmd, ?string $cwd = null): Process
     {
         $process = new Process($cmd, $cwd ?? $this->cwd);
@@ -85,18 +74,16 @@ trait GitTesterTrait
         return (new TestCliProcess($this->getCliOutput()))->setCwd($cwd ?? $this->cwd);
     }
 
-    protected function getCliOutput(): BufferedOutput
+    protected function getCliOutput(): OutputInterface
     {
-        if ($this->cliOutput === null) {
-            $this->cliOutput = new BufferedOutput(BufferedOutput::VERBOSITY_VERBOSE);
-        }
+        $this->cliOutput ??= new StreamOutput(fopen('php://memory', 'w'), BufferedOutput::VERBOSITY_VERBOSE, false);
 
         return $this->cliOutput;
     }
 
-    protected function commitFileToRepository(string $filename, string $repository): void
+    protected function commitFileToRepository(string $filename, string $repository, string $contents = '[Empty]'): void
     {
-        $this->runCliCommand(['touch', $filename], $repository);
+        file_put_contents($repository . '/' . $filename, $contents);
         $this->runCliCommand(['git', 'add', $filename], $repository);
         $this->runCliCommand(['git', 'commit', '-m', 'I am a dwarf, I am digging a hole'], $repository);
     }

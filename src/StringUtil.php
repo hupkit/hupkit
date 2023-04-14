@@ -31,6 +31,11 @@ class StringUtil
         return ($input === '') ? [] : preg_split('{\r?\n}', $input);
     }
 
+    public static function normalizePath(string $path): string
+    {
+        return str_replace('\\', '//', $path);
+    }
+
     /**
      * Concatenates the words to an uppercased wording.
      *

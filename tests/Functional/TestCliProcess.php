@@ -21,6 +21,11 @@ class TestCliProcess extends CliProcess
 {
     private $cwd;
 
+    /**
+     * @var callable|null
+     */
+    private $ignoreCwdChange;
+
     public function setCwd(?string $cwd): self
     {
         $this->cwd = $cwd;
@@ -28,22 +33,31 @@ class TestCliProcess extends CliProcess
         return $this;
     }
 
-    public function run($cmd, $error = null, callable $callback = null, $verbosity = OutputInterface::VERBOSITY_VERY_VERBOSE): ?Process
+    public function ignoreCwdChangeWhen(?callable $fn): self
+    {
+        $this->ignoreCwdChange = $fn;
+
+        return $this;
+    }
+
+    public function run($cmd, $error = null, callable $callback = null, $verbosity = OutputInterface::VERBOSITY_VERY_VERBOSE): Process
     {
         return parent::run($this->wrapProcessorForCmd($cmd), $error, $callback, $verbosity);
     }
 
-    public function mustRun(array | Process $cmd, string $error = null, callable $callback = null): ?Process
+    public function mustRun(array | Process $cmd, string $error = null, callable $callback = null): Process
     {
         return parent::mustRun($this->wrapProcessorForCmd($cmd), $error, $callback);
     }
 
     private function wrapProcessorForCmd($cmd): Process
     {
-        if ($cmd instanceof Process) {
+        if (! $cmd instanceof Process) {
+            return new Process($cmd, $this->cwd);
+        }
+
+        if ($this->ignoreCwdChange === null || ! ($this->ignoreCwdChange)($cmd->getWorkingDirectory())) {
             $cmd->setWorkingDirectory($this->cwd);
-        } else {
-            $cmd = new Process($cmd, $this->cwd);
         }
 
         return $cmd;

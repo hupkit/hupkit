@@ -24,14 +24,12 @@ use Webmozart\Console\Api\Args\Args;
 final class UpMergeHandler extends GitBaseHandler
 {
     private $process;
-    private $config;
     private $splitshGit;
 
     public function __construct(SymfonyStyle $style, Git $git, GitHub $github, CliProcess $process, Config $config, SplitshGit $splitshGit)
     {
-        parent::__construct($style, $git, $github);
+        parent::__construct($style, $git, $github, $config);
         $this->process = $process;
-        $this->config = $config;
         $this->splitshGit = $splitshGit;
     }
 
@@ -241,22 +239,22 @@ final class UpMergeHandler extends GitBaseHandler
         $this->style->progressStart(\count($splitTargets));
 
         foreach ($splitTargets as $prefix => $splitConfigs) {
-            $url = \is_array($splitConfigs) ? $splitConfigs['url'] : $splitConfigs;
-
             $this->style->progressAdvance();
-            $this->splitshGit->splitTo($branch, $prefix, $url);
+            $this->splitshGit->splitTo($branch, $prefix, $splitConfigs['url']);
         }
     }
 
     private function getSplitTargets(Args $args): array
     {
-        $splitTargets = $this->config->get(['repos', $this->github->getHostname(), $this->github->getOrganization() . '/' . $this->github->getRepository(), 'split']);
+        $branch = $args->getArgument('branch') ?? $this->git->getActiveBranchName();
+        $branchConfig = $this->config->getBranchConfig($this->github->getHostname(), $this->github->getOrganization() . '/' . $this->github->getRepository(), $branch);
+        $splitTargets = $branchConfig->config['split'] ?? [];
 
-        if ($args->getOption('no-split') || $splitTargets === null) {
+        if ($args->getOption('no-split') || $splitTargets === []) {
             return [];
         }
 
-        if ($splitTargets !== null) {
+        if ($splitTargets !== []) {
             $this->splitshGit->checkPrecondition();
         }
 
