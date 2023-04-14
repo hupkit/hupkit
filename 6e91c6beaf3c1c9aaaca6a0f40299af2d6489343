@@ -1,0 +1,21 @@
+---------------------------------------------------------------------------
+
+by sstok at 2023-04-03T10:05:34Z
+
+Keeping a local configuration file might cause some trouble when switching branches, where the new configuration might be expected. To solve this it might be an idea to use a special `_hubkit` branch to keep configurations (and scripts for special operations).
+
+---------------------------------------------------------------------------
+
+by sstok at 2023-04-07T08:30:07Z
+
+Local configuration is now stored in a special branch named "_hubkit", the configuration is loaded once (using a special temporary repository) and it not effected by branch switching.
+
+This new config branch can also be used in the future to keep special hook scripts for upmerge for example, as the script can be executed without the need to keep this in the lowest possible branch.
+
+---------------------------------------------------------------------------
+
+by sstok at 2023-04-13T19:31:19Z
+
+OK. I'm finally done! I added two additional commands to initialize the configuration (importing any existing configuration to ease the transition) and another one to synchronize the configuration with the upstream (pull/push/rebase when diverged).
+
+All and all I'm really pleased with this feature!
