@@ -18,7 +18,7 @@ target repository and some additional options like if tag-synchronizing is enabl
 use the [repo-create](commands/repo-create.md) command with the correct arguments
 to create the repositories.**
 
-See [config.md] how to configure your splits.
+See [Configuration](config.md) how to configure your splits.
 
 To test if the configuration is correct run `hubkit split-repo --dry-run`
 to see what would have happened.

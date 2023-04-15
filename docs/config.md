@@ -3,7 +3,7 @@ Configuration
 
 **The examples in this chapter assume schema_version 2 is used, schema_version 1 is still supported. 
 But schema_version 2 uses some advanced features that could cause problems when not
-all team members use the same configuration!** See [upgrade.md] for more information.
+all team members use the same configuration!** See [upgrade](upgrade.md) for more information.
 
 Since Hubkit v1.2 it's possible to use a local configuration housed in the repository itself,
 see below for more information.
