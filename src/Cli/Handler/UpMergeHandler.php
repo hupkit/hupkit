@@ -95,7 +95,7 @@ final class UpMergeHandler extends GitBaseHandler
         }
 
         if ('' === ($nextVersion = $branches[$idx + 1] ?? '')) {
-            $nextVersion = 'master';
+            $nextVersion = $this->git->getPrimaryBranch();
         }
 
         $this->git->ensureBranchInSync('upstream', $branch);
@@ -151,7 +151,7 @@ final class UpMergeHandler extends GitBaseHandler
         }
 
         if ('' === ($nextVersion = $branches[$idx + 1] ?? '')) {
-            $nextVersion = 'master';
+            $nextVersion = $this->git->getPrimaryBranch();
         }
 
         $this->git->ensureBranchInSync('upstream', $branch);

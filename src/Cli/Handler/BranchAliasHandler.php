@@ -29,9 +29,11 @@ final class BranchAliasHandler implements RequiresGitRepository
 
     public function handle(Args $args, IO $io): void
     {
-        $alias = $this->git->getGitConfig('branch.master.alias');
+        $branch = $this->git->getPrimaryBranch();
+        $alias = $this->git->getGitConfig('branch.' . $branch . '.alias');
+        $newAlias = $args->getArgument('alias');
 
-        if (null !== $newAlias = $args->getArgument('alias')) {
+        if ($newAlias !== null) {
             if (! preg_match('/^\d+\.\d+$/', $newAlias)) {
                 throw new \InvalidArgumentException(
                     'A branch alias consists of major and minor version without any prefix or suffix. like: 1.2'
@@ -39,7 +41,7 @@ final class BranchAliasHandler implements RequiresGitRepository
             }
 
             $alias = $newAlias . '-dev';
-            $this->git->setGitConfig('branch.master.alias', $alias, true);
+            $this->git->setGitConfig('branch.' . $branch . '.alias', $alias, true);
         }
 
         $io->writeLine($alias);

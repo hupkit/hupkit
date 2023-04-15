@@ -35,11 +35,19 @@ final class TakeHandler extends GitBaseHandler
         }
 
         $slugTitle = StringUtil::slugify(sprintf('%s %s', $issue['number'], $issue['title']));
+        $base = $args->getOption('base') ?? $this->git->getPrimaryBranch();
+
+        if ($this->git->branchExists($slugTitle)) {
+            $this->style->warning('Branch already exists, checking out existing branch instead.');
+            $this->git->checkout($slugTitle);
+
+            return;
+        }
 
         $this->git->remoteUpdate('upstream');
-        $this->git->checkout('upstream/' . $args->getOption('base'));
+        $this->git->checkoutRemoteBranch('upstream', $base);
         $this->git->checkout($slugTitle, true);
 
-        $this->style->success(sprintf('Issue %s taken!', $issue['html_url']));
+        $this->style->success(sprintf('Issue %s taken with base "%s"!', $issue['html_url'], $base));
     }
 }

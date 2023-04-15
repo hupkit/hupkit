@@ -114,7 +114,9 @@ class Git
      */
     public function getPrimaryBranch(): string
     {
-        $branch = $this->getGitConfig('init.defaultbranch');
+        static $branch = null;
+
+        $branch ??= $this->getGitConfig('init.defaultbranch');
 
         if ($branch !== '') {
             return $branch;
@@ -129,8 +131,6 @@ class Git
                 'Unable to determine primary-branch , expected either "master" or "main". But neither one was found, set the "init.defaultbranch" Git local config to resolve this.'
             );
         }
-
-        $this->setGitConfig('init.defaultbranch', $branch);
 
         return $branch;
     }

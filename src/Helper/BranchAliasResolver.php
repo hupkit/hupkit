@@ -32,19 +32,23 @@ class BranchAliasResolver
 
     public function getAlias(): string
     {
-        if (file_exists($this->cwd . '/composer.json') && '' !== $alias = $this->getAliasByComposer()) {
-            $this->detectedBy = 'composer.json "extra.branch-alias.dev-master"';
+        $branch = $this->git->getPrimaryBranch();
+        $alias = $this->getAliasByComposer($branch);
+
+        if ($alias !== '') {
+            $this->detectedBy = 'composer.json "extra.branch-alias.dev-' . $branch . '"';
 
             return $alias;
         }
 
-        $this->detectedBy = 'Git config "branch.master.alias"';
+        $this->detectedBy = 'Git config "branch.' . $branch . '.alias"';
+        $alias = $this->git->getGitConfig('branch.' . $branch . '.alias');
 
-        if ('' !== ($alias = $this->git->getGitConfig('branch.master.alias'))) {
+        if ($alias !== '') {
             return $alias;
         }
 
-        return $this->askNewAlias();
+        return $this->askNewAlias($branch);
     }
 
     public function getDetectedBy(): string
@@ -52,15 +56,19 @@ class BranchAliasResolver
         return $this->detectedBy;
     }
 
-    private function getAliasByComposer(): string
+    private function getAliasByComposer(string $branch): string
     {
-        $composer = json_decode(file_get_contents($this->cwd . '/composer.json'), true);
-
-        if (! isset($composer['extra']['branch-alias']['dev-master'])) {
+        if (! file_exists($this->cwd . '/composer.json')) {
             return '';
         }
 
-        $label = $composer['extra']['branch-alias']['dev-master'];
+        $composer = json_decode(file_get_contents($this->cwd . '/composer.json'), true, 512, \JSON_THROW_ON_ERROR);
+
+        if (! isset($composer['extra']['branch-alias']['dev-' . $branch])) {
+            return '';
+        }
+
+        $label = $composer['extra']['branch-alias']['dev-' . $branch];
 
         // Unstable releases are known to change often so use `1.0-dev` as final destination
         if ($label[0] === '0') {
@@ -70,12 +78,12 @@ class BranchAliasResolver
         return $label;
     }
 
-    private function askNewAlias(): string
+    private function askNewAlias(string $branch): string
     {
         $this->style->note(
             [
-                'No branch-alias found for "master", please provide an alias.',
-                'This should be the version the master will become.',
+                'No branch-alias found for "' . $branch . '", please provide an alias.',
+                'This should be the version "' . $branch . '" will become.',
                 'If the last release is 2.1 the next will be eg. 2.2 or 3.0.',
             ]
         );
@@ -94,7 +102,7 @@ class BranchAliasResolver
             }
         );
 
-        $this->git->setGitConfig('branch.master.alias', $label, true);
+        $this->git->setGitConfig('branch.' . $branch . '.alias', $label, true);
         $this->style->note(
             [
                 'Branch-alias is stored for feature reference.',
