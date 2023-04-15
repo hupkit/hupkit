@@ -11,13 +11,14 @@ Feel free to use it for your own projects.
 * Merge pull-requests with preservation of all information (description and GitHub discussion).
 * (Up)Merge version branches without mistakes.
 * Create new releases with a proper changelog, and no gaps in version numbers.
+* Split a monolith repository into separate repositories, as done by Symfony and Sylius.
 
 This tool is designed for project maintainers with a good knowledge of Git and GitHub.
 If you have some special needs, please see the contributing section below.
 
 ## Requirements
 
-You need at least PHP 7.1, Git 2.10 and a GitHub account (GitHub Enterprise is possible).
+You need at least PHP 8.1, Git 2.10 and a GitHub account (GitHub Enterprise is possible).
 Composer is assumed to be installed and configured in your PATH.
 
 ## Installation
@@ -28,7 +29,7 @@ and you don't you install it with Composer global.
 > Currently there is no Phar version available, this is being worked-on.
 
 To install HubKit first choose a directory where you want to keep the installation.
-Eg. `~/.hubkit` or any of your choice.
+Either `~/.hubkit` or any of your choice.
 
 **Caution:** Make sure you don't use a directory that is accessible by
 others (like the web server root) as this may expose your API access-token!
