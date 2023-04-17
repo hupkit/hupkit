@@ -189,8 +189,10 @@ final class MergeHandler extends GitBaseHandler
 
     private function getBaseBranchLabel(string $ref): string
     {
-        // Only the master branch is aliased.
-        if ($ref !== 'master') {
+        $primary = $this->git->getPrimaryBranch();
+
+        // Only the 'primary' branch is aliased.
+        if ($ref !== $primary) {
             return $ref;
         }
 
@@ -200,7 +202,8 @@ final class MergeHandler extends GitBaseHandler
 
         $this->style->text(
             sprintf(
-                '<fg=cyan>master branch is aliased</> as <fg=cyan>%s</> <fg=yellow>(detected by %s)</>',
+                '<fg=cyan>%s branch is aliased</> as <fg=cyan>%s</> <fg=yellow>(detected by %s)</>',
+                $primary,
                 $branchLabel,
                 $detectedBy
             )

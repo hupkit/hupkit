@@ -1846,7 +1846,7 @@ parameters:
 			path: tests/Unit/Helper/BranchAliasResolverTest.php
 
 		-
-			message: "#^Method class@anonymous/tests/Unit/Helper/BranchAliasResolverTest\\.php\\:118\\:\\:setGitConfig\\(\\) has parameter \\$value with no type specified\\.$#"
+			message: "#^Method class@anonymous/tests/Unit/Helper/BranchAliasResolverTest\\.php\\:120\\:\\:setGitConfig\\(\\) has parameter \\$value with no type specified\\.$#"
 			count: 1
 			path: tests/Unit/Helper/BranchAliasResolverTest.php
 
@@ -1886,7 +1886,7 @@ parameters:
 			path: tests/Unit/Helper/BranchAliasResolverTest.php
 
 		-
-			message: "#^Property class@anonymous/tests/Unit/Helper/BranchAliasResolverTest\\.php\\:118\\:\\:\\$configsSet has no type specified\\.$#"
+			message: "#^Property class@anonymous/tests/Unit/Helper/BranchAliasResolverTest\\.php\\:120\\:\\:\\$configsSet has no type specified\\.$#"
 			count: 1
 			path: tests/Unit/Helper/BranchAliasResolverTest.php
 

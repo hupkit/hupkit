@@ -72,6 +72,7 @@ final class MergeHandlerTest extends TestCase
         $this->expectCommitCount(1);
 
         $this->git->getActiveBranchName()->willReturn('master');
+        $this->git->getPrimaryBranch()->willReturn('master');
 
         $this->aliasResolver = $this->prophesize(BranchAliasResolver::class);
         $this->aliasResolver->getAlias()->willReturn('1.0-dev');

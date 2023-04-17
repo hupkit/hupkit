@@ -39,6 +39,7 @@ final class BranchAliasHandlerTest extends TestCase
     public function setUpCommandHandler(): void
     {
         $this->git = $this->prophesize(Git::class);
+        $this->git->getPrimaryBranch()->willReturn('master');
         $this->io = new BufferedIO();
     }
 

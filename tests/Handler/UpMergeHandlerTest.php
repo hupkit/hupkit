@@ -57,6 +57,7 @@ final class UpMergeHandlerTest extends TestCase
     {
         $this->git = $this->prophesize(Git::class);
         $this->git->guardWorkingTreeReady()->will(static function (): void {});
+        $this->git->getPrimaryBranch()->willReturn('master');
 
         $this->github = $this->prophesize(GitHub::class);
         $this->github->getHostname()->willReturn('github.com');

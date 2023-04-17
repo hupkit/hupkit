@@ -170,7 +170,7 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
             ->beginCommand('take')
             ->setDescription('Take an issue to work on, checks out the issue as new branch.')
             ->addArgument('number', Argument::INTEGER, 'Number of the issue to take')
-            ->addOption('base', 'b', Option::STRING | Option::OPTIONAL_VALUE, 'Base branch to checkout', 'master')
+            ->addOption('base', 'b', Option::STRING | Option::OPTIONAL_VALUE, 'Base branch to checkout')
             ->setHandler(function () {
                 return new Handler\TakeHandler(
                     $this->container['style'],
@@ -262,7 +262,7 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
             ->end()
 
             ->beginCommand('branch-alias')
-            ->setDescription('Set/get the "master" branch-alias. Omit alias argument to get the current alias.')
+            ->setDescription('Set/get the "primary" branch-alias. Omit alias argument to get the current alias.')
             ->addArgument('alias', Argument::OPTIONAL | Argument::STRING, 'New alias to assign (omit to get the current alias)')
             ->setHandler(function () {
                 return new Handler\BranchAliasHandler(
@@ -289,7 +289,7 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
             ->beginCommand('upmerge')
             ->setDescription('Merges current branch to the next version branch (eg. 1.0 into 1.1)')
             ->addArgument('branch', Argument::OPTIONAL | Argument::STRING, 'Base branch to checkout and start with, uses current when omitted')
-            ->addOption('all', null, Option::NO_VALUE | Option::BOOLEAN, 'Merge all version branches from lowest into highest (and finally master)')
+            ->addOption('all', null, Option::NO_VALUE | Option::BOOLEAN, 'Merge all version branches from lowest into highest')
             ->addOption('dry-run', null, Option::NO_VALUE | Option::BOOLEAN, 'Show which operations would have been performed (without actually merging)')
             ->addOption('no-split', null, Option::NO_VALUE | Option::BOOLEAN, 'Skip splitting of repositories (when they are configured)')
             ->setHandler(function () {

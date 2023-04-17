@@ -50,6 +50,7 @@ final class BranchAliasResolverTest extends TestCase
     {
         $gitProphecy = $this->prophesize(GitConfig::class);
         $gitProphecy->getGitConfig('branch.master.alias')->shouldNotBeCalled();
+        $gitProphecy->getPrimaryBranch()->willReturn('master');
 
         return $gitProphecy->reveal();
     }
@@ -96,6 +97,7 @@ final class BranchAliasResolverTest extends TestCase
     {
         $gitProphecy = $this->prophesize(GitConfig::class);
         $gitProphecy->getGitConfig('branch.master.alias')->willReturn($alias);
+        $gitProphecy->getPrimaryBranch()->willReturn('master');
 
         return $gitProphecy->reveal();
     }
@@ -121,6 +123,11 @@ final class BranchAliasResolverTest extends TestCase
             public function __construct()
             {
                 // Overwritten
+            }
+
+            public function getPrimaryBranch(): string
+            {
+                return 'master';
             }
 
             public function getGitConfig(string $config, string $section = 'local', bool $all = false): string
