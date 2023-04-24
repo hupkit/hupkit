@@ -23,8 +23,10 @@ class Filesystem
 
     public function __construct(?string $tempdir = null, ?SfFilesystem $sfFilesystem = null)
     {
-        $this->tempdir = $tempdir ?: sys_get_temp_dir();
         $this->fs = $sfFilesystem ?? new SfFilesystem();
+        $this->tempdir = ($tempdir ?: sys_get_temp_dir()) . \DIRECTORY_SEPARATOR . 'hubkit';
+
+        $this->fs->mkdir($this->tempdir);
     }
 
     /**
@@ -36,10 +38,7 @@ class Filesystem
      */
     public function newTempFilename(string $content = null): string
     {
-        $dir = $this->tempdir . \DIRECTORY_SEPARATOR . 'hubkit';
-        $this->fs->mkdir($dir);
-
-        $tmpName = tempnam($dir, '');
+        $tmpName = tempnam($this->tempdir, '');
         $this->tempFilenames[] = $tmpName;
 
         if ($content !== null) {
@@ -70,7 +69,7 @@ class Filesystem
      */
     public function tempDirectory(string $name, bool $clearExisting = true, ?bool &$exists = null): string
     {
-        $tmpName = $this->tempdir . \DIRECTORY_SEPARATOR . 'hubkit' . \DIRECTORY_SEPARATOR . 'temp' . \DIRECTORY_SEPARATOR . $name;
+        $tmpName = $this->tempdir . \DIRECTORY_SEPARATOR . 'temp' . \DIRECTORY_SEPARATOR . $name;
         $exists = $this->fs->exists($tmpName);
 
         if ($clearExisting && $exists) {
@@ -92,7 +91,7 @@ class Filesystem
      */
     public function storageTempDirectory(string $name, bool $clearExisting = true, ?bool &$exists = null): string
     {
-        $tmpName = $this->tempdir . \DIRECTORY_SEPARATOR . 'hubkit' . \DIRECTORY_SEPARATOR . 'stor' . \DIRECTORY_SEPARATOR . $name;
+        $tmpName = $this->tempdir . \DIRECTORY_SEPARATOR . 'stor' . \DIRECTORY_SEPARATOR . $name;
         $exists = $this->fs->exists($tmpName);
 
         if ($clearExisting && $exists) {
@@ -114,6 +113,11 @@ class Filesystem
         $this->tempFilenames = [];
     }
 
+    public function clearTempFolder(): void
+    {
+        $this->fs->remove($this->tempdir);
+    }
+
     public function getFilesystem(): SfFilesystem
     {
         return $this->fs;
@@ -127,5 +131,10 @@ class Filesystem
     public function getCwd(): string | false
     {
         return getcwd();
+    }
+
+    public function getTempdir(): string
+    {
+        return $this->tempdir;
     }
 }

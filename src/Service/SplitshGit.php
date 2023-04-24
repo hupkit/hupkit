@@ -43,13 +43,14 @@ class SplitshGit
      * @param string $prefix       Directory prefix, relative to the root directory
      * @param string $url          Git supported URL for pushing the commits
      *
-     * @return array<string, array{0: string, 1: string}>|null Information of the split ['repository-location' => ['commit-hash', 'url', 'commits count']]
-     *                                                         or null when prefix doesn't exist
+     * @return array{0: string, 1: string, 2: string}|null Information of the split ['commit-hash', 'url', 'repository-location']]
+     *                                                     or null when prefix doesn't exist
      */
     public function splitTo(string $targetBranch, string $prefix, string $url): ?array
     {
         if (! file_exists(getcwd() . '/' . $prefix) || ! is_dir(getcwd() . '/' . $prefix)) {
-            $this->logger->warning('Prefix directory "{prefix}" for "{url}" does not exist in the local repository', ['prefix' => $prefix, 'url' => $url]);
+            $this->logger->warning('Prefix directory "{prefix}" for "{url}" does not exist in the local repository.', ['prefix' => $prefix, 'url' => $url]);
+            $this->logger->warning('The behaviour for missing directories will change in Hubkit v2.0 and this warning will produce an fatal error. Set the split for this destination to "false" instead');
 
             return null;
         }
@@ -65,7 +66,7 @@ class SplitshGit
 
         $this->process->mustRun(new Process(['git', 'push', 'origin', $targetBranch . ':refs/heads/' . $targetBranch], $tempDir));
 
-        return [$tempDir => [$sha, $url]];
+        return [$sha, $url, $tempDir];
     }
 
     /**

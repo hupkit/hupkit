@@ -15,9 +15,9 @@ namespace HubKit\Tests\Handler;
 
 use HubKit\Cli\Handler\SplitRepoHandler;
 use HubKit\Config;
+use HubKit\Service\BranchSplitsh;
 use HubKit\Service\Git;
 use HubKit\Service\GitHub;
-use HubKit\Service\SplitshGit;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -45,7 +45,7 @@ final class SplitRepoHandlerTest extends TestCase
     /** @var ObjectProphecy&GitHub */
     private $github;
     private Config $config;
-    /** @var ObjectProphecy&SplitshGit */
+    /** @var ObjectProphecy&BranchSplitsh */
     private $splitshGit;
 
     /** @before */
@@ -118,20 +118,14 @@ final class SplitRepoHandlerTest extends TestCase
             ],
         ]);
 
-        $this->splitshGit = $this->prophesize(SplitshGit::class);
-        $this->splitshGit->checkPrecondition()->shouldBeCalled();
+        $this->splitshGit = $this->prophesize(BranchSplitsh::class);
     }
 
     /** @test */
     public function it_splits_with_current_branch(): void
     {
         $this->git->checkoutRemoteBranch('upstream', 'master')->shouldNotBeCalled();
-        $this->git->ensureBranchInSync('upstream', 'master')->shouldBeCalled();
-
-        $this->expectGitSplit('src/Module/CoreModule', 'git@github.com:hubkit-sandbox/core-module.git');
-        $this->expectGitSplit('src/Module/WebhostingModule', 'git@github.com:hubkit-sandbox/webhosting-module.git');
-        $this->expectGitSplit('docs', 'git@github.com:hubkit-sandbox/docs.git');
-        $this->expectGitSplit('noop', 'git@github.com:hubkit-sandbox/noop.git');
+        $this->splitshGit->splitBranch('master')->willReturn(['core' => ['42431142', 'url']]);
 
         $args = $this->getArgs();
         $this->executeHandler($args);
@@ -139,12 +133,6 @@ final class SplitRepoHandlerTest extends TestCase
         $this->assertOutputMatches(
             [
                 'Working on hubkit-sandbox/empire (branch master)',
-                'Split configuration resolved from branch master',
-                '4 sources to split',
-                'Splitting src/Module/CoreModule to git@github.com:hubkit-sandbox/core-module.git',
-                'Splitting src/Module/WebhostingModule to git@github.com:hubkit-sandbox/webhosting-module.git',
-                'Splitting docs to git@github.com:hubkit-sandbox/docs.git',
-                'Splitting noop to git@github.com:hubkit-sandbox/noop.git',
                 'Repository directories were split into there destination.',
             ]
         );
@@ -154,7 +142,7 @@ final class SplitRepoHandlerTest extends TestCase
     public function it_dry_splits_with_current_branch(): void
     {
         $this->git->checkoutRemoteBranch('upstream', 'master')->shouldNotBeCalled();
-        $this->git->ensureBranchInSync('upstream', 'master')->shouldBeCalled();
+        $this->splitshGit->drySplitBranch('master')->willReturn(2);
 
         $args = $this->getArgs();
         $args->setOption('dry-run', true);
@@ -164,20 +152,9 @@ final class SplitRepoHandlerTest extends TestCase
         $this->assertOutputMatches(
             [
                 'Working on hubkit-sandbox/empire (branch master)',
-                'Split configuration resolved from branch master',
-                '4 sources to split',
-                '[DRY-RUN] Splitting src/Module/CoreModule to git@github.com:hubkit-sandbox/core-module.git',
-                '[DRY-RUN] Splitting src/Module/WebhostingModule to git@github.com:hubkit-sandbox/webhosting-module.git',
-                '[DRY-RUN] Splitting docs to git@github.com:hubkit-sandbox/docs.git',
-                '[DRY-RUN] Splitting noop to git@github.com:hubkit-sandbox/noop.git',
                 '[DRY-RUN] Repository directories were split into there destination.',
             ]
         );
-    }
-
-    private function expectGitSplit(string $prefix, string $url, $targetBranch = 'master'): void
-    {
-        $this->splitshGit->splitTo($targetBranch, $prefix, $url)->shouldBeCalled();
     }
 
     private function getArgs(): Args
@@ -191,7 +168,7 @@ final class SplitRepoHandlerTest extends TestCase
         return new Args($format, new StringArgs(''));
     }
 
-    private function executeHandler(?Args $args = null, array $input = []): int
+    private function executeHandler(?Args $args = null, array $input = []): void
     {
         $style = $this->createStyle($input);
         $handler = new SplitRepoHandler(
@@ -202,17 +179,14 @@ final class SplitRepoHandlerTest extends TestCase
             $this->config,
         );
 
-        return $handler->handle($args ?? $this->getArgs());
+        $handler->handle($args ?? $this->getArgs());
     }
 
     /** @test */
     public function it_splits_specific_branch(): void
     {
         $this->git->checkoutRemoteBranch('upstream', '2.0')->shouldBeCalled();
-        $this->git->ensureBranchInSync('upstream', '2.0')->shouldBeCalled();
-
-        $this->expectGitSplit('src/Module/CoreModule', 'git@github.com:hubkit-sandbox/core-module.git', '2.0');
-        $this->expectGitSplit('src/Module/WebhostingModule', 'git@github.com:hubkit-sandbox/webhosting-module.git', '2.0');
+        $this->splitshGit->splitBranch('2.0')->willReturn(['core' => ['42431142', 'url']]);
 
         $args = $this->getArgs();
         $args->setArgument('branch', '2.0');
@@ -221,28 +195,8 @@ final class SplitRepoHandlerTest extends TestCase
         $this->assertOutputMatches(
             [
                 'Working on hubkit-sandbox/empire (branch 2.0)',
-                'Split configuration resolved from branch 2.x',
-                '2 sources to split',
-                'Splitting src/Module/CoreModule to git@github.com:hubkit-sandbox/core-module.git',
-                'Splitting src/Module/WebhostingModule to git@github.com:hubkit-sandbox/webhosting-module.git',
                 'Repository directories were split into there destination.',
             ]
-        );
-    }
-
-    /** @test */
-    public function it_rejects_splitting_when_no_config_exists(): void
-    {
-        $this->splitshGit->checkPrecondition()->shouldNotBeCalled();
-        $this->git->checkoutRemoteBranch('upstream', 'master')->shouldNotBeCalled();
-
-        $args = $this->getArgs();
-        $args->setArgument('branch', '3.0');
-
-        self::assertEquals(2, $this->executeHandler($args));
-
-        $this->assertOutputMatches(
-            'Unable to split repository: No targets were found in config "[repositories][github.com][repos][hubkit-sandbox/empire][branches][3.0][split]", update the (local) configuration file.',
         );
     }
 }

@@ -81,7 +81,7 @@ class GitFileReader
             throw GitFileNotFound::atBranch($branch, $path);
         }
 
-        return $this->gitTempRepository->getLocal(mb_substr($this->gitBranch->getGitDirectory(), 0, -5), $branch ). \DIRECTORY_SEPARATOR . $path;
+        return $this->gitTempRepository->getLocal(mb_substr($this->gitBranch->getGitDirectory(), 0, -5), $branch) . \DIRECTORY_SEPARATOR . $path;
     }
 
     /**
@@ -115,6 +115,6 @@ class GitFileReader
             throw GitFileNotFound::atRemote($remote, $branch, $path);
         }
 
-        return $this->gitTempRepository->getRemote($this->gitConfig->getLocal('remote.' . $remote . '.url'), $branch) . DIRECTORY_SEPARATOR . $path;
+        return $this->gitTempRepository->getRemote($this->gitConfig->getLocal('remote.' . $remote . '.url'), $branch) . \DIRECTORY_SEPARATOR . $path;
     }
 }

@@ -63,6 +63,14 @@ class Container extends \Pimple\Container implements ContainerInterface
             (new ExecutableFinder())->find('splitsh-lite')
         );
 
+        $this['branch_splitsh_git'] = static fn (self $container) => new Service\BranchSplitsh(
+            $container['splitsh_git'],
+            $container['github'],
+            $container['config'],
+            $container['style'],
+            $container['git'],
+        );
+
         $this['filesystem'] = static fn () => new Service\Filesystem();
 
         $this['editor'] = static fn (self $container) => new Service\Editor($container['process'], $container['filesystem']);

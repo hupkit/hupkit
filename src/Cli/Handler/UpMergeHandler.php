@@ -14,23 +14,21 @@ declare(strict_types=1);
 namespace HubKit\Cli\Handler;
 
 use HubKit\Config;
+use HubKit\Service\BranchSplitsh;
 use HubKit\Service\CliProcess;
 use HubKit\Service\Git;
 use HubKit\Service\GitHub;
-use HubKit\Service\SplitshGit;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Webmozart\Console\Api\Args\Args;
 
 final class UpMergeHandler extends GitBaseHandler
 {
     private $process;
-    private $splitshGit;
 
-    public function __construct(SymfonyStyle $style, Git $git, GitHub $github, CliProcess $process, Config $config, SplitshGit $splitshGit)
+    public function __construct(SymfonyStyle $style, Git $git, GitHub $github, CliProcess $process, Config $config, private BranchSplitsh $branchSplitsh)
     {
         parent::__construct($style, $git, $github, $config);
         $this->process = $process;
-        $this->splitshGit = $splitshGit;
     }
 
     public function handle(Args $args)
@@ -38,12 +36,9 @@ final class UpMergeHandler extends GitBaseHandler
         $this->git->guardWorkingTreeReady();
         $this->git->remoteUpdate('upstream');
 
-        if (null === $branch = $args->getArgument('branch')) {
-            $branch = $this->git->getActiveBranchName();
-        } else {
-            $this->git->checkoutRemoteBranch('upstream', $branch);
-        }
+        $branch = $this->getBranchName($args);
 
+        $this->style->title('Branch Upmerge');
         $this->informationHeader($branch);
 
         if ($args->getOption('dry-run')) {
@@ -53,123 +48,28 @@ final class UpMergeHandler extends GitBaseHandler
         return $this->handleMerge($args, $branch);
     }
 
-    private function mergeAllBranches(string $branch, array $splitTargets, string $defaultBranch): array
+    private function getBranchName(Args $args): string
     {
-        $branches = $this->git->getVersionBranches('upstream');
+        $branch = $args->getArgument('branch');
 
-        // Current is not a version branch, so ignore.
-        if (false === $idx = array_search($branch, $branches, true)) {
-            return [];
+        if ($branch === null) {
+            return $this->git->getActiveBranchName();
         }
 
-        $this->git->ensureBranchInSync('upstream', $branch);
+        $this->git->checkoutRemoteBranch('upstream', $branch);
 
-        if (! \in_array($defaultBranch, $branches, true)) {
-            $branches[] = $defaultBranch;
-        }
-        $changedBranches = [];
-
-        for ($i = $idx + 1, $c = \count($branches); $i < $c; ++$i) {
-            $this->git->checkoutRemoteBranch('upstream', $branches[$i]);
-            $this->git->ensureBranchInSync('upstream', $branches[$i]);
-            $this->process->mustRun(['git', 'merge', '--no-ff', '--log', $branches[$i - 1]]);
-
-            $this->style->note(sprintf('Merged "%s" into "%s"', $branches[$i - 1], $branches[$i]));
-            $this->splitRepository($branches[$i], $splitTargets);
-
-            $changedBranches[] = $branches[$i];
-        }
-
-        $this->git->checkout($branch);
-
-        return $changedBranches;
+        return $branch;
     }
 
-    private function mergeSingleBranch(string $branch, array $splitTargets): array
+    private function handleMerge(Args $args, string $branch)
     {
-        $branches = $this->git->getVersionBranches('upstream');
+        $noSplit = $args->getOption('no-split');
 
-        // Current is not a version branch, so ignore.
-        if (false === $idx = array_search($branch, $branches, true)) {
-            return [];
-        }
-
-        if ('' === ($nextVersion = $branches[$idx + 1] ?? '')) {
-            $nextVersion = $this->git->getPrimaryBranch();
-        }
-
-        $this->git->ensureBranchInSync('upstream', $branch);
-        $this->git->checkoutRemoteBranch('upstream', $nextVersion);
-        $this->git->ensureBranchInSync('upstream', $nextVersion);
-        $this->process->mustRun(['git', 'merge', '--no-ff', '--log', $branch]);
-        $this->splitRepository($nextVersion, $splitTargets);
-
-        $this->style->note(sprintf('Merged "%s" into "%s"', $branch, $nextVersion));
-
-        $this->git->checkout($branch);
-
-        return [$nextVersion];
-    }
-
-    private function dryMergeAllBranches(string $branch, string $defaultBranch): array
-    {
-        $branches = $this->git->getVersionBranches('upstream');
-
-        // Current is not a version branch, so ignore.
-        if (false === $idx = array_search($branch, $branches, true)) {
-            $this->style->warning(sprintf('Branch "%s" is not a supported version branch.', $branch));
-
-            return [];
-        }
-
-        $this->git->ensureBranchInSync('upstream', $branch);
-
-        if (! \in_array($defaultBranch, $branches, true)) {
-            $branches[] = $defaultBranch;
-        }
-        $changedBranches = [];
-
-        for ($i = $idx + 1, $c = \count($branches); $i < $c; ++$i) {
-            $this->git->ensureBranchInSync('upstream', $branches[$i]);
-            $this->style->note(sprintf('[DRY-RUN] Merged "%s" into "%s"', $branches[$i - 1], $branches[$i]));
-
-            $changedBranches[] = $branches[$i];
-        }
-
-        return $changedBranches;
-    }
-
-    private function dryMergeSingleBranch(string $branch): array
-    {
-        $branches = $this->git->getVersionBranches('upstream');
-
-        // Current is not a version branch, so ignore.
-        if (false === $idx = array_search($branch, $branches, true)) {
-            $this->style->warning(sprintf('Branch "%s" is not a supported version branch.', $branch));
-
-            return [];
-        }
-
-        if ('' === ($nextVersion = $branches[$idx + 1] ?? '')) {
-            $nextVersion = $this->git->getPrimaryBranch();
-        }
-
-        $this->git->ensureBranchInSync('upstream', $branch);
-        $this->git->ensureBranchInSync('upstream', $nextVersion);
-        $this->style->note(sprintf('[DRY-RUN] Merged "%s" into "%s"', $branch, $nextVersion));
-
-        return [$nextVersion];
-    }
-
-    private function handleMerge(Args $args, $branch)
-    {
         try {
             if ($args->getOption('all')) {
-                $defaultBranch = $this->github->getDefaultBranch();
-
-                $changedBranches = $this->mergeAllBranches($branch, $this->getSplitTargets($args), $defaultBranch);
+                $changedBranches = $this->mergeAllBranches($branch, $this->github->getDefaultBranch(), $noSplit);
             } else {
-                $changedBranches = $this->mergeSingleBranch($branch, $this->getSplitTargets($args));
+                $changedBranches = $this->mergeSingleBranch($branch, $noSplit);
             }
 
             if ($changedBranches === []) {
@@ -195,15 +95,84 @@ final class UpMergeHandler extends GitBaseHandler
         }
     }
 
-    private function handleDryMerge(Args $args, $branch)
+    private function mergeAllBranches(string $branch, string $defaultBranch, bool $noSplit): array
     {
+        $branches = $this->git->getVersionBranches('upstream');
+
+        // Current is not a version branch, so ignore.
+        if (false === $idx = array_search($branch, $branches, true)) {
+            return [];
+        }
+
+        $this->git->ensureBranchInSync('upstream', $branch);
+
+        if (! \in_array($defaultBranch, $branches, true)) {
+            $branches[] = $defaultBranch;
+        }
+        $changedBranches = [];
+
+        for ($i = $idx + 1, $c = \count($branches); $i < $c; ++$i) {
+            $sourceBranch = $branches[$i - 1];
+            $destBranch = $branches[$i];
+
+            $this->git->checkoutRemoteBranch('upstream', $destBranch);
+            $this->git->ensureBranchInSync('upstream', $destBranch);
+            $this->process->mustRun(['git', 'merge', '--no-ff', '--log', $sourceBranch]);
+
+            $this->style->note(sprintf('Merged "%s" into "%s"', $sourceBranch, $destBranch));
+
+            if (! $noSplit) {
+                $this->branchSplitsh->splitBranch($destBranch);
+            }
+
+            $changedBranches[] = $destBranch;
+        }
+
+        $this->git->checkout($branch);
+
+        return $changedBranches;
+    }
+
+    private function mergeSingleBranch(string $branch, bool $noSplit): array
+    {
+        $branches = $this->git->getVersionBranches('upstream');
+
+        // Current is not a version branch, so ignore.
+        if (false === $idx = array_search($branch, $branches, true)) {
+            return [];
+        }
+
+        if ('' === ($nextVersion = $branches[$idx + 1] ?? '')) {
+            $nextVersion = $this->github->getDefaultBranch();
+        }
+
+        $this->git->ensureBranchInSync('upstream', $branch);
+        $this->git->checkoutRemoteBranch('upstream', $nextVersion);
+        $this->git->ensureBranchInSync('upstream', $nextVersion);
+        $this->process->mustRun(['git', 'merge', '--no-ff', '--log', $branch]);
+
+        $this->style->note(sprintf('Merged "%s" into "%s"', $branch, $nextVersion));
+
+        if (! $noSplit) {
+            $this->branchSplitsh->splitBranch($nextVersion);
+        }
+
+        $this->git->checkout($branch);
+
+        return [$nextVersion];
+    }
+
+    private function handleDryMerge(Args $args, string $branch)
+    {
+        $noSplit = $args->getOption('no-split');
+
         try {
             if ($args->getOption('all')) {
                 $defaultBranch = $this->github->getDefaultBranch();
 
-                $changedBranches = $this->dryMergeAllBranches($branch, $defaultBranch);
+                $changedBranches = $this->dryMergeAllBranches($branch, $defaultBranch, $noSplit);
             } else {
-                $changedBranches = $this->dryMergeSingleBranch($branch);
+                $changedBranches = $this->dryMergeSingleBranch($branch, $noSplit);
             }
 
             if ($changedBranches === []) {
@@ -229,35 +198,55 @@ final class UpMergeHandler extends GitBaseHandler
         }
     }
 
-    private function splitRepository(string $branch, array $splitTargets): void
+    private function dryMergeAllBranches(string $branch, string $defaultBranch, bool $noSplit): array
     {
-        if ($splitTargets === []) {
-            return;
-        }
+        $branches = $this->git->getVersionBranches('upstream');
 
-        $this->style->section(sprintf('Starting repository split operation for %s', $branch));
-        $this->style->progressStart(\count($splitTargets));
+        // Current is not a version branch, so ignore.
+        if (false === $idx = array_search($branch, $branches, true)) {
+            $this->style->warning(sprintf('Branch "%s" is not a supported version branch.', $branch));
 
-        foreach ($splitTargets as $prefix => $splitConfigs) {
-            $this->style->progressAdvance();
-            $this->splitshGit->splitTo($branch, $prefix, $splitConfigs['url']);
-        }
-    }
-
-    private function getSplitTargets(Args $args): array
-    {
-        $branch = $args->getArgument('branch') ?? $this->git->getActiveBranchName();
-        $branchConfig = $this->config->getBranchConfig($this->github->getHostname(), $this->github->getOrganization() . '/' . $this->github->getRepository(), $branch);
-        $splitTargets = $branchConfig->config['split'] ?? [];
-
-        if ($args->getOption('no-split') || $splitTargets === []) {
             return [];
         }
 
-        if ($splitTargets !== []) {
-            $this->splitshGit->checkPrecondition();
+        $this->git->ensureBranchInSync('upstream', $branch);
+
+        if (! \in_array($defaultBranch, $branches, true)) {
+            $branches[] = $defaultBranch;
+        }
+        $changedBranches = [];
+
+        for ($i = $idx + 1, $c = \count($branches); $i < $c; ++$i) {
+            $this->git->ensureBranchInSync('upstream', $branches[$i]);
+            $this->style->note(sprintf('[DRY-RUN] Merged "%s" into "%s"', $branches[$i - 1], $branches[$i]));
+            $this->branchSplitsh->drySplitBranch($branches[$i]);
+
+            $changedBranches[] = $branches[$i];
         }
 
-        return $splitTargets;
+        return $changedBranches;
+    }
+
+    private function dryMergeSingleBranch(string $branch, bool $noSplit): array
+    {
+        $branches = $this->git->getVersionBranches('upstream');
+
+        // Current is not a version branch, so ignore.
+        if (false === $idx = array_search($branch, $branches, true)) {
+            $this->style->warning(sprintf('Branch "%s" is not a supported version branch.', $branch));
+
+            return [];
+        }
+
+        if ('' === ($nextVersion = $branches[$idx + 1] ?? '')) {
+            $nextVersion = $this->github->getDefaultBranch();
+        }
+
+        $this->git->ensureBranchInSync('upstream', $branch);
+        $this->git->ensureBranchInSync('upstream', $nextVersion);
+        $this->style->note(sprintf('[DRY-RUN] Merged "%s" into "%s"', $branch, $nextVersion));
+        $this->branchSplitsh->drySplitBranch($nextVersion);
+
+        return [$nextVersion];
     }
 }

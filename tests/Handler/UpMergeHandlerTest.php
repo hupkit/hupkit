@@ -15,11 +15,12 @@ namespace HubKit\Tests\Handler;
 
 use HubKit\Cli\Handler\UpMergeHandler;
 use HubKit\Config;
+use HubKit\Service\BranchSplitsh;
 use HubKit\Service\CliProcess;
 use HubKit\Service\Git;
 use HubKit\Service\GitHub;
-use HubKit\Service\SplitshGit;
 use PHPUnit\Framework\TestCase;
+use Prophecy\Argument as ProphecyArgument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Webmozart\Console\Api\Args\Args;
@@ -43,9 +44,11 @@ final class UpMergeHandlerTest extends TestCase
     private $github;
 
     /**
-     * @var SplitshGit|ObjectProphecy
+     * @phpstan-var ObjectProphecy<BranchSplitsh>
+     *
+     * @var BranchSplitsh
      */
-    private $splitshGit;
+    private $branchSplitsh;
 
     /**
      * @var Config
@@ -80,8 +83,8 @@ final class UpMergeHandlerTest extends TestCase
             ],
         ]);
 
-        $this->splitshGit = $this->prophesize(SplitshGit::class);
-        $this->splitshGit->checkPrecondition()->shouldNotBeCalled();
+        $this->branchSplitsh = $this->prophesize(BranchSplitsh::class);
+        $this->branchSplitsh->splitAtPrefix(ProphecyArgument::any(), ProphecyArgument::any())->willReturn([])->shouldNotBeCalled();
     }
 
     /** @test */
@@ -100,6 +103,8 @@ final class UpMergeHandlerTest extends TestCase
         $this->git->checkout('2.3')->shouldBeCalled();
         $this->git->pushToRemote('upstream', ['2.5'])->shouldBeCalled();
 
+        $this->branchSplitsh->splitBranch('2.5')->willReturn([]);
+
         $this->executeHandler();
 
         $this->assertOutputMatches('Merged "2.3" into "2.5"');
@@ -110,11 +115,7 @@ final class UpMergeHandlerTest extends TestCase
     {
         $this->expectConfigHasSplits();
 
-        $this->splitshGit->checkPrecondition()->shouldBeCalled();
-        $this->splitshGit->splitTo('2.5', 'src/Component/Core', 'git@github.com:park-manager/core.git')->shouldBeCalled();
-        $this->splitshGit->splitTo('2.5', 'src/Component/Model', 'git@github.com:park-manager/model.git')->shouldBeCalled();
-        $this->splitshGit->splitTo('2.5', 'doc', 'git@github.com:park-manager/doc.git')->shouldBeCalled();
-        $this->splitshGit->splitTo('2.5', 'lobster', 'git@github.com:park-manager/pinchy.git')->shouldBeCalled();
+        $this->branchSplitsh->splitBranch('2.5')->willReturn([]);
 
         $this->git->getActiveBranchName()->willReturn('2.3');
         $this->git->remoteUpdate('upstream')->shouldBeCalled();
@@ -173,6 +174,8 @@ final class UpMergeHandlerTest extends TestCase
         $this->git->checkout('2.3')->shouldBeCalled();
         $this->git->pushToRemote('upstream', ['2.x'])->shouldBeCalled();
 
+        $this->branchSplitsh->splitBranch('2.x')->willReturn([]);
+
         $this->executeHandler();
 
         $this->assertOutputMatches('Merged "2.3" into "2.x"');
@@ -193,6 +196,8 @@ final class UpMergeHandlerTest extends TestCase
 
         $this->git->checkout('2.6')->shouldBeCalled();
         $this->git->pushToRemote('upstream', ['master'])->shouldBeCalled();
+
+        $this->branchSplitsh->splitBranch('master')->willReturn([]);
 
         $this->executeHandler();
 
@@ -225,7 +230,11 @@ final class UpMergeHandlerTest extends TestCase
         $this->git->checkout('2.3')->shouldBeCalled();
         $this->git->pushToRemote('upstream', ['2.5'])->shouldBeCalled();
 
+        $this->branchSplitsh->splitBranch('2.5')->willReturn([]);
+
         $this->executeHandler($this->getArgs()->setArgument('branch', '2.3'));
+
+        $this->branchSplitsh->splitBranch('2.5')->willReturn([]);
 
         $this->assertOutputMatches('Merged "2.3" into "2.5"');
     }
@@ -259,6 +268,10 @@ final class UpMergeHandlerTest extends TestCase
         $this->git->checkout('2.3')->shouldBeCalled();
         $this->git->pushToRemote('upstream', ['2.5', '2.6', '2.x', 'master'])->shouldBeCalled();
 
+        foreach (['2.5', '2.6', '2.x', 'master'] as $branchTarget) {
+            $this->branchSplitsh->splitBranch($branchTarget)->willReturn([]);
+        }
+
         $this->executeHandler($this->getArgs()->setOption('all', true));
 
         $this->assertOutputMatches([
@@ -274,13 +287,8 @@ final class UpMergeHandlerTest extends TestCase
     {
         $this->expectConfigHasSplits();
 
-        $this->splitshGit->checkPrecondition()->shouldBeCalled();
-
         foreach (['2.5', '2.6', '2.x', 'master'] as $branchTarget) {
-            $this->splitshGit->splitTo($branchTarget, 'src/Component/Core', 'git@github.com:park-manager/core.git')->shouldBeCalled();
-            $this->splitshGit->splitTo($branchTarget, 'src/Component/Model', 'git@github.com:park-manager/model.git')->shouldBeCalled();
-            $this->splitshGit->splitTo($branchTarget, 'doc', 'git@github.com:park-manager/doc.git')->shouldBeCalled();
-            $this->splitshGit->splitTo($branchTarget, 'lobster', 'git@github.com:park-manager/pinchy.git')->shouldBeCalled();
+            $this->branchSplitsh->splitBranch($branchTarget)->willReturn([]);
         }
 
         $this->git->getActiveBranchName()->willReturn('2.3');
@@ -395,6 +403,8 @@ final class UpMergeHandlerTest extends TestCase
         $this->git->ensureBranchInSync('upstream', '2.3')->shouldBeCalled();
         $this->git->ensureBranchInSync('upstream', '2.5')->shouldBeCalled();
 
+        $this->branchSplitsh->drySplitBranch('2.5')->shouldBeCalled();
+
         $this->executeHandler($this->getArgs()->setOption('dry-run', true));
 
         $this->assertOutputMatches('[DRY-RUN] Merged "2.3" into "2.5"');
@@ -412,6 +422,11 @@ final class UpMergeHandlerTest extends TestCase
         $this->git->ensureBranchInSync('upstream', '2.6')->shouldBeCalled();
         $this->git->ensureBranchInSync('upstream', '2.x')->shouldBeCalled();
         $this->git->ensureBranchInSync('upstream', 'master')->shouldBeCalled();
+
+        $this->branchSplitsh->drySplitBranch('2.5')->shouldBeCalled();
+        $this->branchSplitsh->drySplitBranch('2.6')->shouldBeCalled();
+        $this->branchSplitsh->drySplitBranch('2.x')->shouldBeCalled();
+        $this->branchSplitsh->drySplitBranch('master')->shouldBeCalled();
 
         $this->executeHandler($this->getArgs()->setOption('all', true)->setOption('dry-run', true));
 
@@ -450,6 +465,10 @@ final class UpMergeHandlerTest extends TestCase
         $this->git->checkout('2.3')->shouldBeCalled();
         $this->git->pushToRemote('upstream', ['2.5', '2.6', '2.x'])->shouldBeCalled();
 
+        $this->branchSplitsh->splitBranch('2.5')->willReturn([]);
+        $this->branchSplitsh->splitBranch('2.6')->willReturn([]);
+        $this->branchSplitsh->splitBranch('2.x')->willReturn([]);
+
         $this->executeHandler($this->getArgs()->setOption('all', true));
 
         $this->assertOutputMatches([
@@ -476,7 +495,7 @@ final class UpMergeHandlerTest extends TestCase
     {
         $style = $this->createStyle();
 
-        $handler = new UpMergeHandler($style, $this->git->reveal(), $this->github->reveal(), $this->process->reveal(), $this->config, $this->splitshGit->reveal());
+        $handler = new UpMergeHandler($style, $this->git->reveal(), $this->github->reveal(), $this->process->reveal(), $this->config, $this->branchSplitsh->reveal());
         $handler->handle($args ?? $this->getArgs());
     }
 
