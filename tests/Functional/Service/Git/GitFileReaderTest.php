@@ -19,6 +19,7 @@ use HubKit\Service\Filesystem;
 use HubKit\Service\Git\GitBranch;
 use HubKit\Service\Git\GitConfig;
 use HubKit\Service\Git\GitFileReader;
+use HubKit\Service\Git\GitTempRepository;
 use HubKit\Tests\Functional\GitTesterTrait;
 use HubKit\Tests\Functional\TestCliProcess;
 use HubKit\Tests\Handler\SymfonyStyleTrait;
@@ -39,6 +40,7 @@ final class GitFileReaderTest extends TestCase
 
     private Filesystem $filesystem;
     private TestCliProcess $cliProcess;
+    private GitTempRepository $gitTempRepository;
     private StyleInterface $style;
 
     /** @before */
@@ -70,9 +72,12 @@ final class GitFileReaderTest extends TestCase
         $this->commitFileToRepository('foo3.txt', $this->rootRepository, 'foo3.txt in master on root'); // File is added after pull and therefor shouldn't exist or second
 
         $this->cwd = $this->rootRepository;
+
         $this->filesystem ??= new Filesystem();
         $this->cliProcess = $this->getProcessService($this->rootRepository);
         $this->cliProcess->ignoreCwdChangeWhen(static fn (string $val): bool => str_contains($val, '/hubkit/stor/repo_'));
+
+        $this->gitTempRepository ??= new GitTempRepository($this->cliProcess, $this->filesystem);
     }
 
     /** @after */
@@ -142,7 +147,7 @@ final class GitFileReaderTest extends TestCase
             },
             new GitConfig($this->cliProcess, $style),
             $this->cliProcess,
-            $this->filesystem
+            $this->gitTempRepository
         );
     }
 

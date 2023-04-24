@@ -13,23 +13,19 @@ declare(strict_types=1);
 
 namespace HubKit\Service;
 
+use HubKit\Service\Git\GitTempRepository;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Process\Process;
 
 class SplitshGit
 {
-    private $git;
-    private $process;
-    private $logger;
-    private $filesystem;
-    private $executable;
-
-    public function __construct(Git $git, CliProcess $process, Filesystem $filesystem, LoggerInterface $logger, ?string $executable)
-    {
-        $this->git = $git;
-        $this->process = $process;
-        $this->filesystem = $filesystem;
-        $this->logger = $logger;
-        $this->executable = $executable;
+    public function __construct(
+        private Git $git,
+        private CliProcess $process,
+        private LoggerInterface $logger,
+        private GitTempRepository $gitTempRepository,
+        private ?string $executable
+    ) {
     }
 
     /**
@@ -47,7 +43,8 @@ class SplitshGit
      * @param string $prefix       Directory prefix, relative to the root directory
      * @param string $url          Git supported URL for pushing the commits
      *
-     * @return array|null Information of the split or null when prefix doesn't exist
+     * @return array<string, array{0: string, 1: string}>|null Information of the split ['repository-location' => ['commit-hash', 'url', 'commits count']]
+     *                                                         or null when prefix doesn't exist
      */
     public function splitTo(string $targetBranch, string $prefix, string $url): ?array
     {
@@ -57,17 +54,35 @@ class SplitshGit
             return null;
         }
 
-        $process = $this->process->mustRun([$this->executable, '--prefix', $prefix]);
-        $sha = trim($process->getOutput());
-
-        $remoteName = '_' . Git::getGitUrlInfo($url)['repo'];
-        $this->git->ensureRemoteExists($remoteName, $url);
-        $tempBranchName = null;
+        $tempDir = $this->gitTempRepository->getRemote($url, $targetBranch);
+        $sha = trim($this->process->mustRun([$this->executable, '--prefix', $prefix])->getOutput());
 
         // NOTE: Always perform the push as git-splitsh in some cases don't produce a new commit as there was already one
-        $this->git->pushToRemote($remoteName, $sha . ':refs/heads/' . $targetBranch);
+        //
+        // Push directly to the temp repository, Git allows to push without a remote name.
+        // This is much safer than keeping all the remotes local as this fails with git update (puling-in conflicting tags)
+        $this->git->pushToRemote('file://' . $tempDir, $sha . ':refs/heads/' . $targetBranch);
 
-        return [$remoteName => [$sha, $url]];
+        $this->process->mustRun(new Process(['git', 'push', 'origin', $targetBranch . ':refs/heads/' . $targetBranch], $tempDir));
+
+        return [$tempDir => [$sha, $url]];
+    }
+
+    /**
+     * Synchronize the source tag to split repositories.
+     *
+     * This method re-uses the information provided by splitTo().
+     * Existing tags are silently ignored.
+     *
+     * @param string                                             $versionStr Version (without prefix) for the tag name
+     * @param array<string, array{0: string, 1: string, 2: int}> $targets    Targets to tag and push as
+     *                                                                       ['repository-location' => ['commit-hash', 'url', 'commits count']]
+     */
+    public function syncTags(string $versionStr, string $branch, array $targets): void
+    {
+        foreach ($targets as [$targetCommit, $url]) {
+            $this->syncTag($versionStr, $url, $branch, $targetCommit);
+        }
     }
 
     /**
@@ -77,37 +92,13 @@ class SplitshGit
      * Existing tags are silently ignored.
      *
      * @param string $versionStr Version (without prefix) for the tag name
-     * @param array  $targets    Targets to tag and push as ['remote-name' => ['sha1-hash', 'url', 'commits count']]
      */
-    public function syncTags(string $versionStr, string $branch, array $targets): void
+    public function syncTag(string $versionStr, string $url, string $branch, string $targetCommit): void
     {
-        $tempDir = $this->filesystem->tempDirectory('split');
-        $filesystem = $this->filesystem->getFilesystem();
-        $currentDir = getcwd();
+        $tempGitDir = $this->gitTempRepository->getRemote($url, $branch);
 
-        // Create a temp clone of the split-repository and tag a release (specific to the split).
-        // All temp directories are automatically removed afterwards.
-
-        foreach ($targets as $remote => [$targetCommit, $url]) {
-            $filesystem->mkdir($tempDir . '/' . $remote);
-
-            if (! $this->filesystem->chdir($tempDir . '/' . $remote)) {
-                throw new \RuntimeException('Unable to change to temp repository. Aborting.');
-            }
-
-            $this->git->clone($url, 'origin');
-            $this->git->checkoutRemoteBranch('origin', $branch);
-
-            try {
-                $this->process->mustRun(['git', 'tag', 'v' . $versionStr, $targetCommit, '-s', '-m', 'Release ' . $versionStr]);
-            } catch (\Exception $e) {
-                // no-op. Ignore and try to push.
-            }
-
-            $this->process->run(['git', 'push', 'origin', 'v' . $versionStr]);
-        }
-
-        $this->filesystem->chdir($currentDir);
+        $this->process->run(new Process(['git', 'tag', 'v' . $versionStr, $targetCommit, '-s', '-m', 'Release ' . $versionStr], $tempGitDir));
+        $this->process->run(new Process(['git', 'push', 'origin', 'v' . $versionStr], $tempGitDir));
     }
 
     public function checkPrecondition(): void
