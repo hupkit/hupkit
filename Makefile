@@ -1,4 +1,4 @@
-QA_DOCKER_IMAGE=jakzal/phpqa:1.76-php8.1-alpine
+QA_DOCKER_IMAGE=jakzal/phpqa:1.87-php8.1-alpine
 QA_DOCKER_COMMAND=docker run --init -t --rm --user "$(shell id -u):$(shell id -g)" --volume /tmp/tmp-phpqa-$(shell id -u):/tmp --volume "$(shell pwd):/project" --workdir /project ${QA_DOCKER_IMAGE}
 
 dist: install cs-full phpstan test-full
@@ -28,6 +28,6 @@ cs-full-check: ensure
 
 ensure:
 	mkdir -p ${HOME}/.composer /tmp/tmp-phpqa-$(shell id -u)
-	docker pull jakzal/phpqa:1.76-php8.1-alpine
+	docker pull ${QA_DOCKER_IMAGE}
 
 .PHONY: install test security-check phpstan cs cs-full cs-full-check
