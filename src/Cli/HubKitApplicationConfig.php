@@ -138,6 +138,16 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
             })
             ->end()
 
+            ->beginCommand('clear-cache')
+            ->setDescription('Clears the Hubkit cache directory. Run this command to free-up space or resolve recurring errors')
+            ->setHandler(function () {
+                return new Handler\ClearCacheHandler(
+                    $this->container['style'],
+                    $this->container['filesystem'],
+                );
+            })
+            ->end()
+
             ->beginCommand('repo-create')
             ->setDescription('Create a new empty GitHub repository. Wiki and Downloads are disabled by default')
             ->addArgument('full-name', Argument::REQUIRED, 'The user (org) and repository name. Eg. acme/my-repo')
@@ -159,7 +169,7 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
             ->setHandler(function () {
                 return new Handler\SplitRepoHandler(
                     $this->container['style'],
-                    $this->container['splitsh_git'],
+                    $this->container['branch_splitsh_git'],
                     $this->container['git'],
                     $this->container['github'],
                     $this->container['config']
@@ -229,6 +239,7 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
             ->addOption('security', null, Option::BOOLEAN, 'Merge pull request as a security patch')
             ->addOption('squash', null, Option::BOOLEAN, 'Squash the pull request before merging')
             ->addOption('no-pull', null, Option::BOOLEAN, 'Skip pulling changes to your local branch')
+            ->addOption('no-split', null, Option::BOOLEAN, 'Skip splitting of monolith repository')
             ->addOption('no-cleanup', null, Option::BOOLEAN, 'Skip clean-up of feature branch (if present)')
             ->addOption('pat', null, Option::OPTIONAL_VALUE | Option::STRING, 'Thank you message, @author will be replaced with pr author(s)', 'Thank you @author')
             ->addOption('no-pat', null, Option::NO_VALUE | Option::BOOLEAN, 'Skip thank you message, cannot be used in combination with --pat')
@@ -240,7 +251,7 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
                     new BranchAliasResolver($this->container['style'], $this->container['git'], getcwd()),
                     new SingleLineChoiceQuestionHelper(),
                     $this->container['config'],
-                    $this->container['splitsh_git']
+                    $this->container['branch_splitsh_git']
                 );
             })
             ->end()
@@ -299,7 +310,7 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
                     $this->container['github'],
                     $this->container['process'],
                     $this->container['config'],
-                    $this->container['splitsh_git']
+                    $this->container['branch_splitsh_git']
                 );
             })
             ->end()
@@ -319,7 +330,7 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
                     $this->container['process'],
                     $this->container['editor'],
                     $this->container['config'],
-                    $this->container['splitsh_git'],
+                    $this->container['branch_splitsh_git'],
                     $this->container['release_hooks']
                 );
             })

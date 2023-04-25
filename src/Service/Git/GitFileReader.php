@@ -15,9 +15,7 @@ namespace HubKit\Service\Git;
 
 use HubKit\Exception\GitFileNotFound;
 use HubKit\Service\CliProcess;
-use HubKit\Service\Filesystem;
 use HubKit\StringUtil;
-use Symfony\Component\Process\Process;
 
 /**
  * The GitFileReader allows get access to files in another branch.
@@ -31,7 +29,7 @@ class GitFileReader
         private GitBranch $gitBranch,
         private GitConfig $gitConfig,
         private CliProcess $process,
-        private Filesystem $filesystem
+        private GitTempRepository $gitTempRepository
     ) {
     }
 
@@ -83,23 +81,7 @@ class GitFileReader
             throw GitFileNotFound::atBranch($branch, $path);
         }
 
-        return $this->getFileAtRepository('file://' . mb_substr($this->gitBranch->getGitDirectory(), 0, -5), $branch, $path);
-    }
-
-    private function getFileAtRepository(string $repositoryUrl, string $branch, string $path): string
-    {
-        $tempdir = $this->filesystem->storageTempDirectory('repo_' . sha1($repositoryUrl), false, $exists);
-
-        if (! $exists) {
-            $this->process->mustRun(['git', 'clone', '--no-checkout', '--no-tags', '--origin', 'origin', $repositoryUrl, $tempdir]);
-        } else {
-            $this->process->mustRun(new Process(['git', 'fetch', '--no-tags', 'origin'], $tempdir));
-        }
-
-        $this->process->mustRun(new Process(['git', 'reset', '--hard'], $tempdir)); // Ensure the repository state is clean.
-        $this->process->mustRun(new Process(['git', 'checkout', 'remotes/origin/' . $branch], $tempdir));
-
-        return $tempdir . \DIRECTORY_SEPARATOR . $path;
+        return $this->gitTempRepository->getLocal(mb_substr($this->gitBranch->getGitDirectory(), 0, -5), $branch) . \DIRECTORY_SEPARATOR . $path;
     }
 
     /**
@@ -133,6 +115,6 @@ class GitFileReader
             throw GitFileNotFound::atRemote($remote, $branch, $path);
         }
 
-        return $this->getFileAtRepository($this->gitConfig->getLocal('remote.' . $remote . '.url'), $branch, $path);
+        return $this->gitTempRepository->getRemote($this->gitConfig->getLocal('remote.' . $remote . '.url'), $branch) . \DIRECTORY_SEPARATOR . $path;
     }
 }

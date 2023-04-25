@@ -17,9 +17,9 @@ use HubKit\Cli\Handler\MergeHandler;
 use HubKit\Config;
 use HubKit\Helper\BranchAliasResolver;
 use HubKit\Helper\SingleLineChoiceQuestionHelper;
+use HubKit\Service\BranchSplitsh;
 use HubKit\Service\Git;
 use HubKit\Service\GitHub;
-use HubKit\Service\SplitshGit;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument as PropArgument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -53,17 +53,20 @@ final class MergeHandlerTest extends TestCase
     private $github;
     /** @var Config */
     private $config;
-    /** @var ObjectProphecy */
-    private $splitshGit;
+
+    /**
+     * @phpstan-var ObjectProphecy<BranchSplitsh>
+     *
+     * @var BranchSplitsh
+     */
+    private $branchSplitsh;
+
     /** @var BufferedIO */
     private $io;
 
     /** @before */
     public function setUpCommandHandler(): void
     {
-        $this->git = $this->prophesize(Git::class);
-//        $this->git->guardWorkingTreeReady()->willReturn(null);
-
         $this->github = $this->prophesize(GitHub::class);
         $this->github->getHostname()->willReturn('github.com');
         $this->github->getOrganization()->willReturn('park-manager');
@@ -71,6 +74,7 @@ final class MergeHandlerTest extends TestCase
         $this->github->getAuthUsername()->willReturn('sstok');
         $this->expectCommitCount(1);
 
+        $this->git = $this->prophesize(Git::class);
         $this->git->getActiveBranchName()->willReturn('master');
         $this->git->getPrimaryBranch()->willReturn('master');
 
@@ -79,8 +83,9 @@ final class MergeHandlerTest extends TestCase
         $this->aliasResolver->getDetectedBy()->willReturn('composer.json "extra.branch-alias.dev-master"');
 
         $this->config = new Config([]);
-        $this->splitshGit = $this->prophesize(SplitshGit::class);
-        $this->splitshGit->checkPrecondition()->shouldNotBeCalled();
+
+        $this->branchSplitsh = $this->prophesize(BranchSplitsh::class);
+        $this->branchSplitsh->splitBranch('master')->shouldBeCalled();
 
         $this->io = new BufferedIO();
         $this->io->setInteractive(true);
@@ -158,7 +163,6 @@ by who-else at 2014-11-23T14:50:24Z
         $pr = $this->expectPrInfo();
         $this->expectCommits($pr);
         $this->expectNotes();
-
         $this->expectCommitStatus([
             ['description' => 'Run tests', 'state' => 'success', 'context' => 'github/ci-tests-PHP6'],
             ['description' => 'Lower button must not be buttoned', 'state' => 'failure', 'context' => 'Gentlemans-gazette'],
@@ -213,185 +217,6 @@ by who-else at 2014-11-23T14:50:24Z
     }
 
     /** @test */
-    public function it_merges_a_pull_request_and_splits_repository_when_confirmed(): void
-    {
-        $this->config = new Config([
-            'repositories' => [
-                'github.com' => [
-                    'repos' => [
-                        'park-manager/hubkit' => [
-                            'branches' => [
-                                ':default' => [
-                                    'sync-tags' => true,
-                                    'split' => [
-                                        'src/Component/Core' => ['url' => 'git@github.com:park-manager/core.git'],
-                                        'src/Component/Model' => ['url' => 'git@github.com:park-manager/model.git'],
-                                        'doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => false],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-        ]);
-
-        $this->splitshGit->checkPrecondition()->shouldBeCalled();
-        $this->expectGitSplit('src/Component/Core', '_core', 'git@github.com:park-manager/core.git', '09d103bae644592ebdc10a2665a2791c291fbea7');
-        $this->expectGitSplit('src/Component/Model', '_model', 'git@github.com:park-manager/model.git', 'b2faccdde512f226ae67e5e73a9f3259c83b933a', 0);
-        $this->expectGitSplit('doc', '_doc', 'git@github.com:park-manager/doc.git', 'c526695a61c698d220f5b2c68ce7b6c689013d55');
-
-        $pr = $this->expectPrInfo();
-        $this->expectCommitStatus();
-        $this->expectCommits($pr);
-
-        $this->github->mergePullRequest(
-            self::PR_NUMBER,
-            'feature #42 Brand new design (sstok)',
-            PropArgument::exact(<<<'BODY'
-                This PR was merged into the 1.0-dev branch.
-
-                Discussion
-                ----------
-
-                There I fixed it
-
-                Commits
-                -------
-
-                06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
-                06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
-
-                BODY
-            ),
-            self::HEAD_SHA,
-            false
-        )->willReturn(['sha' => self::MERGE_SHA]);
-
-        $this->expectNotes(
-            [
-                ['user' => ['login' => 'someone'], 'created_at' => '2014-11-23T14:39:24Z', 'body' => 'Status: reviewed'],
-                ['user' => ['login' => 'who-else'], 'created_at' => '2014-11-23T14:50:24Z', 'body' => ':+1:'],
-            ],
-            '---------------------------------------------------------------------------
-
-by someone at 2014-11-23T14:39:24Z
-
-Status: reviewed
-
----------------------------------------------------------------------------
-
-by who-else at 2014-11-23T14:50:24Z
-
-:+1:
-');
-
-        $this->expectLocalUpdate();
-        $this->expectLocalBranchNotExists();
-
-        $args = $this->getArgs();
-        $args->setArgument('number', '42');
-        $this->executeHandler($args, 'feature', ['yes']);
-
-        $this->assertOutputMatches([
-            'master branch is aliased as 1.0-dev (detected by composer.json "extra.branch-alias.dev-master")',
-            'Pull request has been merged.',
-            'Pushing notes please wait...',
-            'Your local "master" branch is updated.',
-            'Split repository now?',
-            'Starting split operation please wait...',
-            ['3/3 \[[^\]]+\] 100%', true],
-        ]);
-    }
-
-    /** @test */
-    public function it_merges_a_pull_request_and_skips_repository_split_when_confirm_is_rejected(): void
-    {
-        $this->config = new Config([
-            'repositories' => [
-                'github.com' => [
-                    'repos' => [
-                        'park-manager/hubkit' => [
-                            'branches' => [
-                                ':default' => [
-                                    'sync-tags' => true,
-                                    'split' => [
-                                        'src/Component/Core' => ['url' => 'git@github.com:park-manager/core.git'],
-                                        'src/Component/Model' => ['url' => 'git@github.com:park-manager/model.git'],
-                                        'doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => false],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-        ]);
-
-        $pr = $this->expectPrInfo();
-        $this->expectCommitStatus();
-        $this->expectCommits($pr);
-
-        $this->github->mergePullRequest(
-            self::PR_NUMBER,
-            'feature #42 Brand new design (sstok)',
-            PropArgument::exact(<<<'BODY'
-                This PR was merged into the 1.0-dev branch.
-
-                Discussion
-                ----------
-
-                There I fixed it
-
-                Commits
-                -------
-
-                06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
-                06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
-
-                BODY
-            ),
-            self::HEAD_SHA,
-            false
-        )->willReturn(['sha' => self::MERGE_SHA]);
-
-        $this->expectNotes(
-            [
-                ['user' => ['login' => 'someone'], 'created_at' => '2014-11-23T14:39:24Z', 'body' => 'Status: reviewed'],
-                ['user' => ['login' => 'who-else'], 'created_at' => '2014-11-23T14:50:24Z', 'body' => ':+1:'],
-            ],
-            '---------------------------------------------------------------------------
-
-by someone at 2014-11-23T14:39:24Z
-
-Status: reviewed
-
----------------------------------------------------------------------------
-
-by who-else at 2014-11-23T14:50:24Z
-
-:+1:
-');
-
-        $this->expectLocalUpdate();
-        $this->expectLocalBranchNotExists();
-
-        $args = $this->getArgs();
-        $args->setArgument('number', '42');
-        $this->executeHandler($args, 'feature', ['no']);
-
-        $this->assertOutputMatches([
-            'master branch is aliased as 1.0-dev (detected by composer.json "extra.branch-alias.dev-master")',
-            'Pull request has been merged.',
-            'Pushing notes please wait...',
-            'Your local "master" branch is updated.',
-            'Split repository now?',
-        ]);
-
-        $this->assertOutputNotMatches('Starting split operation please wait...');
-    }
-
-    /** @test */
     public function it_merges_a_pull_request_and_skips_repository_split_when_local_branch_is_not_ready(): void
     {
         $this->config = new Config([
@@ -412,6 +237,7 @@ by who-else at 2014-11-23T14:50:24Z
         $pr = $this->expectPrInfo();
         $this->expectCommitStatus();
         $this->expectCommits($pr);
+        $this->expectNoSplits();
 
         $this->github->mergePullRequest(
             self::PR_NUMBER,
@@ -467,87 +293,6 @@ by who-else at 2014-11-23T14:50:24Z
             'Pushing notes please wait...',
             'The Git working tree has uncommitted changes, unable to update your local branch.',
         ]);
-
-        $this->assertOutputNotMatches(['Split repository now?', 'Starting split operation please wait...']);
-    }
-
-    /** @test */
-    public function it_merges_a_pull_request_and_skips_repository_split_when_local_branch_does_exist(): void
-    {
-        $this->config = new Config([
-            'repos' => [
-                'github.com' => [
-                    'park-manager/hubkit' => [
-                        'sync-tags' => true,
-                        'split' => [
-                            'src/Component/Core' => 'git@github.com:park-manager/core.git',
-                            'src/Component/Model' => 'git@github.com:park-manager/model.git',
-                            'doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => false],
-                        ],
-                    ],
-                ],
-            ],
-        ]);
-
-        $pr = $this->expectPrInfo();
-        $this->expectCommitStatus();
-        $this->expectCommits($pr);
-
-        $this->github->mergePullRequest(
-            self::PR_NUMBER,
-            'feature #42 Brand new design (sstok)',
-            PropArgument::exact(<<<'BODY'
-                This PR was merged into the 1.0-dev branch.
-
-                Discussion
-                ----------
-
-                There I fixed it
-
-                Commits
-                -------
-
-                06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
-                06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
-
-                BODY
-            ),
-            self::HEAD_SHA,
-            false
-        )->willReturn(['sha' => self::MERGE_SHA]);
-
-        $this->expectNotes(
-            [
-                ['user' => ['login' => 'someone'], 'created_at' => '2014-11-23T14:39:24Z', 'body' => 'Status: reviewed'],
-                ['user' => ['login' => 'who-else'], 'created_at' => '2014-11-23T14:50:24Z', 'body' => ':+1:'],
-            ],
-            '---------------------------------------------------------------------------
-
-by someone at 2014-11-23T14:39:24Z
-
-Status: reviewed
-
----------------------------------------------------------------------------
-
-by who-else at 2014-11-23T14:50:24Z
-
-:+1:
-');
-
-        $this->expectLocalUpdate(true, false);
-        $this->expectLocalBranchNotExists();
-
-        $args = $this->getArgs();
-        $args->setArgument('number', '42');
-        $this->executeHandler($args, 'feature', ['no']);
-
-        $this->assertOutputMatches([
-            'master branch is aliased as 1.0-dev (detected by composer.json "extra.branch-alias.dev-master")',
-            'Pull request has been merged.',
-            'Pushing notes please wait...',
-        ]);
-
-        $this->assertOutputNotMatches(['Split repository now?', 'Starting split operation please wait...']);
     }
 
     /** @test */
@@ -583,6 +328,7 @@ by who-else at 2014-11-23T14:50:24Z
         $this->expectNotes();
         $this->expectLocalUpdate(true, false);
         $this->expectLocalBranchNotExists();
+        $this->expectNoSplits();
 
         $args = $this->getArgs();
         $args->setArgument('number', '42');
@@ -598,6 +344,7 @@ by who-else at 2014-11-23T14:50:24Z
         $pr = $this->expectPrInfo();
         $this->expectCommitStatus();
         $this->expectCommits($pr);
+        $this->expectNoSplits();
 
         $this->github->mergePullRequest(
             self::PR_NUMBER,
@@ -1021,7 +768,7 @@ by who-else at 2014-11-23T14:50:24Z
     }
 
     /** @test */
-    public function its_merge_subject_correct_author_when_commit_has_no_author(): void
+    public function its_merge_subject_has_correct_author_when_commit_has_no_author(): void
     {
         $pr = $this->expectPrInfo();
         $this->expectCommitStatus();
@@ -1363,6 +1110,7 @@ by who-else at 2014-11-23T14:50:24Z
     public function it_checks_pr_is_open(): void
     {
         $this->expectPrInfo('sstok', [], 'closed');
+        $this->expectNoSplits();
 
         $args = $this->getArgs();
         $args->setArgument('number', '42');
@@ -1378,6 +1126,7 @@ by who-else at 2014-11-23T14:50:24Z
     {
         $pr = $this->expectPrInfo();
         $this->expectCommitStatus();
+        $this->expectNoSplits();
         $this->expectUnacceptableCommits($pr);
 
         $args = $this->getArgs();
@@ -1405,6 +1154,7 @@ by who-else at 2014-11-23T14:50:24Z
     {
         $pr = $this->expectPrInfo();
         $this->expectCommitStatus();
+        $this->expectNoSplits();
         $this->expectLessAcceptableCommits($pr);
 
         $args = $this->getArgs();
@@ -1480,6 +1230,7 @@ by who-else at 2014-11-23T14:50:24Z
     public function it_checks_pr_is_mergeable(): void
     {
         $this->expectPrInfo('sstok', [], 'open', null);
+        $this->expectNoSplits();
 
         $args = $this->getArgs();
         $args->setArgument('number', '42');
@@ -1494,6 +1245,7 @@ by who-else at 2014-11-23T14:50:24Z
     public function it_checks_pr_is_mergeable_with_false(): void
     {
         $this->expectPrInfo('sstok', [], 'open', false);
+        $this->expectNoSplits();
 
         $args = $this->getArgs();
         $args->setArgument('number', '42');
@@ -1509,6 +1261,7 @@ by who-else at 2014-11-23T14:50:24Z
         $format = ArgsFormat::build()
             ->addOption(new Option('squash', null, Option::BOOLEAN))
             ->addOption(new Option('no-pull', null, Option::BOOLEAN))
+            ->addOption(new Option('no-split', null, Option::BOOLEAN))
             ->addOption(new Option('pat', null, Option::OPTIONAL_VALUE | Option::STRING, null, 'Thank you @author'))
             ->addOption(new Option('no-pat', null, Option::NO_VALUE | Option::BOOLEAN))
             ->addOption(new Option('no-cleanup', null, Option::NO_VALUE | Option::BOOLEAN))
@@ -1544,7 +1297,7 @@ by who-else at 2014-11-23T14:50:24Z
             $this->aliasResolver->reveal(),
             $questionHelper->reveal(),
             $this->config,
-            $this->splitshGit->reveal()
+            $this->branchSplitsh->reveal()
         );
 
         $handler->handle($args, $this->io);
@@ -1755,13 +1508,13 @@ by who-else at 2014-11-23T14:50:24Z
         }
     }
 
-    private function expectGitSplit(string $prefix, string $remote, string $url, string $sha, int $commits = 3): void
-    {
-        $this->splitshGit->splitTo('master', $prefix, $url)->shouldBeCalled()->willReturn([$remote => [$sha, $url, $commits]]);
-    }
-
     private function expectCommitCount(int $count): void
     {
         $this->github->getPullrequestCommitCount(self::PR_NUMBER)->willReturn($count);
+    }
+
+    private function expectNoSplits(): void
+    {
+        $this->branchSplitsh->splitBranch('master')->shouldNotBeCalled();
     }
 }

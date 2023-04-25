@@ -14,13 +14,12 @@ declare(strict_types=1);
 namespace HubKit\Tests\Service;
 
 use HubKit\Service\CliProcess;
-use HubKit\Service\Filesystem;
 use HubKit\Service\Git;
+use HubKit\Service\Git\GitTempRepository;
 use HubKit\Service\SplitshGit;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Filesystem\Filesystem as SfFilesystem;
 use Symfony\Component\Process\Process;
 
 /**
@@ -40,29 +39,23 @@ final class SplitshGitTest extends TestCase
         try {
             chdir(__DIR__ . '/Fixtures');
 
+            $gitTempProphecy = $this->prophesize(GitTempRepository::class);
+            $gitTempProphecy->getRemote('git@github.com:park-manager/core.git', 'master')->willReturn('/tmp/hubkit/stor/_core');
+            $gitTemp = $gitTempProphecy->reveal();
+
             $gitProphecy = $this->prophesize(Git::class);
-            $gitProphecy->isGitDir()->willReturn(true);
-            $gitProphecy->ensureRemoteExists('_core', 'git@github.com:park-manager/core.git')->shouldBeCalled();
-            $gitProphecy->pushToRemote('_core', '2c00338aef823d0c0916fc1b59ef49d0bb76f02f:refs/heads/master')->shouldBeCalled();
+            $gitProphecy->pushToRemote('file:///tmp/hubkit/stor/_core', '2c00338aef823d0c0916fc1b59ef49d0bb76f02f:refs/heads/master')->shouldBeCalled();
             $git = $gitProphecy->reveal();
 
-            $processProphecy = $this->prophesize(Process::class);
-            $processProphecy->getOutput()->willReturn('2c00338aef823d0c0916fc1b59ef49d0bb76f02f');
-            $processProphecy->getErrorOutput()->willReturn("\n5 commits created, 0 commits traversed, in 7ms");
-
             $processCliProphecy = $this->prophesize(CliProcess::class);
-            $processCliProphecy->mustRun([self::SPLITSH_EXECUTABLE, '--prefix', 'src/Bundle/CoreBundle'])->willReturn(
-                $processProphecy->reveal()
-            );
+            $processCliProphecy->mustRun([self::SPLITSH_EXECUTABLE, '--prefix', 'src/Bundle/CoreBundle'])->willReturn($this->getGitSplitShResult('2c00338aef823d0c0916fc1b59ef49d0bb76f02f'));
+            $processCliProphecy->mustRun(new Process(['git', 'push', 'origin', 'master:refs/heads/master'], '/tmp/hubkit/stor/_core'));
             $cliProcess = $processCliProphecy->reveal();
 
-            $filesystemProphecy = $this->prophesize(Filesystem::class);
-            $filesystem = $filesystemProphecy->reveal();
-
-            $service = new SplitshGit($git, $cliProcess, $filesystem, $this->createMock(LoggerInterface::class), self::SPLITSH_EXECUTABLE);
+            $service = new SplitshGit($git, $cliProcess, $this->createMock(LoggerInterface::class), $gitTemp, self::SPLITSH_EXECUTABLE);
 
             self::assertEquals(
-                ['_core' => ['2c00338aef823d0c0916fc1b59ef49d0bb76f02f', 'git@github.com:park-manager/core.git']],
+                ['2c00338aef823d0c0916fc1b59ef49d0bb76f02f', 'git@github.com:park-manager/core.git', '/tmp/hubkit/stor/_core'],
                 $service->splitTo('master', 'src/Bundle/CoreBundle', 'git@github.com:park-manager/core.git')
             );
         } finally {
@@ -71,43 +64,53 @@ final class SplitshGitTest extends TestCase
     }
 
     /** @test */
-    public function it_syncs_tag_into_targets(): void
+    public function it_syncs_tag_into_target(): void
     {
-        $gitProphecy = $this->prophesize(Git::class);
-        $gitProphecy->getGitConfig('remote._core.url')->willReturn('git@github.com:park-manager/core.git');
-        $gitProphecy->getGitConfig('remote._user.url')->willReturn('git@github.com:park-manager/user.git');
-        $gitProphecy->clone('git@github.com:park-manager/core.git', 'origin')->shouldBeCalledTimes(1);
-        $gitProphecy->clone('git@github.com:park-manager/user.git', 'origin')->shouldBeCalledTimes(1);
-        $gitProphecy->checkoutRemoteBranch('origin', '1.0')->shouldBeCalledTimes(2);
-
-        $git = $gitProphecy->reveal();
-
         $processCliProphecy = $this->prophesize(CliProcess::class);
-        $processCliProphecy->mustRun(['git', 'tag', 'v1.0.0', '2c00338aef823d0c0916fc1b59ef49d0bb76f02f', '-s', '-m', 'Release 1.0.0'])->shouldBeCalledTimes(1);
-        $processCliProphecy->mustRun(['git', 'tag', 'v1.0.0', '3eed8083737422fe9ac2da9f4348423089fceb7f', '-s', '-m', 'Release 1.0.0'])->shouldBeCalledTimes(1);
-        $processCliProphecy->run(['git', 'push', 'origin', 'v1.0.0'])->shouldBeCalledTimes(2);
+        $processCliProphecy->run(new Process(['git', 'tag', 'v1.0.0', '2c00338aef823d0c0916fc1b59ef49d0bb76f02f', '-s', '-m', 'Release 1.0.0'], '/tmp/hubkit/stor/_core'))->shouldBeCalledTimes(1);
+        $processCliProphecy->run(new Process(['git', 'push', 'origin', 'v1.0.0'], '/tmp/hubkit/stor/_core'));
         $cliProcess = $processCliProphecy->reveal();
 
-        $sfFilesystemProphecy = $this->prophesize(SfFilesystem::class);
-        $sfFilesystemProphecy->mkdir('/tmp/hubkit/split/_core')->shouldBeCalledTimes(1);
-        $sfFilesystemProphecy->mkdir('/tmp/hubkit/split/_user')->shouldBeCalledTimes(1);
+        $gitTempProphecy = $this->prophesize(GitTempRepository::class);
+        $gitTempProphecy->getRemote('git@github.com:park-manager/core.git', '1.0')->willReturn('/tmp/hubkit/stor/_core');
+        $gitTemp = $gitTempProphecy->reveal();
 
-        $filesystemProphecy = $this->prophesize(Filesystem::class);
-        $filesystemProphecy->tempDirectory('split')->willReturn('/tmp/hubkit/split');
-        $filesystemProphecy->chdir('/tmp/hubkit/split/_core')->willReturn(true)->shouldBeCalledTimes(1);
-        $filesystemProphecy->chdir('/tmp/hubkit/split/_user')->willReturn(true)->shouldBeCalledTimes(1);
-        $filesystemProphecy->chdir(getcwd())->willReturn(true)->shouldBeCalledTimes(1);
-        $filesystemProphecy->getFilesystem()->willReturn($sfFilesystemProphecy->reveal());
-        $filesystem = $filesystemProphecy->reveal();
+        $service = new SplitshGit($this->createMock(Git::class), $cliProcess, $this->createMock(LoggerInterface::class), $gitTemp, self::SPLITSH_EXECUTABLE);
 
-        $service = new SplitshGit($git, $cliProcess, $filesystem, $this->createMock(LoggerInterface::class), self::SPLITSH_EXECUTABLE);
+        $service->syncTag(
+            '1.0.0',
+            'git@github.com:park-manager/core.git',
+            '1.0',
+            '2c00338aef823d0c0916fc1b59ef49d0bb76f02f',
+        );
+    }
+
+    /** @test */
+    public function it_syncs_tag_into_targets(): void
+    {
+        $processCliProphecy = $this->prophesize(CliProcess::class);
+
+        $processCliProphecy->run(new Process(['git', 'tag', 'v1.0.0', '2c00338aef823d0c0916fc1b59ef49d0bb76f02f', '-s', '-m', 'Release 1.0.0'], '/tmp/hubkit/stor/_core'))->shouldBeCalledTimes(1);
+        $processCliProphecy->run(new Process(['git', 'push', 'origin', 'v1.0.0'], '/tmp/hubkit/stor/_core'));
+
+        $processCliProphecy->run(new Process(['git', 'tag', 'v1.0.0', '3eed8083737422fe9ac2da9f4348423089fceb7f', '-s', '-m', 'Release 1.0.0'], '/tmp/hubkit/stor/_user'))->shouldBeCalledTimes(1);
+        $processCliProphecy->run(new Process(['git', 'push', 'origin', 'v1.0.0'], '/tmp/hubkit/stor/_user'));
+
+        $cliProcess = $processCliProphecy->reveal();
+
+        $gitTempProphecy = $this->prophesize(GitTempRepository::class);
+        $gitTempProphecy->getRemote('git@github.com:park-manager/core.git', '1.0')->willReturn('/tmp/hubkit/stor/_core');
+        $gitTempProphecy->getRemote('git@github.com:park-manager/user.git', '1.0')->willReturn('/tmp/hubkit/stor/_user');
+        $gitTemp = $gitTempProphecy->reveal();
+
+        $service = new SplitshGit($this->createMock(Git::class), $cliProcess, $this->createMock(LoggerInterface::class), $gitTemp, self::SPLITSH_EXECUTABLE);
 
         $service->syncTags(
             '1.0.0',
             '1.0',
             [
-                '_core' => ['2c00338aef823d0c0916fc1b59ef49d0bb76f02f', 'git@github.com:park-manager/core.git', 5],
-                '_user' => ['3eed8083737422fe9ac2da9f4348423089fceb7f', 'git@github.com:park-manager/user.git', 3],
+                '/tmp/hubkit/stor/_core' => ['2c00338aef823d0c0916fc1b59ef49d0bb76f02f', 'git@github.com:park-manager/core.git', 5],
+                '/tmp/hubkit/stor/_user' => ['3eed8083737422fe9ac2da9f4348423089fceb7f', 'git@github.com:park-manager/user.git', 3],
             ]
         );
     }
@@ -122,8 +125,8 @@ final class SplitshGitTest extends TestCase
         $service = new SplitshGit(
             $git,
             $this->createMock(CliProcess::class),
-            $this->createMock(Filesystem::class),
             $this->createMock(LoggerInterface::class),
+            $this->createMock(GitTempRepository::class),
             self::SPLITSH_EXECUTABLE
         );
         $service->checkPrecondition();
@@ -139,8 +142,8 @@ final class SplitshGitTest extends TestCase
         $service = new SplitshGit(
             $git,
             $this->createMock(CliProcess::class),
-            $this->createMock(Filesystem::class),
             $this->createMock(LoggerInterface::class),
+            $this->createMock(GitTempRepository::class),
             self::SPLITSH_EXECUTABLE
         );
 
@@ -148,5 +151,14 @@ final class SplitshGitTest extends TestCase
         $this->expectExceptionMessage('Unable to perform split operation. Requires Git root directory of the repository.');
 
         $service->checkPrecondition();
+    }
+
+    private function getGitSplitShResult(string $hash): Process
+    {
+        $processProphecy = $this->prophesize(Process::class);
+        $processProphecy->getOutput()->willReturn($hash);
+        $processProphecy->getErrorOutput()->willReturn("\n5 commits created, 0 commits traversed, in 7ms");
+
+        return $processProphecy->reveal();
     }
 }

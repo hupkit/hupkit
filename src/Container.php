@@ -51,17 +51,25 @@ class Container extends \Pimple\Container implements ContainerInterface
 
         $this['git.config'] = static fn (self $container) => new Service\Git\GitConfig($container['process'], $container['style']);
 
-        $this['git.file_reader'] = static fn (self $container) => new Service\Git\GitFileReader($container['git.branch'], $container['git.config'], $container['process'], $container['filesystem']);
+        $this['git.temp_repository'] = static fn (self $container) => new Service\Git\GitTempRepository($container['process'], $container['filesystem']);
 
-        $this['splitsh_git'] = static function (self $container) {
-            return new Service\SplitshGit(
-                $container['git'],
-                $container['process'],
-                $container['filesystem'],
-                $container['logger'],
-                (new ExecutableFinder())->find('splitsh-lite')
-            );
-        };
+        $this['git.file_reader'] = static fn (self $container) => new Service\Git\GitFileReader($container['git.branch'], $container['git.config'], $container['process'], $container['git.temp_repository']);
+
+        $this['splitsh_git'] = static fn (self $container) => new Service\SplitshGit(
+            $container['git'],
+            $container['process'],
+            $container['logger'],
+            $container['git.temp_repository'],
+            (new ExecutableFinder())->find('splitsh-lite')
+        );
+
+        $this['branch_splitsh_git'] = static fn (self $container) => new Service\BranchSplitsh(
+            $container['splitsh_git'],
+            $container['github'],
+            $container['config'],
+            $container['style'],
+            $container['git'],
+        );
 
         $this['filesystem'] = static fn () => new Service\Filesystem();
 

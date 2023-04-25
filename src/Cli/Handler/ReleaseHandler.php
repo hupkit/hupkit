@@ -15,12 +15,12 @@ namespace HubKit\Cli\Handler;
 
 use HubKit\Config;
 use HubKit\Helper\ChangelogRenderer;
+use HubKit\Service\BranchSplitsh;
 use HubKit\Service\CliProcess;
 use HubKit\Service\Editor;
 use HubKit\Service\Git;
 use HubKit\Service\GitHub;
 use HubKit\Service\ReleaseHooks;
-use HubKit\Service\SplitshGit;
 use HubKit\StringUtil;
 use Rollerworks\Component\Version\ContinuesVersionsValidator;
 use Rollerworks\Component\Version\Version;
@@ -32,9 +32,7 @@ final class ReleaseHandler extends GitBaseHandler
 {
     private $process;
     private $editor;
-    private $splitshGit;
-    /** @var IO */
-    private $io;
+    private IO $io;
     private $releaseHooks;
 
     public function __construct(
@@ -44,13 +42,12 @@ final class ReleaseHandler extends GitBaseHandler
         CliProcess $process,
         Editor $editor,
         Config $config,
-        SplitshGit $splitshGit,
+        private BranchSplitsh $branchSplitsh,
         ReleaseHooks $releaseHooks
     ) {
         parent::__construct($style, $git, $github, $config);
         $this->process = $process;
         $this->editor = $editor;
-        $this->splitshGit = $splitshGit;
         $this->releaseHooks = $releaseHooks;
     }
 
@@ -92,7 +89,7 @@ final class ReleaseHandler extends GitBaseHandler
 
         // Perform the sub-split and tagging first as it's easier to recover from split error
         // then being able to re-run the release command on the source repository.
-        $this->tagSplitRepositories($branch, $versionStr);
+        $this->branchSplitsh->syncTags($branch, $versionStr);
 
         $this->process->mustRun(['git', 'tag', '-s', 'v' . $versionStr, '-m', 'Release ' . $versionStr]);
         $this->process->mustRun(['git', 'push', 'upstream', 'v' . $versionStr]);
@@ -174,7 +171,7 @@ final class ReleaseHandler extends GitBaseHandler
     {
         try {
             $base = $this->git->getLastTagOnBranch();
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             // No tags exist yet so there is no need for a changelog.
             $base = null;
         }
@@ -212,39 +209,5 @@ final class ReleaseHandler extends GitBaseHandler
                 implode(', v', $suggested)
             )
         );
-    }
-
-    private function tagSplitRepositories(string $branch, string $version): void
-    {
-        $branchConfig = $this->config->getBranchConfig($this->github->getHostname(), $this->github->getOrganization() . '/' . $this->github->getRepository(), $branch);
-        $splitsConfig = $branchConfig->config['split'] ?? [];
-
-        if (empty($splitsConfig)) {
-            return;
-        }
-
-        $this->splitshGit->checkPrecondition();
-
-        $this->style->text('Starting split operation please wait...');
-        $progressBar = $this->style->createProgressBar();
-        $progressBar->start(\count($splitsConfig));
-
-        $splits = [];
-
-        foreach ($splitsConfig as $prefix => $config) {
-            $progressBar->advance();
-
-            if ($config['url'] === false) {
-                continue;
-            }
-
-            $split = $this->splitshGit->splitTo($branch, $prefix, $config['url']);
-
-            if ($split !== null && ($config['sync-tags'] ?? $config->config['sync-tags'] ?? true)) {
-                $splits += $split;
-            }
-        }
-
-        $this->splitshGit->syncTags($version, $branch, $splits);
     }
 }

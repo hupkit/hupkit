@@ -155,3 +155,9 @@ then once all conflicts are resolved. Run the `switch-base` command (with the or
 again and it will continue as normal.
 
 **Do not push these changes manually as this will not update the pull-request target base.**
+
+### cache-clear
+
+Clears the cache Hubkit uses to split repositories and store resolved configuration branches.
+
+**Tip:** Use the `-v` option to show how much space was retrieved.

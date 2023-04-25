@@ -17,10 +17,10 @@ use HubKit\Config;
 use HubKit\Helper\BranchAliasResolver;
 use HubKit\Helper\SingleLineChoiceQuestionHelper;
 use HubKit\Helper\StatusTable;
+use HubKit\Service\BranchSplitsh;
 use HubKit\Service\Git;
 use HubKit\Service\GitHub;
 use HubKit\Service\MessageValidator;
-use HubKit\Service\SplitshGit;
 use HubKit\StringUtil;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
@@ -33,7 +33,6 @@ final class MergeHandler extends GitBaseHandler
 {
     private $aliasResolver;
     private $questionHelper;
-    private $splitshGit;
 
     public function __construct(
         SymfonyStyle $style,
@@ -42,12 +41,11 @@ final class MergeHandler extends GitBaseHandler
         BranchAliasResolver $aliasResolver,
         SingleLineChoiceQuestionHelper $questionHelper,
         Config $config,
-        SplitshGit $splitshGit
+        private BranchSplitsh $branchSplitsh
     ) {
         parent::__construct($style, $git, $github, $config);
         $this->aliasResolver = $aliasResolver;
         $this->questionHelper = $questionHelper;
-        $this->splitshGit = $splitshGit;
     }
 
     public function handle(Args $args, IO $io): void
@@ -96,8 +94,8 @@ final class MergeHandler extends GitBaseHandler
 
         $this->style->success('Pull request has been merged.');
 
-        if (! $args->getOption('no-pull') && $this->updateLocalBranch($pr['base']['ref'])) {
-            $this->splitRepository($pr);
+        if (! $args->getOption('no-pull') && $this->updateLocalBranch($pr['base']['ref']) && ! $args->getOption('no-split')) {
+            $this->branchSplitsh->splitBranch($pr['base']['ref']);
         }
 
         if (! $args->getOption('squash') && ! $args->getOption('no-cleanup')) {
@@ -373,32 +371,6 @@ final class MergeHandler extends GitBaseHandler
         $this->style->success(sprintf('Your local "%s" branch is updated.', $branch));
 
         return true;
-    }
-
-    private function splitRepository(array $pr): void
-    {
-        $branchConfig = $this->config->getBranchConfig($this->github->getHostname(), $this->github->getOrganization() . '/' . $this->github->getRepository(), $pr['base']['ref']);
-        $splitsConfig = $branchConfig->config['split'] ?? [];
-
-        if (empty($splitsConfig) || ! $this->style->confirm('Split repository now?')) {
-            return;
-        }
-
-        $this->splitshGit->checkPrecondition();
-
-        $this->style->text('Starting split operation please wait...');
-        $progressBar = $this->style->createProgressBar();
-        $progressBar->start(\count($splitsConfig));
-
-        foreach ($splitsConfig as $prefix => $config) {
-            $progressBar->advance();
-
-            if ($config['url'] === false) {
-                continue;
-            }
-
-            $this->splitshGit->splitTo($pr['base']['ref'], $prefix, $config['url']);
-        }
     }
 
     private function removeSourceBranch(array $pr): void

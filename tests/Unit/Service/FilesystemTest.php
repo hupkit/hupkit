@@ -77,6 +77,7 @@ final class FilesystemTest extends TestCase
         $path = $this->getTempdirPath('split');
 
         $sfFilesystem = $this->prophesize(SfFilesystem::class);
+        $sfFilesystem->mkdir('{:temp:}/hubkit')->shouldBeCalledOnce();
         $sfFilesystem->exists($path)->willReturn(false);
         $sfFilesystem->remove(Argument::any())->shouldNotBeCalled();
         $sfFilesystem->mkdir($path)->shouldBeCalledOnce();
@@ -97,6 +98,7 @@ final class FilesystemTest extends TestCase
         $path = $this->getTempdirPath('split');
 
         $sfFilesystem = $this->prophesize(SfFilesystem::class);
+        $sfFilesystem->mkdir('{:temp:}/hubkit')->shouldBeCalledOnce();
         $sfFilesystem->exists($path)->willReturn(true);
         $sfFilesystem->remove($path)->shouldBeCalledOnce();
         $sfFilesystem->mkdir($path)->shouldBeCalledOnce();

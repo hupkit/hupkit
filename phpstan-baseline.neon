@@ -121,11 +121,6 @@ parameters:
 			path: src/Cli/Handler/MergeHandler.php
 
 		-
-			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\MergeHandler\\:\\:splitRepository\\(\\) has parameter \\$pr with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Cli/Handler/MergeHandler.php
-
-		-
 			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\MergeHandler\\:\\:validateMessages\\(\\) has parameter \\$commits with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: src/Cli/Handler/MergeHandler.php
@@ -146,11 +141,6 @@ parameters:
 			path: src/Cli/Handler/MergeHandler.php
 
 		-
-			message: "#^Property HubKit\\\\Cli\\\\Handler\\\\MergeHandler\\:\\:\\$splitshGit has no type specified\\.$#"
-			count: 1
-			path: src/Cli/Handler/MergeHandler.php
-
-		-
 			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\ReleaseHandler\\:\\:guardTagDoesNotExist\\(\\) has parameter \\$tags with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: src/Cli/Handler/ReleaseHandler.php
@@ -167,11 +157,6 @@ parameters:
 
 		-
 			message: "#^Property HubKit\\\\Cli\\\\Handler\\\\ReleaseHandler\\:\\:\\$releaseHooks has no type specified\\.$#"
-			count: 1
-			path: src/Cli/Handler/ReleaseHandler.php
-
-		-
-			message: "#^Property HubKit\\\\Cli\\\\Handler\\\\ReleaseHandler\\:\\:\\$splitshGit has no type specified\\.$#"
 			count: 1
 			path: src/Cli/Handler/ReleaseHandler.php
 
@@ -211,21 +196,6 @@ parameters:
 			path: src/Cli/Handler/SelfDiagnoseHandler.php
 
 		-
-			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\SplitRepoHandler\\:\\:drySplitRepository\\(\\) has parameter \\$repos with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Cli/Handler/SplitRepoHandler.php
-
-		-
-			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\SplitRepoHandler\\:\\:splitRepository\\(\\) has parameter \\$repos with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Cli/Handler/SplitRepoHandler.php
-
-		-
-			message: "#^Property HubKit\\\\Cli\\\\Handler\\\\SplitRepoHandler\\:\\:\\$splitshGit has no type specified\\.$#"
-			count: 1
-			path: src/Cli/Handler/SplitRepoHandler.php
-
-		-
 			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\SwitchBaseHandler\\:\\:postHelpComment\\(\\) has parameter \\$pullRequest with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: src/Cli/Handler/SwitchBaseHandler.php
@@ -256,11 +226,6 @@ parameters:
 			path: src/Cli/Handler/UpMergeHandler.php
 
 		-
-			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\UpMergeHandler\\:\\:getSplitTargets\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Cli/Handler/UpMergeHandler.php
-
-		-
 			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\UpMergeHandler\\:\\:handle\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: src/Cli/Handler/UpMergeHandler.php
@@ -271,22 +236,7 @@ parameters:
 			path: src/Cli/Handler/UpMergeHandler.php
 
 		-
-			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\UpMergeHandler\\:\\:handleDryMerge\\(\\) has parameter \\$branch with no type specified\\.$#"
-			count: 1
-			path: src/Cli/Handler/UpMergeHandler.php
-
-		-
 			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\UpMergeHandler\\:\\:handleMerge\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: src/Cli/Handler/UpMergeHandler.php
-
-		-
-			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\UpMergeHandler\\:\\:handleMerge\\(\\) has parameter \\$branch with no type specified\\.$#"
-			count: 1
-			path: src/Cli/Handler/UpMergeHandler.php
-
-		-
-			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\UpMergeHandler\\:\\:mergeAllBranches\\(\\) has parameter \\$splitTargets with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: src/Cli/Handler/UpMergeHandler.php
 
@@ -296,17 +246,7 @@ parameters:
 			path: src/Cli/Handler/UpMergeHandler.php
 
 		-
-			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\UpMergeHandler\\:\\:mergeSingleBranch\\(\\) has parameter \\$splitTargets with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Cli/Handler/UpMergeHandler.php
-
-		-
 			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\UpMergeHandler\\:\\:mergeSingleBranch\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Cli/Handler/UpMergeHandler.php
-
-		-
-			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\UpMergeHandler\\:\\:splitRepository\\(\\) has parameter \\$splitTargets with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: src/Cli/Handler/UpMergeHandler.php
 
@@ -316,13 +256,8 @@ parameters:
 			path: src/Cli/Handler/UpMergeHandler.php
 
 		-
-			message: "#^Property HubKit\\\\Cli\\\\Handler\\\\UpMergeHandler\\:\\:\\$splitshGit has no type specified\\.$#"
-			count: 1
-			path: src/Cli/Handler/UpMergeHandler.php
-
-		-
 			message: "#^Call to an undefined method Webmozart\\\\Console\\\\Api\\\\Config\\\\ApplicationConfig\\|Webmozart\\\\Console\\\\Api\\\\Config\\\\CommandConfig\\:\\:end\\(\\)\\.$#"
-			count: 13
+			count: 14
 			path: src/Cli/HubKitApplicationConfig.php
 
 		-
@@ -846,41 +781,6 @@ parameters:
 			path: src/Service/ReleaseHooks.php
 
 		-
-			message: "#^Method HubKit\\\\Service\\\\SplitshGit\\:\\:splitTo\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Service/SplitshGit.php
-
-		-
-			message: "#^Method HubKit\\\\Service\\\\SplitshGit\\:\\:syncTags\\(\\) has parameter \\$targets with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Service/SplitshGit.php
-
-		-
-			message: "#^Property HubKit\\\\Service\\\\SplitshGit\\:\\:\\$executable has no type specified\\.$#"
-			count: 1
-			path: src/Service/SplitshGit.php
-
-		-
-			message: "#^Property HubKit\\\\Service\\\\SplitshGit\\:\\:\\$filesystem has no type specified\\.$#"
-			count: 1
-			path: src/Service/SplitshGit.php
-
-		-
-			message: "#^Property HubKit\\\\Service\\\\SplitshGit\\:\\:\\$git has no type specified\\.$#"
-			count: 1
-			path: src/Service/SplitshGit.php
-
-		-
-			message: "#^Property HubKit\\\\Service\\\\SplitshGit\\:\\:\\$logger has no type specified\\.$#"
-			count: 1
-			path: src/Service/SplitshGit.php
-
-		-
-			message: "#^Property HubKit\\\\Service\\\\SplitshGit\\:\\:\\$process has no type specified\\.$#"
-			count: 1
-			path: src/Service/SplitshGit.php
-
-		-
 			message: "#^Method HubKit\\\\StringUtil\\:\\:splitLines\\(\\) should return array\\<string\\> but returns array\\<int, string\\>\\|false\\.$#"
 			count: 1
 			path: src/StringUtil.php
@@ -1376,11 +1276,6 @@ parameters:
 			path: tests/Handler/MergeHandlerTest.php
 
 		-
-			message: "#^Parameter \\#7 \\$splitshGit of class HubKit\\\\Cli\\\\Handler\\\\MergeHandler constructor expects HubKit\\\\Service\\\\SplitshGit, object given\\.$#"
-			count: 1
-			path: tests/Handler/MergeHandlerTest.php
-
-		-
 			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\MergeHandlerTest\\:\\:\\$aliasResolver with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
 			count: 1
 			path: tests/Handler/MergeHandlerTest.php
@@ -1397,11 +1292,6 @@ parameters:
 
 		-
 			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\MergeHandlerTest\\:\\:\\$output \\(Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput\\) does not accept Symfony\\\\Component\\\\Console\\\\Output\\\\OutputInterface\\.$#"
-			count: 1
-			path: tests/Handler/MergeHandlerTest.php
-
-		-
-			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\MergeHandlerTest\\:\\:\\$splitshGit with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
 			count: 1
 			path: tests/Handler/MergeHandlerTest.php
 
@@ -1506,11 +1396,6 @@ parameters:
 			path: tests/Handler/ReleaseHandlerTest.php
 
 		-
-			message: "#^Parameter \\#7 \\$splitshGit of class HubKit\\\\Cli\\\\Handler\\\\ReleaseHandler constructor expects HubKit\\\\Service\\\\SplitshGit, object given\\.$#"
-			count: 1
-			path: tests/Handler/ReleaseHandlerTest.php
-
-		-
 			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\ReleaseHandlerTest\\:\\:\\$editor with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
 			count: 1
 			path: tests/Handler/ReleaseHandlerTest.php
@@ -1532,11 +1417,6 @@ parameters:
 
 		-
 			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\ReleaseHandlerTest\\:\\:\\$process with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
-			count: 1
-			path: tests/Handler/ReleaseHandlerTest.php
-
-		-
-			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\ReleaseHandlerTest\\:\\:\\$splitshGit with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
 			count: 1
 			path: tests/Handler/ReleaseHandlerTest.php
 
@@ -1587,11 +1467,6 @@ parameters:
 
 		-
 			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\SplitRepoHandlerTest\\:\\:executeHandler\\(\\) has parameter \\$input with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Handler/SplitRepoHandlerTest.php
-
-		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\SplitRepoHandlerTest\\:\\:expectGitSplit\\(\\) has parameter \\$targetBranch with no type specified\\.$#"
 			count: 1
 			path: tests/Handler/SplitRepoHandlerTest.php
 
@@ -1784,6 +1659,96 @@ parameters:
 			message: "#^Property HubKit\\\\Tests\\\\Helper\\\\ChangelogRendererTest\\:\\:\\$github with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
 			count: 1
 			path: tests/Helper/ChangelogRendererTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Service\\\\BranchSplitshTest\\:\\:assertOutputMatches\\(\\) has parameter \\$expectedLines with no type specified\\.$#"
+			count: 1
+			path: tests/Service/BranchSplitshTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Service\\\\BranchSplitshTest\\:\\:assertOutputMatches\\(\\) has parameter \\$regex with no type specified\\.$#"
+			count: 1
+			path: tests/Service/BranchSplitshTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Service\\\\BranchSplitshTest\\:\\:assertOutputNotMatches\\(\\) has parameter \\$lines with no type specified\\.$#"
+			count: 1
+			path: tests/Service/BranchSplitshTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Service\\\\BranchSplitshTest\\:\\:assertOutputNotMatches\\(\\) has parameter \\$regex with no type specified\\.$#"
+			count: 1
+			path: tests/Service/BranchSplitshTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Service\\\\BranchSplitshTest\\:\\:createStyle\\(\\) has parameter \\$input with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/Service/BranchSplitshTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Service\\\\BranchSplitshTest\\:\\:getDisplay\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/Service/BranchSplitshTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Service\\\\BranchSplitshTest\\:\\:getInputStream\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/Service/BranchSplitshTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Service\\\\BranchSplitshTest\\:\\:getInputStream\\(\\) has parameter \\$input with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/Service/BranchSplitshTest.php
+
+		-
+			message: "#^PHPDoc tag @var for property HubKit\\\\Tests\\\\Service\\\\BranchSplitshTest\\:\\:\\$git contains unresolvable type\\.$#"
+			count: 1
+			path: tests/Service/BranchSplitshTest.php
+
+		-
+			message: "#^PHPDoc tag @var for property HubKit\\\\Tests\\\\Service\\\\BranchSplitshTest\\:\\:\\$github contains unresolvable type\\.$#"
+			count: 1
+			path: tests/Service/BranchSplitshTest.php
+
+		-
+			message: "#^PHPDoc tag @var for property HubKit\\\\Tests\\\\Service\\\\BranchSplitshTest\\:\\:\\$splitshGit contains unresolvable type\\.$#"
+			count: 1
+			path: tests/Service/BranchSplitshTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
+			count: 1
+			path: tests/Service/BranchSplitshTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$stream of function fwrite expects resource, resource\\|false given\\.$#"
+			count: 1
+			path: tests/Service/BranchSplitshTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$stream of function rewind expects resource, resource\\|false given\\.$#"
+			count: 1
+			path: tests/Service/BranchSplitshTest.php
+
+		-
+			message: "#^Parameter \\#2 \\$string of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertDoesNotMatchRegularExpression\\(\\) expects string, string\\|null given\\.$#"
+			count: 1
+			path: tests/Service/BranchSplitshTest.php
+
+		-
+			message: "#^Parameter \\#2 \\$string of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertMatchesRegularExpression\\(\\) expects string, string\\|null given\\.$#"
+			count: 1
+			path: tests/Service/BranchSplitshTest.php
+
+		-
+			message: "#^Parameter \\#3 \\$subject of function str_replace expects array\\|string, string\\|false given\\.$#"
+			count: 1
+			path: tests/Service/BranchSplitshTest.php
+
+		-
+			message: "#^Property HubKit\\\\Tests\\\\Service\\\\BranchSplitshTest\\:\\:\\$output \\(Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput\\) does not accept Symfony\\\\Component\\\\Console\\\\Output\\\\OutputInterface\\.$#"
+			count: 1
+			path: tests/Service/BranchSplitshTest.php
 
 		-
 			message: "#^Method HubKit\\\\Tests\\\\Service\\\\MessageValidatorTest\\:\\:createMessage\\(\\) has parameter \\$message with no type specified\\.$#"

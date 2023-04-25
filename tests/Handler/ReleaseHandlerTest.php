@@ -15,12 +15,12 @@ namespace HubKit\Tests\Handler;
 
 use HubKit\Cli\Handler\ReleaseHandler;
 use HubKit\Config;
+use HubKit\Service\BranchSplitsh;
 use HubKit\Service\CliProcess;
 use HubKit\Service\Editor;
 use HubKit\Service\Git;
 use HubKit\Service\GitHub;
 use HubKit\Service\ReleaseHooks;
-use HubKit\Service\SplitshGit;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument as PropArgument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -110,8 +110,14 @@ labels: removed-deprecation
     private $editor;
     /** @var Config */
     private $config;
-    /** @var ObjectProphecy */
-    private $splitshGit;
+
+    /**
+     * @phpstan-var ObjectProphecy<BranchSplitsh>
+     *
+     * @var BranchSplitsh
+     */
+    private $branchSplitsh;
+
     /** @var ObjectProphecy|ReleaseHooks */
     private $releaseHooks;
     /** @var BufferedIO */
@@ -158,9 +164,7 @@ labels: removed-deprecation
             ]
         );
 
-        $this->splitshGit = $this->prophesize(SplitshGit::class);
-        $this->splitshGit->checkPrecondition()->shouldNotBeCalled();
-
+        $this->branchSplitsh = $this->prophesize(BranchSplitsh::class);
         $this->releaseHooks = $this->prophesize(ReleaseHooks::class);
 
         $this->io = new BufferedIO();
@@ -272,7 +276,7 @@ labels: removed-deprecation
 
         $this->expectEditorReturns("### Added\n- Introduce a new API for ValuesBag");
 
-        $url = $this->expectTagAndGitHubRelease('3.0.0', "### Added\n- Introduce a new API for ValuesBag");
+        $url = $this->expectTagAndGitHubRelease('3.0.0', "### Added\n- Introduce a new API for ValuesBag", branch: '2.0');
 
         $args = $this->getArgs('3.0');
         $this->executeHandler($args, ['yes']);
@@ -328,89 +332,6 @@ labels: removed-deprecation
                 'Preparing release 3.0.0 (target branch master)',
                 'Please wait...',
                 'Successfully released 3.0.0',
-                $url,
-            ]
-        );
-    }
-
-    /** @test */
-    public function it_creates_a_new_release_for_split_repositories(): void
-    {
-        $this->github->getOrganization()->willReturn('park-manager');
-        $this->github->getRepository()->willReturn('park-manager');
-
-        $this->expectTags();
-        $this->expectMatchingVersionBranchNotExists();
-        $this->expectEditorReturns('Initial release.');
-
-        $this->splitshGit->checkPrecondition()->shouldBeCalled();
-        $this->expectGitSplit('src/Component/Core', '_core', 'git@github.com:park-manager/core.git', '09d103bae644592ebdc10a2665a2791c291fbea7');
-        $this->expectGitSplit('src/Component/Model', '_model', 'git@github.com:park-manager/model.git', 'b2faccdde512f226ae67e5e73a9f3259c83b933a');
-        $this->expectGitSplit('doc', '_doc', 'git@github.com:park-manager/doc.git', 'c526695a61c698d220f5b2c68ce7b6c689013d55');
-
-        $this->splitshGit->syncTags(
-            '1.0.0',
-            'master',
-            [
-                '_core' => ['09d103bae644592ebdc10a2665a2791c291fbea7', 'git@github.com:park-manager/core.git'],
-                '_model' => ['b2faccdde512f226ae67e5e73a9f3259c83b933a', 'git@github.com:park-manager/model.git'],
-                // doc is ignored because tag synchronization is disabled for this repository
-            ]
-        )->shouldBeCalled();
-
-        $url = $this->expectTagAndGitHubRelease('1.0.0', 'Initial release.');
-
-        $args = $this->getArgs('1.0');
-        $this->executeHandler($args);
-
-        $this->assertOutputMatches(
-            [
-                'Preparing release 1.0.0 (target branch master)',
-                'Please wait...',
-                'Starting split operation please wait...',
-                ['3/3 \[[^\]]+\] 100%', true],
-                'Successfully released 1.0.0',
-                $url,
-            ]
-        );
-    }
-
-    /** @test */
-    public function it_creates_a_new_release_for_split_repositories_with_missing_directories(): void
-    {
-        $this->github->getOrganization()->willReturn('park-manager');
-        $this->github->getRepository()->willReturn('park-manager');
-
-        $this->expectTags();
-        $this->expectMatchingVersionBranchNotExists();
-        $this->expectEditorReturns('Initial release.');
-
-        $this->splitshGit->checkPrecondition()->shouldBeCalled();
-        $this->expectGitSplit('src/Component/Core', '_core', 'git@github.com:park-manager/core.git', '09d103bae644592ebdc10a2665a2791c291fbea7');
-        $this->expectGitSplit('src/Component/Model', '_model', 'git@github.com:park-manager/model.git', 'b2faccdde512f226ae67e5e73a9f3259c83b933a', false);
-        $this->expectGitSplit('doc', '_doc', 'git@github.com:park-manager/doc.git', 'c526695a61c698d220f5b2c68ce7b6c689013d55');
-
-        $this->splitshGit->syncTags(
-            '1.0.0',
-            'master',
-            [
-                '_core' => ['09d103bae644592ebdc10a2665a2791c291fbea7', 'git@github.com:park-manager/core.git'],
-                // doc is ignored because tag synchronization is disabled for this repository
-            ]
-        )->shouldBeCalled();
-
-        $url = $this->expectTagAndGitHubRelease('1.0.0', 'Initial release.');
-
-        $args = $this->getArgs('1.0');
-        $this->executeHandler($args);
-
-        $this->assertOutputMatches(
-            [
-                'Preparing release 1.0.0 (target branch master)',
-                'Please wait...',
-                'Starting split operation please wait...',
-                ['3/3 \[[^\]]+\] 100%', true],
-                'Successfully released 1.0.0',
                 $url,
             ]
         );
@@ -496,7 +417,7 @@ labels: removed-deprecation
             $this->process->reveal(),
             $this->editor->reveal(),
             $this->config,
-            $this->splitshGit->reveal(),
+            $this->branchSplitsh->reveal(),
             $this->releaseHooks->reveal()
         );
 
@@ -527,8 +448,10 @@ labels: removed-deprecation
         $this->git->remoteBranchExists('upstream', $branch)->willReturn(false);
     }
 
-    private function expectTagAndGitHubRelease(string $version, string $message, ?string $title = null): string
+    private function expectTagAndGitHubRelease(string $version, string $message, ?string $title = null, ?string $branch = null): string
     {
+        $this->branchSplitsh->syncTags($branch ?? 'master', $version)->willReturn(2)->shouldBeCalled();
+
         $this->process->mustRun(['git', 'tag', '-s', 'v' . $version, '-m', 'Release ' . $version])->shouldBeCalled();
         $this->process->mustRun(['git', 'push', 'upstream', 'v' . $version])->shouldBeCalled();
 
@@ -544,10 +467,5 @@ labels: removed-deprecation
         $this->editor->fromString(PropArgument::containingString($input), true, PropArgument::containingString('Leave file empty to abort operation.'))
             ->willReturn($output ?? $input)
         ;
-    }
-
-    private function expectGitSplit(string $prefix, string $remote, string $url, string $sha, bool $success = true): void
-    {
-        $this->splitshGit->splitTo('master', $prefix, $url)->shouldBeCalled()->willReturn($success ? [$remote => [$sha, $url]] : null);
     }
 }
