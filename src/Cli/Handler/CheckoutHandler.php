@@ -22,12 +22,14 @@ use Webmozart\Console\Api\Args\Args;
 
 final class CheckoutHandler extends GitBaseHandler
 {
-    private $process;
-
-    public function __construct(SymfonyStyle $style, Git $git, CliProcess $process, GitHub $github, Config $config)
-    {
+    public function __construct(
+        SymfonyStyle $style,
+        Git $git,
+        GitHub $github,
+        Config $config,
+        private readonly CliProcess $process
+    ) {
         parent::__construct($style, $git, $github, $config);
-        $this->process = $process;
     }
 
     public function handle(Args $args): void

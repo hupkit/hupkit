@@ -20,11 +20,8 @@ use Webmozart\Console\Api\IO\IO;
 
 final class BranchAliasHandler implements RequiresGitRepository
 {
-    private $git;
-
-    public function __construct(Git $git)
+    public function __construct(private readonly Git $git)
     {
-        $this->git = $git;
     }
 
     public function handle(Args $args, IO $io): void

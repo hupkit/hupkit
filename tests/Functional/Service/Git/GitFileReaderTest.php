@@ -34,14 +34,14 @@ final class GitFileReaderTest extends TestCase
     use GitTesterTrait;
     use SymfonyStyleTrait;
 
-    private string | null $origCwd;
+    private ?string $origCwd = null;
     private string $rootRepository;
     private string $secondRepository;
 
     private Filesystem $filesystem;
     private TestCliProcess $cliProcess;
     private GitTempRepository $gitTempRepository;
-    private StyleInterface $style;
+    private readonly StyleInterface $style;
 
     /** @before */
     public function setUpLocalRepository(): void
@@ -130,7 +130,7 @@ final class GitFileReaderTest extends TestCase
 
         return new GitFileReader(
             new class($this->cliProcess, $style, $repository) extends GitBranch {
-                public function __construct(CliProcess $process, StyleInterface $style, private string $gitDir)
+                public function __construct(CliProcess $process, StyleInterface $style, private readonly string $gitDir)
                 {
                     parent::__construct($process, $style);
                 }

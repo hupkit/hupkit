@@ -45,24 +45,12 @@ final class MergeHandlerTest extends TestCase
     private const HEAD_SHA = '1b04532c8a09d9084abce36f8d9daf675f89eacc';
     private const MERGE_SHA = '52a6bb3aeb7e08e8b641cfa679e4416096bf8439';
 
-    /** @var ObjectProphecy */
-    private $git;
-    /** @var ObjectProphecy */
-    private $aliasResolver;
-    /** @var ObjectProphecy */
-    private $github;
-    /** @var Config */
-    private $config;
-
-    /**
-     * @phpstan-var ObjectProphecy<BranchSplitsh>
-     *
-     * @var BranchSplitsh
-     */
-    private $branchSplitsh;
-
-    /** @var BufferedIO */
-    private $io;
+    private ObjectProphecy $git;
+    private ObjectProphecy $aliasResolver;
+    private ObjectProphecy $github;
+    private ObjectProphecy $branchSplitsh;
+    private BufferedIO $io;
+    private Config $config;
 
     /** @before */
     public function setUpCommandHandler(): void
@@ -1294,9 +1282,9 @@ by who-else at 2014-11-23T14:50:24Z
             $style,
             $this->git->reveal(),
             $this->github->reveal(),
+            $this->config,
             $this->aliasResolver->reveal(),
             $questionHelper->reveal(),
-            $this->config,
             $this->branchSplitsh->reveal()
         );
 

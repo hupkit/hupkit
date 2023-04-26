@@ -18,6 +18,7 @@ use HubKit\Tests\Functional\GitTesterTrait;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
+use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\Console\Style\StyleInterface;
 
 /**
@@ -28,16 +29,12 @@ final class GitConfigTest extends TestCase
     use GitTesterTrait;
     use ProphecyTrait;
 
-    /** @var string */
-    private $localRepository;
-    /** @var string */
-    private $remoteRepository;
-    /** @var GitConfig */
-    private $git;
-    /** @var StyleInterface */
-    private $style;
-    /** @var string */
-    public $output = '';
+    private string $localRepository;
+    private string $output = '';
+    private string $remoteRepository = '';
+
+    private GitConfig $git;
+    private ObjectProphecy $style;
 
     /** @before */
     public function setUpLocalRepository(): void

@@ -21,10 +21,8 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 trait SymfonyStyleTrait
 {
-    /** @var ArrayInput */
-    protected $input;
-    /** @var StreamOutput */
-    protected $output;
+    protected ArrayInput $input;
+    protected StreamOutput $output;
 
     /**
      * @return SymfonyStyle

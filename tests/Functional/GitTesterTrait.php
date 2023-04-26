@@ -22,10 +22,8 @@ trait GitTesterTrait
 {
     protected $cwd;
 
-    /** @var string|null */
-    private $tempDir;
-    /** @var BufferedOutput|null */
-    private $cliOutput;
+    private ?OutputInterface $cliOutput = null;
+    private ?string $tempDir = null;
 
     protected function setUpTempDirectory(): void
     {
@@ -93,6 +91,9 @@ trait GitTesterTrait
         $this->runCliCommand(['git', 'remote', 'add', $remoteName, 'file://' . $remoteRepository], $sourceRepository);
     }
 
+    /**
+     * @param iterable<string> $branches
+     */
     protected function givenRemoteBranchesExist(iterable $branches, string $remote = 'origin'): void
     {
         foreach ($branches as $branch) {

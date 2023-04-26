@@ -29,8 +29,8 @@ final class ConfigFactory
     public function __construct(
         string $currentDir,
         string $configFile,
-        private StyleInterface $style,
-        private GitFileReader $gitFileReader,
+        private readonly StyleInterface $style,
+        private readonly GitFileReader $gitFileReader,
     ) {
         $this->currentDir = self::normalizePath($currentDir);
         $this->configFile = self::normalizePath($configFile);

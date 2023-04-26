@@ -1,11 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Property HubKit\\\\Cli\\\\Handler\\\\BranchAliasHandler\\:\\:\\$git has no type specified\\.$#"
-			count: 1
-			path: src/Cli/Handler/BranchAliasHandler.php
-
-		-
 			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\ChangelogHandler\\:\\:getRefRange\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: src/Cli/Handler/ChangelogHandler.php
@@ -16,37 +11,12 @@ parameters:
 			path: src/Cli/Handler/ChangelogHandler.php
 
 		-
-			message: "#^Property HubKit\\\\Cli\\\\Handler\\\\ChangelogHandler\\:\\:\\$renderer has no type specified\\.$#"
-			count: 1
-			path: src/Cli/Handler/ChangelogHandler.php
-
-		-
-			message: "#^Property HubKit\\\\Cli\\\\Handler\\\\CheckoutHandler\\:\\:\\$process has no type specified\\.$#"
-			count: 1
-			path: src/Cli/Handler/CheckoutHandler.php
-
-		-
-			message: "#^Property HubKit\\\\Cli\\\\Handler\\\\GitBaseHandler\\:\\:\\$git has no type specified\\.$#"
-			count: 1
-			path: src/Cli/Handler/GitBaseHandler.php
-
-		-
-			message: "#^Property HubKit\\\\Cli\\\\Handler\\\\GitBaseHandler\\:\\:\\$github has no type specified\\.$#"
-			count: 1
-			path: src/Cli/Handler/GitBaseHandler.php
-
-		-
-			message: "#^Property HubKit\\\\Cli\\\\Handler\\\\GitBaseHandler\\:\\:\\$style has no type specified\\.$#"
-			count: 1
-			path: src/Cli/Handler/GitBaseHandler.php
-
-		-
-			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\MergeHandler\\:\\:addCommentsToMergeCommit\\(\\) has parameter \\$pr with no value type specified in iterable type array\\.$#"
+			message: "#^Cannot access offset 'id' on array\\<int\\|string, mixed\\>\\|int\\|null\\.$#"
 			count: 1
 			path: src/Cli/Handler/MergeHandler.php
 
 		-
-			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\MergeHandler\\:\\:addCommentsToMergeCommit\\(\\) has parameter \\$sha with no type specified\\.$#"
+			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\MergeHandler\\:\\:addCommentsToMergeCommit\\(\\) has parameter \\$pr with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: src/Cli/Handler/MergeHandler.php
 
@@ -57,11 +27,6 @@ parameters:
 
 		-
 			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\MergeHandler\\:\\:determineSquash\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: src/Cli/Handler/MergeHandler.php
-
-		-
-			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\MergeHandler\\:\\:determineSquash\\(\\) has parameter \\$pullrequestId with no type specified\\.$#"
 			count: 1
 			path: src/Cli/Handler/MergeHandler.php
 
@@ -96,11 +61,6 @@ parameters:
 			path: src/Cli/Handler/MergeHandler.php
 
 		-
-			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\MergeHandler\\:\\:hasPendingCheckSuites\\(\\) has parameter \\$checkSuites with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Cli/Handler/MergeHandler.php
-
-		-
 			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\MergeHandler\\:\\:patAuthor\\(\\) has parameter \\$pr with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: src/Cli/Handler/MergeHandler.php
@@ -121,84 +81,19 @@ parameters:
 			path: src/Cli/Handler/MergeHandler.php
 
 		-
-			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\MergeHandler\\:\\:validateMessages\\(\\) has parameter \\$commits with no value type specified in iterable type array\\.$#"
+			message: "#^Parameter \\#1 \\$checkSuites of method HubKit\\\\Cli\\\\Handler\\\\MergeHandler\\:\\:hasPendingCheckSuites\\(\\) expects array\\<int, array\\{status\\: string\\}\\>, array\\{\\}\\|array\\{id\\: int, check_suites\\: array\\<int, array\\{status\\: string\\}\\>\\|null, check_runs\\: array\\<string, mixed\\>\\|null\\} given\\.$#"
 			count: 1
 			path: src/Cli/Handler/MergeHandler.php
 
 		-
-			message: "#^Parameter \\#3 \\$subject of function str_replace expects array\\|string, string\\|null given\\.$#"
+			message: "#^Strict comparison using \\=\\=\\= between 0\\|string and 5 will always evaluate to false\\.$#"
 			count: 1
 			path: src/Cli/Handler/MergeHandler.php
 
 		-
-			message: "#^Property HubKit\\\\Cli\\\\Handler\\\\MergeHandler\\:\\:\\$aliasResolver has no type specified\\.$#"
-			count: 1
-			path: src/Cli/Handler/MergeHandler.php
-
-		-
-			message: "#^Property HubKit\\\\Cli\\\\Handler\\\\MergeHandler\\:\\:\\$questionHelper has no type specified\\.$#"
-			count: 1
-			path: src/Cli/Handler/MergeHandler.php
-
-		-
-			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\ReleaseHandler\\:\\:guardTagDoesNotExist\\(\\) has parameter \\$tags with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Cli/Handler/ReleaseHandler.php
-
-		-
-			message: "#^Property HubKit\\\\Cli\\\\Handler\\\\ReleaseHandler\\:\\:\\$editor has no type specified\\.$#"
-			count: 1
-			path: src/Cli/Handler/ReleaseHandler.php
-
-		-
-			message: "#^Property HubKit\\\\Cli\\\\Handler\\\\ReleaseHandler\\:\\:\\$process has no type specified\\.$#"
-			count: 1
-			path: src/Cli/Handler/ReleaseHandler.php
-
-		-
-			message: "#^Property HubKit\\\\Cli\\\\Handler\\\\ReleaseHandler\\:\\:\\$releaseHooks has no type specified\\.$#"
-			count: 1
-			path: src/Cli/Handler/ReleaseHandler.php
-
-		-
-			message: "#^Property HubKit\\\\Cli\\\\Handler\\\\RepositoryCreateHandler\\:\\:\\$git has no type specified\\.$#"
-			count: 1
-			path: src/Cli/Handler/RepositoryCreateHandler.php
-
-		-
-			message: "#^Property HubKit\\\\Cli\\\\Handler\\\\RepositoryCreateHandler\\:\\:\\$github has no type specified\\.$#"
-			count: 1
-			path: src/Cli/Handler/RepositoryCreateHandler.php
-
-		-
-			message: "#^Property HubKit\\\\Cli\\\\Handler\\\\RepositoryCreateHandler\\:\\:\\$style has no type specified\\.$#"
-			count: 1
-			path: src/Cli/Handler/RepositoryCreateHandler.php
-
-		-
-			message: "#^Property HubKit\\\\Cli\\\\Handler\\\\SelfDiagnoseHandler\\:\\:\\$config has no type specified\\.$#"
+			message: "#^Strict comparison using \\=\\=\\= between string and null will always evaluate to false\\.$#"
 			count: 1
 			path: src/Cli/Handler/SelfDiagnoseHandler.php
-
-		-
-			message: "#^Property HubKit\\\\Cli\\\\Handler\\\\SelfDiagnoseHandler\\:\\:\\$git has no type specified\\.$#"
-			count: 1
-			path: src/Cli/Handler/SelfDiagnoseHandler.php
-
-		-
-			message: "#^Property HubKit\\\\Cli\\\\Handler\\\\SelfDiagnoseHandler\\:\\:\\$github has no type specified\\.$#"
-			count: 1
-			path: src/Cli/Handler/SelfDiagnoseHandler.php
-
-		-
-			message: "#^Property HubKit\\\\Cli\\\\Handler\\\\SelfDiagnoseHandler\\:\\:\\$style has no type specified\\.$#"
-			count: 1
-			path: src/Cli/Handler/SelfDiagnoseHandler.php
-
-		-
-			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\SwitchBaseHandler\\:\\:postHelpComment\\(\\) has parameter \\$pullRequest with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Cli/Handler/SwitchBaseHandler.php
 
 		-
 			message: "#^Parameter \\#1 \\$string of function trim expects string, string\\|false given\\.$#"
@@ -206,53 +101,8 @@ parameters:
 			path: src/Cli/Handler/SwitchBaseHandler.php
 
 		-
-			message: "#^Property HubKit\\\\Cli\\\\Handler\\\\SwitchBaseHandler\\:\\:\\$process has no type specified\\.$#"
-			count: 1
-			path: src/Cli/Handler/SwitchBaseHandler.php
-
-		-
-			message: "#^Binary operation \"\\+\" between int\\|string and 1 results in an error\\.$#"
-			count: 4
-			path: src/Cli/Handler/UpMergeHandler.php
-
-		-
-			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\UpMergeHandler\\:\\:dryMergeAllBranches\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Cli/Handler/UpMergeHandler.php
-
-		-
-			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\UpMergeHandler\\:\\:dryMergeSingleBranch\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Cli/Handler/UpMergeHandler.php
-
-		-
-			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\UpMergeHandler\\:\\:handle\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: src/Cli/Handler/UpMergeHandler.php
-
-		-
-			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\UpMergeHandler\\:\\:handleDryMerge\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: src/Cli/Handler/UpMergeHandler.php
-
-		-
-			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\UpMergeHandler\\:\\:handleMerge\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: src/Cli/Handler/UpMergeHandler.php
-
-		-
-			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\UpMergeHandler\\:\\:mergeAllBranches\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Cli/Handler/UpMergeHandler.php
-
-		-
-			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\UpMergeHandler\\:\\:mergeSingleBranch\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Cli/Handler/UpMergeHandler.php
-
-		-
-			message: "#^Property HubKit\\\\Cli\\\\Handler\\\\UpMergeHandler\\:\\:\\$process has no type specified\\.$#"
-			count: 1
+			message: "#^Binary operation \"\\+\" between int\\|string\\|false and 1 results in an error\\.$#"
+			count: 6
 			path: src/Cli/Handler/UpMergeHandler.php
 
 		-
@@ -271,7 +121,7 @@ parameters:
 			path: src/Cli/HubKitApplicationConfig.php
 
 		-
-			message: "#^Method HubKit\\\\Config\\:\\:__construct\\(\\) has parameter \\$configuration with no value type specified in iterable type array\\.$#"
+			message: "#^Method HubKit\\\\Config\\:\\:__construct\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: src/Config.php
 
@@ -287,11 +137,6 @@ parameters:
 
 		-
 			message: "#^Method HubKit\\\\Config\\:\\:getOrFail\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: src/Config.php
-
-		-
-			message: "#^Property HubKit\\\\Config\\:\\:\\$config type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: src/Config.php
 
@@ -321,22 +166,7 @@ parameters:
 			path: src/Helper/BranchAliasResolver.php
 
 		-
-			message: "#^Property HubKit\\\\Helper\\\\BranchAliasResolver\\:\\:\\$cwd has no type specified\\.$#"
-			count: 1
-			path: src/Helper/BranchAliasResolver.php
-
-		-
-			message: "#^Property HubKit\\\\Helper\\\\BranchAliasResolver\\:\\:\\$detectedBy has no type specified\\.$#"
-			count: 1
-			path: src/Helper/BranchAliasResolver.php
-
-		-
-			message: "#^Property HubKit\\\\Helper\\\\BranchAliasResolver\\:\\:\\$git has no type specified\\.$#"
-			count: 1
-			path: src/Helper/BranchAliasResolver.php
-
-		-
-			message: "#^Property HubKit\\\\Helper\\\\BranchAliasResolver\\:\\:\\$style has no type specified\\.$#"
+			message: "#^Property HubKit\\\\Helper\\\\BranchAliasResolver\\:\\:\\$cwd \\(string\\) does not accept string\\|false\\.$#"
 			count: 1
 			path: src/Helper/BranchAliasResolver.php
 
@@ -386,21 +216,6 @@ parameters:
 			path: src/Helper/ChangelogRenderer.php
 
 		-
-			message: "#^Property HubKit\\\\Helper\\\\ChangelogRenderer\\:\\:\\$git has no type specified\\.$#"
-			count: 1
-			path: src/Helper/ChangelogRenderer.php
-
-		-
-			message: "#^Property HubKit\\\\Helper\\\\ChangelogRenderer\\:\\:\\$github has no type specified\\.$#"
-			count: 1
-			path: src/Helper/ChangelogRenderer.php
-
-		-
-			message: "#^Property HubKit\\\\Helper\\\\QuestionHelper\\:\\:\\$maxAttempts has no type specified\\.$#"
-			count: 1
-			path: src/Helper/QuestionHelper.php
-
-		-
 			message: "#^Parameter \\#1 \\$text of static method Symfony\\\\Component\\\\Console\\\\Formatter\\\\OutputFormatter\\:\\:escape\\(\\) expects string, bool\\|float\\|int\\|string given\\.$#"
 			count: 1
 			path: src/Helper/SingleLineChoiceQuestionHelper.php
@@ -411,42 +226,17 @@ parameters:
 			path: src/Helper/StatusTable.php
 
 		-
-			message: "#^Property HubKit\\\\Helper\\\\StatusTable\\:\\:\\$output has no type specified\\.$#"
+			message: "#^Property HubKit\\\\Helper\\\\StatusTable\\:\\:\\$rows type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: src/Helper/StatusTable.php
 
 		-
-			message: "#^Property HubKit\\\\Helper\\\\StatusTable\\:\\:\\$rows has no type specified\\.$#"
+			message: "#^Property HubKit\\\\Helper\\\\StatusTable\\:\\:\\$statuses type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: src/Helper/StatusTable.php
 
 		-
-			message: "#^Property HubKit\\\\Helper\\\\StatusTable\\:\\:\\$statuses has no type specified\\.$#"
-			count: 1
-			path: src/Helper/StatusTable.php
-
-		-
-			message: "#^Method HubKit\\\\Service\\\\CliProcess\\:\\:mustRun\\(\\) has parameter \\$cmd with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Service/CliProcess.php
-
-		-
-			message: "#^Method HubKit\\\\Service\\\\CliProcess\\:\\:mustRun\\(\\) has parameter \\$cmd with no value type specified in iterable type array\\|Symfony\\\\Component\\\\Process\\\\Process\\.$#"
-			count: 1
-			path: src/Service/CliProcess.php
-
-		-
-			message: "#^Method HubKit\\\\Service\\\\CliProcess\\:\\:run\\(\\) has parameter \\$cmd with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Service/CliProcess.php
-
-		-
-			message: "#^Method HubKit\\\\Service\\\\CliProcess\\:\\:run\\(\\) has parameter \\$cmd with no value type specified in iterable type array\\|Symfony\\\\Component\\\\Process\\\\Process\\.$#"
-			count: 1
-			path: src/Service/CliProcess.php
-
-		-
-			message: "#^Property HubKit\\\\Service\\\\CliProcess\\:\\:\\$output has no type specified\\.$#"
+			message: "#^Property HubKit\\\\Service\\\\CliProcess\\:\\:\\$processHelper \\(Symfony\\\\Component\\\\Console\\\\Helper\\\\ProcessHelper\\) does not accept Symfony\\\\Component\\\\Console\\\\Helper\\\\HelperInterface\\.$#"
 			count: 1
 			path: src/Service/CliProcess.php
 
@@ -466,21 +256,6 @@ parameters:
 			path: src/Service/Editor.php
 
 		-
-			message: "#^Property HubKit\\\\Service\\\\Editor\\:\\:\\$filesystem has no type specified\\.$#"
-			count: 1
-			path: src/Service/Editor.php
-
-		-
-			message: "#^Property HubKit\\\\Service\\\\Editor\\:\\:\\$process has no type specified\\.$#"
-			count: 1
-			path: src/Service/Editor.php
-
-		-
-			message: "#^Method HubKit\\\\Service\\\\Filesystem\\:\\:dumpFile\\(\\) has parameter \\$content with no type specified\\.$#"
-			count: 1
-			path: src/Service/Filesystem.php
-
-		-
 			message: "#^Method HubKit\\\\Service\\\\Filesystem\\:\\:newTempFilename\\(\\) should return string but returns string\\|false\\.$#"
 			count: 1
 			path: src/Service/Filesystem.php
@@ -496,17 +271,7 @@ parameters:
 			path: src/Service/Filesystem.php
 
 		-
-			message: "#^Property HubKit\\\\Service\\\\Filesystem\\:\\:\\$fs has no type specified\\.$#"
-			count: 1
-			path: src/Service/Filesystem.php
-
-		-
-			message: "#^Property HubKit\\\\Service\\\\Filesystem\\:\\:\\$tempFilenames has no type specified\\.$#"
-			count: 1
-			path: src/Service/Filesystem.php
-
-		-
-			message: "#^Property HubKit\\\\Service\\\\Filesystem\\:\\:\\$tempdir has no type specified\\.$#"
+			message: "#^Property HubKit\\\\Service\\\\Filesystem\\:\\:\\$tempFilenames type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: src/Service/Filesystem.php
 
@@ -522,11 +287,6 @@ parameters:
 
 		-
 			message: "#^Method HubKit\\\\Service\\\\Git\\:\\:deleteBranch\\(\\) has parameter \\$allowFailure with no type specified\\.$#"
-			count: 1
-			path: src/Service/Git.php
-
-		-
-			message: "#^Method HubKit\\\\Service\\\\Git\\:\\:ensureBranchInSync\\(\\) has parameter \\$allowPush with no type specified\\.$#"
 			count: 1
 			path: src/Service/Git.php
 
@@ -551,54 +311,24 @@ parameters:
 			path: src/Service/Git.php
 
 		-
-			message: "#^Method HubKit\\\\Service\\\\Git\\:\\:getVersionBranches\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Service/Git.php
-
-		-
 			message: "#^Method HubKit\\\\Service\\\\Git\\:\\:isWorkingTreeReady\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: src/Service/Git.php
 
 		-
-			message: "#^Method HubKit\\\\Service\\\\Git\\:\\:pushToRemote\\(\\) has parameter \\$ref with no type specified\\.$#"
+			message: "#^PHPDoc tag @return has invalid value \\(array\\<int array\\{'sha'\\: string, 'author'\\: string, 'subject'\\: string, 'message'\\: string\\}\\>\\)\\: Unexpected token \"array\", expected '\\>' at offset 640$#"
 			count: 1
 			path: src/Service/Git.php
 
 		-
-			message: "#^Method HubKit\\\\Service\\\\Git\\:\\:setGitConfig\\(\\) has parameter \\$value with no type specified\\.$#"
-			count: 1
+			message: "#^Parameter \\#1 \\$cmd of method HubKit\\\\Service\\\\CliProcess\\:\\:mustRun\\(\\) expects array\\<int, string\\>\\|Symfony\\\\Component\\\\Process\\\\Process, array\\<int, int\\|string\\> given\\.$#"
+			count: 2
 			path: src/Service/Git.php
 
 		-
 			message: "#^Parameter \\#2 \\$subject of function preg_match expects string, string\\|null given\\.$#"
 			count: 1
 			path: src/Service/Git.php
-
-		-
-			message: "#^Property HubKit\\\\Service\\\\Git\\:\\:\\$filesystem has no type specified\\.$#"
-			count: 1
-			path: src/Service/Git.php
-
-		-
-			message: "#^Property HubKit\\\\Service\\\\Git\\:\\:\\$gitDir has no type specified\\.$#"
-			count: 1
-			path: src/Service/Git.php
-
-		-
-			message: "#^Property HubKit\\\\Service\\\\Git\\:\\:\\$process has no type specified\\.$#"
-			count: 1
-			path: src/Service/Git.php
-
-		-
-			message: "#^Property HubKit\\\\Service\\\\Git\\:\\:\\$style has no type specified\\.$#"
-			count: 1
-			path: src/Service/Git.php
-
-		-
-			message: "#^Property HubKit\\\\Service\\\\Git\\\\GitBase\\:\\:\\$cwd has no type specified\\.$#"
-			count: 1
-			path: src/Service/Git/GitBase.php
 
 		-
 			message: "#^Variable \\$cwd on left side of \\?\\? always exists and is not nullable\\.$#"
@@ -611,13 +341,38 @@ parameters:
 			path: src/Service/Git/GitConfig.php
 
 		-
-			message: "#^PHPDoc tag @param for parameter \\$branch with type array\\<int, string\\>\\|string is not subtype of native type string\\.$#"
-			count: 1
-			path: src/Service/Git/GitFileReader.php
-
-		-
 			message: "#^Cannot assign offset 'labels' to array\\|string\\.$#"
 			count: 1
+			path: src/Service/GitHub.php
+
+		-
+			message: "#^Cannot call method currentUser\\(\\) on Github\\\\Client\\|null\\.$#"
+			count: 1
+			path: src/Service/GitHub.php
+
+		-
+			message: "#^Cannot call method graphql\\(\\) on Github\\\\Client\\|null\\.$#"
+			count: 1
+			path: src/Service/GitHub.php
+
+		-
+			message: "#^Cannot call method issue\\(\\) on Github\\\\Client\\|null\\.$#"
+			count: 5
+			path: src/Service/GitHub.php
+
+		-
+			message: "#^Cannot call method issues\\(\\) on Github\\\\Client\\|null\\.$#"
+			count: 1
+			path: src/Service/GitHub.php
+
+		-
+			message: "#^Cannot call method pullRequest\\(\\) on Github\\\\Client\\|null\\.$#"
+			count: 4
+			path: src/Service/GitHub.php
+
+		-
+			message: "#^Cannot call method repo\\(\\) on Github\\\\Client\\|null\\.$#"
+			count: 7
 			path: src/Service/GitHub.php
 
 		-
@@ -716,69 +471,29 @@ parameters:
 			path: src/Service/GitHub.php
 
 		-
-			message: "#^Property HubKit\\\\Service\\\\GitHub\\:\\:\\$config has no type specified\\.$#"
-			count: 1
+			message: "#^Parameter \\#1 \\$client of class Github\\\\ResultPager constructor expects Github\\\\Client, Github\\\\Client\\|null given\\.$#"
+			count: 5
 			path: src/Service/GitHub.php
 
 		-
-			message: "#^Property HubKit\\\\Service\\\\GitHub\\:\\:\\$hostname has no type specified\\.$#"
-			count: 1
-			path: src/Service/GitHub.php
-
-		-
-			message: "#^Property HubKit\\\\Service\\\\GitHub\\:\\:\\$httpClient has no type specified\\.$#"
-			count: 1
-			path: src/Service/GitHub.php
-
-		-
-			message: "#^Property HubKit\\\\Service\\\\GitHub\\:\\:\\$organization has no type specified\\.$#"
-			count: 1
-			path: src/Service/GitHub.php
-
-		-
-			message: "#^Property HubKit\\\\Service\\\\GitHub\\:\\:\\$repository has no type specified\\.$#"
-			count: 1
-			path: src/Service/GitHub.php
-
-		-
-			message: "#^Property HubKit\\\\Service\\\\GitHub\\:\\:\\$username has no type specified\\.$#"
-			count: 1
-			path: src/Service/GitHub.php
-
-		-
-			message: "#^Method HubKit\\\\Service\\\\MessageValidator\\:\\:validateCommitsMessages\\(\\) has parameter \\$commits with no value type specified in iterable type array\\.$#"
+			message: "#^Method HubKit\\\\Service\\\\MessageValidator\\:\\:validateMessage\\(\\) should return array\\{string, string, string\\}\\|null but returns array\\{3, 'Unrelated commits…', string\\}\\.$#"
 			count: 1
 			path: src/Service/MessageValidator.php
 
 		-
-			message: "#^Method HubKit\\\\Service\\\\MessageValidator\\:\\:validateCommitsMessages\\(\\) return type has no value type specified in iterable type array\\.$#"
+			message: "#^Method HubKit\\\\Service\\\\MessageValidator\\:\\:validateMessage\\(\\) should return array\\{string, string, string\\}\\|null but returns array\\{5, 'Description…', string\\}\\.$#"
 			count: 1
 			path: src/Service/MessageValidator.php
 
 		-
-			message: "#^Method HubKit\\\\Service\\\\MessageValidator\\:\\:validateMessage\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Service/MessageValidator.php
-
-		-
-			message: "#^Property HubKit\\\\Service\\\\ReleaseHooks\\:\\:\\$container has no type specified\\.$#"
+			message: "#^PHPDoc tag @var for property HubKit\\\\Service\\\\ReleaseHooks\\:\\:\\$cwd with type string\\|null is not subtype of native type bool\\|string\\.$#"
 			count: 1
 			path: src/Service/ReleaseHooks.php
 
 		-
-			message: "#^Property HubKit\\\\Service\\\\ReleaseHooks\\:\\:\\$cwd \\(string\\|null\\) does not accept string\\|false\\.$#"
+			message: "#^Parameter \\#1 \\$cmd of method HubKit\\\\Service\\\\CliProcess\\:\\:mustRun\\(\\) expects array\\<int, string\\>\\|Symfony\\\\Component\\\\Process\\\\Process, array\\<int, string\\|null\\> given\\.$#"
 			count: 1
-			path: src/Service/ReleaseHooks.php
-
-		-
-			message: "#^Property HubKit\\\\Service\\\\ReleaseHooks\\:\\:\\$git has no type specified\\.$#"
-			count: 1
-			path: src/Service/ReleaseHooks.php
-
-		-
-			message: "#^Property HubKit\\\\Service\\\\ReleaseHooks\\:\\:\\$logger has no type specified\\.$#"
-			count: 1
-			path: src/Service/ReleaseHooks.php
+			path: src/Service/SplitshGit.php
 
 		-
 			message: "#^Method HubKit\\\\StringUtil\\:\\:splitLines\\(\\) should return array\\<string\\> but returns array\\<int, string\\>\\|false\\.$#"
@@ -876,17 +591,7 @@ parameters:
 			path: tests/Functional/Service/Git/GitBaseTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitBaseTest\\:\\:givenRemoteBranchesExist\\(\\) has parameter \\$branches with no value type specified in iterable type iterable\\.$#"
-			count: 1
-			path: tests/Functional/Service/Git/GitBaseTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: tests/Functional/Service/Git/GitBaseTest.php
-
-		-
-			message: "#^Property HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitBaseTest\\:\\:\\$cliOutput \\(Symfony\\\\Component\\\\Console\\\\Output\\\\BufferedOutput\\|null\\) does not accept Symfony\\\\Component\\\\Console\\\\Output\\\\BufferedOutput\\|Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput\\.$#"
 			count: 1
 			path: tests/Functional/Service/Git/GitBaseTest.php
 
@@ -906,17 +611,7 @@ parameters:
 			path: tests/Functional/Service/Git/GitBranchTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitBranchTest\\:\\:givenRemoteBranchesExist\\(\\) has parameter \\$branches with no value type specified in iterable type iterable\\.$#"
-			count: 1
-			path: tests/Functional/Service/Git/GitBranchTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: tests/Functional/Service/Git/GitBranchTest.php
-
-		-
-			message: "#^Property HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitBranchTest\\:\\:\\$cliOutput \\(Symfony\\\\Component\\\\Console\\\\Output\\\\BufferedOutput\\|null\\) does not accept Symfony\\\\Component\\\\Console\\\\Output\\\\BufferedOutput\\|Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput\\.$#"
 			count: 1
 			path: tests/Functional/Service/Git/GitBranchTest.php
 
@@ -936,11 +631,6 @@ parameters:
 			path: tests/Functional/Service/Git/GitConfigTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitConfigTest\\:\\:givenRemoteBranchesExist\\(\\) has parameter \\$branches with no value type specified in iterable type iterable\\.$#"
-			count: 1
-			path: tests/Functional/Service/Git/GitConfigTest.php
-
-		-
 			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitConfigTest\\:\\:provideGitUrls\\(\\) return type has no value type specified in iterable type iterable\\.$#"
 			count: 1
 			path: tests/Functional/Service/Git/GitConfigTest.php
@@ -951,23 +641,23 @@ parameters:
 			path: tests/Functional/Service/Git/GitConfigTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitConfigTest\\:\\:\\$cliOutput \\(Symfony\\\\Component\\\\Console\\\\Output\\\\BufferedOutput\\|null\\) does not accept Symfony\\\\Component\\\\Console\\\\Output\\\\BufferedOutput\\|Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput\\.$#"
-			count: 1
-			path: tests/Functional/Service/Git/GitConfigTest.php
-
-		-
 			message: "#^Property HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitConfigTest\\:\\:\\$cwd has no type specified\\.$#"
 			count: 1
 			path: tests/Functional/Service/Git/GitConfigTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitConfigTest\\:\\:\\$style \\(Symfony\\\\Component\\\\Console\\\\Style\\\\StyleInterface\\) does not accept Prophecy\\\\Prophecy\\\\ObjectProphecy\\<Symfony\\\\Component\\\\Console\\\\Style\\\\StyleInterface\\>\\.$#"
+			message: "#^Property HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitConfigTest\\:\\:\\$style with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
 			count: 1
 			path: tests/Functional/Service/Git/GitConfigTest.php
 
 		-
 			message: "#^Access to an undefined property HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitFileReaderTest\\:\\:\\$localRepository\\.$#"
 			count: 3
+			path: tests/Functional/Service/Git/GitFileReaderTest.php
+
+		-
+			message: "#^Class HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitFileReaderTest has an uninitialized readonly property \\$style\\. Assign it in the constructor\\.$#"
+			count: 1
 			path: tests/Functional/Service/Git/GitFileReaderTest.php
 
 		-
@@ -1021,11 +711,6 @@ parameters:
 			path: tests/Functional/Service/Git/GitFileReaderTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitFileReaderTest\\:\\:givenRemoteBranchesExist\\(\\) has parameter \\$branches with no value type specified in iterable type iterable\\.$#"
-			count: 1
-			path: tests/Functional/Service/Git/GitFileReaderTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$directory of function chdir expects string, string\\|null given\\.$#"
 			count: 1
 			path: tests/Functional/Service/Git/GitFileReaderTest.php
@@ -1061,11 +746,6 @@ parameters:
 			path: tests/Functional/Service/Git/GitFileReaderTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitFileReaderTest\\:\\:\\$cliOutput \\(Symfony\\\\Component\\\\Console\\\\Output\\\\BufferedOutput\\|null\\) does not accept Symfony\\\\Component\\\\Console\\\\Output\\\\BufferedOutput\\|Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput\\.$#"
-			count: 1
-			path: tests/Functional/Service/Git/GitFileReaderTest.php
-
-		-
 			message: "#^Property HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitFileReaderTest\\:\\:\\$cwd has no type specified\\.$#"
 			count: 1
 			path: tests/Functional/Service/Git/GitFileReaderTest.php
@@ -1086,32 +766,7 @@ parameters:
 			path: tests/Functional/Service/Git/GitFileReaderTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\TestCliProcess\\:\\:mustRun\\(\\) has parameter \\$cmd with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/TestCliProcess.php
-
-		-
-			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\TestCliProcess\\:\\:mustRun\\(\\) has parameter \\$cmd with no value type specified in iterable type array\\|Symfony\\\\Component\\\\Process\\\\Process\\.$#"
-			count: 1
-			path: tests/Functional/TestCliProcess.php
-
-		-
-			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\TestCliProcess\\:\\:run\\(\\) has parameter \\$cmd with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/TestCliProcess.php
-
-		-
-			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\TestCliProcess\\:\\:run\\(\\) has parameter \\$cmd with no value type specified in iterable type array\\|Symfony\\\\Component\\\\Process\\\\Process\\.$#"
-			count: 1
-			path: tests/Functional/TestCliProcess.php
-
-		-
-			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\TestCliProcess\\:\\:wrapProcessorForCmd\\(\\) has parameter \\$cmd with no type specified\\.$#"
-			count: 1
-			path: tests/Functional/TestCliProcess.php
-
-		-
-			message: "#^Property HubKit\\\\Tests\\\\Functional\\\\TestCliProcess\\:\\:\\$cwd has no type specified\\.$#"
+			message: "#^Parameter \\#1 \\$cwd of method Symfony\\\\Component\\\\Process\\\\Process\\:\\:setWorkingDirectory\\(\\) expects string, string\\|null given\\.$#"
 			count: 1
 			path: tests/Functional/TestCliProcess.php
 
@@ -1271,12 +926,22 @@ parameters:
 			path: tests/Handler/MergeHandlerTest.php
 
 		-
-			message: "#^Parameter \\#4 \\$aliasResolver of class HubKit\\\\Cli\\\\Handler\\\\MergeHandler constructor expects HubKit\\\\Helper\\\\BranchAliasResolver, object given\\.$#"
+			message: "#^Parameter \\#5 \\$aliasResolver of class HubKit\\\\Cli\\\\Handler\\\\MergeHandler constructor expects HubKit\\\\Helper\\\\BranchAliasResolver, object given\\.$#"
+			count: 1
+			path: tests/Handler/MergeHandlerTest.php
+
+		-
+			message: "#^Parameter \\#7 \\$branchSplitsh of class HubKit\\\\Cli\\\\Handler\\\\MergeHandler constructor expects HubKit\\\\Service\\\\BranchSplitsh, object given\\.$#"
 			count: 1
 			path: tests/Handler/MergeHandlerTest.php
 
 		-
 			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\MergeHandlerTest\\:\\:\\$aliasResolver with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
+			count: 1
+			path: tests/Handler/MergeHandlerTest.php
+
+		-
+			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\MergeHandlerTest\\:\\:\\$branchSplitsh with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
 			count: 1
 			path: tests/Handler/MergeHandlerTest.php
 
@@ -1386,12 +1051,27 @@ parameters:
 			path: tests/Handler/ReleaseHandlerTest.php
 
 		-
-			message: "#^Parameter \\#4 \\$process of class HubKit\\\\Cli\\\\Handler\\\\ReleaseHandler constructor expects HubKit\\\\Service\\\\CliProcess, object given\\.$#"
+			message: "#^Parameter \\#5 \\$process of class HubKit\\\\Cli\\\\Handler\\\\ReleaseHandler constructor expects HubKit\\\\Service\\\\CliProcess, object given\\.$#"
 			count: 1
 			path: tests/Handler/ReleaseHandlerTest.php
 
 		-
-			message: "#^Parameter \\#5 \\$editor of class HubKit\\\\Cli\\\\Handler\\\\ReleaseHandler constructor expects HubKit\\\\Service\\\\Editor, object given\\.$#"
+			message: "#^Parameter \\#6 \\$editor of class HubKit\\\\Cli\\\\Handler\\\\ReleaseHandler constructor expects HubKit\\\\Service\\\\Editor, object given\\.$#"
+			count: 1
+			path: tests/Handler/ReleaseHandlerTest.php
+
+		-
+			message: "#^Parameter \\#7 \\$branchSplitsh of class HubKit\\\\Cli\\\\Handler\\\\ReleaseHandler constructor expects HubKit\\\\Service\\\\BranchSplitsh, object given\\.$#"
+			count: 1
+			path: tests/Handler/ReleaseHandlerTest.php
+
+		-
+			message: "#^Parameter \\#8 \\$releaseHooks of class HubKit\\\\Cli\\\\Handler\\\\ReleaseHandler constructor expects HubKit\\\\Service\\\\ReleaseHooks, object given\\.$#"
+			count: 1
+			path: tests/Handler/ReleaseHandlerTest.php
+
+		-
+			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\ReleaseHandlerTest\\:\\:\\$branchSplitsh with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
 			count: 1
 			path: tests/Handler/ReleaseHandlerTest.php
 
@@ -1417,6 +1097,11 @@ parameters:
 
 		-
 			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\ReleaseHandlerTest\\:\\:\\$process with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
+			count: 1
+			path: tests/Handler/ReleaseHandlerTest.php
+
+		-
+			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\ReleaseHandlerTest\\:\\:\\$releaseHooks with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
 			count: 1
 			path: tests/Handler/ReleaseHandlerTest.php
 
@@ -1486,21 +1171,6 @@ parameters:
 			path: tests/Handler/SplitRepoHandlerTest.php
 
 		-
-			message: "#^PHPDoc tag @var for property HubKit\\\\Tests\\\\Handler\\\\SplitRepoHandlerTest\\:\\:\\$git contains unresolvable type\\.$#"
-			count: 1
-			path: tests/Handler/SplitRepoHandlerTest.php
-
-		-
-			message: "#^PHPDoc tag @var for property HubKit\\\\Tests\\\\Handler\\\\SplitRepoHandlerTest\\:\\:\\$github contains unresolvable type\\.$#"
-			count: 1
-			path: tests/Handler/SplitRepoHandlerTest.php
-
-		-
-			message: "#^PHPDoc tag @var for property HubKit\\\\Tests\\\\Handler\\\\SplitRepoHandlerTest\\:\\:\\$splitshGit contains unresolvable type\\.$#"
-			count: 1
-			path: tests/Handler/SplitRepoHandlerTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
 			count: 1
 			path: tests/Handler/SplitRepoHandlerTest.php
@@ -1516,6 +1186,11 @@ parameters:
 			path: tests/Handler/SplitRepoHandlerTest.php
 
 		-
+			message: "#^Parameter \\#2 \\$git of class HubKit\\\\Cli\\\\Handler\\\\SplitRepoHandler constructor expects HubKit\\\\Service\\\\Git, object given\\.$#"
+			count: 1
+			path: tests/Handler/SplitRepoHandlerTest.php
+
+		-
 			message: "#^Parameter \\#2 \\$string of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertDoesNotMatchRegularExpression\\(\\) expects string, string\\|null given\\.$#"
 			count: 1
 			path: tests/Handler/SplitRepoHandlerTest.php
@@ -1526,12 +1201,37 @@ parameters:
 			path: tests/Handler/SplitRepoHandlerTest.php
 
 		-
+			message: "#^Parameter \\#3 \\$github of class HubKit\\\\Cli\\\\Handler\\\\SplitRepoHandler constructor expects HubKit\\\\Service\\\\GitHub, object given\\.$#"
+			count: 1
+			path: tests/Handler/SplitRepoHandlerTest.php
+
+		-
 			message: "#^Parameter \\#3 \\$subject of function str_replace expects array\\|string, string\\|false given\\.$#"
 			count: 1
 			path: tests/Handler/SplitRepoHandlerTest.php
 
 		-
+			message: "#^Parameter \\#5 \\$branchSplitsh of class HubKit\\\\Cli\\\\Handler\\\\SplitRepoHandler constructor expects HubKit\\\\Service\\\\BranchSplitsh, object given\\.$#"
+			count: 1
+			path: tests/Handler/SplitRepoHandlerTest.php
+
+		-
+			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\SplitRepoHandlerTest\\:\\:\\$git with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
+			count: 1
+			path: tests/Handler/SplitRepoHandlerTest.php
+
+		-
+			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\SplitRepoHandlerTest\\:\\:\\$github with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
+			count: 1
+			path: tests/Handler/SplitRepoHandlerTest.php
+
+		-
 			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\SplitRepoHandlerTest\\:\\:\\$output \\(Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput\\) does not accept Symfony\\\\Component\\\\Console\\\\Output\\\\OutputInterface\\.$#"
+			count: 1
+			path: tests/Handler/SplitRepoHandlerTest.php
+
+		-
+			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\SplitRepoHandlerTest\\:\\:\\$splitshGit with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
 			count: 1
 			path: tests/Handler/SplitRepoHandlerTest.php
 
@@ -1616,7 +1316,17 @@ parameters:
 			path: tests/Handler/UpMergeHandlerTest.php
 
 		-
-			message: "#^Parameter \\#4 \\$process of class HubKit\\\\Cli\\\\Handler\\\\UpMergeHandler constructor expects HubKit\\\\Service\\\\CliProcess, object given\\.$#"
+			message: "#^Parameter \\#5 \\$process of class HubKit\\\\Cli\\\\Handler\\\\UpMergeHandler constructor expects HubKit\\\\Service\\\\CliProcess, object given\\.$#"
+			count: 1
+			path: tests/Handler/UpMergeHandlerTest.php
+
+		-
+			message: "#^Parameter \\#6 \\$branchSplitsh of class HubKit\\\\Cli\\\\Handler\\\\UpMergeHandler constructor expects HubKit\\\\Service\\\\BranchSplitsh, object given\\.$#"
+			count: 1
+			path: tests/Handler/UpMergeHandlerTest.php
+
+		-
+			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\UpMergeHandlerTest\\:\\:\\$branchSplitsh with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
 			count: 1
 			path: tests/Handler/UpMergeHandlerTest.php
 
@@ -1701,17 +1411,7 @@ parameters:
 			path: tests/Service/BranchSplitshTest.php
 
 		-
-			message: "#^PHPDoc tag @var for property HubKit\\\\Tests\\\\Service\\\\BranchSplitshTest\\:\\:\\$git contains unresolvable type\\.$#"
-			count: 1
-			path: tests/Service/BranchSplitshTest.php
-
-		-
-			message: "#^PHPDoc tag @var for property HubKit\\\\Tests\\\\Service\\\\BranchSplitshTest\\:\\:\\$github contains unresolvable type\\.$#"
-			count: 1
-			path: tests/Service/BranchSplitshTest.php
-
-		-
-			message: "#^PHPDoc tag @var for property HubKit\\\\Tests\\\\Service\\\\BranchSplitshTest\\:\\:\\$splitshGit contains unresolvable type\\.$#"
+			message: "#^Parameter \\#1 \\$splitshGit of class HubKit\\\\Service\\\\BranchSplitsh constructor expects HubKit\\\\Service\\\\SplitshGit, object given\\.$#"
 			count: 1
 			path: tests/Service/BranchSplitshTest.php
 
@@ -1731,6 +1431,11 @@ parameters:
 			path: tests/Service/BranchSplitshTest.php
 
 		-
+			message: "#^Parameter \\#2 \\$github of class HubKit\\\\Service\\\\BranchSplitsh constructor expects HubKit\\\\Service\\\\GitHub, object given\\.$#"
+			count: 1
+			path: tests/Service/BranchSplitshTest.php
+
+		-
 			message: "#^Parameter \\#2 \\$string of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertDoesNotMatchRegularExpression\\(\\) expects string, string\\|null given\\.$#"
 			count: 1
 			path: tests/Service/BranchSplitshTest.php
@@ -1746,7 +1451,27 @@ parameters:
 			path: tests/Service/BranchSplitshTest.php
 
 		-
+			message: "#^Parameter \\#5 \\$git of class HubKit\\\\Service\\\\BranchSplitsh constructor expects HubKit\\\\Service\\\\Git, object given\\.$#"
+			count: 1
+			path: tests/Service/BranchSplitshTest.php
+
+		-
+			message: "#^Property HubKit\\\\Tests\\\\Service\\\\BranchSplitshTest\\:\\:\\$git with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
+			count: 1
+			path: tests/Service/BranchSplitshTest.php
+
+		-
+			message: "#^Property HubKit\\\\Tests\\\\Service\\\\BranchSplitshTest\\:\\:\\$github with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
+			count: 1
+			path: tests/Service/BranchSplitshTest.php
+
+		-
 			message: "#^Property HubKit\\\\Tests\\\\Service\\\\BranchSplitshTest\\:\\:\\$output \\(Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput\\) does not accept Symfony\\\\Component\\\\Console\\\\Output\\\\OutputInterface\\.$#"
+			count: 1
+			path: tests/Service/BranchSplitshTest.php
+
+		-
+			message: "#^Property HubKit\\\\Tests\\\\Service\\\\BranchSplitshTest\\:\\:\\$splitshGit with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
 			count: 1
 			path: tests/Service/BranchSplitshTest.php
 
@@ -1886,23 +1611,18 @@ parameters:
 			path: tests/Unit/Service/EditorTest.php
 
 		-
-			message: "#^Access to an undefined property object\\:\\:\\$diffStatusCall\\.$#"
+			message: "#^Access to an undefined property HubKit\\\\Service\\\\Git\\\\GitBranch\\:\\:\\$diffStatusCall\\.$#"
 			count: 3
 			path: tests/Unit/Service/Git/GitBranchTest.php
 
 		-
-			message: "#^Access to an undefined property object\\:\\:\\$pullCall\\.$#"
+			message: "#^Access to an undefined property HubKit\\\\Service\\\\Git\\\\GitBranch\\:\\:\\$pullCall\\.$#"
 			count: 3
 			path: tests/Unit/Service/Git/GitBranchTest.php
 
 		-
-			message: "#^Access to an undefined property object\\:\\:\\$pushCall\\.$#"
+			message: "#^Access to an undefined property HubKit\\\\Service\\\\Git\\\\GitBranch\\:\\:\\$pushCall\\.$#"
 			count: 3
-			path: tests/Unit/Service/Git/GitBranchTest.php
-
-		-
-			message: "#^Call to an undefined method object\\:\\:ensureBranchInSync\\(\\)\\.$#"
-			count: 5
 			path: tests/Unit/Service/Git/GitBranchTest.php
 
 		-
@@ -1926,26 +1646,16 @@ parameters:
 			path: tests/Unit/Service/Git/GitBranchTest.php
 
 		-
-			message: "#^Method class@anonymous/tests/Unit/Service/Git/GitBranchTest\\.php\\:143\\:\\:pushToRemote\\(\\) has parameter \\$ref with no type specified\\.$#"
+			message: "#^Property class@anonymous/tests/Unit/Service/Git/GitBranchTest\\.php\\:140\\:\\:\\$diffStatusCall type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Unit/Service/Git/GitBranchTest.php
 
 		-
-			message: "#^Property class@anonymous/tests/Unit/Service/Git/GitBranchTest\\.php\\:143\\:\\:\\$diffStatus has no type specified\\.$#"
+			message: "#^Property class@anonymous/tests/Unit/Service/Git/GitBranchTest\\.php\\:140\\:\\:\\$pullCall type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Unit/Service/Git/GitBranchTest.php
 
 		-
-			message: "#^Property class@anonymous/tests/Unit/Service/Git/GitBranchTest\\.php\\:143\\:\\:\\$diffStatusCall has no type specified\\.$#"
-			count: 1
-			path: tests/Unit/Service/Git/GitBranchTest.php
-
-		-
-			message: "#^Property class@anonymous/tests/Unit/Service/Git/GitBranchTest\\.php\\:143\\:\\:\\$pullCall has no type specified\\.$#"
-			count: 1
-			path: tests/Unit/Service/Git/GitBranchTest.php
-
-		-
-			message: "#^Property class@anonymous/tests/Unit/Service/Git/GitBranchTest\\.php\\:143\\:\\:\\$pushCall has no type specified\\.$#"
+			message: "#^Property class@anonymous/tests/Unit/Service/Git/GitBranchTest\\.php\\:140\\:\\:\\$pushCall type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Unit/Service/Git/GitBranchTest.php

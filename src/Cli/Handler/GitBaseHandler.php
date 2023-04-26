@@ -21,15 +21,12 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 abstract class GitBaseHandler implements RequiresGitRepository
 {
-    protected $style;
-    protected $git;
-    protected $github;
-
-    public function __construct(SymfonyStyle $style, Git $git, GitHub $github, protected Config $config)
-    {
-        $this->style = $style;
-        $this->git = $git;
-        $this->github = $github;
+    public function __construct(
+        protected SymfonyStyle $style,
+        protected Git $git,
+        protected GitHub $github,
+        protected Config $config
+    ) {
     }
 
     protected function informationHeader(string $branch = null): void

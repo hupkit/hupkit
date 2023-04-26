@@ -19,13 +19,10 @@ use HubKit\StringUtil;
 
 class ChangelogRenderer
 {
-    private $git;
-    private $github;
-
-    public function __construct(Git $git, GitHub $github)
-    {
-        $this->git = $git;
-        $this->github = $github;
+    public function __construct(
+        private readonly Git $git,
+        private readonly GitHub $github
+    ) {
     }
 
     public function renderChangelogOneLine(string $base, string $head): string

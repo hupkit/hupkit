@@ -23,12 +23,14 @@ use Webmozart\Console\Api\Args\Args;
 
 final class SwitchBaseHandler extends GitBaseHandler
 {
-    private $process;
-
-    public function __construct(SymfonyStyle $style, Git $git, CliProcess $process, GitHub $github, Config $config)
-    {
+    public function __construct(
+        SymfonyStyle $style,
+        Git $git,
+        GitHub $github,
+        Config $config,
+        private readonly CliProcess $process
+    ) {
         parent::__construct($style, $git, $github, $config);
-        $this->process = $process;
     }
 
     public function handle(Args $args): void
@@ -193,6 +195,9 @@ final class SwitchBaseHandler extends GitBaseHandler
         }
     }
 
+    /**
+     * @param array<string, mixed> $pullRequest
+     */
     private function postHelpComment(array $pullRequest, string $branch): void
     {
         if ($pullRequest['user']['login'] === $this->github->getAuthUsername()) {

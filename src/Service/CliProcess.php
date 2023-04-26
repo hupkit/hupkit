@@ -22,17 +22,12 @@ use Symfony\Component\Process\Process;
 
 class CliProcess
 {
-    /**
-     * @var ProcessHelper
-     */
-    private $processHelper;
-    private $output;
+    private readonly ProcessHelper $processHelper;
 
-    public function __construct(OutputInterface $output)
+    public function __construct(private readonly OutputInterface $output)
     {
         $helperSet = new HelperSet([new DebugFormatterHelper(), new ProcessHelper()]);
         $this->processHelper = $helperSet->get('process');
-        $this->output = $output;
     }
 
     /**
@@ -53,11 +48,11 @@ class CliProcess
     /**
      * Runs an external process.
      *
-     * @param array|Process $cmd       An instance of Process or an array of arguments to escape and run or a command to run
-     * @param string|null   $error     An error message that must be displayed if something went wrong
-     * @param callable|null $callback  A PHP callback to run whenever there is some
-     *                                 output available on STDOUT or STDERR
-     * @param int           $verbosity The threshold for verbosity
+     * @param array<int, string>|Process $cmd       An instance of Process or an array of arguments to escape and run or a command to run
+     * @param string|null                $error     An error message that must be displayed if something went wrong
+     * @param callable|null              $callback  A PHP callback to run whenever there is some
+     *                                              output available on STDOUT or STDERR
+     * @param int                        $verbosity The threshold for verbosity
      *
      * @return Process The process that ran
      */
@@ -72,10 +67,10 @@ class CliProcess
      * This is identical to run() except that an exception is thrown if the process
      * exits with a non-zero exit code.
      *
-     * @param array|Process $cmd      An instance of Process or an array of arguments to escape and run or a command to run
-     * @param string|null   $error    An error message that must be displayed if something went wrong
-     * @param callable|null $callback A PHP callback to run whenever there is some
-     *                                output available on STDOUT or STDERR
+     * @param array<int, string>|Process $cmd      An instance of Process or an array of arguments to escape and run or a command to run
+     * @param string|null                $error    An error message that must be displayed if something went wrong
+     * @param callable|null              $callback A PHP callback to run whenever there is some
+     *                                             output available on STDOUT or STDERR
      *
      * @return Process The process that ran
      *
@@ -83,7 +78,7 @@ class CliProcess
      *
      * @see run()
      */
-    public function mustRun(array | Process $cmd, string $error = null, callable $callback = null): Process
+    public function mustRun(array | Process $cmd, ?string $error = null, callable $callback = null): Process
     {
         return $this->processHelper->mustRun($this->output, $cmd, $error, $callback);
     }

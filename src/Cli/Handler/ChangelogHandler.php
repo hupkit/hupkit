@@ -23,7 +23,7 @@ use Webmozart\Console\Api\IO\IO;
 
 final class ChangelogHandler extends GitBaseHandler
 {
-    private $renderer;
+    private readonly ChangelogRenderer $renderer;
 
     public function __construct(SymfonyStyle $style, Git $git, GitHub $github, Config $config)
     {

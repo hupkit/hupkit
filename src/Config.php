@@ -15,13 +15,11 @@ namespace HubKit;
 
 final class Config
 {
-    private array $config;
     public ?string $activeHost = null;
     public ?string $activeRepository = null;
 
-    public function __construct(array $configuration)
+    public function __construct(private readonly array $config)
     {
-        $this->config = $configuration;
     }
 
     public function setActiveRepository(?string $host, ?string $repository): void
@@ -35,7 +33,7 @@ final class Config
      *                                 like ['profiles', 'symfony-bundle']
      * @param mixed           $default Default value to use when no config is found (null)
      */
-    public function get($keys, $default = null)
+    public function get(string | array $keys, mixed $default = null)
     {
         $keys = (array) $keys;
 
@@ -62,7 +60,7 @@ final class Config
      * @param string|string[] $keys Single level key like 'profiles' or array-path
      *                              like ['profiles', 'symfony-bundle']
      */
-    public function getOrFail($keys)
+    public function getOrFail(string | array $keys)
     {
         $keys = (array) $keys;
         $value = $this->get($keys, $invalid = new \stdClass());
@@ -81,7 +79,7 @@ final class Config
      *                                             like ['profiles', 'symfony-bundle'] to check
      * @param mixed                       $default Default value to use when no config is found (null)
      */
-    public function getFirstNotNull(array $keys, $default = null)
+    public function getFirstNotNull(array $keys, mixed $default = null)
     {
         foreach ($keys as $key) {
             $value = $this->get($key);
@@ -100,7 +98,7 @@ final class Config
      * @param string|string[] $keys Single level key like "profiles" or array-path
      *                              like ['profiles', 'symfony-bundle']
      */
-    public function has($keys): bool
+    public function has(string | array $keys): bool
     {
         $keys = (array) $keys;
 
@@ -142,7 +140,14 @@ final class Config
         $repoConfig = $this->getForRepository($host, $repository, $isLocal);
         $configPath = $isLocal ? ['_local', 'branches'] : ['repositories', $host, 'repos', $repository, 'branches'];
 
+        /**
+         * @var array<string, array<string, mixed>> $branches
+         */
         $branches = $repoConfig['branches'];
+
+        /**
+         * @var array<string, array<string, mixed>> $default
+         */
         $default = $branches[':default'] ?? [];
 
         if (isset($branches['#' . $branchName]) && str_ends_with($branchName, '.x')) {

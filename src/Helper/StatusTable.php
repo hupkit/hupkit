@@ -30,15 +30,13 @@ class StatusTable
         'action_required' => '<fg=red>Action required</>',
     ];
 
-    public const STATUS_PENDING = 'pending';
+    final public const STATUS_PENDING = 'pending';
 
-    private $output;
-    private $rows = [];
-    private $statuses = [];
+    private array $rows = [];
+    private array $statuses = [];
 
-    public function __construct(OutputInterface $output)
+    public function __construct(private readonly OutputInterface $output)
     {
-        $this->output = $output;
     }
 
     public function render(): void
@@ -81,9 +79,9 @@ class StatusTable
 
     public function hasFailureStatus(): bool
     {
-        $statusses = ['error', 'pending', 'failure', 'action_required', 'timed_out'];
+        $statuses = ['error', 'pending', 'failure', 'action_required', 'timed_out'];
 
-        foreach ($statusses as $status) {
+        foreach ($statuses as $status) {
             if ($this->hasStatus($status)) {
                 return true;
             }

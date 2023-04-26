@@ -169,10 +169,10 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
             ->setHandler(function () {
                 return new Handler\SplitRepoHandler(
                     $this->container['style'],
-                    $this->container['branch_splitsh_git'],
                     $this->container['git'],
                     $this->container['github'],
-                    $this->container['config']
+                    $this->container['config'],
+                    $this->container['branch_splitsh_git']
                 );
             })
             ->end()
@@ -198,9 +198,9 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
                 return new Handler\CheckoutHandler(
                     $this->container['style'],
                     $this->container['git'],
-                    $this->container['process'],
                     $this->container['github'],
-                    $this->container['config']
+                    $this->container['config'],
+                    $this->container['process']
                 );
             })
             ->end()
@@ -248,9 +248,9 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
                     $this->container['style'],
                     $this->container['git'],
                     $this->container['github'],
+                    $this->container['config'],
                     new BranchAliasResolver($this->container['style'], $this->container['git'], getcwd()),
                     new SingleLineChoiceQuestionHelper(),
-                    $this->container['config'],
                     $this->container['branch_splitsh_git']
                 );
             })
@@ -265,9 +265,9 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
                 return new Handler\SwitchBaseHandler(
                     $this->container['style'],
                     $this->container['git'],
-                    $this->container['process'],
                     $this->container['github'],
-                    $this->container['config']
+                    $this->container['config'],
+                    $this->container['process']
                 );
             })
             ->end()
@@ -308,8 +308,8 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
                     $this->container['style'],
                     $this->container['git'],
                     $this->container['github'],
-                    $this->container['process'],
                     $this->container['config'],
+                    $this->container['process'],
                     $this->container['branch_splitsh_git']
                 );
             })
@@ -327,9 +327,9 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
                     $this->container['style'],
                     $this->container['git'],
                     $this->container['github'],
+                    $this->container['config'],
                     $this->container['process'],
                     $this->container['editor'],
-                    $this->container['config'],
                     $this->container['branch_splitsh_git'],
                     $this->container['release_hooks']
                 );

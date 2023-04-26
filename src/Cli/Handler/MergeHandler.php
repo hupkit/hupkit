@@ -31,21 +31,16 @@ use Webmozart\Console\Api\IO\IO;
 
 final class MergeHandler extends GitBaseHandler
 {
-    private $aliasResolver;
-    private $questionHelper;
-
     public function __construct(
         SymfonyStyle $style,
         Git $git,
         GitHub $github,
-        BranchAliasResolver $aliasResolver,
-        SingleLineChoiceQuestionHelper $questionHelper,
         Config $config,
-        private BranchSplitsh $branchSplitsh
+        private readonly BranchAliasResolver $aliasResolver,
+        private readonly SingleLineChoiceQuestionHelper $questionHelper,
+        private readonly BranchSplitsh $branchSplitsh
     ) {
         parent::__construct($style, $git, $github, $config);
-        $this->aliasResolver = $aliasResolver;
-        $this->questionHelper = $questionHelper;
     }
 
     public function handle(Args $args, IO $io): void
@@ -128,7 +123,14 @@ final class MergeHandler extends GitBaseHandler
         $name = $pr['base']['repo']['name'];
         $sha = $pr['head']['sha'];
 
+        /**
+         * @var array{'state': string, 'statuses': array<int, array{'context': string, 'state': string, 'description': string}>|null} $status
+         */
         $status = $this->github->getCommitStatuses($org, $name, $sha);
+
+        /**
+         * @var array{'check_suites': array{'id': int, 'check_suites': array<int, array{'status': string}>|null, 'check_runs': array<string, mixed>|null}|null} $checkSuites
+         */
         $checkSuites = $this->github->getCheckSuitesForReference($org, $name, $sha);
 
         if ($status['state'] === 'pending' || $this->hasPendingCheckSuites($checkSuites['check_suites'] ?? [])) {
@@ -162,7 +164,7 @@ final class MergeHandler extends GitBaseHandler
 
     private function determineReviewStatus(array $pr, StatusTable $table): void
     {
-        if (! \count($pr['labels'])) {
+        if (! (is_countable($pr['labels']) ? \count($pr['labels']) : 0)) {
             return;
         }
 
@@ -309,7 +311,7 @@ final class MergeHandler extends GitBaseHandler
         return "\n";
     }
 
-    private function patAuthor(array $pr, string $message = null): void
+    private function patAuthor(array $pr, string $message = ''): void
     {
         if ($this->github->getAuthUsername() === $pr['user']['login']) {
             return;
@@ -318,7 +320,7 @@ final class MergeHandler extends GitBaseHandler
         $this->github->createComment($pr['number'], str_replace('@author', '@' . $pr['user']['login'], $message));
     }
 
-    private function addCommentsToMergeCommit(array $pr, $sha): void
+    private function addCommentsToMergeCommit(array $pr, string $sha): void
     {
         $commentText = '';
 
@@ -400,6 +402,9 @@ final class MergeHandler extends GitBaseHandler
         $this->style->note(sprintf('Branch "%s" was deleted.', $branch));
     }
 
+    /**
+     * @param array<array-key, array<string, mixed>> $commits
+     */
     private function validateMessages(array $commits): void
     {
         $violations = MessageValidator::validateCommitsMessages($commits);
@@ -409,6 +414,9 @@ final class MergeHandler extends GitBaseHandler
             return;
         }
 
+        /**
+         * @var array<int, string> $messages
+         */
         $messages = [];
 
         foreach ($violations as $violation) {
@@ -431,14 +439,14 @@ final class MergeHandler extends GitBaseHandler
         }
     }
 
-    private function determineSquash(Args $args, $pullrequestId)
+    private function determineSquash(Args $args, int $pullRequestId)
     {
         if ($args->getOption('squash')) {
             return true;
         }
 
         try {
-            $commitCount = $this->github->getPullRequestCommitCount($pullrequestId);
+            $commitCount = $this->github->getPullRequestCommitCount($pullRequestId);
 
             if ($commitCount > 1) {
                 return $this->questionHelper->ask(
@@ -454,6 +462,9 @@ final class MergeHandler extends GitBaseHandler
         return false;
     }
 
+    /**
+     * @param array<int, array{'status': string}> $checkSuites
+     */
     private function hasPendingCheckSuites(array $checkSuites): bool
     {
         foreach ($checkSuites as $checkSuite) {

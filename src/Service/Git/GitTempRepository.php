@@ -24,8 +24,8 @@ use Symfony\Component\Process\Process;
 class GitTempRepository
 {
     public function __construct(
-        private CliProcess $process,
-        private Filesystem $filesystem
+        private readonly CliProcess $process,
+        private readonly Filesystem $filesystem
     ) {
     }
 

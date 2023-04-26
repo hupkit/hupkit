@@ -22,21 +22,18 @@ use Symfony\Component\Process\Process;
 
 class Git
 {
-    public const STATUS_UP_TO_DATE = 'up-to-date';
-    public const STATUS_NEED_PULL = 'need_pull';
-    public const STATUS_NEED_PUSH = 'need_push';
-    public const STATUS_DIVERGED = 'diverged';
+    final public const STATUS_UP_TO_DATE = 'up-to-date';
+    final public const STATUS_NEED_PULL = 'need_pull';
+    final public const STATUS_NEED_PUSH = 'need_push';
+    final public const STATUS_DIVERGED = 'diverged';
 
-    protected $process;
-    private $filesystem;
-    protected $style;
-    private $gitDir;
+    private ?string $gitDir = null;
 
-    public function __construct(CliProcess $process, Filesystem $filesystemHelper, StyleInterface $style)
-    {
-        $this->process = $process;
-        $this->filesystem = $filesystemHelper;
-        $this->style = $style;
+    public function __construct(
+        protected CliProcess $process,
+        private readonly Filesystem $filesystem,
+        protected StyleInterface $style
+    ) {
     }
 
     public function isGitDir(): bool
@@ -110,7 +107,7 @@ class Git
     }
 
     /**
-     * @return string either main or master
+     * @return string either main, master or a custom configured branch-name
      */
     public function getPrimaryBranch(): string
     {
@@ -140,6 +137,9 @@ class Git
         return trim($this->process->mustRun(['git', 'describe', '--tags', '--abbrev=0', $ref])->getOutput());
     }
 
+    /**
+     * @return array<int, string> ['v1.0', 'v1.5', 'v2.0' '...']
+     */
     public function getVersionBranches(string $remote): array
     {
         $branches = StringUtil::splitLines(
@@ -190,7 +190,7 @@ class Git
      *
      * Or an empty array when there are no logs.
      *
-     * @return array[]
+     * @return array<int array{'sha': string, 'author': string, 'subject': string, 'message': string}>
      */
     public function getLogBetweenCommits(string $start, string $end): array
     {
@@ -311,7 +311,10 @@ class Git
         $this->process->run($commands, 'Adding git notes failed.');
     }
 
-    public function pushToRemote(string $remote, $ref, bool $setUpstream = false, bool $force = false): void
+    /**
+     * @param array<int, string>|string $ref either a single ref of array of references
+     */
+    public function pushToRemote(string $remote, array | string $ref, bool $setUpstream = false, bool $force = false): void
     {
         $ref = (array) $ref;
         $ref = array_map(
@@ -427,7 +430,7 @@ class Git
         }
     }
 
-    public function ensureBranchInSync(string $remote, string $localBranch, $allowPush = true): void
+    public function ensureBranchInSync(string $remote, string $localBranch, bool $allowPush = true): void
     {
         $status = $this->getRemoteDiffStatus($remote, $localBranch);
 
@@ -464,7 +467,7 @@ class Git
         }
     }
 
-    public function setGitConfig(string $config, $value, bool $overwrite = false, string $section = 'local'): void
+    public function setGitConfig(string $config, string | int $value, bool $overwrite = false, string $section = 'local'): void
     {
         if (! $overwrite && $this->getGitConfig($config, $section) !== '') {
             throw new \RuntimeException(

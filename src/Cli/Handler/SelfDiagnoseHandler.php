@@ -25,29 +25,14 @@ use Symfony\Component\VarExporter\VarExporter;
 
 final class SelfDiagnoseHandler
 {
-    private $style;
-    private $config;
-    private $git;
-    private $github;
-
-    /**
-     * @var CliProcess
-     */
-    private $process;
-
     public function __construct(
-        SymfonyStyle $style,
-        Config $config,
-        Git $git,
-        GitHub $github,
-        CliProcess $process,
-        private GitFileReader $gitFileReader
+        private readonly SymfonyStyle $style,
+        private readonly Config $config,
+        private readonly Git $git,
+        private readonly GitHub $github,
+        private readonly CliProcess $process,
+        private readonly GitFileReader $gitFileReader
     ) {
-        $this->style = $style;
-        $this->config = $config;
-        $this->git = $git;
-        $this->github = $github;
-        $this->process = $process;
     }
 
     public function handle(): int
@@ -96,7 +81,9 @@ final class SelfDiagnoseHandler
             );
         }
 
-        if (false !== $editor = getenv('EDITOR')) {
+        $editor = getenv('EDITOR');
+
+        if ($editor !== false) {
             $table->addRow('EDITOR configured', 'success', $editor);
         } else {
             $table->addRow('EDITOR configured', 'warning', 'The EDITOR environment variable should be set');

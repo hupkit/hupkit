@@ -129,10 +129,7 @@ final class GitBranchTest extends TestCase
         $git->ensureBranchInSync('origin', 'master', true);
     }
 
-    /**
-     * @return GitBranch|object
-     */
-    private function givenGitRemoteDiffStatus(string $status)
+    private function givenGitRemoteDiffStatus(string $status): GitBranch
     {
         $style = $this->createMock(StyleInterface::class);
 
@@ -141,10 +138,10 @@ final class GitBranchTest extends TestCase
         // Performing actual Git commands for this related test would be much slower (and not to mention difficult),
         // plus the called methods are already tested on their own. ensureBranchInSync() is merely a helper method.
         $git = new class($style) extends GitBranch {
-            public $diffStatus;
-            public $diffStatusCall = [];
-            public $pushCall = [];
-            public $pullCall = [];
+            public string $diffStatus;
+            public array $diffStatusCall = [];
+            public array $pushCall = [];
+            public array $pullCall = [];
 
             public function __construct(StyleInterface $style)
             {
