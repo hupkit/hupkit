@@ -28,7 +28,7 @@ final class SynchronizeConfigHandler extends GitBaseHandler
         Git $git,
         GitHub $github,
         Config $config,
-        private GitFileReader $gitFileReader
+        private readonly GitFileReader $gitFileReader
     ) {
         parent::__construct($style, $git, $github, $config);
     }

@@ -93,10 +93,8 @@ labels: removed-deprecation,bc-break
         ],
     ];
 
-    /** @var ObjectProphecy */
-    private $git;
-    /** @var ObjectProphecy */
-    private $github;
+    private ObjectProphecy $git;
+    private ObjectProphecy $github;
 
     /** @before */
     public function setUpCommandHandler(): void

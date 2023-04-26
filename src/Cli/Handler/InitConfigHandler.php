@@ -32,9 +32,9 @@ final class InitConfigHandler extends GitBaseHandler
         Git $git,
         GitHub $github,
         Config $config,
-        private Filesystem $filesystem,
-        private CliProcess $process,
-        private GitFileReader $gitFileReader
+        private readonly Filesystem $filesystem,
+        private readonly CliProcess $process,
+        private readonly GitFileReader $gitFileReader
     ) {
         parent::__construct($style, $git, $github, $config);
     }

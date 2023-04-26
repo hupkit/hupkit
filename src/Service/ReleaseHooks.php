@@ -19,20 +19,17 @@ use Rollerworks\Component\Version\Version;
 
 class ReleaseHooks
 {
-    private $container;
-    private $git;
-    private $logger;
-
     /**
      * @var string|null
      */
-    private $cwd;
+    private readonly string | bool $cwd;
 
-    public function __construct(ContainerInterface $container, Git $git, LoggerInterface $logger, ?string $cwd = null)
-    {
-        $this->logger = $logger;
-        $this->git = $git;
-        $this->container = $container;
+    public function __construct(
+        private readonly ContainerInterface $container,
+        private readonly Git $git,
+        private readonly LoggerInterface $logger,
+        ?string $cwd = null
+    ) {
         $this->cwd = $cwd ?? getcwd();
     }
 

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace HubKit\Service;
 
+use Github\AuthMethod;
 use Github\Client as GitHubClient;
 use Github\HttpClient\Builder;
 use Github\ResultPager;
@@ -21,24 +22,20 @@ use Psr\Http\Client\ClientInterface;
 
 class GitHub
 {
-    public const DEFAULT_HOST = 'github.com';
+    final public const DEFAULT_HOST = 'github.com';
 
-    private $httpClient;
-    private $config;
-    /** @var Builder */
-    private $clientBuilder;
-    /** @var GitHubClient */
-    private $client;
+    private ?Builder $clientBuilder = null;
+    private ?GitHubClient $client = null;
 
-    private $organization = '';
-    private $repository = '';
-    private $hostname = '';
-    private $username = '';
+    private string $organization = '';
+    private string $repository = '';
+    private string $hostname = '';
+    private string $username = '';
 
-    public function __construct(ClientInterface $client, Config $config)
-    {
-        $this->httpClient = $client;
-        $this->config = $config;
+    public function __construct(
+        private readonly ClientInterface $httpClient,
+        private readonly Config $config
+    ) {
     }
 
     public function autoConfigure(Git $git): void
@@ -67,7 +64,7 @@ class GitHub
             $this->clientBuilder = new Builder($this->httpClient);
 
             $this->client = new GitHubClient($this->clientBuilder, null, $apiUrl);
-            $this->client->authenticate($apiToken, null, GitHubClient::AUTH_ACCESS_TOKEN);
+            $this->client->authenticate($apiToken, null, AuthMethod::ACCESS_TOKEN);
             $this->hostname = $hostname;
         }
     }
@@ -107,9 +104,7 @@ class GitHub
 
     public function createRepo(string $organization, string $name, bool $public = true, bool $hasIssues = true)
     {
-        $repo = $this->client->repo();
-
-        return $repo->create(
+        return $this->client->repo()->create(
             $name, // name
             '', // description
             '', // homepage
@@ -134,8 +129,6 @@ class GitHub
 
     public function closeIssues(int ...$numbers): void
     {
-        // FIXME This is a good candidate for GrapQL but my knowledge is limited on this topic and searching yields a death link
-
         foreach ($numbers as $number) {
             $this->client->issue()->update(
                 $this->organization,
@@ -148,23 +141,17 @@ class GitHub
 
     public function createComment(int $id, string $message)
     {
-        $api = $this->client->issue()->comments();
-
-        $comment = $api->create(
+        return $this->client->issue()->comments()->create(
             $this->organization,
             $this->repository,
             $id,
             ['body' => $message]
-        );
-
-        return $comment['html_url'];
+        )['html_url'];
     }
 
     public function getComments(int $id)
     {
-        $pager = new ResultPager($this->client);
-
-        return $pager->fetchAll(
+        return (new ResultPager($this->client))->fetchAll(
             $this->client->issue()->comments(),
             'all',
             [
@@ -177,10 +164,8 @@ class GitHub
 
     public function getLabels(): array
     {
-        $api = $this->client->issue()->labels();
-
         return self::getValuesFromNestedArray(
-            $api->all(
+            $this->client->issue()->labels()->all(
                 $this->organization,
                 $this->repository
             ),
@@ -190,9 +175,7 @@ class GitHub
 
     public function openPullRequest(string $base, string $head, string $subject, string $body)
     {
-        $api = $this->client->pullRequest();
-
-        return $api->create(
+        return $this->client->pullRequest()->create(
             $this->organization,
             $this->repository,
             [
@@ -230,30 +213,24 @@ class GitHub
 
     public function getCommitStatuses(string $org, string $repo, string $hash): array
     {
-        $pager = new ResultPager($this->client);
-
-        return $pager->fetchAll($this->client->repo()->statuses(), 'combined', [$org, $repo, $hash]);
+        return (new ResultPager($this->client))->fetchAll($this->client->repo()->statuses(), 'combined', [$org, $repo, $hash]);
     }
 
     public function getCheckSuitesForReference(string $org, string $repo, string $hash): array
     {
-        $pager = new ResultPager($this->client);
-
-        return $pager->fetchAll($this->client->repo()->checkSuites(), 'allForReference', [$org, $repo, $hash]);
+        return (new ResultPager(
+            $this->client
+        ))->fetchAll($this->client->repo()->checkSuites(), 'allForReference', [$org, $repo, $hash]);
     }
 
     public function getCheckRunsForCheckSuite(string $org, string $repo, int $checkSuiteId): array
     {
-        $pager = new ResultPager($this->client);
-
-        return $pager->fetchAll($this->client->repo()->checkRuns(), 'allForCheckSuite', [$org, $repo, $checkSuiteId]);
+        return (new ResultPager($this->client))->fetchAll($this->client->repo()->checkRuns(), 'allForCheckSuite', [$org, $repo, $checkSuiteId]);
     }
 
     public function getCommits(string $org, string $repo, string $base, string $head): array
     {
-        $pager = new ResultPager($this->client);
-
-        return $pager->fetchAll(
+        return (new ResultPager($this->client))->fetchAll(
             $this->client->repo()->commits(),
             'compare',
             [
@@ -291,9 +268,7 @@ class GitHub
 
     public function updatePullRequest($id, array $parameters): void
     {
-        $api = $this->client->pullRequest();
-
-        $api->update(
+        $this->client->pullRequest()->update(
             $this->organization,
             $this->repository,
             $id,
@@ -303,9 +278,7 @@ class GitHub
 
     public function mergePullRequest(int $id, string $title, string $message, string $sha, bool $squash = false)
     {
-        $api = $this->client->pullRequest();
-
-        return $api->merge(
+        return $this->client->pullRequest()->merge(
             $this->organization,
             $this->repository,
             $id,
@@ -318,9 +291,7 @@ class GitHub
 
     public function createRelease(string $name, string $body, bool $preRelease = false, ?string $title = null)
     {
-        $api = $this->client->repo()->releases();
-
-        return $api->create(
+        return $this->client->repo()->releases()->create(
             $this->organization,
             $this->repository,
             [
@@ -334,9 +305,7 @@ class GitHub
 
     public function getDefaultBranch(): string
     {
-        $repo = $this->client->repo()->show($this->getOrganization(), $this->getRepository());
-
-        return $repo['default_branch'];
+        return $this->client->repo()->show($this->getOrganization(), $this->getRepository())['default_branch'];
     }
 
     private static function getValuesFromNestedArray(array $array, string $key)

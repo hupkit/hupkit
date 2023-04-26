@@ -36,24 +36,12 @@ final class UpMergeHandlerTest extends TestCase
     use ProphecyTrait;
     use SymfonyStyleTrait;
 
-    /** @var ObjectProphecy */
-    private $process;
-    /** @var ObjectProphecy */
-    private $git;
-    /** @var ObjectProphecy */
-    private $github;
+    private ObjectProphecy $process;
+    private ObjectProphecy $git;
+    private ObjectProphecy $github;
+    private ObjectProphecy $branchSplitsh;
 
-    /**
-     * @phpstan-var ObjectProphecy<BranchSplitsh>
-     *
-     * @var BranchSplitsh
-     */
-    private $branchSplitsh;
-
-    /**
-     * @var Config
-     */
-    private $config;
+    private Config $config;
 
     /** @before */
     public function setUpCommandHandler(): void
@@ -104,31 +92,6 @@ final class UpMergeHandlerTest extends TestCase
         $this->git->pushToRemote('upstream', ['2.5'])->shouldBeCalled();
 
         $this->branchSplitsh->splitBranch('2.5')->willReturn([]);
-
-        $this->executeHandler();
-
-        $this->assertOutputMatches('Merged "2.3" into "2.5"');
-    }
-
-    /** @test */
-    public function it_merges_current_branch_into_next_version_branch_and_splits_repository(): void
-    {
-        $this->expectConfigHasSplits();
-
-        $this->branchSplitsh->splitBranch('2.5')->willReturn([]);
-
-        $this->git->getActiveBranchName()->willReturn('2.3');
-        $this->git->remoteUpdate('upstream')->shouldBeCalled();
-
-        $this->git->getVersionBranches('upstream')->willReturn(['2.2', '2.3', '2.5', '2.6']);
-
-        $this->git->ensureBranchInSync('upstream', '2.3')->shouldBeCalled();
-        $this->git->checkoutRemoteBranch('upstream', '2.5')->shouldBeCalled();
-        $this->git->ensureBranchInSync('upstream', '2.5')->shouldBeCalled();
-        $this->process->mustRun(['git', 'merge', '--no-ff', '--log', '2.3'])->shouldBeCalled();
-
-        $this->git->checkout('2.3')->shouldBeCalled();
-        $this->git->pushToRemote('upstream', ['2.5'])->shouldBeCalled();
 
         $this->executeHandler();
 
@@ -376,6 +339,25 @@ final class UpMergeHandlerTest extends TestCase
         $this->git->getVersionBranches('upstream')->willReturn(['2.2', '2.3', '2.5', '2.6']);
 
         $this->executeHandler($this->getArgs()->setOption('all', true));
+
+        $this->assertOutputMatches('Branch "master" is not a supported version branch.');
+    }
+
+    /** @test */
+    public function it_does_nothing_when_current_is_last_branch(): void
+    {
+        $this->github->getDefaultBranch()->willReturn('2.3');
+
+        $this->git->getActiveBranchName()->willReturn('2.6');
+        $this->git->remoteUpdate('upstream')->shouldBeCalled();
+
+        $this->git->getVersionBranches('upstream')->willReturn(['2.2', '2.3', '2.5', '2.6']);
+
+        $this->git->ensureBranchInSync('upstream', '2.6')->shouldBeCalled();
+
+        $this->executeHandler();
+
+        $this->assertOutputMatches('Nothing to do here.');
     }
 
     /** @test */
@@ -491,11 +473,18 @@ final class UpMergeHandlerTest extends TestCase
         return new Args($format);
     }
 
-    private function executeHandler(Args $args = null): void
+    private function executeHandler(?Args $args = null): void
     {
         $style = $this->createStyle();
 
-        $handler = new UpMergeHandler($style, $this->git->reveal(), $this->github->reveal(), $this->process->reveal(), $this->config, $this->branchSplitsh->reveal());
+        $handler = new UpMergeHandler(
+            $style,
+            $this->git->reveal(),
+            $this->github->reveal(),
+            $this->config,
+            $this->process->reveal(),
+            $this->branchSplitsh->reveal()
+        );
         $handler->handle($args ?? $this->getArgs());
     }
 

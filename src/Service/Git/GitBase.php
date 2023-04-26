@@ -18,7 +18,7 @@ use HubKit\Service\Git;
 
 class GitBase extends Git
 {
-    private $cwd;
+    private readonly string $cwd;
 
     public function __construct(CliProcess $process, string $cwd)
     {

@@ -30,10 +30,8 @@ final class BranchAliasHandlerTest extends TestCase
 {
     use ProphecyTrait;
 
-    /** @var ObjectProphecy */
-    private $git;
-    /** @var BufferedIO */
-    private $io;
+    private ObjectProphecy $git;
+    private BufferedIO $io;
 
     /** @before */
     public function setUpCommandHandler(): void

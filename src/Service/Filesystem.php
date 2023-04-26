@@ -17,9 +17,9 @@ use Symfony\Component\Filesystem\Filesystem as SfFilesystem;
 
 class Filesystem
 {
-    private $tempdir;
-    private $tempFilenames = [];
-    private $fs;
+    private readonly string $tempdir;
+    private readonly SfFilesystem $fs;
+    private array $tempFilenames = [];
 
     public function __construct(?string $tempdir = null, ?SfFilesystem $sfFilesystem = null)
     {
@@ -48,6 +48,9 @@ class Filesystem
         return $tmpName;
     }
 
+    /**
+     * @param string|resource $content
+     */
     public function dumpFile(string $filename, $content): void
     {
         if (str_starts_with($filename, './')) {

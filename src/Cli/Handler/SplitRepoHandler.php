@@ -22,8 +22,13 @@ use Webmozart\Console\Api\Args\Args;
 
 final class SplitRepoHandler extends GitBaseHandler
 {
-    public function __construct(SymfonyStyle $style, private BranchSplitsh $branchSplitsh, Git $git, GitHub $github, Config $config)
-    {
+    public function __construct(
+        SymfonyStyle $style,
+        Git $git,
+        GitHub $github,
+        Config $config,
+        private readonly BranchSplitsh $branchSplitsh
+    ) {
         parent::__construct($style, $git, $github, $config);
     }
 

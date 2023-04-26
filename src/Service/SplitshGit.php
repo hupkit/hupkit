@@ -20,11 +20,11 @@ use Symfony\Component\Process\Process;
 class SplitshGit
 {
     public function __construct(
-        private Git $git,
-        private CliProcess $process,
-        private LoggerInterface $logger,
-        private GitTempRepository $gitTempRepository,
-        private ?string $executable
+        private readonly Git $git,
+        private readonly CliProcess $process,
+        private readonly LoggerInterface $logger,
+        private readonly GitTempRepository $gitTempRepository,
+        private readonly ?string $executable
     ) {
     }
 

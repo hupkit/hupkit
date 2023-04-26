@@ -24,11 +24,11 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class BranchSplitsh
 {
     public function __construct(
-        private SplitshGit $splitshGit,
-        private GitHub $github,
-        private Config $config,
-        private SymfonyStyle $style,
-        private Git $git
+        private readonly SplitshGit $splitshGit,
+        private readonly GitHub $github,
+        private readonly Config $config,
+        private readonly SymfonyStyle $style,
+        private readonly Git $git
     ) {
     }
 
@@ -147,7 +147,7 @@ class BranchSplitsh
      *
      * @param string $versionStr Version (without prefix) for the tag name
      *
-     *                           @return int The number of tags synchronized
+     * @return int The number of tags synchronized
      */
     public function syncTags(string $branch, string $versionStr): int
     {

@@ -26,10 +26,10 @@ use HubKit\StringUtil;
 class GitFileReader
 {
     public function __construct(
-        private GitBranch $gitBranch,
-        private GitConfig $gitConfig,
-        private CliProcess $process,
-        private GitTempRepository $gitTempRepository
+        private readonly GitBranch $gitBranch,
+        private readonly GitConfig $gitConfig,
+        private readonly CliProcess $process,
+        private readonly GitTempRepository $gitTempRepository
     ) {
     }
 
@@ -51,7 +51,7 @@ class GitFileReader
 
     private function fileExistsAtRef(string $ref, string $path): bool
     {
-        $files = array_map([StringUtil::class, 'normalizePath'],
+        $files = array_map(StringUtil::normalizePath(...),
             StringUtil::splitLines(
                 $this->process->mustRun(
                     [
@@ -85,8 +85,7 @@ class GitFileReader
     }
 
     /**
-     * @param string|array{0: string, 1: string} $branch either 'main' or ['upstream', 'main]
-     * @param string                             $path   Path relative to repository root
+     * @param string $path Path relative to repository root
      */
     public function fileExistsAtRemote(string $remote, string $branch, string $path): bool
     {

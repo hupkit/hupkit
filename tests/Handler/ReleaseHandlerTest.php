@@ -100,28 +100,14 @@ labels: removed-deprecation
         ],
     ];
 
-    /** @var ObjectProphecy */
-    private $git;
-    /** @var ObjectProphecy */
-    private $github;
-    /** @var ObjectProphecy */
-    private $process;
-    /** @var ObjectProphecy */
-    private $editor;
-    /** @var Config */
-    private $config;
-
-    /**
-     * @phpstan-var ObjectProphecy<BranchSplitsh>
-     *
-     * @var BranchSplitsh
-     */
-    private $branchSplitsh;
-
-    /** @var ObjectProphecy|ReleaseHooks */
-    private $releaseHooks;
-    /** @var BufferedIO */
-    private $io;
+    private ObjectProphecy $git;
+    private ObjectProphecy $github;
+    private ObjectProphecy $process;
+    private ObjectProphecy $editor;
+    private ObjectProphecy $branchSplitsh;
+    private ObjectProphecy $releaseHooks;
+    private Config $config;
+    private BufferedIO $io;
 
     /** @before */
     public function setUpCommandHandler(): void
@@ -414,9 +400,9 @@ labels: removed-deprecation
             $style,
             $this->git->reveal(),
             $this->github->reveal(),
+            $this->config,
             $this->process->reveal(),
             $this->editor->reveal(),
-            $this->config,
             $this->branchSplitsh->reveal(),
             $this->releaseHooks->reveal()
         );

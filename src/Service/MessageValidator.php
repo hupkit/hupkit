@@ -17,16 +17,23 @@ use HubKit\StringUtil;
 
 class MessageValidator
 {
-    public const SEVERITY_LOW = 0;
-    public const SEVERITY_MID = 3;
-    public const SEVERITY_HIGH = 5;
+    final public const SEVERITY_LOW = 0;
+    final public const SEVERITY_MID = 3;
+    final public const SEVERITY_HIGH = 5;
 
+    /**
+     * @param array<array-key, array<string, mixed>> $commits
+     *
+     * @return array<int, array{0: string, 1: string, 2: string}>
+     */
     public static function validateCommitsMessages(array $commits): array
     {
         $result = [];
 
         foreach ($commits as $commit) {
-            if (null !== $validated = self::validateMessage($commit['commit']['message'])) {
+            $validated = self::validateMessage($commit['commit']['message']);
+
+            if ($validated !== null) {
                 $result[] = $validated;
             }
         }
@@ -34,6 +41,9 @@ class MessageValidator
         return $result;
     }
 
+    /**
+     * @return array{0: string, 1: string, 2: string}|null
+     */
     public static function validateMessage(string $message): ?array
     {
         // I wont judge you for swearing, but for merging commits this is unacceptable!

@@ -18,15 +18,14 @@ use Symfony\Component\Console\Style\StyleInterface;
 
 class BranchAliasResolver
 {
-    private $style;
-    private $git;
-    private $cwd;
-    private $detectedBy = '';
+    private readonly string $cwd;
+    private string $detectedBy = '';
 
-    public function __construct(StyleInterface $style, Git $git, string $cwd = null)
-    {
-        $this->style = $style;
-        $this->git = $git;
+    public function __construct(
+        private readonly StyleInterface $style,
+        private readonly Git $git,
+        string $cwd = null
+    ) {
         $this->cwd = $cwd ?? getcwd();
     }
 

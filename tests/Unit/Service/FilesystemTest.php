@@ -33,8 +33,7 @@ final class FilesystemTest extends TestCase
      */
     public const MOCK_TMP_DIR = '{:temp:}';
 
-    /** @var string|null */
-    private $tempDir;
+    private ?string $tempDir = null;
 
     /** @before */
     public function setUpTempDirectoryPath(): void

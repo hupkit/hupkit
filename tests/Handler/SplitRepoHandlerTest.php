@@ -40,13 +40,10 @@ final class SplitRepoHandlerTest extends TestCase
     private const HEAD_SHA = '1b04532c8a09d9084abce36f8d9daf675f89eacc';
     private const MERGE_SHA = '52a6bb3aeb7e08e8b641cfa679e4416096bf8439';
 
-    /** @var ObjectProphecy&Git */
-    private $git;
-    /** @var ObjectProphecy&GitHub */
-    private $github;
+    private ObjectProphecy $git;
+    private ObjectProphecy $github;
+    private ObjectProphecy $splitshGit;
     private Config $config;
-    /** @var ObjectProphecy&BranchSplitsh */
-    private $splitshGit;
 
     /** @before */
     public function setUpCommandHandler(): void
@@ -168,15 +165,15 @@ final class SplitRepoHandlerTest extends TestCase
         return new Args($format, new StringArgs(''));
     }
 
-    private function executeHandler(?Args $args = null, array $input = []): void
+    private function executeHandler(?Args $args, array $input = []): void
     {
         $style = $this->createStyle($input);
         $handler = new SplitRepoHandler(
             $style,
-            $this->splitshGit->reveal(),
             $this->git->reveal(),
             $this->github->reveal(),
             $this->config,
+            $this->splitshGit->reveal(),
         );
 
         $handler->handle($args ?? $this->getArgs());

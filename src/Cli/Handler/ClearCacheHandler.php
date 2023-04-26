@@ -21,8 +21,10 @@ use Webmozart\Console\Api\IO\IO;
 
 final class ClearCacheHandler
 {
-    public function __construct(private SymfonyStyle $style, private Filesystem $filesystem)
-    {
+    public function __construct(
+        private readonly SymfonyStyle $style,
+        private readonly Filesystem $filesystem
+    ) {
     }
 
     public function handle(Args $args, IO $io): int

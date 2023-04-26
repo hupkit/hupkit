@@ -17,13 +17,10 @@ use Symfony\Component\Process\Process;
 
 class Editor
 {
-    private $process;
-    private $filesystem;
-
-    public function __construct(CliProcess $process, Filesystem $filesystem)
-    {
-        $this->process = $process;
-        $this->filesystem = $filesystem;
+    public function __construct(
+        private readonly CliProcess $process,
+        private readonly Filesystem $filesystem
+    ) {
     }
 
     /**
@@ -80,6 +77,6 @@ class Editor
             throw new \RuntimeException('No EDITOR environment variable set.');
         }
 
-        return (string) $editor;
+        return $editor;
     }
 }

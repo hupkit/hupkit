@@ -32,13 +32,10 @@ final class BranchSplitshTest extends TestCase
     use ProphecyTrait;
     use SymfonyStyleTrait;
 
-    /** @var Git&ObjectProphecy */
-    private $git;
-    /** @var GitHub&ObjectProphecy */
-    private $github;
+    private ObjectProphecy $git;
+    private ObjectProphecy $github;
+    private ObjectProphecy $splitshGit;
     private Config $config;
-    /** @var SplitshGit&ObjectProphecy */
-    private $splitshGit;
 
     /** @before */
     public function setUpServices(): void

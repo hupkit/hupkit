@@ -30,25 +30,19 @@ use Webmozart\Console\Api\IO\IO;
 
 final class ReleaseHandler extends GitBaseHandler
 {
-    private $process;
-    private $editor;
     private IO $io;
-    private $releaseHooks;
 
     public function __construct(
         SymfonyStyle $style,
         Git $git,
         GitHub $github,
-        CliProcess $process,
-        Editor $editor,
         Config $config,
-        private BranchSplitsh $branchSplitsh,
-        ReleaseHooks $releaseHooks
+        private readonly CliProcess $process,
+        private readonly Editor $editor,
+        private readonly BranchSplitsh $branchSplitsh,
+        private readonly ReleaseHooks $releaseHooks
     ) {
         parent::__construct($style, $git, $github, $config);
-        $this->process = $process;
-        $this->editor = $editor;
-        $this->releaseHooks = $releaseHooks;
     }
 
     public function handle(Args $args, IO $io): void
@@ -183,6 +177,9 @@ final class ReleaseHandler extends GitBaseHandler
         return 'Initial release.';
     }
 
+    /**
+     * @param array<int, string> $tags
+     */
     private function guardTagDoesNotExist(Version $version, array $tags): void
     {
         $tags = array_map(

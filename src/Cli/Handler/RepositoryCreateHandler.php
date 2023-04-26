@@ -20,15 +20,11 @@ use Webmozart\Console\Api\Args\Args;
 
 final class RepositoryCreateHandler
 {
-    private $style;
-    private $git;
-    private $github;
-
-    public function __construct(SymfonyStyle $style, Git $git, GitHub $github)
-    {
-        $this->style = $style;
-        $this->git = $git;
-        $this->github = $github;
+    public function __construct(
+        private readonly SymfonyStyle $style,
+        private readonly Git $git,
+        private readonly GitHub $github
+    ) {
     }
 
     public function handle(Args $args): void

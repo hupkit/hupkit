@@ -20,7 +20,7 @@ use Symfony\Component\Console\Question\Question;
 
 class QuestionHelper extends BaseQuestionHelper
 {
-    private $maxAttempts;
+    private ?int $maxAttempts = null;
 
     /**
      * Overwrite the maximum attempts for a question.
