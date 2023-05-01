@@ -38,9 +38,16 @@ final class SplitRepoHandler extends GitBaseHandler
         $this->git->remoteUpdate('upstream');
 
         $branch = $this->getBranchName($args);
+        $prefix = $args->getOption('prefix');
 
         $this->style->title('Repository Split');
         $this->informationHeader($branch);
+
+        if ($prefix !== '') {
+            $this->splitPrefixOnly($branch, $prefix, $args->getOption('dry-run'));
+
+            return;
+        }
 
         if ($args->getOption('dry-run')) {
             if ($this->branchSplitsh->drySplitBranch($branch) > 0) {
@@ -66,5 +73,19 @@ final class SplitRepoHandler extends GitBaseHandler
         $this->git->checkoutRemoteBranch('upstream', $branch);
 
         return $branch;
+    }
+
+    private function splitPrefixOnly(string $branch, string $prefix, bool $dryRun): void
+    {
+        if ($dryRun) {
+            $this->branchSplitsh->drySplitAtPrefix($branch, $prefix);
+            $this->style->success(sprintf('[DRY-RUN] Repository directory "%s" were split into there destination.', $prefix));
+
+            return;
+        }
+
+        if ($this->branchSplitsh->splitAtPrefix($branch, $prefix) !== null) {
+            $this->style->success(sprintf('Repository directory "%s" were split into there destination.', $prefix));
+        }
     }
 }
