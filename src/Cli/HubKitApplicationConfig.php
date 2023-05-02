@@ -166,6 +166,7 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
             ->setDescription('Split the repository into configured targets. Requires "repos" is configured in config.php')
             ->addArgument('branch', Argument::OPTIONAL | Argument::STRING, 'Branch to checkout and split from, uses current when omitted')
             ->addOption('dry-run', null, Option::NO_VALUE | Option::BOOLEAN, 'Show which operations would have been performed (without actually splitting)')
+            ->addOption('prefix', null, Option::REQUIRED_VALUE | Option::STRING, 'Split only a specific prefix instead of all')
             ->setHandler(function () {
                 return new Handler\SplitRepoHandler(
                     $this->container['style'],

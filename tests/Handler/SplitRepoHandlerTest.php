@@ -154,10 +154,67 @@ final class SplitRepoHandlerTest extends TestCase
         );
     }
 
+    /** @test */
+    public function it_splits_specific_branch(): void
+    {
+        $this->git->checkoutRemoteBranch('upstream', '2.0')->shouldBeCalled();
+        $this->splitshGit->splitBranch('2.0')->willReturn(['core' => ['42431142', 'url']]);
+
+        $args = $this->getArgs();
+        $args->setArgument('branch', '2.0');
+        $this->executeHandler($args);
+
+        $this->assertOutputMatches(
+            [
+                'Working on hubkit-sandbox/empire (branch 2.0)',
+                'Repository directories were split into there destination.',
+            ]
+        );
+    }
+
+    /** @test */
+    public function it_splits_at_specific_prefix(): void
+    {
+        $this->git->checkoutRemoteBranch('upstream', 'master')->shouldNotBeCalled();
+        $this->splitshGit->splitAtPrefix('master', 'src/Module/CoreModule')->willReturn(['core' => ['42431142', 'url']]);
+
+        $args = $this->getArgs();
+        $args->setOption('prefix', 'src/Module/CoreModule');
+        $this->executeHandler($args);
+
+        $this->assertOutputMatches(
+            [
+                'Working on hubkit-sandbox/empire (branch master)',
+                'Repository directory "src/Module/CoreModule" were split into there destination.',
+            ]
+        );
+    }
+
+    /** @test */
+    public function it_dry_splits_at_specific_prefix(): void
+    {
+        $this->git->checkoutRemoteBranch('upstream', 'master')->shouldNotBeCalled();
+        $this->splitshGit->drySplitAtPrefix('master', 'src/Module/CoreModule')->shouldBeCalled();
+
+        $args = $this->getArgs();
+        $args->setOption('prefix', 'src/Module/CoreModule');
+        $args->setOption('dry-run', true);
+
+        $this->executeHandler($args);
+
+        $this->assertOutputMatches(
+            [
+                'Working on hubkit-sandbox/empire (branch master)',
+                '[DRY-RUN] Repository directory "src/Module/CoreModule" were split into there destination.',
+            ]
+        );
+    }
+
     private function getArgs(): Args
     {
         $format = ArgsFormat::build()
             ->addOption(new Option('dry-run', null, Option::BOOLEAN))
+            ->addOption(new Option('prefix', null, OPTION::REQUIRED_VALUE | Option::STRING, null, ''))
             ->addArgument(new Argument('branch', Argument::OPTIONAL | Argument::STRING))
             ->getFormat()
         ;
@@ -177,23 +234,5 @@ final class SplitRepoHandlerTest extends TestCase
         );
 
         $handler->handle($args ?? $this->getArgs());
-    }
-
-    /** @test */
-    public function it_splits_specific_branch(): void
-    {
-        $this->git->checkoutRemoteBranch('upstream', '2.0')->shouldBeCalled();
-        $this->splitshGit->splitBranch('2.0')->willReturn(['core' => ['42431142', 'url']]);
-
-        $args = $this->getArgs();
-        $args->setArgument('branch', '2.0');
-        $this->executeHandler($args);
-
-        $this->assertOutputMatches(
-            [
-                'Working on hubkit-sandbox/empire (branch 2.0)',
-                'Repository directories were split into there destination.',
-            ]
-        );
     }
 }
