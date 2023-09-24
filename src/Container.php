@@ -75,7 +75,12 @@ class Container extends \Pimple\Container implements ContainerInterface
 
         $this['editor'] = static fn (self $container) => new Service\Editor($container['process'], $container['filesystem']);
 
-        $this['release_hooks'] = static fn (self $container) => new Service\ReleaseHooks($container, $container['git'], $container['logger']);
+        $this['release_hooks'] = static fn (self $container) => new Service\ReleaseHooks(
+            $container['git.file_reader'],
+            $container['logger'],
+            $container,
+            $container['git']
+        );
 
         //
         // Third-party APIs

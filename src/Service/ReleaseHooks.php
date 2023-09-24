@@ -13,24 +13,21 @@ declare(strict_types=1);
 
 namespace HubKit\Service;
 
+use HubKit\Service\Git\GitFileReader;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Rollerworks\Component\Version\Version;
 
-class ReleaseHooks
+class ReleaseHooks extends HookScript
 {
-    /**
-     * @var string|null
-     */
-    private readonly string | bool $cwd;
-
     public function __construct(
+        GitFileReader $gitFileReader,
+        LoggerInterface $logger,
         private readonly ContainerInterface $container,
         private readonly Git $git,
-        private readonly LoggerInterface $logger,
-        ?string $cwd = null
+        string $cwd = null
     ) {
-        $this->cwd = $cwd ?? getcwd();
+        parent::__construct($gitFileReader, $logger, $cwd);
     }
 
     public function preRelease(Version $version, string $branch, ?string $releaseTitle, string $changelog): ?string
@@ -45,26 +42,13 @@ class ReleaseHooks
 
     private function executeScript(string $type, Version $version, string $branch, ?string $releaseTitle, string $changelog): ?string
     {
-        $scriptFile = $this->cwd . '/.hubkit/' . $type . '.php';
+        $scriptFile = $this->findScript($type);
 
-        if (! file_exists($scriptFile)) {
-            $this->logger->debug('File {script} was not found. ' . $type . ' script will not be executed.', ['script' => $scriptFile]);
-
-            return '';
+        if ($scriptFile === null) {
+            return null;
         }
 
-        $hookCallback = include $scriptFile;
-
-        if (! \is_callable($hookCallback)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    'Expected script file "%s" to return a callable, got "%s" instead.',
-                    $scriptFile,
-                    \gettype($hookCallback)
-                )
-            );
-        }
-
+        $hookCallback = $this->getHookCallback($scriptFile);
         $result = $hookCallback($this->container, $version, $branch, $releaseTitle, $changelog);
 
         if (! $this->git->isWorkingTreeReady()) {
