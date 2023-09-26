@@ -213,7 +213,7 @@ final class ConfigFactory
                 ->normalizeKeys(false)
                 ->treatFalseLike(['upmerge' => false, 'sync-tags' => true, 'ignore-default' => true, 'split' => []])
                 ->children()
-                    ->booleanNode('upmerge')->defaultTrue()->end()
+                    ->booleanNode('upmerge')->defaultTrue()->info('Set to false to disable upmerge for this branch configuration, and continue with next possible version')->end()
                     ->booleanNode('sync-tags')->defaultTrue()->end()
                     ->booleanNode('ignore-default')->defaultFalse()->info('Ignore the ":default" branch configuration')->end()
                     ->arrayNode('split')

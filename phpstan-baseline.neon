@@ -101,8 +101,13 @@ parameters:
 			path: src/Cli/Handler/SwitchBaseHandler.php
 
 		-
-			message: "#^Binary operation \"\\+\" between int\\|string\\|false and 1 results in an error\\.$#"
-			count: 6
+			message: "#^Parameter \\#2 \\$branches of method HubKit\\\\Cli\\\\Handler\\\\UpMergeHandler\\:\\:dryMergeBranches\\(\\) expects array\\<string\\>, array\\<string\\|false\\> given\\.$#"
+			count: 1
+			path: src/Cli/Handler/UpMergeHandler.php
+
+		-
+			message: "#^Parameter \\#2 \\$branches of method HubKit\\\\Cli\\\\Handler\\\\UpMergeHandler\\:\\:mergeBranches\\(\\) expects array\\<string\\>, array\\<string\\|false\\> given\\.$#"
+			count: 1
 			path: src/Cli/Handler/UpMergeHandler.php
 
 		-
@@ -138,6 +143,26 @@ parameters:
 		-
 			message: "#^Method HubKit\\\\Config\\:\\:getOrFail\\(\\) has no return type specified\\.$#"
 			count: 1
+			path: src/Config.php
+
+		-
+			message: "#^Parameter \\#1 \\$host of method HubKit\\\\Config\\:\\:getForRepository\\(\\) expects string, string\\|null given\\.$#"
+			count: 1
+			path: src/Config.php
+
+		-
+			message: "#^Parameter \\#2 \\$repository of method HubKit\\\\Config\\:\\:getForRepository\\(\\) expects string, string\\|null given\\.$#"
+			count: 1
+			path: src/Config.php
+
+		-
+			message: "#^Parameter \\#4 \\$configPath of class HubKit\\\\BranchConfig constructor expects array\\<int, string\\>\\|null, array\\<int, string\\|null\\> given\\.$#"
+			count: 2
+			path: src/Config.php
+
+		-
+			message: "#^Parameter \\$configPath of class HubKit\\\\BranchConfig constructor expects array\\<int, string\\>\\|null, array\\<int, string\\|null\\> given\\.$#"
+			count: 2
 			path: src/Config.php
 
 		-

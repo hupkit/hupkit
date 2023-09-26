@@ -317,7 +317,7 @@ final class ConfigTest extends TestCase
                 configName: '1.0',
                 configPath: ['repositories', 'github.com', 'repos', 'hubkit-sandbox/empire', 'branches', '1.0'],
             ),
-            $config->getBranchConfig('github.com', 'hubkit-sandbox/empire', '1.0')
+            $config->getBranchConfig('1.0', 'github.com', 'hubkit-sandbox/empire')
         );
 
         self::assertEquals(
@@ -327,7 +327,7 @@ final class ConfigTest extends TestCase
                 configName: '2.0',
                 configPath: ['repositories', 'github.com', 'repos', 'hubkit-sandbox/empire', 'branches', '2.0'],
             ),
-            $config->getBranchConfig('github.com', 'hubkit-sandbox/empire', '2.0')
+            $config->getBranchConfig('2.0', 'github.com', 'hubkit-sandbox/empire')
         );
 
         self::assertEquals(
@@ -337,7 +337,7 @@ final class ConfigTest extends TestCase
                 configName: '#3.x',
                 configPath: ['repositories', 'github.com', 'repos', 'hubkit-sandbox/empire', 'branches', '#3.x'],
             ),
-            $config->getBranchConfig('github.com', 'hubkit-sandbox/empire', '#3.x')
+            $config->getBranchConfig('#3.x', 'github.com', 'hubkit-sandbox/empire')
         );
 
         self::assertEquals(
@@ -355,7 +355,7 @@ final class ConfigTest extends TestCase
                 configName: '1.0',
                 configPath: ['repositories', 'github.com', 'repos', 'hubkit-sandbox/application', 'branches', '1.0'],
             ),
-            $config->getBranchConfig('github.com', 'hubkit-sandbox/application', '1.0')
+            $config->getBranchConfig('1.0', 'github.com', 'hubkit-sandbox/application')
         );
 
         self::assertEquals(
@@ -372,7 +372,7 @@ final class ConfigTest extends TestCase
                 configName: '1.*',
                 configPath: ['repositories', 'github.com', 'repos', 'hubkit-sandbox/application', 'branches', '1.*'],
             ),
-            $config->getBranchConfig('github.com', 'hubkit-sandbox/application', '1.1')
+            $config->getBranchConfig('1.1', 'github.com', 'hubkit-sandbox/application')
         );
 
         self::assertEquals(
@@ -389,7 +389,7 @@ final class ConfigTest extends TestCase
                 configName: '2.x',
                 configPath: ['repositories', 'github.com', 'repos', 'hubkit-sandbox/application', 'branches', '2.x'],
             ),
-            $config->getBranchConfig('github.com', 'hubkit-sandbox/application', '2.1')
+            $config->getBranchConfig('2.1', 'github.com', 'hubkit-sandbox/application')
         );
 
         self::assertEquals(
@@ -406,7 +406,7 @@ final class ConfigTest extends TestCase
                 configName: '/[3-9]\.\d+/',
                 configPath: ['repositories', 'github.com', 'repos', 'hubkit-sandbox/application', 'branches', '/[3-9]\.\d+/'],
             ),
-            $config->getBranchConfig('github.com', 'hubkit-sandbox/application', '4.5')
+            $config->getBranchConfig('4.5', 'github.com', 'hubkit-sandbox/application')
         );
 
         $config->setActiveRepository('github.com', 'hubkit-sandbox/empire');
@@ -425,7 +425,7 @@ final class ConfigTest extends TestCase
                 configName: '1.*',
                 configPath: ['_local', 'branches', '1.*'],
             ),
-            $config->getBranchConfig('github.com', 'hubkit-sandbox/empire', '1.0')
+            $config->getBranchConfig('1.0', 'github.com', 'hubkit-sandbox/empire')
         );
 
         self::assertEquals(
@@ -443,7 +443,7 @@ final class ConfigTest extends TestCase
                 configName: '1.0',
                 configPath: ['repositories', 'github.com', 'repos', 'hubkit-sandbox/application', 'branches', '1.0'],
             ),
-            $config->getBranchConfig('github.com', 'hubkit-sandbox/application', '1.0')
+            $config->getBranchConfig('1.0', 'github.com', 'hubkit-sandbox/application')
         );
 
         // No explicit branch found, resolved from :default
@@ -460,7 +460,7 @@ final class ConfigTest extends TestCase
                 configName: ':default',
                 configPath: ['repositories', 'github.com', 'repos', 'hubkit-sandbox/application', 'branches', ':default'],
             ),
-            $config->getBranchConfig('github.com', 'hubkit-sandbox/application', '10.5')
+            $config->getBranchConfig('10.5', 'github.com', 'hubkit-sandbox/application')
         );
 
         // No explicit branch found, default ignored
@@ -475,7 +475,7 @@ final class ConfigTest extends TestCase
                 configName: '11.0',
                 configPath: ['repositories', 'github.com', 'repos', 'hubkit-sandbox/application', 'branches', '11.0'],
             ),
-            $config->getBranchConfig('github.com', 'hubkit-sandbox/application', '11.0')
+            $config->getBranchConfig('11.0', 'github.com', 'hubkit-sandbox/application')
         );
     }
 }

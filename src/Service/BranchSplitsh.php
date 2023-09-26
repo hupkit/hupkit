@@ -84,7 +84,11 @@ class BranchSplitsh
 
     private function getBranchConfig(string $branch): BranchConfig
     {
-        $branchConfig = $this->config->getBranchConfig($this->github->getHostname(), $this->github->getOrganization() . '/' . $this->github->getRepository(), $branch);
+        $branchConfig = $this->config->getBranchConfig(
+            $branch,
+            $this->github->getHostname(),
+            $this->github->getOrganization() . '/' . $this->github->getRepository()
+        );
 
         if (empty($branchConfig->config['split'])) {
             $this->style->text(sprintf('No repository-split targets were found in config "[%s]".', implode('][', $branchConfig->configPath)));

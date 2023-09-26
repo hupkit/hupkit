@@ -81,7 +81,7 @@ Each branch has the following options:
 |------------------|---------|----------|-------------------------------------------------------------------------------------------------------------------|
 | `sync-tags`      | Boolean | `true`   | _Only when 'split' targets are configured_, <br/>whether new tags should be synchronized when creating a release. |
 | `ignore-default` | Boolean | `false`  | Whether the ':default' configuration should be ignored.                                                           |
-| `upmerge`        | Boolean | `true`   | _Not supported at the moment._                                                                                    |
+| `upmerge`        | Boolean | `true`   | Set to false to disable upmerge for this branch configuration, and continue with next possible version.           |
 | `split`          | array   | `[]`     | See Repository splitting for details.                                                                             |
 
 ```php
@@ -96,9 +96,9 @@ Each branch has the following options:
             'docs' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => false],
         ],
     ],
-    '1.0' => false, // Disabled
+    '1.0' => false, // Disabled all
     '2.x' => [ // '2.x' is a pattern equivalent to '/2\.\d+/'
-        'upmerge' => false,
+        'upmerge' => false, // Disable upmerge for this branch, effectively all of the '2.x' range are skipped
         // Split's is inherited and merged from ':default'
         'split' => [
             'src/Module/DomainRegModule' => 'git@github.com:hubkit-sandbox/webhosting-module.git',
