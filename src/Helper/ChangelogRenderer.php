@@ -22,8 +22,7 @@ class ChangelogRenderer
     public function __construct(
         private readonly Git $git,
         private readonly GitHub $github
-    ) {
-    }
+    ) {}
 
     public function renderChangelogOneLine(string $base, string $head): string
     {

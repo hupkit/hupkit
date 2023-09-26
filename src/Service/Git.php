@@ -33,8 +33,7 @@ class Git
         protected CliProcess $process,
         private readonly Filesystem $filesystem,
         protected StyleInterface $style
-    ) {
-    }
+    ) {}
 
     public function isGitDir(): bool
     {
@@ -63,7 +62,7 @@ class Git
      * @see https://gist.github.com/WebPlatformDocs/437f763b948c926ca7ba
      * @see https://stackoverflow.com/questions/3258243/git-check-if-pull-needed
      */
-    public function getRemoteDiffStatus(string $remoteName, string $localBranch, ?string $remoteBranch = null): string
+    public function getRemoteDiffStatus(string $remoteName, string $localBranch, string $remoteBranch = null): string
     {
         if ($remoteBranch === null) {
             $remoteBranch = $localBranch;
@@ -538,7 +537,7 @@ class Git
         return $info;
     }
 
-    public function clone(string $ssh_url, string $remoteName = 'origin', ?int $depth = null): void
+    public function clone(string $ssh_url, string $remoteName = 'origin', int $depth = null): void
     {
         $command = ['git', 'clone', $ssh_url, '.'];
 

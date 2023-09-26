@@ -26,8 +26,7 @@ abstract class GitBaseHandler implements RequiresGitRepository
         protected Git $git,
         protected GitHub $github,
         protected Config $config
-    ) {
-    }
+    ) {}
 
     protected function informationHeader(string $branch = null): void
     {

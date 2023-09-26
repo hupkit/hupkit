@@ -1038,7 +1038,7 @@ by who-else at 2014-11-23T14:50:24Z
         $this->assertOutputMatches($expected);
     }
 
-    public function provideStatusLabels(): array
+    public function provideStatusLabels(): iterable
     {
         return [
             [['Status: ready'], true, 'Reviewed    OK        Status: ready'],

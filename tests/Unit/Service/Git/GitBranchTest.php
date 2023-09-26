@@ -27,7 +27,7 @@ final class GitBranchTest extends TestCase
 {
     use ProphecyTrait;
 
-    public function provideExpectedVersions(): array
+    public function provideExpectedVersions(): iterable
     {
         return [
             [['master', '1.0', 'v1.1', '2.0', 'x.1'], ['1.0', 'v1.1', '2.0']],

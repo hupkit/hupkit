@@ -64,6 +64,7 @@ $config
         'not_operator_with_successor_space' => true,
         'ordered_class_elements' => false,
         'ordered_imports' => true,
+        'php_unit_data_provider_name' => false,
         'php_unit_method_casing' => ['case' => 'snake_case'],
         'php_unit_strict' => false,
         'php_unit_test_annotation' => ['style' => 'annotation'],

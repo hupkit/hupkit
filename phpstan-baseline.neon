@@ -881,7 +881,7 @@ parameters:
 			path: tests/Handler/MergeHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\MergeHandlerTest\\:\\:provideStatusLabels\\(\\) return type has no value type specified in iterable type array\\.$#"
+			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\MergeHandlerTest\\:\\:provideStatusLabels\\(\\) return type has no value type specified in iterable type iterable\\.$#"
 			count: 1
 			path: tests/Handler/MergeHandlerTest.php
 
@@ -1641,7 +1641,7 @@ parameters:
 			path: tests/Unit/Service/Git/GitBranchTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Unit\\\\Service\\\\Git\\\\GitBranchTest\\:\\:provideExpectedVersions\\(\\) return type has no value type specified in iterable type array\\.$#"
+			message: "#^Method HubKit\\\\Tests\\\\Unit\\\\Service\\\\Git\\\\GitBranchTest\\:\\:provideExpectedVersions\\(\\) return type has no value type specified in iterable type iterable\\.$#"
 			count: 1
 			path: tests/Unit/Service/Git/GitBranchTest.php
 

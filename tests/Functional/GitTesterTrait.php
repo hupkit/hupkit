@@ -59,7 +59,7 @@ trait GitTesterTrait
     /**
      * @param array<int, string> $cmd
      */
-    protected function runCliCommand(array $cmd, ?string $cwd = null): Process
+    protected function runCliCommand(array $cmd, string $cwd = null): Process
     {
         $process = new Process($cmd, $cwd ?? $this->cwd);
         $process->mustRun();
@@ -67,7 +67,7 @@ trait GitTesterTrait
         return $process;
     }
 
-    protected function getProcessService(?string $cwd = null): TestCliProcess
+    protected function getProcessService(string $cwd = null): TestCliProcess
     {
         return (new TestCliProcess($this->getCliOutput()))->setCwd($cwd ?? $this->cwd);
     }
@@ -86,7 +86,7 @@ trait GitTesterTrait
         $this->runCliCommand(['git', 'commit', '-m', 'I am a dwarf, I am digging a hole'], $repository);
     }
 
-    protected function addRemote(string $remoteName, string $remoteRepository, ?string $sourceRepository = null): void
+    protected function addRemote(string $remoteName, string $remoteRepository, string $sourceRepository = null): void
     {
         $this->runCliCommand(['git', 'remote', 'add', $remoteName, 'file://' . $remoteRepository], $sourceRepository);
     }

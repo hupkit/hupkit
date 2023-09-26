@@ -35,9 +35,7 @@ class StatusTable
     private array $rows = [];
     private array $statuses = [];
 
-    public function __construct(private readonly OutputInterface $output)
-    {
-    }
+    public function __construct(private readonly OutputInterface $output) {}
 
     public function render(): void
     {
@@ -71,7 +69,7 @@ class StatusTable
         return isset($this->statuses[$status]);
     }
 
-    public function addRow(string $label, string $status, ?string $message = null): void
+    public function addRow(string $label, string $status, string $message = null): void
     {
         $this->rows[] = [$label, self::STATUS_LABELS[$status], wordwrap((string) $message, 38)];
         $this->statuses[$status] = true;

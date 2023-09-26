@@ -32,8 +32,7 @@ final class SelfDiagnoseHandler
         private readonly GitHub $github,
         private readonly CliProcess $process,
         private readonly GitFileReader $gitFileReader
-    ) {
-    }
+    ) {}
 
     public function handle(): int
     {

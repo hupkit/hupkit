@@ -24,8 +24,7 @@ final class ClearCacheHandler
     public function __construct(
         private readonly SymfonyStyle $style,
         private readonly Filesystem $filesystem
-    ) {
-    }
+    ) {}
 
     public function handle(Args $args, IO $io): int
     {

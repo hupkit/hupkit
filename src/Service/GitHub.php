@@ -35,8 +35,7 @@ class GitHub
     public function __construct(
         private readonly ClientInterface $httpClient,
         private readonly Config $config
-    ) {
-    }
+    ) {}
 
     public function autoConfigure(Git $git): void
     {
@@ -289,7 +288,7 @@ class GitHub
         );
     }
 
-    public function createRelease(string $name, string $body, bool $preRelease = false, ?string $title = null)
+    public function createRelease(string $name, string $body, bool $preRelease = false, string $title = null)
     {
         return $this->client->repo()->releases()->create(
             $this->organization,

@@ -30,8 +30,7 @@ class GitFileReader
         private readonly GitConfig $gitConfig,
         private readonly CliProcess $process,
         private readonly GitTempRepository $gitTempRepository
-    ) {
-    }
+    ) {}
 
     /**
      * @param string $path Path relative to repository root

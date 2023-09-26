@@ -434,7 +434,7 @@ labels: removed-deprecation
         $this->git->remoteBranchExists('upstream', $branch)->willReturn(false);
     }
 
-    private function expectTagAndGitHubRelease(string $version, string $message, ?string $title = null, ?string $branch = null): string
+    private function expectTagAndGitHubRelease(string $version, string $message, string $title = null, string $branch = null): string
     {
         $this->branchSplitsh->syncTags($branch ?? 'master', $version)->willReturn(2)->shouldBeCalled();
 

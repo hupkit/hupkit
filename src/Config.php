@@ -18,9 +18,7 @@ final class Config
     public ?string $activeHost = null;
     public ?string $activeRepository = null;
 
-    public function __construct(private readonly array $config)
-    {
-    }
+    public function __construct(private readonly array $config) {}
 
     public function setActiveRepository(?string $host, ?string $repository): void
     {

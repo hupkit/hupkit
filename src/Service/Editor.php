@@ -20,8 +20,7 @@ class Editor
     public function __construct(
         private readonly CliProcess $process,
         private readonly Filesystem $filesystem
-    ) {
-    }
+    ) {}
 
     /**
      * Launch an external editor and open a temporary file containing the $contents value.

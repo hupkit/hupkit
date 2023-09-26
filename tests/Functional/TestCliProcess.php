@@ -43,7 +43,7 @@ class TestCliProcess extends CliProcess
     /**
      * @param Process|array<int, string> $cmd
      */
-    public function run(array | Process $cmd, ?string $error = null, callable $callback = null, int $verbosity = OutputInterface::VERBOSITY_VERY_VERBOSE): Process
+    public function run(array | Process $cmd, string $error = null, callable $callback = null, int $verbosity = OutputInterface::VERBOSITY_VERY_VERBOSE): Process
     {
         return parent::run($this->wrapProcessorForCmd($cmd), $error, $callback, $verbosity);
     }
@@ -51,7 +51,7 @@ class TestCliProcess extends CliProcess
     /**
      * @param Process|array<int, string> $cmd
      */
-    public function mustRun(array | Process $cmd, ?string $error = null, callable $callback = null): Process
+    public function mustRun(array | Process $cmd, string $error = null, callable $callback = null): Process
     {
         return parent::mustRun($this->wrapProcessorForCmd($cmd), $error, $callback);
     }

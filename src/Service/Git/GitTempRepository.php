@@ -26,15 +26,14 @@ class GitTempRepository
     public function __construct(
         private readonly CliProcess $process,
         private readonly Filesystem $filesystem
-    ) {
-    }
+    ) {}
 
     public function getLocal(string $directory, string $branch = null): string
     {
         return $this->getRemote('file://' . $directory, $branch);
     }
 
-    public function getRemote(string $repositoryUrl, ?string $branch = null): string
+    public function getRemote(string $repositoryUrl, string $branch = null): string
     {
         $tempdir = $this->filesystem->storageTempDirectory('repo_' . sha1($repositoryUrl), false, $exists);
 

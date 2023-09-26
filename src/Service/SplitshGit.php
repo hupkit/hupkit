@@ -25,8 +25,7 @@ class SplitshGit
         private readonly LoggerInterface $logger,
         private readonly GitTempRepository $gitTempRepository,
         private readonly ?string $executable
-    ) {
-    }
+    ) {}
 
     /**
      * Split the prefix directory into another repository.

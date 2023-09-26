@@ -24,8 +24,7 @@ final class RepositoryCreateHandler
         private readonly SymfonyStyle $style,
         private readonly Git $git,
         private readonly GitHub $github
-    ) {
-    }
+    ) {}
 
     public function handle(Args $args): void
     {

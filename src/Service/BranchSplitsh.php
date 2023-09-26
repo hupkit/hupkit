@@ -29,8 +29,7 @@ class BranchSplitsh
         private readonly Config $config,
         private readonly SymfonyStyle $style,
         private readonly Git $git
-    ) {
-    }
+    ) {}
 
     /**
      * Split the prefix directory into another repository.

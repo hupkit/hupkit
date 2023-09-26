@@ -27,7 +27,7 @@ trait SymfonyStyleTrait
     /**
      * @return SymfonyStyle
      */
-    protected function createStyle(array $input = [], ?OutputInterface $output = null)
+    protected function createStyle(array $input = [], OutputInterface $output = null)
     {
         $this->input = new ArrayInput([]);
         $this->input->setInteractive(true);
