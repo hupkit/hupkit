@@ -476,6 +476,11 @@ parameters:
 			path: src/Service/GitHub.php
 
 		-
+			message: "#^Property HubKit\\\\Service\\\\HookScript\\:\\:\\$cwd \\(string\\|null\\) does not accept string\\|false\\.$#"
+			count: 1
+			path: src/Service/HookScript.php
+
+		-
 			message: "#^Method HubKit\\\\Service\\\\MessageValidator\\:\\:validateMessage\\(\\) should return array\\{string, string, string\\}\\|null but returns array\\{3, 'Unrelated commits…', string\\}\\.$#"
 			count: 1
 			path: src/Service/MessageValidator.php
@@ -484,11 +489,6 @@ parameters:
 			message: "#^Method HubKit\\\\Service\\\\MessageValidator\\:\\:validateMessage\\(\\) should return array\\{string, string, string\\}\\|null but returns array\\{5, 'Description…', string\\}\\.$#"
 			count: 1
 			path: src/Service/MessageValidator.php
-
-		-
-			message: "#^PHPDoc tag @var for property HubKit\\\\Service\\\\ReleaseHooks\\:\\:\\$cwd with type string\\|null is not subtype of native type bool\\|string\\.$#"
-			count: 1
-			path: src/Service/ReleaseHooks.php
 
 		-
 			message: "#^Parameter \\#1 \\$cmd of method HubKit\\\\Service\\\\CliProcess\\:\\:mustRun\\(\\) expects array\\<int, string\\>\\|Symfony\\\\Component\\\\Process\\\\Process, array\\<int, string\\|null\\> given\\.$#"

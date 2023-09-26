@@ -36,7 +36,7 @@ The `release` command has a number of special options:
 ## Release hooks
 
 The `release` command allows to executes a script prior (pre) and/or after (post) after the release
-operation. See [Release Hooks](release-hooks.md) for details.
+operation. See [Release Hooks](../release-hooks.md) for details.
 
 *Note:* You need at least HubKit version 1.0.0-BETA18 to use release hooks.
 

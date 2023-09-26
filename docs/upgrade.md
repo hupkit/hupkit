@@ -1,6 +1,56 @@
 Upgrade Hubkit
 ==============
 
+Upgrade to v1.2.0-BETA6
+-----------------------
+
+The pre/post release hook scripts are now expected to be stored in the _"hubkit" configuration branch.
+
+*Using the ".hubkit directory at the root of the repository is still supported, but will no longer work
+in HubKit v2.0.*
+
+**Caution:** Hooks are loaded from a temporary location *outside of the repository*, use the `__DIR__`
+constant to load files from the the temp-location, use `$container['current_dir']` 
+to get the actual location to the project repository. 
+
+The services already use the correct current location (the repository root).
+
+**For example:**
+
+```php
+<?php
+
+// pre-release.php (in the "_hubkit" branch)
+
+declare(strict_types=1);
+
+use Psr\Container\ContainerInterface as Container;
+use Rollerworks\Component\Version\Version;
+
+return function (Container $container, Version $version, string $branch, ?string $releaseTitle, string $changelog) {
+
+    $container->get('logger')->debug('Working at: ' . $container['current_dir']);
+    $container->get('logger')->info('Updating composer branch-alias');
+    
+    $container->get('process')->mustRun(['composer', 'config', 'extra.branch-alias.dev-'.$branch, sprintf('%d.%d-dev', $version->major, $version->minor)]);
+
+    /** @var \HubKit\Service\Git\GitBranch $gitBranch */
+    $gitBranch = $container->get('git.branch');
+
+    if ($gitBranch->isWorkingTreeReady()) {
+        return; // Nothing to, composer is already up-to-date
+    }
+
+    $gitBranch->add('composer.json');
+    $gitBranch->commit('Update composer branch-alias');
+
+    /** @var \HubKit\Service\Git $git */
+    $git = $container->get('git.branch');
+    $git->pushToRemote('upstream', $branch);
+};
+```
+
+
 Upgrade to v1.2.0-BETA4
 -----------------------
 

@@ -10,14 +10,17 @@ This might vary from updating the `composer.json` branch-alias, to creating a pu
 the new release.
 
 Now instead of doing this manually HubKit allows to hook-into the release process, but executing
-a custom script before and/or after a new release created.
+a custom callback before and/or after a new release is created.
 
 Both the pre and post hooks work the same way, but are executed at different stages.
 
 ## The Script
 
-Add a PHP  script named either `pre-release.php` or `post-release.php` in the project root folder
-at `.hubkit`, like `.hubkit/pre-release.php`.
+Add a PHP  script named either `pre-release.php` or `post-release.php` at the root folder
+of the "_hubkit" [configuration branch](config.md#local-configuration).
+
+**Caution:** Prior to HubKit v1.2 scripts were expected in the ".hubkit" folder at the root folder
+of the repository. Make sure to use the latest available release to prevent unexpected behavior.
 
 With the following contents:
 
@@ -37,12 +40,23 @@ return function (Container $container, Version $version, string $branch, ?string
     //
     // See \HubKit\Container for all services and there corresponding classes.
     // Note: Only the services listed above are covered by the BC promise.
+    
+    // !! CAUTION !!
+    //
+    // Hooks are loaded from a temporary location *outside of the repository*, use the `__DIR__`
+    // constant to load files related to the script, use `$container['current_dir']` 
+    // to get the actual location to the project repository.
+    //
 };
 ```
 
-**Note:** The hook is executed in the application's context, you have full access to entire applications flow!
+**Note:** The hook is executed in the HubKit application's context, you have full access to entire applications flow!
 
-Below you can find some examples how to use these hooks
+While possible it's' best not to load external dependencies as there is currently no promise this will work
+when HubKit uses similar dependencies. In this case it might be better to use the `process` service to execute
+a separate command.
+
+Below you can find some examples how to use these hooks.
 
 ### Updating the `composer.json` branch-alias (pre-release)
 
@@ -51,7 +65,7 @@ Below you can find some examples how to use these hooks
 
 declare(strict_types=1);
 
-// .hubkit/pre-release.php
+// pre-release.php (in the _hubkit branch)
 
 use Psr\Container\ContainerInterface as Container;
 use Rollerworks\Component\Version\Version;
@@ -82,7 +96,7 @@ return function (Container $container, Version $version, string $branch, ?string
 
 declare(strict_types=1);
 
-// .hubkit/post-release.php
+// post-release.php  (in the _hubkit branch)
 
 use Psr\Container\ContainerInterface as Container;
 use Rollerworks\Component\Version\Version;
@@ -120,7 +134,7 @@ error protections.
 
 declare(strict_types=1);
 
-// .hubkit/pre-release.php
+// pre-release.php  (in the _hubkit branch)
 
 use Psr\Container\ContainerInterface as Container;
 use Rollerworks\Component\Version\Version;
