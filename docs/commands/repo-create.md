@@ -10,6 +10,9 @@ $ hubkit repo-create park-manager/hubkit
 This creates the "hubkit" repository in the "park-manager" organization. To create a
 private repository (may require a paid plan) use the `--private` option.
 
+**Tip:** Since HubKit v1.6 use the `split-create` command to automatically create
+repositories for split targets.
+
 # Special options
 
 The `repo-create` command has a number of special options:

@@ -68,6 +68,16 @@ class GitHub
         }
     }
 
+    public function createForHost(string $hostname): self
+    {
+        $github = clone $this;
+        $github->initializeForHost($hostname);
+        $github->organization = '';
+        $github->repository = '';
+
+        return $github;
+    }
+
     public function setRepository(string $organization, string $repository): void
     {
         $this->organization = $organization;
@@ -115,6 +125,14 @@ class GitHub
             null, // team-id
             false // auto-init
         );
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function getRepoInfo(string $organization, string $name): array
+    {
+        return $this->client->repo()->show($organization, $name);
     }
 
     public function getIssue(int $number)

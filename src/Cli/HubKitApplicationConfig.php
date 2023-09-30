@@ -164,6 +164,7 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
 
             ->beginCommand('split-repo')
             ->setDescription('Split the repository into configured targets. Requires "repos" is configured in config.php')
+            ->setHelp('Splits the current repository into configured targets, use the `split-create` command to set-up missing repositories')
             ->addArgument('branch', Argument::OPTIONAL | Argument::STRING, 'Branch to checkout and split from, uses current when omitted')
             ->addOption('dry-run', null, Option::NO_VALUE | Option::BOOLEAN, 'Show which operations would have been performed (without actually splitting)')
             ->addOption('prefix', null, Option::REQUIRED_VALUE | Option::STRING, 'Split only a specific prefix instead of all')
@@ -174,6 +175,18 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
                     $this->container['github'],
                     $this->container['config'],
                     $this->container['branch_splitsh_git']
+                );
+            })
+            ->end()
+
+            ->beginCommand('split-create')
+            ->setDescription('Create repositories for the current repository configured split targets (already existing repositories are ignored). Requires "repos" is configured in config.php')
+            ->setHandler(function () {
+                return new Handler\SplitCreatedHandler(
+                    $this->container['style'],
+                    $this->container['git'],
+                    $this->container['github'],
+                    $this->container['config'],
                 );
             })
             ->end()
