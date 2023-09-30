@@ -1,0 +1,6 @@
+---------------------------------------------------------------------------
+
+by sstok at 2023-09-27T07:35:53Z
+
+Build failure is unrelated, I'm not using the exact same version of php-cs-fixer as the one used for CI.
+And building a new image (surprise) fails 😑
