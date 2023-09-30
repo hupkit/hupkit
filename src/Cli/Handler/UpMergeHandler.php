@@ -51,10 +51,20 @@ final class UpMergeHandler extends GitBaseHandler
             return 1;
         }
 
-        $defaultBranch = $this->github->getDefaultBranch();
+        $branchConfig = $this->config->getBranchConfig($branch);
 
-        if (! \in_array($defaultBranch, $branches, true)) {
-            $branches[] = $defaultBranch;
+        if (! ($branchConfig->config['upmerge'] ?? true)) {
+            $this->style->error(sprintf('Branch "%s" has upmerge disabled by "%s".', $branch, $branchConfig->configName));
+
+            return 1;
+        }
+
+        $branches = $this->getBranches($branch, $branches);
+
+        if ($branches === []) {
+            $this->style->success('Nothing to do here, no branches to upmerge.');
+
+            return 0;
         }
 
         if ($args->getOption('dry-run')) {
@@ -78,6 +88,37 @@ final class UpMergeHandler extends GitBaseHandler
     }
 
     /**
+     * @param array<int, string> $branches
+     *
+     * @return array<int, string>
+     */
+    private function getBranches(string $branch, array $branches): array
+    {
+        $defaultBranch = $this->github->getDefaultBranch();
+
+        if (! \in_array($defaultBranch, $branches, true)) {
+            $branches[] = $defaultBranch;
+        }
+
+        $finalBranches = [];
+
+        for ($i = (array_search($branch, $branches, true) + 1), $c = \count($branches); $i < $c; ++$i) {
+            $branchName = $branches[$i];
+            $branchConfig = $this->config->getBranchConfig($branchName);
+
+            if (! ($branchConfig->config['upmerge'] ?? true)) {
+                $this->style->note(sprintf('Branch "%s" has upmerge disabled by "%s", and will be skipped.', $branchName, $branchConfig->configName));
+
+                continue;
+            }
+
+            $finalBranches[] = $branchName;
+        }
+
+        return $finalBranches;
+    }
+
+    /**
      * @param string[] $branches
      */
     private function handleMerge(Args $args, string $branch, array $branches): int
@@ -86,21 +127,8 @@ final class UpMergeHandler extends GitBaseHandler
 
         try {
             $this->git->ensureBranchInSync('upstream', $branch);
-
-            if ($args->getOption('all')) {
-                $changedBranches = $this->mergeAllBranches($branch, $branches, $noSplit);
-            } else {
-                $changedBranches = $this->mergeSingleBranch($branch, $branches, $noSplit);
-            }
-
-            if ($changedBranches === []) {
-                $this->style->success('Nothing to do here.');
-
-                return 0;
-            }
-
+            $changedBranches = $this->mergeBranches($branch, $args->getOption('all') ? $branches : [reset($branches)], $noSplit);
             $this->git->pushToRemote('upstream', $changedBranches);
-            $this->style->success('Branch(es) where merged.');
         } catch (\Exception $e) {
             $this->style->error(
                 [
@@ -115,6 +143,8 @@ final class UpMergeHandler extends GitBaseHandler
             return 1;
         }
 
+        $this->style->success('Branch(es) where merged.');
+
         return 0;
     }
 
@@ -123,61 +153,27 @@ final class UpMergeHandler extends GitBaseHandler
      *
      * @return string[]
      */
-    private function mergeAllBranches(string $branch, array $branches, bool $noSplit): array
+    private function mergeBranches(string $branch, array $branches, bool $noSplit): array
     {
-        $changedBranches = [];
+        $sourceBranch = $branch;
 
-        for ($i = (array_search($branch, $branches, true) + 1), $c = \count($branches); $i < $c; ++$i) {
-            $sourceBranch = $branches[$i - 1];
-            $nextVersion = $branches[$i];
-
-            $this->git->checkoutRemoteBranch('upstream', $nextVersion);
-            $this->git->ensureBranchInSync('upstream', $nextVersion);
+        foreach ($branches as $destBranch) {
+            $this->git->checkoutRemoteBranch('upstream', $destBranch);
+            $this->git->ensureBranchInSync('upstream', $destBranch);
             $this->process->mustRun(['git', 'merge', '--no-ff', '--log', $sourceBranch]);
 
-            $this->style->note(sprintf('Merged "%s" into "%s"', $sourceBranch, $nextVersion));
+            $this->style->note(sprintf('Merged "%s" into "%s"', $sourceBranch, $destBranch));
 
             if (! $noSplit) {
-                $this->branchSplitsh->splitBranch($nextVersion);
+                $this->branchSplitsh->splitBranch($destBranch);
             }
 
-            $changedBranches[] = $nextVersion;
+            $sourceBranch = $destBranch;
         }
 
         $this->git->checkout($branch);
 
-        return $changedBranches;
-    }
-
-    /**
-     * @param string[] $branches
-     *
-     * @return string[]
-     */
-    private function mergeSingleBranch(string $branch, array $branches, bool $noSplit): array
-    {
-        $idx = array_search($branch, $branches, true);
-
-        if (! isset($branches[$idx + 1])) {
-            return []; // Already at the last possible branch
-        }
-
-        $nextVersion = $branches[$idx + 1];
-
-        $this->git->ensureBranchInSync('upstream', $branch);
-        $this->git->checkoutRemoteBranch('upstream', $nextVersion);
-        $this->git->ensureBranchInSync('upstream', $nextVersion);
-        $this->process->mustRun(['git', 'merge', '--no-ff', '--log', $branch]);
-
-        $this->style->note(sprintf('Merged "%s" into "%s"', $branch, $nextVersion));
-
-        if (! $noSplit) {
-            $this->branchSplitsh->splitBranch($nextVersion);
-        }
-
-        $this->git->checkout($branch);
-
-        return [$nextVersion];
+        return $branches;
     }
 
     /**
@@ -185,27 +181,9 @@ final class UpMergeHandler extends GitBaseHandler
      */
     private function handleDryMerge(Args $args, string $branch, array $branches): int
     {
-        $noSplit = $args->getOption('no-split');
-
         try {
             $this->git->ensureBranchInSync('upstream', $branch);
-
-            if ($args->getOption('all')) {
-                $changedBranches = $this->dryMergeAllBranches($branch, $branches, $noSplit);
-            } else {
-                $changedBranches = $this->dryMergeSingleBranch($branch, $branches, $noSplit);
-            }
-
-            if ($changedBranches === []) {
-                $this->style->success(
-                    'This operation would not perform anything, ' .
-                    'everything is up-to-date or current branch is not a version branch.'
-                );
-
-                return 0;
-            }
-
-            $this->style->success('[DRY-RUN] Branch(es) where merged.');
+            $this->dryMergeBranches($branch, $args->getOption('all') ? $branches : [reset($branches)]);
         } catch (\Exception $e) {
             $this->style->error(
                 [
@@ -218,48 +196,24 @@ final class UpMergeHandler extends GitBaseHandler
             return 1;
         }
 
+        $this->style->success('[DRY-RUN] Branch(es) where merged.');
+
         return 0;
     }
 
     /**
      * @param string[] $branches
-     *
-     * @return string[]
      */
-    private function dryMergeAllBranches(string $branch, array $branches, bool $noSplit): array
+    private function dryMergeBranches(string $branch, array $branches): void
     {
-        $changedBranches = [];
+        $sourceBranch = $branch;
 
-        for ($i = (array_search($branch, $branches, true) + 1), $c = \count($branches); $i < $c; ++$i) {
-            $this->git->ensureBranchInSync('upstream', $branches[$i]);
-            $this->style->note(sprintf('[DRY-RUN] Merged "%s" into "%s"', $branches[$i - 1], $branches[$i]));
-            $this->branchSplitsh->drySplitBranch($branches[$i]);
+        foreach ($branches as $destBranch) {
+            $this->git->ensureBranchInSync('upstream', $destBranch);
+            $this->style->note(sprintf('[DRY-RUN] Merged "%s" into "%s"', $sourceBranch, $destBranch));
+            $this->branchSplitsh->drySplitBranch($destBranch);
 
-            $changedBranches[] = $branches[$i];
+            $sourceBranch = $destBranch;
         }
-
-        return $changedBranches;
-    }
-
-    /**
-     * @param string[] $branches
-     *
-     * @return string[]
-     */
-    private function dryMergeSingleBranch(string $branch, array $branches, bool $noSplit): array
-    {
-        $idx = array_search($branch, $branches, true);
-
-        if (! isset($branches[$idx + 1])) {
-            return []; // Already at the last possible branch
-        }
-
-        $nextVersion = $branches[$idx + 1];
-
-        $this->git->ensureBranchInSync('upstream', $nextVersion);
-        $this->style->note(sprintf('[DRY-RUN] Merged "%s" into "%s"', $branch, $nextVersion));
-        $this->branchSplitsh->drySplitBranch($nextVersion);
-
-        return [$nextVersion];
     }
 }

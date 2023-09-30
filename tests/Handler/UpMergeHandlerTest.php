@@ -70,6 +70,7 @@ final class UpMergeHandlerTest extends TestCase
                 ],
             ],
         ]);
+        $this->config->setActiveRepository('github.com', 'park-manager/hubkit');
 
         $this->branchSplitsh = $this->prophesize(BranchSplitsh::class);
         $this->branchSplitsh->splitAtPrefix(ProphecyArgument::any(), ProphecyArgument::any())->willReturn([])->shouldNotBeCalled();
@@ -338,7 +339,7 @@ final class UpMergeHandlerTest extends TestCase
         $this->git->remoteUpdate('upstream')->shouldBeCalled();
         $this->git->getVersionBranches('upstream')->willReturn(['2.2', '2.3', '2.5', '2.6']);
 
-        $this->executeHandler($this->getArgs()->setOption('all', true));
+        self::assertSame(1, $this->executeHandler($this->getArgs()->setOption('all', true)));
 
         $this->assertOutputMatches('Branch "master" is not a supported version branch.');
     }
@@ -353,11 +354,9 @@ final class UpMergeHandlerTest extends TestCase
 
         $this->git->getVersionBranches('upstream')->willReturn(['2.2', '2.3', '2.5', '2.6']);
 
-        $this->git->ensureBranchInSync('upstream', '2.6')->shouldBeCalled();
-
         $this->executeHandler();
 
-        $this->assertOutputMatches('Nothing to do here.');
+        $this->assertOutputMatches('Nothing to do here, no branches to upmerge.');
     }
 
     /** @test */
@@ -373,6 +372,60 @@ final class UpMergeHandlerTest extends TestCase
 
         $this->executeHandler($this->getArgs()->setArgument('branch', '2.3'));
         $this->assertOutputMatches('Local branch is not up-to-date.');
+    }
+
+    /** @test */
+    public function it_merges_current_branch_into_next_version_branches_skipping_upmerge_disabled_branches(): void
+    {
+        $this->expectConfigHasUpmergeDisabled();
+
+        $this->git->checkout('1.3')->shouldBeCalled();
+
+        $this->git->getActiveBranchName()->willReturn('1.3');
+        $this->git->remoteUpdate('upstream')->shouldBeCalled();
+
+        $this->git->getVersionBranches('upstream')->willReturn(['1.3', '2.2', '2.3', '2.5', '2.6', '2.x', '3.0']);
+        $this->git->ensureBranchInSync('upstream', '1.3')->shouldBeCalled();
+
+        $this->git->checkoutRemoteBranch('upstream', '3.0')->shouldBeCalled();
+        $this->git->ensureBranchInSync('upstream', '3.0')->shouldBeCalled();
+        $this->process->mustRun(['git', 'merge', '--no-ff', '--log', '1.3'])->shouldBeCalled();
+
+        $this->git->checkoutRemoteBranch('upstream', 'master')->shouldBeCalled();
+        $this->git->ensureBranchInSync('upstream', 'master')->shouldBeCalled();
+        $this->process->mustRun(['git', 'merge', '--no-ff', '--log', '3.0'])->shouldBeCalled();
+
+        $this->git->pushToRemote('upstream', ['3.0', 'master'])->shouldBeCalled();
+
+        foreach (['3.0', 'master'] as $branchTarget) {
+            $this->branchSplitsh->splitBranch($branchTarget)->willReturn([]);
+        }
+
+        $this->executeHandler($this->getArgs()->setOption('all', true));
+
+        $this->assertOutputMatches([
+            'Branch "2.2" has upmerge disabled by "2.x", and will be skipped.',
+            'Branch "2.3" has upmerge disabled by "2.x", and will be skipped.',
+            'Branch "2.6" has upmerge disabled by "2.x", and will be skipped.',
+            'Branch "2.x" has upmerge disabled by "2.x", and will be skipped.',
+            'Merged "1.3" into "3.0"',
+            'Merged "3.0" into "master"',
+        ]);
+    }
+
+    /** @test */
+    public function it_does_nothing_when_current_branch_has_upmerge_disabled(): void
+    {
+        $this->expectConfigHasUpmergeDisabled();
+
+        $this->git->getActiveBranchName()->willReturn('2.6');
+        $this->git->remoteUpdate('upstream')->shouldBeCalled();
+
+        $this->git->getVersionBranches('upstream')->willReturn(['2.2', '2.3', '2.5', '2.6']);
+
+        self::assertSame(1, $this->executeHandler());
+
+        $this->assertOutputMatches('Branch "2.6" has upmerge disabled by "2.x".');
     }
 
     /** @test */
@@ -473,19 +526,18 @@ final class UpMergeHandlerTest extends TestCase
         return new Args($format);
     }
 
-    private function executeHandler(Args $args = null): void
+    private function executeHandler(Args $args = null): int
     {
-        $style = $this->createStyle();
-
         $handler = new UpMergeHandler(
-            $style,
+            $this->createStyle(),
             $this->git->reveal(),
             $this->github->reveal(),
             $this->config,
             $this->process->reveal(),
             $this->branchSplitsh->reveal()
         );
-        $handler->handle($args ?? $this->getArgs());
+
+        return $handler->handle($args ?? $this->getArgs());
     }
 
     private function expectConfigHasSplits(): void
@@ -520,7 +572,7 @@ final class UpMergeHandlerTest extends TestCase
                                 ],
                                 '1.x' => [
                                     'sync-tags' => true,
-                                    'upmerge' => false,
+                                    'upmerge' => true,
                                     'split' => [],
                                 ],
                                 '2.x' => [
@@ -547,5 +599,73 @@ final class UpMergeHandlerTest extends TestCase
                 ],
             ],
         ]);
+        $this->config->setActiveRepository('github.com', 'park-manager/hubkit');
+    }
+
+    private function expectConfigHasUpmergeDisabled(): void
+    {
+        $this->config = new Config([
+            'schema_version' => 2,
+            'github' => [
+                'github.com' => [
+                    'username' => 'sstok',
+                    'api_token' => 'CHANGE-ME',
+                ],
+            ],
+            'repositories' => [
+                'github.com' => [
+                    'repos' => [
+                        'park-manager/hubkit' => [
+                            'branches' => [
+                                ':default' => [
+                                    'sync-tags' => false,
+                                    'split' => [
+                                        'src/Component/Core' => ['url' => 'git@github.com:park-manager/core.git', 'sync-tags' => null],
+                                        'src/Component/Model' => ['url' => 'git@github.com:park-manager/model.git', 'sync-tags' => null],
+                                        'doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => false],
+                                    ],
+                                ],
+                                'master' => [
+                                    'sync-tags' => true,
+                                    'split' => [
+                                        'docs' => ['url' => 'git@github.com:park-manager/docs.git'],
+                                        'noop' => ['url' => 'git@github.com:park-manager/noop.git', 'sync-tags' => false],
+                                    ],
+                                ],
+                                '1.x' => [
+                                    'sync-tags' => true,
+                                    'split' => [],
+                                ],
+                                '2.x' => [
+                                    'sync-tags' => true,
+                                    'upmerge' => false,
+                                    'split' => [
+                                        'lobster' => ['url' => 'git@github.com:park-manager/pinchy.git'],
+                                    ],
+                                ],
+                                '3.x' => [
+                                    'sync-tags' => true,
+                                    'ignore-default' => true,
+                                    'split' => [],
+                                ],
+                                '4.x' => [
+                                    'sync-tags' => true,
+                                    'ignore-default' => true,
+                                    'split' => [],
+                                ],
+                            ],
+                        ],
+                        'park-manager/website' => [
+                            'branches' => [
+                                '1.0' => [
+                                    'sync-tags' => false,
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ]);
+        $this->config->setActiveRepository('github.com', 'park-manager/hubkit');
     }
 }

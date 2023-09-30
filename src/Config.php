@@ -133,8 +133,11 @@ final class Config
         return $globalConfig;
     }
 
-    public function getBranchConfig(string $host, string $repository, string $branchName): BranchConfig
+    public function getBranchConfig(string $branchName, string $host = null, string $repository = null): BranchConfig
     {
+        $host ??= $this->activeHost;
+        $repository ??= $this->activeRepository;
+
         $repoConfig = $this->getForRepository($host, $repository, $isLocal);
         $configPath = $isLocal ? ['_local', 'branches'] : ['repositories', $host, 'repos', $repository, 'branches'];
 
