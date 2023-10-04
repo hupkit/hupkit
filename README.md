@@ -22,7 +22,7 @@ If you have some special needs, please see the contributing section below.
 
 ## Requirements
 
-You need at least PHP 7.2, Git 2.10 and a GitHub account (GitHub Enterprise is possible).
+You need at least PHP 8.1, Git 2.10 and a GitHub account (GitHub Enterprise is possible).
 Composer is assumed to be installed and configured in your PATH.
 
 ## Installation
