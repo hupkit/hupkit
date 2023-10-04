@@ -63,7 +63,7 @@ class SplitshGit
         // This is much safer than keeping all the remotes local as this fails with git update (puling-in conflicting tags)
         $this->git->pushToRemote('file://' . $tempDir, $sha . ':refs/heads/' . $targetBranch);
 
-        $this->process->mustRun(new Process(['git', 'push', 'origin', $targetBranch . ':refs/heads/' . $targetBranch], $tempDir));
+        $this->process->mustRun(new Process(['git', 'push', 'origin', $targetBranch . ':refs/heads/' . $targetBranch], $tempDir), 'If the destination does not exist run the `split-create` command.');
 
         return [$sha, $url, $tempDir];
     }

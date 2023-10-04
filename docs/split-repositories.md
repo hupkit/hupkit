@@ -15,8 +15,7 @@ be configured. Each target consists of a prefix (directory path),
 target repository and some additional options like if tag-synchronizing is enabled.
 
 **Suffice to say the repositories must exist! They are not automatically created,
-use the [repo-create](commands/repo-create.md) command with the correct arguments
-to create the repositories.**
+use the `split-create` command to create the repositories.**
 
 See [Configuration](config.md) how to configure your splits.
 
