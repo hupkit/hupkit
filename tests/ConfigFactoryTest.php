@@ -56,6 +56,7 @@ final class ConfigFactoryTest extends TestCase
                                     ],
                                     'upmerge' => true,
                                     'ignore-default' => false,
+                                    'maintained' => true,
                                 ],
                             ],
                         ],
@@ -114,6 +115,7 @@ final class ConfigFactoryTest extends TestCase
                                     ],
                                     'upmerge' => true,
                                     'ignore-default' => false,
+                                    'maintained' => true,
                                 ],
                             ],
                         ],
@@ -164,28 +166,30 @@ final class ConfigFactoryTest extends TestCase
                                     ],
                                     'upmerge' => true,
                                     'ignore-default' => false,
+                                    'maintained' => true,
                                 ],
 
                                 // Additional branch names for testing
-                                'main' => ['split' => ['doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => null]], 'upmerge' => true, 'sync-tags' => true, 'ignore-default' => false],
-                                'master' => ['split' => ['doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => null]], 'upmerge' => true, 'sync-tags' => true, 'ignore-default' => false],
+                                'main' => ['split' => ['doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => null]], 'upmerge' => true, 'sync-tags' => true, 'ignore-default' => false, 'maintained' => true],
+                                'master' => ['split' => ['doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => null]], 'upmerge' => true, 'sync-tags' => true, 'ignore-default' => false, 'maintained' => true],
 
-                                '0.1' => ['split' => ['doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => null]], 'upmerge' => true, 'sync-tags' => true, 'ignore-default' => false],
-                                '1.0' => ['split' => ['doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => null]], 'upmerge' => true, 'sync-tags' => true, 'ignore-default' => false],
-                                '2.0' => ['split' => ['doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => null]], 'upmerge' => true, 'sync-tags' => true, 'ignore-default' => false],
+                                '0.1' => ['split' => ['doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => null]], 'upmerge' => true, 'sync-tags' => true, 'ignore-default' => false, 'maintained' => true],
+                                '1.0' => ['split' => ['doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => null]], 'upmerge' => true, 'sync-tags' => true, 'ignore-default' => false, 'maintained' => true],
+                                '2.0' => ['split' => ['doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => null]], 'upmerge' => true, 'sync-tags' => true, 'ignore-default' => false, 'maintained' => true],
 
                                 // Pattern
-                                '3.x' => ['split' => ['doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => null]], 'upmerge' => true, 'sync-tags' => true, 'ignore-default' => false],
-                                '4.*' => ['split' => ['doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => null]], 'upmerge' => true, 'sync-tags' => true, 'ignore-default' => false],
+                                '3.x' => ['split' => ['doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => null]], 'upmerge' => true, 'sync-tags' => true, 'ignore-default' => false, 'maintained' => true],
+                                '4.*' => ['split' => ['doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => null]], 'upmerge' => true, 'sync-tags' => true, 'ignore-default' => false, 'maintained' => true],
 
                                 // Regexp (without anchors and options)
-                                '/[1-5]\.[0-9]/' => ['split' => ['doc' => ['url' => 'git@github.com:park-manager/brown.git', 'sync-tags' => null]], 'upmerge' => true, 'sync-tags' => true, 'ignore-default' => false],
+                                '/[1-5]\.[0-9]/' => ['split' => ['doc' => ['url' => 'git@github.com:park-manager/brown.git', 'sync-tags' => null]], 'upmerge' => true, 'sync-tags' => true, 'ignore-default' => false, 'maintained' => true],
 
                                 '10.0' => [
-                                    'sync-tags' => true,
+                                    'sync-tags' => false,
                                     'split' => [],
                                     'upmerge' => false,
                                     'ignore-default' => true,
+                                    'maintained' => false,
                                 ],
                             ],
                         ],
@@ -236,6 +240,7 @@ final class ConfigFactoryTest extends TestCase
                                     ],
                                     'upmerge' => true,
                                     'ignore-default' => false,
+                                    'maintained' => true,
                                 ],
                             ],
                         ],
@@ -249,6 +254,7 @@ final class ConfigFactoryTest extends TestCase
                         'sync-tags' => true,
                         'split' => [],
                         'ignore-default' => false,
+                        'maintained' => true,
                     ],
                     '2.0' => [
                         'sync-tags' => true,
@@ -268,6 +274,7 @@ final class ConfigFactoryTest extends TestCase
                         ],
                         'upmerge' => true,
                         'ignore-default' => false,
+                        'maintained' => true,
                     ],
                 ],
                 'adapter' => 'github',

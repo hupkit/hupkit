@@ -44,6 +44,8 @@ final class SwitchBaseHandler extends GitBaseHandler
         $this->guardValidBase($newBase, $pullRequest['base']['ref']);
         $this->guardWorkingTreeIsReady();
 
+        $this->guardMaintained($newBase);
+
         $branch = $pullRequest['head']['ref'];
         $remote = $pullRequest['head']['user']['login'];
         $tmpBranch = '_temp_' . $remote . '--' . $branch . '--' . $newBase;

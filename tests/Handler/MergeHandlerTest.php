@@ -70,7 +70,24 @@ final class MergeHandlerTest extends TestCase
         $this->aliasResolver->getAlias()->willReturn('1.0-dev');
         $this->aliasResolver->getDetectedBy()->willReturn('composer.json "extra.branch-alias.dev-master"');
 
-        $this->config = new Config([]);
+        $this->config = new Config([
+            'repositories' => [
+                'github.com' => [
+                    'repos' => [
+                        'park-manager/hubkit' => [
+                            'sync-tags' => true,
+                            'branches' => [
+                                '2.0' => [
+                                    'maintained' => false,
+                                    'split' => [],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ]);
+        $this->config->setActiveRepository('github.com', 'park-manager/hubkit');
 
         $this->branchSplitsh = $this->prophesize(BranchSplitsh::class);
         $this->branchSplitsh->splitBranch('master')->shouldBeCalled();
@@ -221,6 +238,7 @@ by who-else at 2014-11-23T14:50:24Z
                 ],
             ],
         ]);
+        $this->config->setActiveRepository('github.com', 'park-manager/hubkit');
 
         $pr = $this->expectPrInfo();
         $this->expectCommitStatus();
@@ -1244,6 +1262,32 @@ by who-else at 2014-11-23T14:50:24Z
         $this->executeHandler($args);
     }
 
+    /** @test */
+    public function it_warns_if_branch_is_unmaintained(): void
+    {
+        $this->branchSplitsh->splitBranch('master')->shouldNotBeCalled();
+
+        $pr = $this->expectPrInfo(base: '2.0');
+        $this->expectCommits($pr);
+
+        $args = $this->getArgs();
+        $args->setArgument('number', '42');
+
+        try {
+            $this->executeHandler($args, input: ['no']);
+        } catch (\RuntimeException $e) {
+            self::assertSame('User aborted.', $e->getMessage());
+        }
+
+        $this->assertOutputMatches(
+            [
+                'Merging Pull Request 42: Brand new design',
+                'The "2.0" branch is marked as unmaintained!',
+                'Do you want to continue this operation anyway?',
+            ]
+        );
+    }
+
     private function getArgs(): Args
     {
         $format = ArgsFormat::build()
@@ -1296,7 +1340,8 @@ by who-else at 2014-11-23T14:50:24Z
         array $labels = [],
         string $state = 'open',
         $mergeable = true,
-        string $body = 'There I fixed it'
+        string $body = 'There I fixed it',
+        string $base = 'master'
     ): array {
         $number = self::PR_NUMBER;
 
@@ -1307,7 +1352,7 @@ by who-else at 2014-11-23T14:50:24Z
                 'title' => 'Brand new design',
                 'body' => $body,
                 'html_url' => 'https://github.com/park-manager/hubkit/pull/' . $number,
-                'base' => ['ref' => 'master', 'repo' => ['name' => 'hubkit', 'owner' => ['login' => 'park-manager']]],
+                'base' => ['ref' => $base, 'repo' => ['name' => 'hubkit', 'owner' => ['login' => 'park-manager']]],
                 'head' => [
                     'ref' => self::PR_BRANCH,
                     'sha' => self::HEAD_SHA,

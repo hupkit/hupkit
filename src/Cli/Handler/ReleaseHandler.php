@@ -52,6 +52,8 @@ final class ReleaseHandler extends GitBaseHandler
         $this->io = $io;
         $this->informationHeader($branch);
 
+        $this->guardMaintained($branch);
+
         $version = $this->validateVersion($args->getArgument('version'));
         $versionStr = (string) $version;
 

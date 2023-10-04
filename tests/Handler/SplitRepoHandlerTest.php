@@ -109,6 +109,7 @@ final class SplitRepoHandlerTest extends TestCase
                 ],
             ],
         ]);
+        $this->config->setActiveRepository('github.com', 'hubkit-sandbox/empire');
 
         $this->splitshGit = $this->prophesize(BranchSplitsh::class);
     }

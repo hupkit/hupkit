@@ -45,6 +45,7 @@ return [
                         // Regexp (without anchors and options)
                         '/[1-5]\.[0-9]/' => ['split' => ['doc' => ['url' => 'git@github.com:park-manager/brown.git']]],
 
+                        // Marked as unmaintained
                         '10.0' => false,
                     ],
                 ],
