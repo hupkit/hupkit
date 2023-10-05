@@ -63,6 +63,8 @@ final class MergeHandler extends GitBaseHandler
             ]
         );
 
+        $this->guardMaintained($pr['base']['ref']);
+
         $squash = $this->determineSquash($args, $id);
 
         if ($squash) {

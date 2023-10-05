@@ -47,4 +47,18 @@ abstract class GitBaseHandler implements RequiresGitRepository
             $this->style->note('Using local configuration from branch "_hubkit".');
         }
     }
+
+    protected function guardMaintained(string $branch = null): void
+    {
+        $branch ??= $this->git->getActiveBranchName();
+        $branchConfig = $this->config->getBranchConfig($branch);
+
+        if (($branchConfig->config['maintained'] ?? true) === false) {
+            $this->style->warning(sprintf('The "%s" branch is marked as unmaintained!', $branch));
+
+            if (! $this->style->confirm('Do you want to continue this operation anyway?', false)) {
+                throw new \RuntimeException('User aborted.');
+            }
+        }
+    }
 }

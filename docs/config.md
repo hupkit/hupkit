@@ -73,16 +73,20 @@ by traversing all (in order of listing) the patterns and regexp until a matching
 
 If no configuration was found the `:default` configuration (if set) is used.
 
-Use `false` as value to mark a branch as ignored, this will set all options to `false` and empty respectively.
+Use `false` to mark a branch as unmaintained and skip upmerging to *and* from this branch, 
+this will give a warning whenever this branch is used for either merging, releasing, taking an issue, etc. 
+
+**Tip:** Use regex ranges like `/[12].\d+/` to mark multiple versions at once.
 
 Each branch has the following options:
 
-| Name             | Type    | Default  | Description                                                                                                       | 
-|------------------|---------|----------|-------------------------------------------------------------------------------------------------------------------|
-| `sync-tags`      | Boolean | `true`   | _Only when 'split' targets are configured_, <br/>whether new tags should be synchronized when creating a release. |
-| `ignore-default` | Boolean | `false`  | Whether the ':default' configuration should be ignored.                                                           |
-| `upmerge`        | Boolean | `true`   | Set to false to disable upmerge for this branch configuration, and continue with next possible version.           |
-| `split`          | array   | `[]`     | See Repository splitting for details.                                                                             |
+| Name             | Type    | Default   | Description                                                                                                       | 
+|------------------|---------|-----------|-------------------------------------------------------------------------------------------------------------------|
+| `sync-tags`      | Boolean | `true`    | _Only when 'split' targets are configured_, <br/>whether new tags should be synchronized when creating a release. |
+| `ignore-default` | Boolean | `false`   | Whether the ':default' configuration should be ignored.                                                           |
+| `upmerge`        | Boolean | `true`    | Set to false to disable upmerge for this branch configuration, and continue with next possible version.           |
+| `split`          | array   | `[]`      | See Repository splitting for details.                                                                             |
+| `maintained`     | Boolean | `true`    | `true` when maintained, use `false` as config value shorthand.                                                    |
 
 ```php
 // ... At config path `repositories.[github.com].[organization/repository-name]`
@@ -96,7 +100,7 @@ Each branch has the following options:
             'docs' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => false],
         ],
     ],
-    '1.0' => false, // Disabled all
+    '1.0' => false, // Mark branch as unmaintained
     '2.x' => [ // '2.x' is a pattern equivalent to '/2\.\d+/'
         'upmerge' => false, // Disable upmerge for this branch, effectively all of the '2.x' range are skipped
         // Split's is inherited and merged from ':default'

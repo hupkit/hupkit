@@ -149,6 +149,7 @@ labels: removed-deprecation
                 ],
             ]
         );
+        $this->config->setActiveRepository('github.com', 'park-manager/hubkit');
 
         $this->branchSplitsh = $this->prophesize(BranchSplitsh::class);
         $this->releaseHooks = $this->prophesize(ReleaseHooks::class);

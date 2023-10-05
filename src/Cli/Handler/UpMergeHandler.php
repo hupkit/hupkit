@@ -43,6 +43,8 @@ final class UpMergeHandler extends GitBaseHandler
         $this->style->title('Branch Upmerge');
         $this->informationHeader($branch);
 
+        $this->guardMaintained($branch);
+
         $branches = $this->git->getVersionBranches('upstream');
 
         if (! \in_array($branch, $branches, true)) {

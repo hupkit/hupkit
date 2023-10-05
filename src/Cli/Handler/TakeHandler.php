@@ -37,6 +37,8 @@ final class TakeHandler extends GitBaseHandler
         $slugTitle = StringUtil::slugify(sprintf('%s %s', $issue['number'], $issue['title']));
         $base = $args->getOption('base') ?? $this->git->getPrimaryBranch();
 
+        $this->guardMaintained($base);
+
         if ($this->git->branchExists($slugTitle)) {
             $this->style->warning('Branch already exists, checking out existing branch instead.');
             $this->git->checkout($slugTitle);
