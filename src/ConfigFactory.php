@@ -35,8 +35,12 @@ final class ConfigFactory
         $this->currentDir = self::normalizePath($currentDir);
         $this->configFile = self::normalizePath($configFile);
 
-        if ($this->gitFileReader->fileExists('_hubkit', 'config.php')) {
+        if (getenv('HUBKIT_NO_LOCAL') !== 'true' && $this->gitFileReader->fileExists('_hubkit', 'config.php')) {
             $this->localConfigFile = $this->gitFileReader->getFile('_hubkit', 'config.php');
+        }
+
+        if (getenv('HUBKIT_NO_LOCAL') === 'true') {
+            $this->style->warning('Env HUBKIT_NO_LOCAL=true was set, local configuration was not loaded.');
         }
     }
 
@@ -70,7 +74,12 @@ final class ConfigFactory
         if ($config['schema_version'] < 2) {
             $this->style->note('Hubkit "schema_version" 1 in configuration is deprecated and will no longer work in v2.0.');
         } elseif ($this->localConfigFile) {
-            $localeConfig = require $this->localConfigFile;
+            try {
+                $localeConfig = require $this->localConfigFile;
+            } catch (\ParseError $e) {
+                throw new \RuntimeException('Unable to load configuration file, run with env `HUBKIT_NO_LOCAL=true` to bypass local config loading. Error: ' . $e->getMessage(), 1, $e);
+            }
+
             $config['_local'] = $this->resolveLocalConfig($localeConfig);
         }
 

@@ -11,6 +11,21 @@ parameters:
 			path: src/Cli/Handler/ChangelogHandler.php
 
 		-
+			message: "#^Parameter \\#1 \\$directory of method HubKit\\\\Service\\\\Git\\\\GitTempRepository\\:\\:getLocal\\(\\) expects string, string\\|false given\\.$#"
+			count: 1
+			path: src/Cli/Handler/EditConfigHandler.php
+
+		-
+			message: "#^Parameter \\#1 \\$directory of method HubKit\\\\Service\\\\Git\\\\GitTempRepository\\:\\:getLocal\\(\\) expects string, string\\|false given\\.$#"
+			count: 1
+			path: src/Cli/Handler/InitConfigHandler.php
+
+		-
+			message: "#^Parameter \\#2 \\$targetDir of method Symfony\\\\Component\\\\Filesystem\\\\Filesystem\\:\\:mirror\\(\\) expects string, string\\|false given\\.$#"
+			count: 1
+			path: src/Cli/Handler/InitConfigHandler.php
+
+		-
 			message: "#^Cannot access offset 'id' on array\\<int\\|string, mixed\\>\\|int\\|null\\.$#"
 			count: 1
 			path: src/Cli/Handler/MergeHandler.php
@@ -122,7 +137,12 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method Webmozart\\\\Console\\\\Api\\\\Config\\\\ApplicationConfig\\|Webmozart\\\\Console\\\\Api\\\\Config\\\\CommandConfig\\:\\:end\\(\\)\\.$#"
-			count: 15
+			count: 16
+			path: src/Cli/HubKitApplicationConfig.php
+
+		-
+			message: "#^Class HubKit\\\\Cli\\\\Handler\\\\EditConfigHandler constructor invoked with 7 parameters, 6 required\\.$#"
+			count: 1
 			path: src/Cli/HubKitApplicationConfig.php
 
 		-
@@ -289,6 +309,11 @@ parameters:
 			message: "#^Parameter \\#3 \\$subject of function preg_replace expects array\\|string, string\\|false given\\.$#"
 			count: 1
 			path: src/Service/Editor.php
+
+		-
+			message: "#^Method HubKit\\\\Service\\\\Filesystem\\:\\:getFileContents\\(\\) should return string but returns string\\|false\\.$#"
+			count: 1
+			path: src/Service/Filesystem.php
 
 		-
 			message: "#^Method HubKit\\\\Service\\\\Filesystem\\:\\:newTempFilename\\(\\) should return string but returns string\\|false\\.$#"

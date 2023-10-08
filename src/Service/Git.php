@@ -360,6 +360,13 @@ class Git
         $this->process->mustRun($command);
     }
 
+    public function fetchRemote(string $remote, string $ref): void
+    {
+        $this->guardWorkingTreeReady();
+
+        $this->process->mustRun(['git', 'fetch', $remote, $ref]);
+    }
+
     public function remoteUpdate(string $remote): void
     {
         $this->process->mustRun(['git', 'fetch', $remote]);

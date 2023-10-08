@@ -228,8 +228,23 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
                     $this->container['github'],
                     $this->container['config'],
                     $this->container['filesystem'],
+                    $this->container['git.temp_repository'],
                     $this->container['process'],
-                    $this->container['git.file_reader']
+                );
+            })
+            ->end()
+
+            ->beginCommand('edit-config')
+            ->setDescription('Edit the contents of the "_hubkit" configuration branch')
+            ->setHandler(function () {
+                return new Handler\EditConfigHandler(
+                    $this->container['style'],
+                    $this->container['git'],
+                    $this->container['github'],
+                    $this->container['config'],
+                    $this->container['filesystem'],
+                    $this->container['git.temp_repository'],
+                    $this->container['process'],
                 );
             })
             ->end()
@@ -242,7 +257,6 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
                     $this->container['git'],
                     $this->container['github'],
                     $this->container['config'],
-                    $this->container['git.file_reader']
                 );
             })
             ->end()
