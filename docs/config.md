@@ -226,17 +226,26 @@ the main configuration entry defined for this repository.
 
 ### Initialize Configuration
 
-To create the special branch that HubKit uses to store the config.file and some additional scripts
-for special operations run the `init-config` command to create this branch, and import any existing
-configuration from your global config.php file.
+To create the special branch that HubKit uses to store the config.php file and some additional scripts
+for special operations run the `init-config` command to create this branch.
 
-**Note:** The .gitignore is automatically copied from your primary branch (either main or master) to
-ensure no unrelated files are accidentally added when working on this branch. The _hubkit sits separate
+The command will automatically import any existing configuration for the repository, and all files
+stored in the ".hubkit" directory (of the current branch).
+
+**Note:** The .gitignore is automatically copied from your current branch to ensure no unrelated files 
+are accidentally added when working on this branch. The _hubkit sits separate
 from your normal Git workflow and shares no parenting to any existing branch.
 
 Once you are done run the `sync-config` command to push your changes.
 
 Use the `self-diagnose` command to check your configuration and see if any updated is needed.
+
+### Editing
+
+To change the existing configuration or edit any scripts run the `edit-config` command.
+
+**Note:** If this fails due to a configuration error run HubKit with the env `HUBKIT_NO_LOCAL=true`
+and `unset HUBKIT_NO_LOCAL` once you are done.
 
 ### Synchronize Configuration
 

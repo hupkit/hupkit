@@ -17,26 +17,27 @@ use HubKit\Config;
 use HubKit\Service\CliProcess;
 use HubKit\Service\Filesystem;
 use HubKit\Service\Git;
-use HubKit\Service\Git\GitFileReader;
+use HubKit\Service\Git\GitTempRepository;
 use HubKit\Service\GitHub;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 use Symfony\Component\VarExporter\VarExporter;
 use Webmozart\Console\Api\Args\Args;
 use Webmozart\Console\Api\IO\IO;
 
-final class InitConfigHandler extends GitBaseHandler
+final class InitConfigHandler extends ConfigBaseHandler
 {
     public function __construct(
         SymfonyStyle $style,
         Git $git,
         GitHub $github,
         Config $config,
-        private readonly Filesystem $filesystem,
+        Filesystem $filesystem,
+        GitTempRepository $tempRepository,
         private readonly CliProcess $process,
-        private readonly GitFileReader $gitFileReader
     ) {
-        parent::__construct($style, $git, $github, $config);
+        parent::__construct($style, $git, $github, $config, $filesystem, $tempRepository);
     }
 
     public function handle(Args $args, IO $io): int
@@ -49,33 +50,80 @@ final class InitConfigHandler extends GitBaseHandler
         if ($this->git->branchExists('_hubkit')) {
             $this->ensureRemoteIsNotDiverged();
 
-            if ($this->gitFileReader->fileExists('_hubkit', 'config.php')) {
-                $this->style->error('The config.php file already exists in the "_hubkit" branch.');
+            throw new \RuntimeException('The "_hubkit" branch already exists. Run `edit-config` instead.');
+        }
 
-                if ($this->style->confirm('Do you want to checkout the "_hubkit" branch instead?', false)) {
-                    $this->git->checkout('_hubkit');
-
-                    return 0;
-                }
-
-                return 1;
-            }
-
-            $this->git->checkout('_hubkit');
-        } elseif ($this->gitFileReader->fileExistsAtRemote('upstream', '_hubkit', 'config.php')) {
+        if ($this->git->remoteBranchExists('upstream', '_hubkit')) {
             throw new \RuntimeException(
                 'The "_hubkit" branch exists remote, but the branch was not found locally.' . \PHP_EOL .
                 'Run the "sync-config" command to pull-in the remote branch.' . \PHP_EOL
             );
         }
 
-        $this->createHkBranch();
+        $activeBranch = $this->git->getActiveBranchName();
 
-        $config = VarExporter::export($this->config->getForRepository(
-            $this->github->getHostname(),
-            sprintf('%s/%s', $this->github->getOrganization(), $this->github->getRepository())
-        ));
+        $this->createHkBranch($activeBranch);
+        $this->createConfigFile();
 
+        $this->style->success([
+            'The _hubkit configuration branch was created, edit the config.php file with your favorite editor.',
+            'Make sure to add to and commit once you are done.',
+            sprintf('After you are done run `git checkout %s`.', $activeBranch),
+            'And finally run the `sync-config` command to push the configuration to the upstream repository.',
+        ]);
+
+        return 0;
+    }
+
+    private function createHkBranch(string $activeBranch): void
+    {
+        $this->style->note('Generating empty "_hubkit" branch');
+
+        $this->process->mustRun(['git', 'checkout', '--orphan', '_hubkit']);
+        $this->process->mustRun(['git', 'rm', '-rf', '.']);
+
+        if ($this->filesystem->fileExists('./config.php')) {
+            throw new \RuntimeException('The config.php file already exists, cannot safely continue, either (temporarily) move or rename this file.');
+        }
+
+        // Do this prior to .gitignore as the file likely already exist.
+        $this->mirrorHubKitDirectory($activeBranch);
+
+        try {
+            $this->process->mustRun(Process::fromShellCommandline('git show ' . $activeBranch . ':./.gitignore > .gitignore'));
+            $this->process->mustRun(['git', 'add', '.gitignore']);
+        } catch (\Exception $e) {
+            $this->style->warning('Unable to automatically add .gitignore. Error: ' . $e->getMessage());
+        }
+    }
+
+    private function mirrorHubKitDirectory(string $activeBranch): void
+    {
+        $tempDirectory = $this->tempRepository->getLocal($this->filesystem->getCwd(), $activeBranch);
+
+        if (! $this->filesystem->fileExists($tempDirectory . '/.hubkit')) {
+            return;
+        }
+
+        $this->filesystem->getFilesystem()->mirror($tempDirectory . '/.hubkit', $this->filesystem->getCwd(), options: ['copy_on_windows' => true]);
+
+        $this->style->info([
+            'The .hubkit directory was found and it\'s files copied to the _hubkit configuration branch.',
+            'Make sure to `git add` these files manually.',
+        ]);
+    }
+
+    private function createConfigFile(): void
+    {
+        $config = $this->config->getForRepository(
+            $host = $this->github->getHostname(),
+            $repository = sprintf('%s/%s', $this->github->getOrganization(), $this->github->getRepository())
+        );
+        $config['host'] = $host;
+        $config['repository'] = $repository;
+        $config['schema_version'] = 2;
+
+        $configStr = VarExporter::export($config);
         $this->filesystem->dumpFile(
             './config.php',
             <<<CONF
@@ -83,51 +131,15 @@ final class InitConfigHandler extends GitBaseHandler
 
                 // See https://www.park-manager.com/hubkit/config.html
 
-                return {$config};
+                return {$configStr};
 
                 CONF
         );
 
-        $this->process->mustRun(['git', 'add', 'config.php']);
-
-        $this->style->success([
-            'Config file was created, edit the config.php file with your favorite editor.',
-            'Make sure to add the `git add config.php` and commit once you are done.',
-        ]);
-
-        return 0;
-    }
-
-    private function ensureRemoteIsNotDiverged(): void
-    {
-        $status = $this->git->getRemoteDiffStatus('upstream', '_hubkit');
-
-        if ($status !== Git::STATUS_UP_TO_DATE && $status !== Git::STATUS_NEED_PUSH) {
-            throw new \RuntimeException(
-                'The remote "_hubkit" branch and local branch have diverged. Status: ' . $status .
-                '.  Run the "sync-config" command to resolve this problem.'
-            );
-        }
-    }
-
-    private function createHkBranch(): void
-    {
-        if ($this->git->branchExists('_hubkit')) {
-            return;
-        }
-
-        $this->style->note('Generating empty "_hubkit" branch');
-
-        $this->process->mustRun(['git', 'checkout', '--orphan', '_hubkit']);
-        $this->process->mustRun(['git', 'rm', '-rf', '.']);
-
         try {
-            $branch = $this->git->getPrimaryBranch();
-
-            $this->process->mustRun(Process::fromShellCommandline('git show ' . $branch . ':./.gitignore > .gitignore'));
-            $this->process->mustRun(['git', 'add', '.gitignore']);
-        } catch (\Exception $e) {
-            $this->style->warning('Unable to automatically add .gitignore from primary branch: ' . $e->getMessage());
+            $this->process->mustRun(['git', 'add', 'config.php']);
+        } catch (ProcessFailedException $e) {
+            $this->style->warning($e->getMessage());
         }
     }
 }

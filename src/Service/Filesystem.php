@@ -53,11 +53,26 @@ class Filesystem
      */
     public function dumpFile(string $filename, $content): void
     {
+        $this->fs->dumpFile($this->getAbsolutePath($filename), $content);
+    }
+
+    public function getFileContents(string $filename): string
+    {
+        return file_get_contents($this->getAbsolutePath($filename));
+    }
+
+    public function getAbsolutePath(string $filename): string
+    {
         if (str_starts_with($filename, './')) {
             $filename = substr_replace($filename, $this->getCwd(), 0, 1);
         }
 
-        $this->fs->dumpFile($filename, $content);
+        return $filename;
+    }
+
+    public function fileExists(string $file): bool
+    {
+        return $this->fs->exists($this->getAbsolutePath($file));
     }
 
     /**
