@@ -47,6 +47,20 @@ return [
 
                         // Marked as unmaintained
                         '10.0' => false,
+
+                        // Literal branch name, no pattern
+                        '#11.x' => [
+                            'sync-tags' => false,
+                            'split' => [
+                                'doc' => [
+                                    'url' => 'git@github.com:park-manager/doc2.git',
+                                    'sync-tags' => false,
+                                ],
+                            ],
+                            'upmerge' => false,
+                            'ignore-default' => true,
+                            'maintained' => true,
+                        ],
                     ],
                 ],
             ],

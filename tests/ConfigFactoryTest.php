@@ -191,6 +191,20 @@ final class ConfigFactoryTest extends TestCase
                                     'ignore-default' => true,
                                     'maintained' => false,
                                 ],
+
+                                // Literal branch name, no pattern
+                                '#11.x' => [
+                                    'sync-tags' => false,
+                                    'split' => [
+                                        'doc' => [
+                                            'url' => 'git@github.com:park-manager/doc2.git',
+                                            'sync-tags' => false,
+                                        ],
+                                    ],
+                                    'upmerge' => false,
+                                    'ignore-default' => true,
+                                    'maintained' => true,
+                                ],
                             ],
                         ],
                     ],
@@ -329,9 +343,9 @@ final class ConfigFactoryTest extends TestCase
      */
     public function provideInvalidConfigs(): iterable
     {
-        yield 'branches: non versioned branch' => ['invalid_branch_name.php', 'Invalid configuration for path "hubkit.repositories.github.com.repos.park-manager/park-manager.branches": Invalid minor version or relative pattern "nee", must be either: 1.x, 1.*, main, master, ":default" or a regexp like "/0.[1-9]+/".'];
-        yield 'branches: v prefix' => ['invalid_branch_pattern.php', 'Invalid configuration for path "hubkit.repositories.github.com.repos.park-manager/park-manager.branches": Invalid minor version or relative pattern "v2.0", must be either: 1.x, 1.*, main, master, ":default" or a regexp like "/0.[1-9]+/".'];
-        yield 'branches: wildcard for major' => ['invalid_branch_pattern2.php', 'Invalid configuration for path "hubkit.repositories.github.com.repos.park-manager/park-manager.branches": Invalid minor version or relative pattern "x.0", must be either: 1.x, 1.*, main, master, ":default" or a regexp like "/0.[1-9]+/".'];
+        yield 'branches: non versioned branch' => ['invalid_branch_name.php', 'Invalid configuration for path "hubkit.repositories.github.com.repos.park-manager/park-manager.branches": Invalid version or relative pattern "nee", must be either "1.x" or "1.*", or "#1.x" (for an exact branch named 1.x), ":default", "main" or "master", or a regexp like "/0.[1-9]+/".'];
+        yield 'branches: v prefix' => ['invalid_branch_pattern.php', 'Invalid configuration for path "hubkit.repositories.github.com.repos.park-manager/park-manager.branches": Invalid version or relative pattern "v2.0", must be either "1.x" or "1.*", or "#1.x" (for an exact branch named 1.x), ":default", "main" or "master", or a regexp like "/0.[1-9]+/".'];
+        yield 'branches: wildcard for major' => ['invalid_branch_pattern2.php', 'Invalid configuration for path "hubkit.repositories.github.com.repos.park-manager/park-manager.branches": Invalid version or relative pattern "x.0", must be either "1.x" or "1.*", or "#1.x" (for an exact branch named 1.x), ":default", "main" or "master", or a regexp like "/0.[1-9]+/".'];
         yield 'branches: invalid regexp' => ['invalid_branch_regexp.php', 'Invalid configuration for path "hubkit.repositories.github.com.repos.park-manager/park-manager.branches": Invalid regexp "\/[]\/" error: "preg_match(): Compilation failed: missing terminating ] for character class at offset 2".'];
         yield 'branches: regexp with options' => ['invalid_branch_regexp2.php', 'Invalid configuration for path "hubkit.repositories.github.com.repos.park-manager/park-manager.branches": Invalid regexp "\/\\\\d\\\\.\\\\d+\/s", cannot contain start/end anchor or options. Either "/[5-9]\.x/" not "/^[5-9].x$/i".'];
         yield 'branches: regexp with anchors' => ['invalid_branch_regexp3.php', 'Invalid configuration for path "hubkit.repositories.github.com.repos.park-manager/park-manager.branches": Invalid regexp "\/^\\\\d\\\\.\\\\d+$\/", cannot contain start/end anchor or options. Either "/[5-9]\.x/" not "/^[5-9].x$/i".'];
