@@ -10,8 +10,8 @@ The pre/post release hook scripts are now expected to be stored in the _"hubkit"
 in HubKit v2.0.*
 
 **Caution:** Hooks are loaded from a temporary location *outside of the repository*, use the `__DIR__`
-constant to load files from the the temp-location, use `$container['current_dir']` 
-to get the actual location to the project repository. 
+constant to load files from the the temp-location, use `$container['current_dir']`
+to get the actual location to the project repository.
 
 The services already use the correct current location (the repository root).
 
@@ -31,7 +31,7 @@ return function (Container $container, Version $version, string $branch, ?string
 
     $container->get('logger')->debug('Working at: ' . $container['current_dir']);
     $container->get('logger')->info('Updating composer branch-alias');
-    
+
     $container->get('process')->mustRun(['composer', 'config', 'extra.branch-alias.dev-'.$branch, sprintf('%d.%d-dev', $version->major, $version->minor)]);
 
     /** @var \HubKit\Service\Git\GitBranch $gitBranch */
