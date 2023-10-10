@@ -210,8 +210,8 @@ final class ConfigFactory
                             if (preg_match('{[\$\^]|/\w+$}', $name) > 0) {
                                 throw new \InvalidArgumentException(sprintf('Invalid regexp %s, cannot contain start/end anchor or options. Either "/[5-9]\.x/" not "/^[5-9].x$/i".', json_encode($name)));
                             }
-                        } elseif (preg_match('{^(:default|main|master|(\d+\.([x*]|\d+)))$}', $name) === 0) {
-                            throw new \InvalidArgumentException(sprintf('Invalid minor version or relative pattern %s, must be either: 1.x, 1.*, main, master, ":default" or a regexp like "/0.[1-9]+/".', json_encode($name)));
+                        } elseif (preg_match('{^(:default|main|master|(#\d+\.x)|(\d+\.([x*]|\d+)))$}', $name) === 0) {
+                            throw new \InvalidArgumentException(sprintf('Invalid version or relative pattern %s, must be either "1.x" or "1.*", or "#1.x" (for an exact branch named 1.x), ":default", "main" or "master", or a regexp like "/0.[1-9]+/".', json_encode($name)));
                         }
                     }
 
