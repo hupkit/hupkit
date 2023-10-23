@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the HubKit package.
+ * This file is part of the HuPKit package.
  *
  * (c) Sebastiaan Stok <s.stok@rollerscapes.net>
  *
@@ -28,7 +28,7 @@ final class SynchronizeConfigHandler extends GitBaseHandler
 
         if (! $this->git->remoteBranchExists('upstream', '_hubkit')) {
             if (! $this->git->branchExists('_hubkit')) {
-                $this->style->success('Hubkit configuration is not set-up yet, run `init-config` first.');
+                $this->style->success('HuPKit configuration is not set-up yet, run `init-config` first.');
 
                 return 1;
             }

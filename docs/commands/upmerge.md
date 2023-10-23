@@ -17,7 +17,7 @@ And run the upmerge command.
 
 ```bash
 $ git checkout 1.0
-$ hubkit upmerge
+$ hupkit upmerge
 ```
 
 That's it! The command automatically detects which branch `1.0` is to be merged into.
@@ -32,7 +32,7 @@ then into the "master" branch.
 
 ```bash
 $ git checkout 1.0
-$ hubkit upmerge --all
+$ hupkit upmerge --all
 ```
 
 ## Conflict resolving

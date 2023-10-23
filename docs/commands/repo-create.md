@@ -4,13 +4,13 @@ repo-create
 Create a new minimal empty GitHub repository. Wiki and Downloads are disabled by default.
 
 ```bash
-$ hubkit repo-create park-manager/hubkit
+$ hupkit repo-create hupkit/hupkit
 ```
 
-This creates the "hubkit" repository in the "park-manager" organization. To create a
+This creates the "hupkit" repository in the "hupkit" organization. To create a
 private repository (may require a paid plan) use the `--private` option.
 
-**Tip:** Since HubKit v1.2 use the `split-create` command to automatically create
+**Tip:** Since HuPKit v1.2 use the `split-create` command to automatically create
 repositories for split targets.
 
 # Special options

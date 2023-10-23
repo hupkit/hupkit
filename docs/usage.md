@@ -3,19 +3,19 @@ Usage
 
 ## Configuration
 
-HubKit works by a number of conventions which cannot be changed, the configuration
+HuPKit works by a number of conventions which cannot be changed, the configuration
 contains your authentication credentials, and set-up for special operations like
 repository splitting and upmerge.
 
 Assuming you already copied `config.php.dist` to `config.php`. Open `config.php`
 and fill-in your authentication credentials.
 
-**Tip:** Whenever you change the configuration it's advised to run `hubkit self-diagnose`
+**Tip:** Whenever you change the configuration it's advised to run `hupkit self-diagnose`
 afterwards to check if everything is configured properly.
 
 ### Working with GitHub Enterprise
 
-HubKit supports GitHub Enterprise, and therefor you can add multiple
+HuPKit supports GitHub Enterprise, and therefor you can add multiple
 hub configurations by there hostname. The default one is `github.com`.
 
 ```phph
@@ -24,12 +24,12 @@ hub configurations by there hostname. The default one is `github.com`.
 return [
     'schema_version' => 2, // Config-schema version, only change this when requested
 
-    // HubKit supports GitHub Enterprise, and therefor you can add multiple
+    // HuPKit supports GitHub Enterprise, and therefor you can add multiple
     // hub configurations by there hostname. The default one is `github.com`.
     //
     // Before you can authenticate, get a new token at: https://github.com/settings/tokens/new
     //
-    // Use a unique and distinct name like: `hubkit on computer-1 at 2016-11-01 14:54 CET`
+    // Use a unique and distinct name like: `hupkit on computer-1 at 2016-11-01 14:54 CET`
     // with scopes: "repo, user:email, read:gpg_key"
     'github' => [
         'github.com' => [ // hostname of the hub
@@ -54,12 +54,12 @@ hub configuration to your `config.php` file:
 return [
     'schema_version' => 2, // Config-schema version, only change this when requested
 
-    // HubKit supports GitHub Enterprise, and therefor you can add multiple
+    // HuPKit supports GitHub Enterprise, and therefor you can add multiple
     // hub configurations by there hostname. The default one is `github.com`.
     //
     // Before you can authenticate, get a new token at: https://github.com/settings/tokens/new
     //
-    // Use a unique and distinct name like: `hubkit on computer-1 at 2016-11-01 14:54 CET`
+    // Use a unique and distinct name like: `hupkit on computer-1 at 2016-11-01 14:54 CET`
     // with scopes: "repo, user:email, read:gpg_key"
     'github' => [
         'github.com' => [ // hostname of the hub
@@ -76,15 +76,15 @@ return [
 ```
 
 And obtain a new api-token at `https://development.example.com/settings/tokens/new`,
-place it in your 'development.example.com' hub configuration and run `hubkit self-diagnose`
+place it in your 'development.example.com' hub configuration and run `hupkit self-diagnose`
 to test if everything is working.
 
-Whenever you use hubkit in a Git repository it will automatically detect the
+Whenever you use hupkit in a Git repository it will automatically detect the
 correct hub configuration by remote "upstream".
 
 ## Self Diagnoses
 
-The `self-diagnose` checks your system is ready to use HubKit and gives recommendations
+The `self-diagnose` checks your system is ready to use HuPKit and gives recommendations
 about changes you should make.
 
 **Note:** It's recommended to run this command from a local Git repository,
@@ -92,7 +92,7 @@ as more information is shown then.
 
 ## Repository splitting
 
-A special feature of HubKit is the ability to manage split monolith repositories,
+A special feature of HuPKit is the ability to manage split monolith repositories,
 each split-repository holds the contents of a smaller portion of the main monolith
 repository.
 
@@ -100,7 +100,7 @@ See [Managing Split Repositories](split-repositories.md) for all details.
 
 ## Commands
 
-Run `hubkit help` for a full list of all available commands and options.
+Run `hupkit help` for a full list of all available commands and options.
 
 **Note:** All commands except `help`, `repo-create` and `self-diagnose` require
 you are in a Git repository, and have Git remote `upstream` existing and pointing
@@ -128,14 +128,14 @@ as a maintainer.
 Take an issue (no pull request) to work on. In practice this checkouts the issue as new branch.
 
 ```bash
-$ hubkit take 22
+$ hupkit take 22
 ```
 
 By default the "master" branch is used as base, use the `--base` option to use
 a different one. Eg. `--base=1.x` for `upstream/1.x`.
 
 ```bash
-$ hubkit take --base=1.x 22
+$ hupkit take --base=1.x 22
 ```
 
 ### switch-base
@@ -143,7 +143,7 @@ $ hubkit take --base=1.x 22
 Switch the base of a pull request (and performs a rebase to prevent unwanted commits).
 
 ```bash
-$ hubkit switch-base 22 1.6
+$ hupkit switch-base 22 1.6
 ```
 
 #### Conflict resolving
@@ -158,6 +158,6 @@ again and it will continue as normal.
 
 ### cache-clear
 
-Clears the cache Hubkit uses to split repositories and store resolved configuration branches.
+Clears the cache HuPKit uses to split repositories and store resolved configuration branches.
 
 **Tip:** Use the `-v` option to show how much space was retrieved.

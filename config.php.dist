@@ -1,16 +1,16 @@
 <?php
 
-// See https://www.park-manager.com/hubkit/config.html
+// See https://hupkit.github.io/hupkit/config.html
 
 return [
     'schema_version' => 2, // Config-schema version, only change this when requested.
 
-    // HubKit supports GitHub Enterprise, and therefor you can add multiple
+    // HuPKit supports GitHub Enterprise, and therefor you can add multiple
     // hub configurations by there hostname. The default one is `github.com`.
     //
     // Before you can authenticate, get a new token at: https://github.com/settings/tokens/new
     //
-    // Use a unique and distinct name like: `hubkit on computer-1 at 2016-11-01 14:54 CET`
+    // Use a unique and distinct name like: `HuPKit on computer-1 at 2016-11-01 14:54 CET`
     // with scopes: "repo, user:email, read:gpg_key"
     'github' => [
         'github.com' => [ // hostname of the hub

@@ -1,7 +1,7 @@
 <?php
 
 $header = <<<EOF
-This file is part of the HubKit package.
+This file is part of the HuPKit package.
 
 (c) Sebastiaan Stok <s.stok@rollerscapes.net>
 

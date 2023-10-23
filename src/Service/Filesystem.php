@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the HubKit package.
+ * This file is part of the HuPKit package.
  *
  * (c) Sebastiaan Stok <s.stok@rollerscapes.net>
  *
@@ -146,7 +146,7 @@ class Filesystem
         return chdir($directory);
     }
 
-    public function getCwd(): string | false
+    public function getCwd(): false | string
     {
         return getcwd();
     }

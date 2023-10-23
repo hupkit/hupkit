@@ -1,7 +1,10 @@
-# Park-Manager HubKit
+# HuPKit
 
-HubKit was created to ease the development workflow of the Park-Manger project.
-In short HubKit allows project(s) maintainers to easily manage there GitHub repositories.
+HuPKit was created to ease the development workflow of the (now discontinued) Park-Manager project.
+In short HuPKit allows project(s) maintainers to easily manage their GitHub repositories.
+
+**Note:** On October 23rd the repository was moved to it's own organization, and renamed to HuPKit.
+The old PHP namespace has been left unchanged.
 
 Feel free to use it for your own projects.
 
@@ -11,7 +14,7 @@ Feel free to use it for your own projects.
 * Merge pull-requests with preservation of all information (description and GitHub discussion).
 * (Up)Merge version branches without mistakes.
 * Create new releases with a proper changelog, and no gaps in version numbers.
-* Split a monolith repository into separate repositories, as done by Symfony and Sylius.
+* (Automatically) Split a monolith repository into READ-ONLY repositories.
 
 This tool is designed for project maintainers with a good knowledge of Git and GitHub.
 If you have some special needs, please see the contributing section below.
@@ -23,26 +26,24 @@ Composer is assumed to be installed and configured in your PATH.
 
 ## Installation
 
-HubKit is a PHP application, you don't install it as a dependency
-and you don't you install it with Composer global.
+HuPKit is a PHP application, you don't install it as a dependency
+and you don't install it with Composer global.
 
-> Currently there is no Phar version available, this is being worked-on.
-
-To install HubKit first choose a directory where you want to keep the installation.
-Either `~/.hubkit` or any of your choice.
+To install HuPKit first choose a directory where you want to keep the installation.
+Eg. `~/.hupkit` or any of your choice.
 
 **Caution:** Make sure you don't use a directory that is accessible by
 others (like the web server root) as this may expose your API access-token!
 
-Download HubKit by cloning the repository:
+Download HuPKit by cloning the repository:
 
 ```bash
-mkdir ~/.hubkit
-cd ~/.hubkit
-git clone https://github.com/park-manager/hubkit.git .
+mkdir ~/.hupkit
+cd ~/.hupkit
+git clone https://github.com/hupkit/hupkit.git .
 ```
 
-Checkout the [latest version](https://github.com/park-manager/hubkit/releases). Eg.
+Checkout the [latest version](https://github.com/hupkit/hupkit/releases). Eg.
 
 ```bash
 git checkout tags/1.0.0 -b version-1.0.0
@@ -56,10 +57,10 @@ And install the dependencies:
 
 ### Special note for Windows users
 
-**HubKit has not been tested on Windows yet, it should work.
+**HuPKit has not been tested on Windows yet, it should work.
 But you may encounter some problems.**
 
-Note that HubKit expects a Unix (alike) environment.
+Note that HuPKit expects a Unix (alike) environment.
 You are advised to use the Git console or Bash shell (Windows 10+).
 
 Please open an issue in the issue-tracker when something is not working.
@@ -67,7 +68,7 @@ Or open a pull-request when you can fix the problem :+1:
 
 ### Updating
 
-Updating HubKit is very easy. Go to the HubKit installation
+Updating HuPKit is very easy. Go to the HuPKit installation
 directory, and run `./bin/upgrade`.
 
 Done, you now have the latest version.
@@ -96,40 +97,24 @@ For more information on SemVer, please visit <http://semver.org/>.
 
 ## Contributing
 
-HubKit was designed specifically for the maintenance workflow of the Park-Manager project.
-In the spirit of free-software it's made available to everyone.
-
-HubKit is open-source and community driven, but to prevent becoming
+HuPKit is open-source and community driven, but to prevent becoming
 to bloated not all requested features will be actually accepted.
 
-*The purpose of HubKit is to ease the daily workflow of project maintainers,
+*The purpose of HuPKit is to ease the daily workflow of project maintainers,
 not to replace already sufficient functionality. Creating an issue is easier
 with the web interface then using a limited CLI application.*
 
-**Support for other adapters like BitBucket or GitLab will only ever happen once
+**Support for other adapters, like BitBucket or GitLab will only ever happen once
 all adapters support the same level of functionality and stability and performance
 is not negatively affected.**
 
-### Rejected feature requests
-
-If you have some special requirements that are outside the scope of HubKit
-it's properly better to "source fork" this repository and adjust it to
-your own needs (*don't forget to change the name or indicate your providing
-a modified version. To prevent confusion.*). But always keep the original credits!
-
-*A source fork is nothing more then Git cloning the repository and then
-creating a new (GitHub) repository, rather then using the "Fork button".*
-
 ## License
 
-HubKit is provided under the [MIT license](LICENSE).
+HuPKit is provided under the [MIT license](https://github.com/hupkit/hupkit/LICENSE).
 
 ## Credits
 
-This project is maintained by Sebastiaan Stok (aka. [@sstok](https://github.com/sstok)),
-creator of Park-Manager.
+This project is maintained by Sebastiaan Stok (aka. [@sstok](https://github.com/sstok)).
 
-HubKit was inspired on the GH Tool used by the Symfony maintainers,
+HuPKit was inspired on the GH Tool used by the Symfony maintainers,
 no actual code from GH was used.
-
-HubKit is not to be confused with [Hub](https://hub.github.com/) (from GitHub).
