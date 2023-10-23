@@ -1,6 +1,6 @@
 {
-    "name": "park-manager/hub-kit",
-    "description": "HubKit allows project(s) maintainers to easily manage their GitHub repositories",
+    "name": "park-manager/hupkit",
+    "description": "HuPKit allows project(s) maintainers to easily manage their GitHub repositories",
     "license": "MIT",
     "type": "project",
     "authors": [

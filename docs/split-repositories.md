@@ -1,7 +1,7 @@
 Managing Split Repositories
 ===========================
 
-A special feature of HubKit is the ability to handle monolith project developments,
+A special feature of HuPKit is the ability to handle monolith project developments,
 instead of having separate Git repositories for each package all are housed in a
 central repository from where all work is coordinated.
 
@@ -19,10 +19,10 @@ use the `split-create` command to create the repositories.**
 
 See [Configuration](config.md) how to configure your splits.
 
-To test if the configuration is correct run `hubkit split-repo --dry-run`
+To test if the configuration is correct run `hupkit split-repo --dry-run`
 to see what would have happened.
 
-Everything correct? Then run `hubkit split-repo` (this may take some time).
+Everything correct? Then run `hupkit split-repo` (this may take some time).
 
 ## Splitting during merge/release
 

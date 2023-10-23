@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the HubKit package.
+ * This file is part of the HuPKit package.
  *
  * (c) Sebastiaan Stok <s.stok@rollerscapes.net>
  *
@@ -125,7 +125,7 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
 
         $this
             ->beginCommand('self-diagnose')
-            ->setDescription('Checks your system is ready to use HubKit and gives recommendations about changes you should make.')
+            ->setDescription('Checks your system is ready to use HuPKit and gives recommendations about changes you should make.')
             ->setHandler(function () {
                 return new Handler\SelfDiagnoseHandler(
                     $this->container['style'],
@@ -139,7 +139,7 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
             ->end()
 
             ->beginCommand('clear-cache')
-            ->setDescription('Clears the Hubkit cache directory. Run this command to free-up space or resolve recurring errors')
+            ->setDescription('Clears the HuPKit cache directory. Run this command to free-up space or resolve recurring errors')
             ->setHandler(function () {
                 return new Handler\ClearCacheHandler(
                     $this->container['style'],

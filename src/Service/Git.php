@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the HubKit package.
+ * This file is part of the HuPKit package.
  *
  * (c) Sebastiaan Stok <s.stok@rollerscapes.net>
  *
@@ -473,7 +473,7 @@ class Git
         }
     }
 
-    public function setGitConfig(string $config, string | int $value, bool $overwrite = false, string $section = 'local'): void
+    public function setGitConfig(string $config, int | string $value, bool $overwrite = false, string $section = 'local'): void
     {
         if (! $overwrite && $this->getGitConfig($config, $section) !== '') {
             throw new \RuntimeException(

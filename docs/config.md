@@ -5,7 +5,7 @@ Configuration
 But schema_version 2 uses some advanced features that could cause problems when not
 all team members use the same configuration!** See [upgrade](upgrade.md) for more information.
 
-Since Hubkit v1.2 it's possible to use a local configuration housed in the repository itself,
+Since HuPKit v1.2 it's possible to use a local configuration housed in the repository itself,
 see below for more information.
 
 Schema Version
@@ -13,20 +13,20 @@ Schema Version
 
 The `schema_version` defines configuration schema version.
 
-Since Hubkit v1.2 `schema_version` 2 should be used with the correct structure.
-While `schema_version` 1 is still supported until Hubkit 2.0, it will produce a warning message everytime Hubkit is used. 
+Since HuPKit v1.2 `schema_version` 2 should be used with the correct structure.
+While `schema_version` 1 is still supported until HuPKit 2.0, it will produce a warning message everytime HuPKit is used. 
 The new configuration schema provides for some powerful features including a local configuration file and per branch configuration.
 
 Authentication
 --------------
 
-Before Hubkit can be used to manage your repositories you first need to configure
+Before HuPKit can be used to manage your repositories you first need to configure
 the GitHub authentication credentials. Get a new token at: https://github.com/settings/tokens/new
 
-Use a unique and distinct name like: `hubkit on computer-1 at 2016-11-01 14:54 CET`
+Use a unique and distinct name like: `hupkit on computer-1 at 2016-11-01 14:54 CET`
 with scopes: "repo, user:email, read:gpg_key".
 
-HubKit supports GitHub Enterprise, and therefor you can add multiple
+HuPKit supports GitHub Enterprise, and therefor you can add multiple
 hub configurations by there hostname. The default one is `github.com`.
 
 ```php
@@ -130,7 +130,7 @@ Each branch has the following options:
 A list of paths (relative to repository root, *no patterns*) and the value, either a 'push url' 
 or an array with following options `['url' => 'push url', 'sync-tags' => false]`.
 
-**Note:** Missing directories are ignored with a warning. In Hubkit v2.0 this behavior is bound to change.
+**Note:** Missing directories are ignored with a warning. In HuPKit v2.0 this behavior is bound to change.
 
 ```php
 // ... At config path `repositories.[github.com].[organization/repository-name].[branch-name]`
@@ -214,7 +214,7 @@ return [
 Local Configuration
 -------------------
 
-Since Hubkit v1.2 it's possible to use a local configuration housed in the repository itself.
+Since HuPKit v1.2 it's possible to use a local configuration housed in the repository itself.
 
 **Note:** This requires in the main `config.php` file `schema_version` 2 is used, 
 otherwise the local configuration is ignored.
@@ -226,7 +226,7 @@ the main configuration entry defined for this repository.
 
 ### Initialize Configuration
 
-To create the special branch that HubKit uses to store the config.php file and some additional scripts
+To create the special branch that HuPKit uses to store the config.php file and some additional scripts
 for special operations run the `init-config` command to create this branch.
 
 The command will automatically import any existing configuration for the repository, and all files
@@ -244,7 +244,7 @@ Use the `self-diagnose` command to check your configuration and see if any updat
 
 To change the existing configuration or edit any scripts run the `edit-config` command.
 
-**Note:** If this fails due to a configuration error run HubKit with the env `HUBKIT_NO_LOCAL=true`
+**Note:** If this fails due to a configuration error run HuPKit with the env `HUBKIT_NO_LOCAL=true`
 and `unset HUBKIT_NO_LOCAL` once you are done.
 
 ### Synchronize Configuration

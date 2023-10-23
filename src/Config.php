@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the HubKit package.
+ * This file is part of the HuPKit package.
  *
  * (c) Sebastiaan Stok <s.stok@rollerscapes.net>
  *
@@ -31,7 +31,7 @@ final class Config
      *                                 like ['profiles', 'symfony-bundle']
      * @param mixed           $default Default value to use when no config is found (null)
      */
-    public function get(string | array $keys, mixed $default = null)
+    public function get(array | string $keys, mixed $default = null)
     {
         $keys = (array) $keys;
 
@@ -58,7 +58,7 @@ final class Config
      * @param string|string[] $keys Single level key like 'profiles' or array-path
      *                              like ['profiles', 'symfony-bundle']
      */
-    public function getOrFail(string | array $keys)
+    public function getOrFail(array | string $keys)
     {
         $keys = (array) $keys;
         $value = $this->get($keys, $invalid = new \stdClass());
@@ -96,7 +96,7 @@ final class Config
      * @param string|string[] $keys Single level key like "profiles" or array-path
      *                              like ['profiles', 'symfony-bundle']
      */
-    public function has(string | array $keys): bool
+    public function has(array | string $keys): bool
     {
         $keys = (array) $keys;
 
@@ -120,7 +120,7 @@ final class Config
     /**
      * @return array<string, mixed>
      */
-    public function getForRepository(string $host, string $repository, bool | null &$isLocal = false): array
+    public function getForRepository(string $host, string $repository, null | bool &$isLocal = false): array
     {
         $globalConfig = $this->get(['repositories', $host, 'repos', $repository], ['branches' => []]);
 

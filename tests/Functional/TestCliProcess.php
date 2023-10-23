@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the HubKit package.
+ * This file is part of the HuPKit package.
  *
  * (c) Sebastiaan Stok <s.stok@rollerscapes.net>
  *
@@ -59,7 +59,7 @@ class TestCliProcess extends CliProcess
     /**
      * @param Process|array<int, string> $cmd
      */
-    private function wrapProcessorForCmd(Process | array $cmd): Process
+    private function wrapProcessorForCmd(array | Process $cmd): Process
     {
         if (! $cmd instanceof Process) {
             return new Process($cmd, $this->cwd);

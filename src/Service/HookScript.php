@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the HubKit package.
+ * This file is part of the HuPKit package.
  *
  * (c) Sebastiaan Stok <s.stok@rollerscapes.net>
  *
@@ -39,7 +39,7 @@ abstract class HookScript
         if (file_exists($scriptFile)) {
             $this->logger->warning('Hook script {name}.php was found at "{script}". Move this file to the "_hubkit" configuration branch instead.', ['name' => $name, 'script' => $this->cwd . '/.hubkit']);
 
-            trigger_deprecation('park-manager/hubkit', 'v1.2.0', 'Storing hook scripts in ".hubkit" is deprecated and will no longer work in HubKit v2.0. Use the "_hubkit" configuration branch to store hook scripts instead.');
+            trigger_deprecation('hupkit/hupkit', 'v1.2.0', 'Storing hook scripts in ".hubkit" is deprecated and will no longer work in HubKit v2.0. Use the "_hubkit" configuration branch to store hook scripts instead.');
 
             return $scriptFile;
         }

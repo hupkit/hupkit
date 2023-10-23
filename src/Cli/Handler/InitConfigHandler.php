@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the HubKit package.
+ * This file is part of the HuPKit package.
  *
  * (c) Sebastiaan Stok <s.stok@rollerscapes.net>
  *
@@ -129,7 +129,7 @@ final class InitConfigHandler extends ConfigBaseHandler
             <<<CONF
                 <?php
 
-                // See https://www.park-manager.com/hubkit/config.html
+                // See https://hupkit.github.io/hupkit/config.html
 
                 return {$configStr};
 

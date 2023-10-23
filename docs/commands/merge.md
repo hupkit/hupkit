@@ -7,7 +7,7 @@ Plus some additional information for the [changelog](changelog.md) command.
 To merge pull request `#22` in your repository simple run:
 
 ```bash
-$ hubkit merge 22
+$ hupkit merge 22
 ```
 
 And choose a category (feature, refactor, bug, minor, style, security).
@@ -31,7 +31,7 @@ automatically gets little "pat on the back" for there work.
 You can change the (default) message `Thank you @author` using the `--pat` option.
 
 ```bash
-$ hubkit merge 22 --pat=':beers: @author !'
+$ hupkit merge 22 --pat=':beers: @author !'
 ```
 
 Or use the `--no-pat` option to skip it for this merge.
