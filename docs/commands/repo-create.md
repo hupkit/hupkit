@@ -21,3 +21,5 @@ The `repo-create` command has a number of special options:
 
 * `--no-issues`: Disable issues, usable when you have a global issue tracker or using
   a third party solution like Jira.
+
+* `--host`: Use a specific host configuration, either `--host=development.example.com`.

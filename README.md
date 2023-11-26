@@ -1,12 +1,11 @@
 # HuPKit
 
-HuPKit was created to ease the development workflow of the (now discontinued) Park-Manager project.
-In short HuPKit allows project(s) maintainers to easily manage their GitHub repositories.
+In short HuPKit allows project(s) maintainers to easily manage their GitHub repositories,
+merging pull requests, creating new releases, merging older versioned branches into newer
+once and much more.
 
 **Note:** On October 23rd the repository was moved to it's own organization, and renamed to HuPKit.
 The old PHP namespace has been lest unchanged.
-
-Feel free to use it for your own projects.
 
 ## Features
 
@@ -17,6 +16,7 @@ Feel free to use it for your own projects.
 * (Automatically) Split a monolith repository into READ-ONLY repositories.
 
 This tool is designed for project maintainers with a good knowledge of Git and GitHub.
+
 If you have some special needs, please see the contributing section below.
 
 ## Requirements

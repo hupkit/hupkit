@@ -1,9 +1,11 @@
-remote_theme: pages-themes/midnight@v0.2.0
-plugins:
-- jekyll-remote-theme
+remote_theme: niklasbuschmann/contrast@v2.11
 
-#theme: jekyll-theme-slate
-#remote_theme: mmistakes/minimal-mistakes
+plugins:
+  - jekyll-remote-theme
+
 
 title: HuPKit
 description: Project maintainance tool for GitHub repositories
+
+navigation:
+    - {file: "index.md", title: "Home"}

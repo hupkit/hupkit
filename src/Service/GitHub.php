@@ -34,7 +34,7 @@ class GitHub
 
     public function __construct(
         private readonly ClientInterface $httpClient,
-        private readonly Config $config
+        private Config $config
     ) {}
 
     public function autoConfigure(Git $git): void
@@ -74,6 +74,9 @@ class GitHub
         $github->initializeForHost($hostname);
         $github->organization = '';
         $github->repository = '';
+
+        // Prevent calling setRepository() from changing the active configuration.
+        $github->config = clone $this->config;
 
         return $github;
     }
