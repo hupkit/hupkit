@@ -123,9 +123,9 @@ Once done you follow-up with the following articles:
 Run `hupkit help` for a full list of all supported commands, and there options.
 
 If something doesn't work as expected you can find useful tips 
-in the [troubleshooting guide][troubleshooting.md].
+in the [troubleshooting guide](troubleshooting.md).
 
 And finally for the hook-scripts you can find all the available public 
-services in the [Container services][container-services.md] reference guide.
+services in the [Container services](container-services.md) reference guide.
 
 [composer]: https://getcomposer.org/doc/00-intro.md

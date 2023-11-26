@@ -3,9 +3,5 @@ remote_theme: niklasbuschmann/contrast@v2.11
 plugins:
   - jekyll-remote-theme
 
-
 title: HuPKit
-description: Project maintainance tool for GitHub repositories
-
-navigation:
-    - {file: "index.md", title: "Home"}
+description: Project maintenance tool for GitHub repositories
