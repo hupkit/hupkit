@@ -1,2 +1,10 @@
-theme: jekyll-theme-slate
-#remote_theme: mmistakes/minimal-mistakes
+remote_theme: niklasbuschmann/contrast@v2.11
+
+plugins:
+  - jekyll-remote-theme
+
+
+title: "HuPKit"
+
+navigation:
+    - {file: "index.md"}

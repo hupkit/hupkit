@@ -2,7 +2,7 @@ Managing Split Repositories
 ===========================
 
 A special feature of HuPKit is the ability to handle monolith project developments,
-instead of having separate Git repositories for each package all are housed in a
+instead of having separate Git repositories for each package, all are housed in a
 central repository from where all work is coordinated.
 
 **Before you continue make sure [splitsh-lite](https://github.com/splitsh/lite) is
@@ -19,12 +19,12 @@ use the `split-create` command to create the repositories.**
 
 See [Configuration](config.md) how to configure your splits.
 
-To test if the configuration is correct run `hupkit split-repo --dry-run`
-to see what would have happened.
+To test if the configuration is correct run the `split-repo --dry-run`
+command to see what would have happened.
 
-Everything correct? Then run `hupkit split-repo` (this may take some time).
+Everything correct? Then run the `split-repo` command (this may take some time).
 
-## Splitting during merge/release
+## Splitting during merge
 
 Once the repository splitting is configured, you want to make sure the split repositories
 are up-to-date.
@@ -38,10 +38,12 @@ the split operation till you're done.
 
 **Caution:** Splitting is automatically skipped when the `--no-pull` option is provided.
 
-The release command works a little different here, when making a new release the
+## Splitting during a release
+
+The `release` command works a little different here, when making a new release the
 split operation is always performed! You cannot skip this. However you can skip
 the synchronizing of tags to certain split repositories by setting the `sync-tags`
-config to false.
+config to false.å
 
 ```php
     // ...

@@ -4,7 +4,7 @@ upmerge
 Merge the current branch to the next possible version branch (either merge 1.0 into 1.1).
 
 Some projects follow a 'merge bug fixes to the lowest supported branch first' approach,
-and then (up)merge the lower branches into newer branches. Usually: `1.0 -> 2.0 -> master`.
+and then (up)merge the lower branches into newer branches. Usually: `1.0 -> 2.0 -> main`.
 
 But this process is tedious (boring) and error prone, the `upmerge` command makes
 this boring work, as simple and save as possible.
@@ -42,3 +42,23 @@ By merging branches into each other, you might cause some merge conflicts.
 When this happens you can simple resolve the conflicts as you would with using
 the `git mergetool`, then once all conflicts are resolved. Run the `upmerge`
 command again and it will continue as normal.
+
+## Skipping specific branches
+
+When you work with multiple long-term support branches you don't want
+to merge from unmaintained branches.
+
+Set the `upmerge` option to `false` for this the unmaintained branches
+or disable the branch completely.
+
+```php
+'branches' => [
+    // ...
+
+    '1.3' => ['upmerge' => false],
+    // Or mark the branch as unmaintained/disabled
+    '1.3' => false,
+]
+```
+
+See [configuration](../config.md) for full details.

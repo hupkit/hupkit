@@ -50,7 +50,6 @@ return function (Container $container, Version $version, string $branch, ?string
 };
 ```
 
-
 Upgrade to v1.2.0-BETA4
 -----------------------
 

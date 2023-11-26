@@ -1,30 +1,45 @@
-# HuPKit
+HuPKit
+======
 
-HuPKit was created to ease the development workflow of the (now discontinued) Park-Manager project.
-In short HuPKit allows project(s) maintainers to easily manage their GitHub repositories.
+In short HuPKit allows project(s) maintainers to easily manage their GitHub repositories,
+merging pull requests, creating new releases, merging older versioned branches into newer
+once and much more.
 
-**Note:** On October 23rd the repository was moved to it's own organization, and renamed to HuPKit.
-The old PHP namespace has been left unchanged.
+You need at least PHP 8.1, Git 2.10 and a GitHub account (GitHub Enterprise is supported).
+HuPKit works but is not fully tested on Windows.
 
-Feel free to use it for your own projects.
+**Note:** On October 23rd 2023 the repository was moved to it's own organization, and renamed 
+to HuPKit. The old PHP namespace has been left unchanged. In version 2.0 this will change.
 
-## Features
+HuPKit is provided under the [MIT license](https://github.com/hupkit/hupkit/LICENSE) and maintained by Sebastiaan Stok 
+(aka. [@sstok](https://github.com/sstok)).
 
-* Checkout an issue (as local working branch).
-* Merge pull-requests with preservation of all information (description and GitHub discussion).
-* (Up)Merge version branches without mistakes.
-* Create new releases with a proper changelog, and no gaps in version numbers.
-* (Automatically) Split a monolith repository into READ-ONLY repositories.
+Features
+--------
 
-This tool is designed for project maintainers with a good knowledge of Git and GitHub.
+* Taking issues to work on, and checking out an existing pull request
+  to either fix manually or changing the base branch (rebase) with ease.
+
+* Merging pull requests with preservation of all information
+  And additional metadata storage for Changelog rendering;
+
+* Upmerging changes to newer branches;
+
+* Release new version with fault checking, automatic Changelog rendering
+  and monolith repository-split;
+
+* Monolith repository splitting to READ-ONLY repositories;
+
+* Additional support for custom hook scripts before/after release;
+
+* And finally per branch configuration of maintenance marking, repository splitting
+  tag-synchronizing and upmerging;
+
+This tool is designed for project maintainers with a good knowledge of Git, PHP and GitHub.
 If you have some special needs, please see the contributing section below.
 
-## Requirements
-
-You need at least PHP 8.1, Git 2.10 and a GitHub account (GitHub Enterprise is possible).
-Composer is assumed to be installed and configured in your PATH.
-
-## Installation
+Installation
+------------
 
 HuPKit is a PHP application, you don't install it as a dependency
 and you don't install it with Composer global.
@@ -73,48 +88,44 @@ directory, and run `./bin/upgrade`.
 
 Done, you now have the latest version.
 
-## Basic usage
+Basic Usage
+-----------
 
-See the [usage](usage.md) for all commands and usage instructions.
+Before you can use HuPKit a number of things must be configured first,
+you need a GitHub authentication token, Git must be configured in your 
+PATH-env, and PHP must be accessible.
 
-## Versioning
+All commands except `help`, `repo-create` and `self-diagnose` require
+you are in a Git repository, and have Git remote `upstream` existing 
+and pointing to the GitHub main repository (from which all work is 
+coordinated, not your fork).
 
-For transparency and insight into the release cycle, and for striving
-to maintain backward compatibility, this package is maintained under
-the Semantic Versioning guidelines as much as possible.
+### Configuring
 
-Releases will be numbered with the following format:
+See the [Configuration](config.md) section how to configure your
+GitHub credentials, and set-up repository splittings.
 
-`<major>.<minor>.<patch>`
+### Commands
 
-And constructed with the following guidelines:
+Once done you follow-up with the following articles:
 
-* Breaking backward compatibility bumps the major (and resets the minor and patch)
-* New additions without breaking backward compatibility bumps the minor (and resets the patch)
-* Bug fixes and misc changes bumps the patch
+* [Repository Splitting](split-repositories.md)
+* [Creating a new Release](commands/release.md)
+* [Upmerging](commands/upmerge.md)
+* [Pull request base switching](commands/switch-base.md)
+* [Merging a pull request](commands/merge.md)
+* [Checkout](commands/checkout.md)
+* [Take](commands/take.md)
+* [Creating a Repository](commands/repo-create.md)
+* [Changelog](commands/changelog.md)
+* [Branch aliasing](commands/branch-alias.md)
 
-For more information on SemVer, please visit <http://semver.org/>.
+Run `hupkit help` for a full list of all supported commands, and there options.
 
-## Contributing
+If something doesn't work as expected you can find useful tips 
+in the [troubleshooting guide][troubleshooting.md].
 
-HuPKit is open-source and community driven, but to prevent becoming
-to bloated not all requested features will be actually accepted.
+And finally for the hook-scripts you can find all the available public 
+services in the [Container services][container-services.md] reference guide.
 
-*The purpose of HuPKit is to ease the daily workflow of project maintainers,
-not to replace already sufficient functionality. Creating an issue is easier
-with the web interface then using a limited CLI application.*
-
-**Support for other adapters, like BitBucket or GitLab will only ever happen once
-all adapters support the same level of functionality and stability and performance
-is not negatively affected.**
-
-## License
-
-HuPKit is provided under the [MIT license](https://github.com/hupkit/hupkit/LICENSE).
-
-## Credits
-
-This project is maintained by Sebastiaan Stok (aka. [@sstok](https://github.com/sstok)).
-
-HuPKit was inspired on the GH Tool used by the Symfony maintainers,
-no actual code from GH was used.
+[composer]: https://getcomposer.org/doc/00-intro.md

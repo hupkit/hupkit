@@ -11,9 +11,11 @@ you can change the content later using the GitHub web interface.
 $ hupkit release 1.0.0
 ```
 
+## Validation
+
 A version is expected to follow the SemVer format, eg. `v1.0.0`, `0.1.0` or `v1.0.0-BETA1`.
 The leading `v` is automatically added when missing and the meta version (alpha, beta, rc) is
-upper cased.
+turned to uppercase.
 
 **Tip:**
 
@@ -38,14 +40,12 @@ The `release` command has a number of special options:
 The `release` command allows to executes a script prior (pre) and/or after (post) after the release
 operation. See [Release Hooks](../release-hooks.md) for details.
 
-*Note:* You need at least HuPKit version 1.0.0-BETA18 to use release hooks.
-
 ## Notes on Git tag signing
 
 The Git tag of each release is cryptographically signed, **this cannot be disabled**.
 Make sure you have a signing key configured, and that your gpg/pgp application is
 set-up properly.
 
-Run `hupkit self-diagnose` to test if this set-up correctly for you.
+Run `self-diagnose` command to test if this set-up correctly for you.
 
 See also: https://git-scm.com/book/tr/v2/Git-Tools-Signing-Your-Work
