@@ -6,9 +6,16 @@ use Psr\Container\ContainerInterface as Container;
 use Rollerworks\Component\Version\Version;
 
 return function (Container $container, Version $version, string $branch, ?string $releaseTitle, string $changelog) {
+    $versionResolver = static function (Version $version) {
+        if ($version->stability !== Version::STABILITY_STABLE) {
+            return sprintf('%d.%d-dev', $version->major, $version->minor);
+        }
+
+        return sprintf('%d.%d-dev', $version->major, $version->minor + 1);
+    };
 
     $container->get('logger')->info('Updating composer branch-alias');
-    $container->get('process')->mustRun(['composer', 'config', 'extra.branch-alias.dev-'.$branch, sprintf('%d.%d-dev', $version->major, $version->minor)]);
+    $container->get('process')->mustRun(['composer', 'config', 'extra.branch-alias.dev-'.$branch, $versionResolver($version)]);
 
     /** @var \HubKit\Service\Git\GitBranch $gitBranch */
     $gitBranch = $container->get('git.branch');
