@@ -4,7 +4,7 @@ In short HuPKit allows project(s) maintainers to easily manage their GitHub repo
 merging pull requests, creating new releases, merging older versioned branches into newer
 once and much more.
 
-**Note:** On October 23rd the repository was moved to it's own organization, and renamed to HuPKit.
+**Note:** On October 23rd 2023 the repository was moved to it's own organization, and renamed to HuPKit.
 The old PHP namespace has been lest unchanged.
 
 ## Features
