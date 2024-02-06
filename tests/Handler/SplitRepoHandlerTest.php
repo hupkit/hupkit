@@ -210,7 +210,7 @@ final class SplitRepoHandlerTest extends TestCase
     {
         $format = ArgsFormat::build()
             ->addOption(new Option('dry-run', null, Option::BOOLEAN))
-            ->addOption(new Option('prefix', null, OPTION::REQUIRED_VALUE | Option::STRING, null, ''))
+            ->addOption(new Option('prefix', null, OPTION::REQUIRED_VALUE | Option::STRING, null))
             ->addArgument(new Argument('branch', Argument::OPTIONAL | Argument::STRING))
             ->getFormat()
         ;
