@@ -37,7 +37,7 @@ if [ ! -f ./config.php ]; then
 fi;
 
 # This is required for self-diagnose to work properly
-git remote add upstream https://github.com/park-manager/hubkit.git
+git remote add upstream https://github.com/hupkit/hupkit.git
 
 chmod u+x ./bin/hubkit.php
 ./bin/hubkit.php self-diagnose
