@@ -45,7 +45,7 @@ final class SplitRepoHandler extends GitBaseHandler
 
         $this->guardMaintained($branch);
 
-        if ($prefix !== '') {
+        if ($prefix !== null) {
             $this->splitPrefixOnly($branch, $prefix, $args->getOption('dry-run'));
 
             return;
