@@ -64,6 +64,7 @@ final class MergeHandler extends GitBaseHandler
         );
 
         $this->guardMaintained($pr['base']['ref']);
+        $this->guardMergeStatus($pr);
 
         $squash = $this->determineSquash($args, $id);
 
@@ -71,7 +72,6 @@ final class MergeHandler extends GitBaseHandler
             $this->style->note('This pull request will be squashed before being merged.');
         }
 
-        $this->guardMergeStatus($pr);
         $this->renderStatus($pr);
 
         $branchLabel = $this->getBaseBranchLabel($pr['base']['ref']);
