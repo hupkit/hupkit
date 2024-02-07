@@ -294,7 +294,8 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
                     $this->container['git'],
                     $this->container['github'],
                     $this->container['config'],
-                    $this->container['process']
+                    $this->container['process'],
+                    $this->container['filesystem']
                 );
             })
             ->end()

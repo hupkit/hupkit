@@ -15,9 +15,11 @@ namespace HubKit\Cli\Handler;
 
 use HubKit\Config;
 use HubKit\Service\CliProcess;
+use HubKit\Service\Filesystem;
 use HubKit\Service\Git;
 use HubKit\Service\GitHub;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Webmozart\Console\Api\Args\Args;
 
@@ -28,7 +30,8 @@ final class SwitchBaseHandler extends GitBaseHandler
         Git $git,
         GitHub $github,
         Config $config,
-        private readonly CliProcess $process
+        private readonly CliProcess $process,
+        private readonly Filesystem $filesystem,
     ) {
         parent::__construct($style, $git, $github, $config);
     }
@@ -48,14 +51,14 @@ final class SwitchBaseHandler extends GitBaseHandler
 
         $branch = $pullRequest['head']['ref'];
         $remote = $pullRequest['head']['user']['login'];
-        $tmpBranch = '_temp_' . $remote . '--' . $branch . '--' . $newBase;
+        $tmpBranch = '_temp/' . $remote . '--' . $branch . '--' . $newBase;
 
         $this->git->ensureRemoteExists($remote, $pullRequest['head']['repo']['ssh_url']);
         $this->git->remoteUpdate($remote);
         $this->git->remoteUpdate('upstream');
 
         // Operation was already in progress (but gave a conflict).
-        if (file_exists($this->git->getGitDirectory() . '/.hubkit-switch')) {
+        if ($this->filesystem->fileExists($this->git->getGitDirectory() . '/.hubkit-switch')) {
             $this->handleIncompleteOperation($remote, $tmpBranch, $branch);
         }
 
@@ -78,7 +81,7 @@ final class SwitchBaseHandler extends GitBaseHandler
             );
         }
 
-        $this->style->success(sprintf('Pull request %s base was switched from "%s" to "%s"',
+        $this->style->success(sprintf('Pull request %s base was switched from "%s" to "%s".',
             $pullRequest['html_url'],
             $pullRequest['base']['ref'],
             $newBase
@@ -88,7 +91,7 @@ final class SwitchBaseHandler extends GitBaseHandler
     private function handleIncompleteOperation(string $remote, string $tmpBranch, string $branch): void
     {
         $gitDir = $this->git->getGitDirectory();
-        $tmpWorkingBranch = trim(file_get_contents($gitDir . '/.hubkit-switch'));
+        $tmpWorkingBranch = trim($this->filesystem->getFileContents($gitDir . '/.hubkit-switch'));
 
         // If branch was switched, assume the operation is aborted completely (and start over from scratch).
         // If branch name equals, assume a resolve - check if there are actual changes (before we push with force)
@@ -102,7 +105,7 @@ final class SwitchBaseHandler extends GitBaseHandler
             );
 
             if ($this->style->confirm('Do you want to abort the previous operation?')) {
-                return; // Delete always performed in switchBranchBase()
+                return; // Continue with the current operation. Delete is always performed in switchBranchBase()
             }
 
             if (! $this->style->confirm('Do you want to continue the previous operation?')) {
@@ -115,9 +118,10 @@ final class SwitchBaseHandler extends GitBaseHandler
         }
 
         // Operation was continued, now check if the branches have in fact diverged.
+        // If so, push the changes. After this back in the 'main' flow the rebase is performed again, which
+        // will work as expected now. This extra rebase is performed to ensure everything is as expected.
         if ($this->git->getRemoteDiffStatus($remote, $tmpBranch, $branch) === $this->git::STATUS_DIVERGED) {
             $this->pushToRemote($remote, $tmpBranch, $branch);
-            $this->deleteTempBranch($tmpBranch);
         }
     }
 
@@ -131,10 +135,10 @@ final class SwitchBaseHandler extends GitBaseHandler
 
         // Always (re)start the rebase process from scratch in case something went horrible wrong.
         $this->deleteTempBranch($tmpBranch);
-        $this->git->checkout($remote . '/' . $branch);
+        $this->git->checkoutRemoteBranch($remote, $branch, false);
         $this->git->checkout($tmpBranch, true);
 
-        file_put_contents($this->git->getGitDirectory() . '/.hubkit-switch', $tmpBranch);
+        $this->filesystem->dumpFile($this->git->getGitDirectory() . '/.hubkit-switch', $tmpBranch);
 
         try {
             $this->process->mustRun(['git', 'rebase', '--onto', 'upstream/' . $newBase, $currentBase, $tmpBranch]);
@@ -171,7 +175,12 @@ final class SwitchBaseHandler extends GitBaseHandler
     private function deleteTempBranch(string $tmpBranch): void
     {
         $this->process->run(['git', 'branch', '-D', $tmpBranch]);
-        @unlink($this->git->getGitDirectory() . '/.hubkit-switch');
+
+        try {
+            $this->filesystem->getFilesystem()->remove($this->git->getGitDirectory() . '/.hubkit-switch');
+        } catch (IOException) {
+            // Noop
+        }
     }
 
     private function pushToRemote(string $remote, string $tmpBranch, string $branch): void
