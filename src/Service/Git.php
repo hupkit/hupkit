@@ -401,7 +401,7 @@ class Git
     /**
      * Checkout a remote branch or create it when it doesn't exit yet.
      */
-    public function checkoutRemoteBranch(string $remote, string $branchName): void
+    public function checkoutRemoteBranch(string $remote, string $branchName, bool $create = true): void
     {
         if ($this->branchExists($branchName)) {
             $this->process->mustRun(['git', 'checkout', $branchName]);
@@ -409,7 +409,14 @@ class Git
             return;
         }
 
-        $this->process->mustRun(['git', 'checkout', 'remotes/' . $remote . '/' . $branchName, '-b', $branchName]);
+        $cmd = ['git', 'checkout', 'remotes/' . $remote . '/' . $branchName];
+
+        if ($create) {
+            $cmd[] = '-b';
+            $cmd[] = $branchName;
+        }
+
+        $this->process->mustRun($cmd);
     }
 
     public function guardWorkingTreeReady(): void

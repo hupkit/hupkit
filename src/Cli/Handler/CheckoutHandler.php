@@ -55,9 +55,9 @@ final class CheckoutHandler extends GitBaseHandler
             $this->git->checkout($branch);
             $this->ensureBranchInSync($remote, $branch, $pullRequest['head']['ref']);
         } else {
-            $this->git->checkout($remote . '/' . $pullRequest['head']['ref']);
+            $this->git->checkoutRemoteBranch($remote, $pullRequest['head']['ref'], create: false);
             $this->git->checkout($branch, true);
-            $this->process->run(['git', 'branch', '--set-upstream-to', $remote . '/' . $pullRequest['head']['ref'], $branch]);
+            $this->process->run(['git', 'branch', '--set-upstream-to', sprintf('%s/%s', $remote, $pullRequest['head']['ref']), $branch]);
         }
 
         $this->style->success(sprintf('Pull request %s is checked out!', $pullRequest['html_url']));
@@ -67,16 +67,16 @@ final class CheckoutHandler extends GitBaseHandler
     {
         $status = $this->git->getRemoteDiffStatus($remote, $branch, $remoteBranch);
 
+        if ($this->git::STATUS_DIVERGED === $status) {
+            throw new \RuntimeException('Your local branch and the remote version have differed. Please resolve this problem manually.');
+        }
+
         if ($this->git::STATUS_NEED_PULL === $status) {
             $this->style->note(
                 sprintf('Your local branch "%s" is outdated, running git pull.', $branch)
             );
 
             $this->git->pullRemote($remote);
-        } elseif ($this->git::STATUS_DIVERGED === $status) {
-            throw new \RuntimeException(
-                'Your local branch and the remote version have differed. Please resolve this problem manually.'
-            );
         }
     }
 }
