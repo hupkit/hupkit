@@ -72,7 +72,12 @@ class Filesystem
 
     public function fileExists(string $file): bool
     {
-        return $this->fs->exists($this->getAbsolutePath($file));
+        return $this->exists($file);
+    }
+
+    public function exists(string $path): bool
+    {
+        return $this->fs->exists($this->getAbsolutePath($path));
     }
 
     /**

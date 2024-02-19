@@ -66,7 +66,7 @@ final class InitConfigHandler extends ConfigBaseHandler
         $this->createConfigFile();
 
         $this->style->success([
-            'The _hubkit configuration branch was created, edit the config.php file with your favorite editor.',
+            'The "_hubkit" configuration branch was created, edit the config.php file with your favorite editor.',
             'Make sure to add to and commit once you are done.',
             sprintf('After you are done run `git checkout %s`.', $activeBranch),
             'And finally run the `sync-config` command to push the configuration to the upstream repository.',
@@ -77,12 +77,12 @@ final class InitConfigHandler extends ConfigBaseHandler
 
     private function createHkBranch(string $activeBranch): void
     {
-        $this->style->note('Generating empty "_hubkit" branch');
+        $this->style->note('Generating empty "_hubkit" branch.');
 
         $this->process->mustRun(['git', 'checkout', '--orphan', '_hubkit']);
         $this->process->mustRun(['git', 'rm', '-rf', '.']);
 
-        if ($this->filesystem->fileExists('./config.php')) {
+        if ($this->filesystem->exists('./config.php')) {
             throw new \RuntimeException('The config.php file already exists, cannot safely continue, either (temporarily) move or rename this file.');
         }
 
@@ -101,14 +101,14 @@ final class InitConfigHandler extends ConfigBaseHandler
     {
         $tempDirectory = $this->tempRepository->getLocal($this->filesystem->getCwd(), $activeBranch);
 
-        if (! $this->filesystem->fileExists($tempDirectory . '/.hubkit')) {
+        if (! $this->filesystem->exists($tempDirectory . '/.hubkit')) {
             return;
         }
 
         $this->filesystem->getFilesystem()->mirror($tempDirectory . '/.hubkit', $this->filesystem->getCwd(), options: ['copy_on_windows' => true]);
 
         $this->style->info([
-            'The .hubkit directory was found and it\'s files copied to the _hubkit configuration branch.',
+            'The .hubkit directory was found and it\'s files copied to the "_hubkit" configuration branch.',
             'Make sure to `git add` these files manually.',
         ]);
     }
