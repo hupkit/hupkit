@@ -18,7 +18,7 @@ use Symfony\Component\Finder\Gitignore;
 use Webmozart\Console\Api\Args\Args;
 use Webmozart\Console\Api\IO\IO;
 
-final class EditConfigHandler extends ConfigBaseHandler
+class EditConfigHandler extends ConfigBaseHandler
 {
     public function handle(Args $args, IO $io): void
     {
@@ -57,8 +57,8 @@ final class EditConfigHandler extends ConfigBaseHandler
         $this->git->checkout('_hubkit');
 
         $this->style->success([
-            'THe _hubkit configuration branch was checked out.',
-            'Make sure to add to and commit once you are done.',
+            'The "_hubkit" configuration branch was checked out.',
+            'Make sure to add and commit once you are done.',
             sprintf('After you are done run `git checkout %s`.', $activeBranch),
             'And run the `sync-config` command to push the configuration to the upstream repository.',
         ]);
@@ -71,24 +71,18 @@ final class EditConfigHandler extends ConfigBaseHandler
 
         // Note that this is only works for top-level excludes, nested excludes are considered an edge-case.
         foreach (['./.gitignore', './.git/info/exclude'] as $excludeFile) {
-            if ($this->filesystem->fileExists($excludeFile)) {
+            if ($this->filesystem->exists($excludeFile)) {
                 $gitIgnores[] = Gitignore::toRegex($this->filesystem->getFileContents($excludeFile));
             }
         }
 
-        $finder = new Finder();
-        $finder
-            ->files()
-            ->name($gitIgnores)
-            ->in($configRepository);
-
+        $strip = mb_strlen($configRepository) + 1; // Path length to get relative path
         $found = [];
-        $strip = mb_strlen($configRepository) + 1;
 
-        foreach ($finder as $file) {
+        foreach ($this->getFinder($gitIgnores, $configRepository) as $file) {
             $filePath = mb_substr($file->getPathname(), $strip);
 
-            if ($this->filesystem->fileExists('./' . $filePath)) {
+            if ($this->filesystem->exists('./' . $filePath)) {
                 $found[] = $filePath;
             }
         }
@@ -96,11 +90,24 @@ final class EditConfigHandler extends ConfigBaseHandler
         if (\count($found) > 0) {
             throw new \RuntimeException(
                 sprintf(
-                    "One or more git-ignored files where found in the _hubkit branch, these would be overwritten when checking out.\n" .
+                    "One or more git-ignored files where found in the \"_hubkit\" branch, these would be overwritten when checking out.\n" .
                     "\nTemporarily move or rename these files:\n\n  * %s",
                     implode("\n  * ", $found)
                 )
             );
         }
+    }
+
+    /**
+     * Protected to allow testing.
+     *
+     * @param array<int, string> $gitIgnores
+     */
+    protected function getFinder(array $gitIgnores, string $configRepository): Finder
+    {
+        return (new Finder())
+            ->files()
+            ->name($gitIgnores)
+            ->in($configRepository);
     }
 }
