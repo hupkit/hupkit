@@ -141,11 +141,6 @@ parameters:
 			path: src/Cli/HubKitApplicationConfig.php
 
 		-
-			message: "#^Class HubKit\\\\Cli\\\\Handler\\\\EditConfigHandler constructor invoked with 7 parameters, 6 required\\.$#"
-			count: 1
-			path: src/Cli/HubKitApplicationConfig.php
-
-		-
 			message: "#^Parameter \\#3 \\$cwd of class HubKit\\\\Helper\\\\BranchAliasResolver constructor expects string\\|null, string\\|false given\\.$#"
 			count: 1
 			path: src/Cli/HubKitApplicationConfig.php
@@ -839,6 +834,286 @@ parameters:
 			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\BranchAliasHandlerTest\\:\\:\\$git with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
 			count: 1
 			path: tests/Handler/BranchAliasHandlerTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\CheckoutHandlerTest\\:\\:assertOutputMatches\\(\\) has parameter \\$expectedLines with no type specified\\.$#"
+			count: 1
+			path: tests/Handler/CheckoutHandlerTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\CheckoutHandlerTest\\:\\:assertOutputMatches\\(\\) has parameter \\$regex with no type specified\\.$#"
+			count: 1
+			path: tests/Handler/CheckoutHandlerTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\CheckoutHandlerTest\\:\\:assertOutputNotMatches\\(\\) has parameter \\$lines with no type specified\\.$#"
+			count: 1
+			path: tests/Handler/CheckoutHandlerTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\CheckoutHandlerTest\\:\\:assertOutputNotMatches\\(\\) has parameter \\$regex with no type specified\\.$#"
+			count: 1
+			path: tests/Handler/CheckoutHandlerTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\CheckoutHandlerTest\\:\\:createStyle\\(\\) has parameter \\$input with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/Handler/CheckoutHandlerTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\CheckoutHandlerTest\\:\\:getDisplay\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/Handler/CheckoutHandlerTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\CheckoutHandlerTest\\:\\:getInputStream\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/Handler/CheckoutHandlerTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\CheckoutHandlerTest\\:\\:getInputStream\\(\\) has parameter \\$input with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/Handler/CheckoutHandlerTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
+			count: 1
+			path: tests/Handler/CheckoutHandlerTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$stream of function fwrite expects resource, resource\\|false given\\.$#"
+			count: 1
+			path: tests/Handler/CheckoutHandlerTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$stream of function rewind expects resource, resource\\|false given\\.$#"
+			count: 1
+			path: tests/Handler/CheckoutHandlerTest.php
+
+		-
+			message: "#^Parameter \\#2 \\$git of class HubKit\\\\Cli\\\\Handler\\\\CheckoutHandler constructor expects HubKit\\\\Service\\\\Git, object given\\.$#"
+			count: 1
+			path: tests/Handler/CheckoutHandlerTest.php
+
+		-
+			message: "#^Parameter \\#2 \\$string of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertDoesNotMatchRegularExpression\\(\\) expects string, string\\|null given\\.$#"
+			count: 1
+			path: tests/Handler/CheckoutHandlerTest.php
+
+		-
+			message: "#^Parameter \\#2 \\$string of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertMatchesRegularExpression\\(\\) expects string, string\\|null given\\.$#"
+			count: 1
+			path: tests/Handler/CheckoutHandlerTest.php
+
+		-
+			message: "#^Parameter \\#3 \\$github of class HubKit\\\\Cli\\\\Handler\\\\CheckoutHandler constructor expects HubKit\\\\Service\\\\GitHub, object given\\.$#"
+			count: 1
+			path: tests/Handler/CheckoutHandlerTest.php
+
+		-
+			message: "#^Parameter \\#3 \\$subject of function str_replace expects array\\|string, string\\|false given\\.$#"
+			count: 1
+			path: tests/Handler/CheckoutHandlerTest.php
+
+		-
+			message: "#^Parameter \\#5 \\$process of class HubKit\\\\Cli\\\\Handler\\\\CheckoutHandler constructor expects HubKit\\\\Service\\\\CliProcess, object given\\.$#"
+			count: 1
+			path: tests/Handler/CheckoutHandlerTest.php
+
+		-
+			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\CheckoutHandlerTest\\:\\:\\$git with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
+			count: 1
+			path: tests/Handler/CheckoutHandlerTest.php
+
+		-
+			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\CheckoutHandlerTest\\:\\:\\$github with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
+			count: 1
+			path: tests/Handler/CheckoutHandlerTest.php
+
+		-
+			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\CheckoutHandlerTest\\:\\:\\$output \\(Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput\\) does not accept Symfony\\\\Component\\\\Console\\\\Output\\\\OutputInterface\\.$#"
+			count: 1
+			path: tests/Handler/CheckoutHandlerTest.php
+
+		-
+			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\CheckoutHandlerTest\\:\\:\\$process with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
+			count: 1
+			path: tests/Handler/CheckoutHandlerTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\ConfigHandlerTestCase\\:\\:assertOutputMatches\\(\\) has parameter \\$expectedLines with no type specified\\.$#"
+			count: 1
+			path: tests/Handler/ConfigHandlerTestCase.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\ConfigHandlerTestCase\\:\\:assertOutputMatches\\(\\) has parameter \\$regex with no type specified\\.$#"
+			count: 1
+			path: tests/Handler/ConfigHandlerTestCase.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\ConfigHandlerTestCase\\:\\:assertOutputNotMatches\\(\\) has parameter \\$lines with no type specified\\.$#"
+			count: 1
+			path: tests/Handler/ConfigHandlerTestCase.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\ConfigHandlerTestCase\\:\\:assertOutputNotMatches\\(\\) has parameter \\$regex with no type specified\\.$#"
+			count: 1
+			path: tests/Handler/ConfigHandlerTestCase.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\ConfigHandlerTestCase\\:\\:createStyle\\(\\) has parameter \\$input with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/Handler/ConfigHandlerTestCase.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\ConfigHandlerTestCase\\:\\:getDisplay\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/Handler/ConfigHandlerTestCase.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\ConfigHandlerTestCase\\:\\:getInputStream\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: tests/Handler/ConfigHandlerTestCase.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\ConfigHandlerTestCase\\:\\:getInputStream\\(\\) has parameter \\$input with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/Handler/ConfigHandlerTestCase.php
+
+		-
+			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
+			count: 1
+			path: tests/Handler/ConfigHandlerTestCase.php
+
+		-
+			message: "#^Parameter \\#1 \\$stream of function fwrite expects resource, resource\\|false given\\.$#"
+			count: 1
+			path: tests/Handler/ConfigHandlerTestCase.php
+
+		-
+			message: "#^Parameter \\#1 \\$stream of function rewind expects resource, resource\\|false given\\.$#"
+			count: 1
+			path: tests/Handler/ConfigHandlerTestCase.php
+
+		-
+			message: "#^Parameter \\#2 \\$string of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertDoesNotMatchRegularExpression\\(\\) expects string, string\\|null given\\.$#"
+			count: 1
+			path: tests/Handler/ConfigHandlerTestCase.php
+
+		-
+			message: "#^Parameter \\#2 \\$string of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertMatchesRegularExpression\\(\\) expects string, string\\|null given\\.$#"
+			count: 1
+			path: tests/Handler/ConfigHandlerTestCase.php
+
+		-
+			message: "#^Parameter \\#3 \\$subject of function str_replace expects array\\|string, string\\|false given\\.$#"
+			count: 1
+			path: tests/Handler/ConfigHandlerTestCase.php
+
+		-
+			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\ConfigHandlerTestCase\\:\\:\\$filesystem with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
+			count: 1
+			path: tests/Handler/ConfigHandlerTestCase.php
+
+		-
+			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\ConfigHandlerTestCase\\:\\:\\$git with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
+			count: 1
+			path: tests/Handler/ConfigHandlerTestCase.php
+
+		-
+			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\ConfigHandlerTestCase\\:\\:\\$github with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
+			count: 1
+			path: tests/Handler/ConfigHandlerTestCase.php
+
+		-
+			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\ConfigHandlerTestCase\\:\\:\\$output \\(Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput\\) does not accept Symfony\\\\Component\\\\Console\\\\Output\\\\OutputInterface\\.$#"
+			count: 1
+			path: tests/Handler/ConfigHandlerTestCase.php
+
+		-
+			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\ConfigHandlerTestCase\\:\\:\\$process with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
+			count: 1
+			path: tests/Handler/ConfigHandlerTestCase.php
+
+		-
+			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\ConfigHandlerTestCase\\:\\:\\$tempRepository with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
+			count: 1
+			path: tests/Handler/ConfigHandlerTestCase.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\EditConfigHandlerTest\\:\\:it_fails_overwritten_ignored_files\\(\\) has parameter \\$existingFiles with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/Handler/EditConfigHandlerTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\EditConfigHandlerTest\\:\\:it_fails_overwritten_ignored_files\\(\\) has parameter \\$foundFiles with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/Handler/EditConfigHandlerTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\EditConfigHandlerTest\\:\\:provide_it_fails_overwritten_ignored_files\\(\\) return type has no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: tests/Handler/EditConfigHandlerTest.php
+
+		-
+			message: "#^Parameter \\#2 \\$git of class class@anonymous/tests/Handler/EditConfigHandlerTest\\.php\\:225 constructor expects HubKit\\\\Service\\\\Git, object given\\.$#"
+			count: 1
+			path: tests/Handler/EditConfigHandlerTest.php
+
+		-
+			message: "#^Parameter \\#3 \\$github of class class@anonymous/tests/Handler/EditConfigHandlerTest\\.php\\:225 constructor expects HubKit\\\\Service\\\\GitHub, object given\\.$#"
+			count: 1
+			path: tests/Handler/EditConfigHandlerTest.php
+
+		-
+			message: "#^Parameter \\#5 \\$filesystem of class class@anonymous/tests/Handler/EditConfigHandlerTest\\.php\\:225 constructor expects HubKit\\\\Service\\\\Filesystem, object given\\.$#"
+			count: 1
+			path: tests/Handler/EditConfigHandlerTest.php
+
+		-
+			message: "#^Parameter \\#6 \\$tempRepository of class class@anonymous/tests/Handler/EditConfigHandlerTest\\.php\\:225 constructor expects HubKit\\\\Service\\\\Git\\\\GitTempRepository, object given\\.$#"
+			count: 1
+			path: tests/Handler/EditConfigHandlerTest.php
+
+		-
+			message: "#^Parameter \\#7 \\$finder of class class@anonymous/tests/Handler/EditConfigHandlerTest\\.php\\:225 constructor expects Symfony\\\\Component\\\\Finder\\\\Finder, object given\\.$#"
+			count: 1
+			path: tests/Handler/EditConfigHandlerTest.php
+
+		-
+			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\EditConfigHandlerTest\\:\\:\\$finder with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
+			count: 1
+			path: tests/Handler/EditConfigHandlerTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\InitConfigHandlerTest\\:\\:assertConfigFileEquals\\(\\) has parameter \\$expected with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/Handler/InitConfigHandlerTest.php
+
+		-
+			message: "#^Parameter \\#2 \\$git of class HubKit\\\\Cli\\\\Handler\\\\InitConfigHandler constructor expects HubKit\\\\Service\\\\Git, object given\\.$#"
+			count: 1
+			path: tests/Handler/InitConfigHandlerTest.php
+
+		-
+			message: "#^Parameter \\#3 \\$github of class HubKit\\\\Cli\\\\Handler\\\\InitConfigHandler constructor expects HubKit\\\\Service\\\\GitHub, object given\\.$#"
+			count: 1
+			path: tests/Handler/InitConfigHandlerTest.php
+
+		-
+			message: "#^Parameter \\#5 \\$filesystem of class HubKit\\\\Cli\\\\Handler\\\\InitConfigHandler constructor expects HubKit\\\\Service\\\\Filesystem, object given\\.$#"
+			count: 1
+			path: tests/Handler/InitConfigHandlerTest.php
+
+		-
+			message: "#^Parameter \\#6 \\$tempRepository of class HubKit\\\\Cli\\\\Handler\\\\InitConfigHandler constructor expects HubKit\\\\Service\\\\Git\\\\GitTempRepository, object given\\.$#"
+			count: 1
+			path: tests/Handler/InitConfigHandlerTest.php
+
+		-
+			message: "#^Parameter \\#7 \\$process of class HubKit\\\\Cli\\\\Handler\\\\InitConfigHandler constructor expects HubKit\\\\Service\\\\CliProcess, object given\\.$#"
+			count: 1
+			path: tests/Handler/InitConfigHandlerTest.php
 
 		-
 			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\MergeHandlerTest\\:\\:assertOutputMatches\\(\\) has parameter \\$expectedLines with no type specified\\.$#"
