@@ -31,11 +31,12 @@
     },
     "require-dev": {
         "jangregor/phpstan-prophecy": "^1.0.0",
-        "phpspec/prophecy-phpunit": "^v2.0.1",
+        "phpspec/prophecy-phpunit": "^2.0.1",
         "phpstan/phpstan": "^1.8.1",
         "phpstan/phpstan-phpunit": "^1.1.1",
         "phpstan/phpstan-symfony": "^1.2",
         "phpunit/phpunit": "^9.5.21",
+        "rollerscapes/standards": "^1.0",
         "symfony/phpunit-bridge": "^6.0"
     },
     "repositories": [
@@ -58,13 +59,13 @@
     },
     "config": {
         "allow-plugins": {
-            "symfony/flex": true,
-            "php-http/discovery": true
+            "php-http/discovery": true,
+            "symfony/flex": true
         },
-        "sort-packages": true,
         "platform": {
             "php": "8.1"
-        }
+        },
+        "sort-packages": true
     },
     "extra": {
         "branch-alias": {
