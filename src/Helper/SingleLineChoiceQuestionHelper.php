@@ -35,7 +35,7 @@ class SingleLineChoiceQuestionHelper extends QuestionHelper
         $defaultLabel = '';
 
         if ($default !== null) {
-            $defaultLabel = sprintf(' [<comment>%s</comment>] ', OutputFormatter::escape($default));
+            $defaultLabel = sprintf(' [<comment>%s</comment>] ', OutputFormatter::escape((string) $default));
         }
 
         $output->write($text);

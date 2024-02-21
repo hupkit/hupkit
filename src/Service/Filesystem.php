@@ -39,6 +39,11 @@ class Filesystem
     public function newTempFilename(string $content = null): string
     {
         $tmpName = tempnam($this->tempdir, '');
+
+        if ($tmpName === false) {
+            throw new \RuntimeException('Could not create temp filename. Invalid temporary directory?');
+        }
+
         $this->tempFilenames[] = $tmpName;
 
         if ($content !== null) {
@@ -58,7 +63,13 @@ class Filesystem
 
     public function getFileContents(string $filename): string
     {
-        return file_get_contents($this->getAbsolutePath($filename));
+        $contents = file_get_contents($this->getAbsolutePath($filename));
+
+        if ($contents === false) {
+            throw new \RuntimeException(sprintf('Unable to get contents of file %s', $filename));
+        }
+
+        return $contents;
     }
 
     public function getAbsolutePath(string $filename): string
@@ -151,9 +162,18 @@ class Filesystem
         return chdir($directory);
     }
 
-    public function getCwd(): false | string
+    /**
+     * @return ($allowFailure is true ? false|string : string)
+     */
+    public function getCwd(bool $allowFailure = false): false | string
     {
-        return getcwd();
+        $cwd = getcwd();
+
+        if ($cwd === false && ! $allowFailure) {
+            throw new \RuntimeException('No current working directory.');
+        }
+
+        return $cwd;
     }
 
     public function getTempdir(): string

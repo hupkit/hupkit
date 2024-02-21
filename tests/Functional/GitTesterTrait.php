@@ -20,10 +20,11 @@ use Symfony\Component\Process\Process;
 
 trait GitTesterTrait
 {
-    protected $cwd;
+    protected string $localRepository;
+    protected null | string $cwd = null;
 
-    private ?OutputInterface $cliOutput = null;
     private ?string $tempDir = null;
+    private ?OutputInterface $cliOutput = null;
 
     protected function setUpTempDirectory(): void
     {

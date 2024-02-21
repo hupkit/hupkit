@@ -60,7 +60,7 @@ class Container extends \Pimple\Container implements ContainerInterface
             $container['process'],
             $container['logger'],
             $container['git.temp_repository'],
-            (new ExecutableFinder())->find('splitsh-lite')
+            (new ExecutableFinder())->find('splitsh-lite') ?? ''
         );
 
         $this['branch_splitsh_git'] = static fn (self $container) => new Service\BranchSplitsh(

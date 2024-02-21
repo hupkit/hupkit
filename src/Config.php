@@ -138,6 +138,14 @@ final class Config
         $host ??= $this->activeHost;
         $repository ??= $this->activeRepository;
 
+        if ($host === null) {
+            throw new \InvalidArgumentException('Argument $host cannot be empty, and could not be resolved from default.');
+        }
+
+        if ($repository === null) {
+            throw new \InvalidArgumentException('Argument $repository cannot be empty, and could not be resolved from default');
+        }
+
         $repoConfig = $this->getForRepository($host, $repository, $isLocal);
         $configPath = $isLocal ? ['_local', 'branches'] : ['repositories', $host, 'repos', $repository, 'branches'];
 

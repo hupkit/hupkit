@@ -26,7 +26,6 @@ final class GitBranchTest extends TestCase
 {
     use GitTesterTrait;
 
-    private string $localRepository;
     private string $remoteRepository;
     private GitBranch $git;
 

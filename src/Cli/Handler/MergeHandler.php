@@ -441,7 +441,7 @@ final class MergeHandler extends GitBaseHandler
         }
     }
 
-    private function determineSquash(Args $args, int $pullRequestId)
+    private function determineSquash(Args $args, int $pullRequestId): bool
     {
         if ($args->getOption('squash')) {
             return true;

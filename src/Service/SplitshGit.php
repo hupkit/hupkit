@@ -24,7 +24,7 @@ class SplitshGit
         private readonly CliProcess $process,
         private readonly LoggerInterface $logger,
         private readonly GitTempRepository $gitTempRepository,
-        private readonly ?string $executable
+        private readonly string $executable
     ) {}
 
     /**

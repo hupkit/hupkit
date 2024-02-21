@@ -20,7 +20,7 @@ class GitBase extends Git
 {
     private readonly string $cwd;
 
-    public function __construct(CliProcess $process, string $cwd)
+    public function __construct(CliProcess $process, string $cwd = null)
     {
         $this->process = $process;
         $this->cwd = $cwd ?? getcwd();

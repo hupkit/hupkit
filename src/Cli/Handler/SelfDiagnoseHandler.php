@@ -220,7 +220,7 @@ final class SelfDiagnoseHandler
             return;
         }
 
-        if ($this->git->getGitConfig('remote.upstream.url') === '' || $this->github->getHostname() === null) {
+        if ($this->git->getGitConfig('remote.upstream.url') === '' || $this->github->getHostname() === '') {
             $table->addRow($label, 'skipped', 'Unable to detect host and repository');
 
             return;
