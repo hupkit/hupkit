@@ -22,8 +22,8 @@ use Symfony\Component\Console\Style\StyleInterface;
 
 final class ConfigFactory
 {
-    private $currentDir;
-    private $configFile;
+    private string $currentDir;
+    private string $configFile;
     private ?string $localConfigFile = null;
 
     public function __construct(

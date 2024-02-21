@@ -76,6 +76,10 @@ class ChangelogRenderer
         $title = $item['title'];
         $pos = mb_strrpos($title, '(');
 
+        if ($pos === false) {
+            return '';
+        }
+
         // Replace authors with links
         $title = mb_substr($title, 0, $pos) .
             preg_replace(

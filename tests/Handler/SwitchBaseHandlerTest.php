@@ -39,9 +39,9 @@ use Webmozart\Console\Args\StringArgs;
  */
 final class SwitchBaseHandlerTest extends TestCase
 {
+    use GitTesterTrait;
     use ProphecyTrait;
     use SymfonyStyleTrait;
-    use GitTesterTrait;
 
     private ObjectProphecy $git;
     private ObjectProphecy $github;
@@ -94,7 +94,7 @@ final class SwitchBaseHandlerTest extends TestCase
             'state' => 'open',
             'base' => [
                 'ref' => 'main',
-            ]
+            ],
         ]);
 
         $this->expectException(\InvalidArgumentException::class);
@@ -111,7 +111,7 @@ final class SwitchBaseHandlerTest extends TestCase
             'state' => 'open',
             'base' => [
                 'ref' => 'main',
-            ]
+            ],
         ]);
 
         $this->expectException(\InvalidArgumentException::class);
@@ -129,7 +129,7 @@ final class SwitchBaseHandlerTest extends TestCase
             'state' => 'open',
             'base' => [
                 'ref' => 'main',
-            ]
+            ],
         ]);
 
         $this->expectException(\RuntimeException::class);
@@ -206,7 +206,7 @@ final class SwitchBaseHandlerTest extends TestCase
             [Git::class, 'checkoutRemoteBranch', ['sstok', 'bug/new-feature-1', false]],
             [Git::class, 'checkout', ['_temp/sstok--bug/new-feature-1--2.0', true]],
             [Filesystem::class, 'dumpFile', ['/:local/.hubkit-switch', '_temp/sstok--bug/new-feature-1--2.0']],
-            [CliProcess::class, 'mustRun',[['git', 'rebase', '--onto', 'upstream/2.0', 'upstream/main', '_temp/sstok--bug/new-feature-1--2.0']]],
+            [CliProcess::class, 'mustRun', [['git', 'rebase', '--onto', 'upstream/2.0', 'upstream/main', '_temp/sstok--bug/new-feature-1--2.0']]],
             [Git::class, 'checkout', ['main']],
             [CliProcess::class, 'mustRun', [['git', 'push', '--force', 'sstok', '_temp/sstok--bug/new-feature-1--2.0:bug/new-feature-1'], 'Push failed (access disabled?)']],
             [CliProcess::class, 'run', [['git', 'branch', '-D', '_temp/sstok--bug/new-feature-1--2.0']]],
@@ -217,16 +217,16 @@ final class SwitchBaseHandlerTest extends TestCase
                 'createComment',
                 [
                     12,
-                    <<<MESSAGE
-                    The base of this pull-request was changed, you need fetch and reset your local branch
-                    if you want to add new commits to this pull request. **Reset before you pull, else commits
-                    may become messed-up.**
+                    <<<'MESSAGE'
+                        The base of this pull-request was changed, you need fetch and reset your local branch
+                        if you want to add new commits to this pull request. **Reset before you pull, else commits
+                        may become messed-up.**
 
-                    Unless you added new commits (to this branch) locally that you did not push yet,
-                    execute `git fetch origin && git reset "bug/new-feature-1"` to update your local branch.
+                        Unless you added new commits (to this branch) locally that you did not push yet,
+                        execute `git fetch origin && git reset "bug/new-feature-1"` to update your local branch.
 
-                    Feel free to ask for assistance when you get stuck :+1:
-                    MESSAGE,
+                        Feel free to ask for assistance when you get stuck :+1:
+                        MESSAGE,
                 ],
             ],
             [Git::class, 'branchExists', ['bug/new-feature-1']],
@@ -333,7 +333,7 @@ final class SwitchBaseHandlerTest extends TestCase
         $this->assertOutputMatches([
             sprintf('Another switch operation was already in process for "%s"!', $tmpBranch),
             'Do you want to abort the previous operation?',
-            'Pull request https://github.com/sstok/hupkit/pull/12 base was switched from "main" to "2.0".'
+            'Pull request https://github.com/sstok/hupkit/pull/12 base was switched from "main" to "2.0".',
         ]);
         $this->assertOutputNotMatches('Do you want to continue the previous operation?');
 
@@ -349,7 +349,7 @@ final class SwitchBaseHandlerTest extends TestCase
             [Git::class, 'checkoutRemoteBranch', ['sstok', 'bug/new-feature-1', false]],
             [Git::class, 'checkout', ['_temp/sstok--bug/new-feature-1--2.0', true]],
             [Filesystem::class, 'dumpFile', ['/:local/.hubkit-switch', '_temp/sstok--bug/new-feature-1--2.0']],
-            [CliProcess::class, 'mustRun',[['git', 'rebase', '--onto', 'upstream/2.0', 'upstream/main', '_temp/sstok--bug/new-feature-1--2.0']]],
+            [CliProcess::class, 'mustRun', [['git', 'rebase', '--onto', 'upstream/2.0', 'upstream/main', '_temp/sstok--bug/new-feature-1--2.0']]],
             [Git::class, 'checkout', ['main']],
             [CliProcess::class, 'mustRun', [['git', 'push', '--force', 'sstok', '_temp/sstok--bug/new-feature-1--2.0:bug/new-feature-1'], 'Push failed (access disabled?)']],
             [CliProcess::class, 'run', [['git', 'branch', '-D', '_temp/sstok--bug/new-feature-1--2.0']]],
@@ -360,16 +360,16 @@ final class SwitchBaseHandlerTest extends TestCase
                 'createComment',
                 [
                     12,
-                    <<<MESSAGE
-                    The base of this pull-request was changed, you need fetch and reset your local branch
-                    if you want to add new commits to this pull request. **Reset before you pull, else commits
-                    may become messed-up.**
+                    <<<'MESSAGE'
+                        The base of this pull-request was changed, you need fetch and reset your local branch
+                        if you want to add new commits to this pull request. **Reset before you pull, else commits
+                        may become messed-up.**
 
-                    Unless you added new commits (to this branch) locally that you did not push yet,
-                    execute `git fetch origin && git reset "bug/new-feature-1"` to update your local branch.
+                        Unless you added new commits (to this branch) locally that you did not push yet,
+                        execute `git fetch origin && git reset "bug/new-feature-1"` to update your local branch.
 
-                    Feel free to ask for assistance when you get stuck :+1:
-                    MESSAGE,
+                        Feel free to ask for assistance when you get stuck :+1:
+                        MESSAGE,
                 ],
             ],
             [Git::class, 'branchExists', ['bug/new-feature-1']],
@@ -437,7 +437,7 @@ final class SwitchBaseHandlerTest extends TestCase
             sprintf('Another switch operation was already in process for "%s"!', $tmpBranch),
             'Do you want to abort the previous operation?',
             'Do you want to continue the previous operation?',
-            'Pull request https://github.com/sstok/hupkit/pull/12 base was switched from "main" to "2.0".'
+            'Pull request https://github.com/sstok/hupkit/pull/12 base was switched from "main" to "2.0".',
         ]);
 
         // Ensure all calls where made in the correct order.
@@ -454,7 +454,7 @@ final class SwitchBaseHandlerTest extends TestCase
             [Git::class, 'checkoutRemoteBranch', ['sstok', 'bug/new-feature-1', false]],
             [Git::class, 'checkout', ['_temp/sstok--bug/new-feature-1--2.0', true]],
             [Filesystem::class, 'dumpFile', ['/:local/.hubkit-switch', '_temp/sstok--bug/new-feature-1--2.0']],
-            [CliProcess::class, 'mustRun',[['git', 'rebase', '--onto', 'upstream/2.0', 'upstream/main', '_temp/sstok--bug/new-feature-1--2.0']]],
+            [CliProcess::class, 'mustRun', [['git', 'rebase', '--onto', 'upstream/2.0', 'upstream/main', '_temp/sstok--bug/new-feature-1--2.0']]],
             [Git::class, 'checkout', ['main']],
             [CliProcess::class, 'mustRun', [['git', 'push', '--force', 'sstok', '_temp/sstok--bug/new-feature-1--2.0:bug/new-feature-1'], 'Push failed (access disabled?)']],
             [CliProcess::class, 'run', [['git', 'branch', '-D', '_temp/sstok--bug/new-feature-1--2.0']]],
@@ -465,16 +465,16 @@ final class SwitchBaseHandlerTest extends TestCase
                 'createComment',
                 [
                     12,
-                    <<<MESSAGE
-                    The base of this pull-request was changed, you need fetch and reset your local branch
-                    if you want to add new commits to this pull request. **Reset before you pull, else commits
-                    may become messed-up.**
+                    <<<'MESSAGE'
+                        The base of this pull-request was changed, you need fetch and reset your local branch
+                        if you want to add new commits to this pull request. **Reset before you pull, else commits
+                        may become messed-up.**
 
-                    Unless you added new commits (to this branch) locally that you did not push yet,
-                    execute `git fetch origin && git reset "bug/new-feature-1"` to update your local branch.
+                        Unless you added new commits (to this branch) locally that you did not push yet,
+                        execute `git fetch origin && git reset "bug/new-feature-1"` to update your local branch.
 
-                    Feel free to ask for assistance when you get stuck :+1:
-                    MESSAGE,
+                        Feel free to ask for assistance when you get stuck :+1:
+                        MESSAGE,
                 ],
             ],
             [Git::class, 'branchExists', ['bug/new-feature-1']],
@@ -542,7 +542,7 @@ final class SwitchBaseHandlerTest extends TestCase
             sprintf('Another switch operation was already in process for "%s"!', $tmpBranch),
             'Do you want to abort the previous operation?',
             'Do you want to continue the previous operation?',
-            'Pull request https://github.com/sstok/hupkit/pull/12 base was switched from "main" to "2.0".'
+            'Pull request https://github.com/sstok/hupkit/pull/12 base was switched from "main" to "2.0".',
         ]);
 
         // Ensure all calls where made in the correct order.
@@ -561,7 +561,7 @@ final class SwitchBaseHandlerTest extends TestCase
             [Git::class, 'checkoutRemoteBranch', ['sstok', 'bug/new-feature-1', false]],
             [Git::class, 'checkout', ['_temp/sstok--bug/new-feature-1--2.0', true]],
             [Filesystem::class, 'dumpFile', ['/:local/.hubkit-switch', '_temp/sstok--bug/new-feature-1--2.0']],
-            [CliProcess::class, 'mustRun',[['git', 'rebase', '--onto', 'upstream/2.0', 'upstream/main', '_temp/sstok--bug/new-feature-1--2.0']]],
+            [CliProcess::class, 'mustRun', [['git', 'rebase', '--onto', 'upstream/2.0', 'upstream/main', '_temp/sstok--bug/new-feature-1--2.0']]],
             [Git::class, 'checkout', ['main']],
             [CliProcess::class, 'mustRun', [['git', 'push', '--force', 'sstok', '_temp/sstok--bug/new-feature-1--2.0:bug/new-feature-1'], 'Push failed (access disabled?)']],
             [CliProcess::class, 'run', [['git', 'branch', '-D', '_temp/sstok--bug/new-feature-1--2.0']]],
@@ -572,16 +572,16 @@ final class SwitchBaseHandlerTest extends TestCase
                 'createComment',
                 [
                     12,
-                    <<<MESSAGE
-                    The base of this pull-request was changed, you need fetch and reset your local branch
-                    if you want to add new commits to this pull request. **Reset before you pull, else commits
-                    may become messed-up.**
+                    <<<'MESSAGE'
+                        The base of this pull-request was changed, you need fetch and reset your local branch
+                        if you want to add new commits to this pull request. **Reset before you pull, else commits
+                        may become messed-up.**
 
-                    Unless you added new commits (to this branch) locally that you did not push yet,
-                    execute `git fetch origin && git reset "bug/new-feature-1"` to update your local branch.
+                        Unless you added new commits (to this branch) locally that you did not push yet,
+                        execute `git fetch origin && git reset "bug/new-feature-1"` to update your local branch.
 
-                    Feel free to ask for assistance when you get stuck :+1:
-                    MESSAGE,
+                        Feel free to ask for assistance when you get stuck :+1:
+                        MESSAGE,
                 ],
             ],
             [Git::class, 'branchExists', ['bug/new-feature-1']],
@@ -646,8 +646,7 @@ final class TrackedPromise implements PromiseInterface
         private string $class,
         private mixed $returnValue,
         private bool $hasReturn = true
-    ) {
-    }
+    ) {}
 
     public static function with(string $class, mixed $value): self
     {

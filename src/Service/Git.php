@@ -189,7 +189,7 @@ class Git
      *
      * Or an empty array when there are no logs.
      *
-     * @return array<int array{'sha': string, 'author': string, 'subject': string, 'message': string}>
+     * @return array<int, array{'sha': string, 'author': string, 'subject': string, 'message': string}>
      */
     public function getLogBetweenCommits(string $start, string $end): array
     {
@@ -226,8 +226,8 @@ class Git
                     )->getOutput()
                 );
 
-                $author = array_shift($commitData);
-                $subject = array_shift($commitData);
+                $author = (string) array_shift($commitData);
+                $subject = (string) array_shift($commitData);
 
                 if (! preg_match('/^(feature|refactor|bug|minor|style|security)\s#\d*\s.*\s\(.*\)$/', $subject)) {
                     return null;
@@ -273,7 +273,7 @@ class Git
         $this->process->mustRun(['git', 'push', $remote, ':' . $ref]);
     }
 
-    public function deleteBranch(string $name, $allowFailure = false): void
+    public function deleteBranch(string $name, bool $allowFailure = false): void
     {
         if ($allowFailure) {
             $this->process->run(['git', 'branch', '-d', $name], sprintf('Could not delete branch "%s".', $name));
@@ -508,7 +508,7 @@ class Git
     }
 
     /**
-     * @return array [host, org, repo]
+     * @return array{'host': string, 'org': string, 'repo': string}
      */
     public function getRemoteInfo(string $name = 'upstream'): array
     {
@@ -516,7 +516,7 @@ class Git
     }
 
     /**
-     * @return array [host, org, repo]
+     * @return array{'host': string, 'org': string, 'repo': string}
      */
     public static function getGitUrlInfo(string $gitUri): array
     {
@@ -524,13 +524,24 @@ class Git
             'host' => '',
             'org' => '',
             'repo' => '',
+            'path' => '',
         ];
+
+        if (mb_stripos($gitUri, 'file://') === 0) {
+            unset($info['path']);
+
+            return $info;
+        }
 
         if (mb_stripos($gitUri, 'http://') === 0 || mb_stripos($gitUri, 'https://') === 0) {
             $url = parse_url($gitUri);
 
+            if ($url === false) {
+                throw new \InvalidArgumentException(sprintf('Malformed Git url "%s".', $gitUri));
+            }
+
             $info['host'] = $url['host'];
-            $info['path'] = ltrim($url['path'], '/');
+            $info['path'] = ltrim($url['path'] ?? '', '/');
         } elseif (preg_match('%^(?:(?:git|ssh)://)?[^@]+@(?P<host>[^:]+):(?P<path>[^$]+)$%', $gitUri, $match)) {
             $info['host'] = $match['host'];
             $info['path'] = $match['path'];
@@ -539,14 +550,14 @@ class Git
             $info['path'] = $match['path'];
         }
 
-        if (isset($info['path'])) {
+        if (str_contains($info['path'], '/')) {
             $dirs = \array_slice(explode('/', $info['path']), -2, 2);
 
             $info['org'] = $dirs[0];
             $info['repo'] = mb_substr($dirs[1], -4, 4) === '.git' ? mb_substr($dirs[1], 0, -4) : $dirs[1];
-
-            unset($info['path']);
         }
+
+        unset($info['path']);
 
         return $info;
     }

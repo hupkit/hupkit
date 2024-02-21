@@ -48,11 +48,11 @@ class CliProcess
     /**
      * Runs an external process.
      *
-     * @param array<int, string>|Process $cmd       An instance of Process or an array of arguments to escape and run or a command to run
-     * @param string|null                $error     An error message that must be displayed if something went wrong
-     * @param callable|null              $callback  A PHP callback to run whenever there is some
-     *                                              output available on STDOUT or STDERR
-     * @param int                        $verbosity The threshold for verbosity
+     * @param array<int, string|int>|Process $cmd       An instance of Process or an array of arguments to escape and run or a command to run
+     * @param string|null                    $error     An error message that must be displayed if something went wrong
+     * @param callable|null                  $callback  A PHP callback to run whenever there is some
+     *                                                  output available on STDOUT or STDERR
+     * @param int                            $verbosity The threshold for verbosity
      *
      * @return Process The process that ran
      */
@@ -67,10 +67,10 @@ class CliProcess
      * This is identical to run() except that an exception is thrown if the process
      * exits with a non-zero exit code.
      *
-     * @param array<int, string>|Process $cmd      An instance of Process or an array of arguments to escape and run or a command to run
-     * @param string|null                $error    An error message that must be displayed if something went wrong
-     * @param callable|null              $callback A PHP callback to run whenever there is some
-     *                                             output available on STDOUT or STDERR
+     * @param array<int, string|int>|Process $cmd      An instance of Process or an array of arguments to escape and run or a command to run
+     * @param string|null                    $error    An error message that must be displayed if something went wrong
+     * @param callable|null                  $callback A PHP callback to run whenever there is some
+     *                                                 output available on STDOUT or STDERR
      *
      * @return Process The process that ran
      *

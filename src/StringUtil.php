@@ -28,7 +28,7 @@ class StringUtil
     {
         $input = trim($input);
 
-        return ($input === '') ? [] : preg_split('{\r?\n}', $input);
+        return ($input === '') ? [] : (preg_split('{\r?\n}', $input) ?: []);
     }
 
     public static function normalizePath(string $path): string

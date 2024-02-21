@@ -11,21 +11,6 @@ parameters:
 			path: src/Cli/Handler/ChangelogHandler.php
 
 		-
-			message: "#^Parameter \\#1 \\$directory of method HubKit\\\\Service\\\\Git\\\\GitTempRepository\\:\\:getLocal\\(\\) expects string, string\\|false given\\.$#"
-			count: 1
-			path: src/Cli/Handler/EditConfigHandler.php
-
-		-
-			message: "#^Parameter \\#1 \\$directory of method HubKit\\\\Service\\\\Git\\\\GitTempRepository\\:\\:getLocal\\(\\) expects string, string\\|false given\\.$#"
-			count: 1
-			path: src/Cli/Handler/InitConfigHandler.php
-
-		-
-			message: "#^Parameter \\#2 \\$targetDir of method Symfony\\\\Component\\\\Filesystem\\\\Filesystem\\:\\:mirror\\(\\) expects string, string\\|false given\\.$#"
-			count: 1
-			path: src/Cli/Handler/InitConfigHandler.php
-
-		-
 			message: "#^Cannot access offset 'id' on array\\<int\\|string, mixed\\>\\|int\\|null\\.$#"
 			count: 1
 			path: src/Cli/Handler/MergeHandler.php
@@ -37,11 +22,6 @@ parameters:
 
 		-
 			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\MergeHandler\\:\\:determineReviewStatus\\(\\) has parameter \\$pr with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Cli/Handler/MergeHandler.php
-
-		-
-			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\MergeHandler\\:\\:determineSquash\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: src/Cli/Handler/MergeHandler.php
 
@@ -106,11 +86,6 @@ parameters:
 			path: src/Cli/Handler/MergeHandler.php
 
 		-
-			message: "#^Strict comparison using \\=\\=\\= between string and null will always evaluate to false\\.$#"
-			count: 1
-			path: src/Cli/Handler/SelfDiagnoseHandler.php
-
-		-
 			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\SplitCreatedHandler\\:\\:getSplits\\(\\) should return array\\<string, string\\> but returns array\\<int\\|string, mixed\\>\\.$#"
 			count: 1
 			path: src/Cli/Handler/SplitCreatedHandler.php
@@ -166,37 +141,7 @@ parameters:
 			path: src/Config.php
 
 		-
-			message: "#^Parameter \\#1 \\$host of method HubKit\\\\Config\\:\\:getForRepository\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
-			path: src/Config.php
-
-		-
-			message: "#^Parameter \\#2 \\$repository of method HubKit\\\\Config\\:\\:getForRepository\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
-			path: src/Config.php
-
-		-
-			message: "#^Parameter \\#4 \\$configPath of class HubKit\\\\BranchConfig constructor expects array\\<int, string\\>\\|null, array\\<int, string\\|null\\> given\\.$#"
-			count: 2
-			path: src/Config.php
-
-		-
-			message: "#^Parameter \\$configPath of class HubKit\\\\BranchConfig constructor expects array\\<int, string\\>\\|null, array\\<int, string\\|null\\> given\\.$#"
-			count: 2
-			path: src/Config.php
-
-		-
 			message: "#^Method HubKit\\\\ConfigFactory\\:\\:normalizePath\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: src/ConfigFactory.php
-
-		-
-			message: "#^Property HubKit\\\\ConfigFactory\\:\\:\\$configFile has no type specified\\.$#"
-			count: 1
-			path: src/ConfigFactory.php
-
-		-
-			message: "#^Property HubKit\\\\ConfigFactory\\:\\:\\$currentDir has no type specified\\.$#"
 			count: 1
 			path: src/ConfigFactory.php
 
@@ -204,11 +149,6 @@ parameters:
 			message: "#^Method HubKit\\\\Container\\:\\:__construct\\(\\) has parameter \\$values with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: src/Container.php
-
-		-
-			message: "#^Parameter \\#1 \\$json of function json_decode expects string, string\\|false given\\.$#"
-			count: 1
-			path: src/Helper/BranchAliasResolver.php
 
 		-
 			message: "#^Property HubKit\\\\Helper\\\\BranchAliasResolver\\:\\:\\$cwd \\(string\\) does not accept string\\|false\\.$#"
@@ -251,26 +191,6 @@ parameters:
 			path: src/Helper/ChangelogRenderer.php
 
 		-
-			message: "#^Parameter \\#2 \\$start of function mb_substr expects int, int\\<0, max\\>\\|false given\\.$#"
-			count: 1
-			path: src/Helper/ChangelogRenderer.php
-
-		-
-			message: "#^Parameter \\#3 \\$length of function mb_substr expects int\\|null, int\\<0, max\\>\\|false given\\.$#"
-			count: 1
-			path: src/Helper/ChangelogRenderer.php
-
-		-
-			message: "#^Parameter \\#1 \\$text of static method Symfony\\\\Component\\\\Console\\\\Formatter\\\\OutputFormatter\\:\\:escape\\(\\) expects string, bool\\|float\\|int\\|string given\\.$#"
-			count: 1
-			path: src/Helper/SingleLineChoiceQuestionHelper.php
-
-		-
-			message: "#^Method HubKit\\\\Helper\\\\StatusTable\\:\\:hasStatus\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: src/Helper/StatusTable.php
-
-		-
 			message: "#^Property HubKit\\\\Helper\\\\StatusTable\\:\\:\\$rows type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: src/Helper/StatusTable.php
@@ -286,77 +206,12 @@ parameters:
 			path: src/Service/CliProcess.php
 
 		-
-			message: "#^Method HubKit\\\\Service\\\\Editor\\:\\:fromString\\(\\) should return string but returns string\\|false\\|null\\.$#"
-			count: 1
-			path: src/Service/Editor.php
-
-		-
-			message: "#^Parameter \\#1 \\$contents of method HubKit\\\\Service\\\\Editor\\:\\:abortWhenEmpty\\(\\) expects string, string\\|false\\|null given\\.$#"
-			count: 1
-			path: src/Service/Editor.php
-
-		-
-			message: "#^Parameter \\#3 \\$subject of function preg_replace expects array\\|string, string\\|false given\\.$#"
-			count: 1
-			path: src/Service/Editor.php
-
-		-
-			message: "#^Method HubKit\\\\Service\\\\Filesystem\\:\\:getFileContents\\(\\) should return string but returns string\\|false\\.$#"
-			count: 1
-			path: src/Service/Filesystem.php
-
-		-
-			message: "#^Method HubKit\\\\Service\\\\Filesystem\\:\\:newTempFilename\\(\\) should return string but returns string\\|false\\.$#"
-			count: 1
-			path: src/Service/Filesystem.php
-
-		-
-			message: "#^Parameter \\#1 \\$filename of function file_put_contents expects string, string\\|false given\\.$#"
-			count: 1
-			path: src/Service/Filesystem.php
-
-		-
-			message: "#^Parameter \\#2 \\$replace of function substr_replace expects array\\|string, string\\|false given\\.$#"
-			count: 1
-			path: src/Service/Filesystem.php
-
-		-
 			message: "#^Property HubKit\\\\Service\\\\Filesystem\\:\\:\\$tempFilenames type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: src/Service/Filesystem.php
 
 		-
-			message: "#^Cannot access offset 'host' on array\\{scheme\\?\\: string, host\\?\\: string, port\\?\\: int\\<0, 65535\\>, user\\?\\: string, pass\\?\\: string, path\\?\\: string, query\\?\\: string, fragment\\?\\: string\\}\\|false\\.$#"
-			count: 1
-			path: src/Service/Git.php
-
-		-
-			message: "#^Cannot access offset 'path' on array\\{scheme\\?\\: string, host\\?\\: string, port\\?\\: int\\<0, 65535\\>, user\\?\\: string, pass\\?\\: string, path\\?\\: string, query\\?\\: string, fragment\\?\\: string\\}\\|false\\.$#"
-			count: 1
-			path: src/Service/Git.php
-
-		-
-			message: "#^Method HubKit\\\\Service\\\\Git\\:\\:deleteBranch\\(\\) has parameter \\$allowFailure with no type specified\\.$#"
-			count: 1
-			path: src/Service/Git.php
-
-		-
 			message: "#^Method HubKit\\\\Service\\\\Git\\:\\:getCwd\\(\\) should return string but returns string\\|false\\.$#"
-			count: 1
-			path: src/Service/Git.php
-
-		-
-			message: "#^Method HubKit\\\\Service\\\\Git\\:\\:getGitUrlInfo\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Service/Git.php
-
-		-
-			message: "#^Method HubKit\\\\Service\\\\Git\\:\\:getLogBetweenCommits\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Service/Git.php
-
-		-
-			message: "#^Method HubKit\\\\Service\\\\Git\\:\\:getRemoteInfo\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: src/Service/Git.php
 
@@ -366,63 +221,18 @@ parameters:
 			path: src/Service/Git.php
 
 		-
-			message: "#^PHPDoc tag @return has invalid value \\(array\\<int array\\{'sha'\\: string, 'author'\\: string, 'subject'\\: string, 'message'\\: string\\}\\>\\)\\: Unexpected token \"array\", expected '\\>' at offset 640$#"
+			message: "#^Offset 'host' does not exist on array\\{scheme\\?\\: string, host\\?\\: string, port\\?\\: int\\<0, 65535\\>, user\\?\\: string, pass\\?\\: string, path\\?\\: string, query\\?\\: string, fragment\\?\\: string\\}\\.$#"
 			count: 1
 			path: src/Service/Git.php
 
 		-
-			message: "#^Parameter \\#1 \\$cmd of method HubKit\\\\Service\\\\CliProcess\\:\\:mustRun\\(\\) expects array\\<int, string\\>\\|Symfony\\\\Component\\\\Process\\\\Process, array\\<int, int\\|string\\> given\\.$#"
-			count: 2
-			path: src/Service/Git.php
-
-		-
-			message: "#^Parameter \\#2 \\$subject of function preg_match expects string, string\\|null given\\.$#"
-			count: 1
-			path: src/Service/Git.php
-
-		-
-			message: "#^Variable \\$cwd on left side of \\?\\? always exists and is not nullable\\.$#"
+			message: "#^Property HubKit\\\\Service\\\\Git\\\\GitBase\\:\\:\\$cwd \\(string\\) does not accept string\\|false\\.$#"
 			count: 1
 			path: src/Service/Git/GitBase.php
 
 		-
-			message: "#^Method HubKit\\\\Service\\\\Git\\\\GitConfig\\:\\:setLocal\\(\\) has parameter \\$value with no type specified\\.$#"
-			count: 1
-			path: src/Service/Git/GitConfig.php
-
-		-
 			message: "#^Cannot assign offset 'labels' to array\\|string\\.$#"
 			count: 1
-			path: src/Service/GitHub.php
-
-		-
-			message: "#^Cannot call method currentUser\\(\\) on Github\\\\Client\\|null\\.$#"
-			count: 1
-			path: src/Service/GitHub.php
-
-		-
-			message: "#^Cannot call method graphql\\(\\) on Github\\\\Client\\|null\\.$#"
-			count: 1
-			path: src/Service/GitHub.php
-
-		-
-			message: "#^Cannot call method issue\\(\\) on Github\\\\Client\\|null\\.$#"
-			count: 5
-			path: src/Service/GitHub.php
-
-		-
-			message: "#^Cannot call method issues\\(\\) on Github\\\\Client\\|null\\.$#"
-			count: 1
-			path: src/Service/GitHub.php
-
-		-
-			message: "#^Cannot call method pullRequest\\(\\) on Github\\\\Client\\|null\\.$#"
-			count: 4
-			path: src/Service/GitHub.php
-
-		-
-			message: "#^Cannot call method repo\\(\\) on Github\\\\Client\\|null\\.$#"
-			count: 8
 			path: src/Service/GitHub.php
 
 		-
@@ -496,11 +306,6 @@ parameters:
 			path: src/Service/GitHub.php
 
 		-
-			message: "#^Method HubKit\\\\Service\\\\GitHub\\:\\:isAuthenticated\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: src/Service/GitHub.php
-
-		-
 			message: "#^Method HubKit\\\\Service\\\\GitHub\\:\\:mergePullRequest\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: src/Service/GitHub.php
@@ -521,11 +326,6 @@ parameters:
 			path: src/Service/GitHub.php
 
 		-
-			message: "#^Parameter \\#1 \\$client of class Github\\\\ResultPager constructor expects Github\\\\Client, Github\\\\Client\\|null given\\.$#"
-			count: 5
-			path: src/Service/GitHub.php
-
-		-
 			message: "#^Property HubKit\\\\Service\\\\HookScript\\:\\:\\$cwd \\(string\\|null\\) does not accept string\\|false\\.$#"
 			count: 1
 			path: src/Service/HookScript.php
@@ -541,14 +341,9 @@ parameters:
 			path: src/Service/MessageValidator.php
 
 		-
-			message: "#^Parameter \\#1 \\$cmd of method HubKit\\\\Service\\\\CliProcess\\:\\:mustRun\\(\\) expects array\\<int, string\\>\\|Symfony\\\\Component\\\\Process\\\\Process, array\\<int, string\\|null\\> given\\.$#"
+			message: "#^Strict comparison using \\=\\=\\= between string and null will always evaluate to false\\.$#"
 			count: 1
 			path: src/Service/SplitshGit.php
-
-		-
-			message: "#^Method HubKit\\\\StringUtil\\:\\:splitLines\\(\\) should return array\\<string\\> but returns array\\<int, string\\>\\|false\\.$#"
-			count: 1
-			path: src/StringUtil.php
 
 		-
 			message: "#^Method HubKit\\\\Tests\\\\ConfigFactoryTest\\:\\:assertOutputMatches\\(\\) has parameter \\$expectedLines with no type specified\\.$#"
@@ -626,11 +421,6 @@ parameters:
 			path: tests/ConfigFactoryTest.php
 
 		-
-			message: "#^Access to an undefined property HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitBaseTest\\:\\:\\$localRepository\\.$#"
-			count: 3
-			path: tests/Functional/Service/Git/GitBaseTest.php
-
-		-
 			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitBaseTest\\:\\:getTempDir\\(\\) should return string but returns string\\|null\\.$#"
 			count: 1
 			path: tests/Functional/Service/Git/GitBaseTest.php
@@ -642,11 +432,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: tests/Functional/Service/Git/GitBaseTest.php
-
-		-
-			message: "#^Property HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitBaseTest\\:\\:\\$cwd has no type specified\\.$#"
 			count: 1
 			path: tests/Functional/Service/Git/GitBaseTest.php
 
@@ -666,17 +451,17 @@ parameters:
 			path: tests/Functional/Service/Git/GitBranchTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitBranchTest\\:\\:\\$cwd has no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Service/Git/GitBranchTest.php
-
-		-
 			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitConfigTest\\:\\:getTempDir\\(\\) should return string but returns string\\|null\\.$#"
 			count: 1
 			path: tests/Functional/Service/Git/GitConfigTest.php
 
 		-
 			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitConfigTest\\:\\:givenLocalBranchesExist\\(\\) has parameter \\$branches with no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: tests/Functional/Service/Git/GitConfigTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitConfigTest\\:\\:it_gets_git_url_info\\(\\) has parameter \\$info with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Service/Git/GitConfigTest.php
 
@@ -691,19 +476,9 @@ parameters:
 			path: tests/Functional/Service/Git/GitConfigTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitConfigTest\\:\\:\\$cwd has no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Service/Git/GitConfigTest.php
-
-		-
 			message: "#^Property HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitConfigTest\\:\\:\\$style with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
 			count: 1
 			path: tests/Functional/Service/Git/GitConfigTest.php
-
-		-
-			message: "#^Access to an undefined property HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitFileReaderTest\\:\\:\\$localRepository\\.$#"
-			count: 3
-			path: tests/Functional/Service/Git/GitFileReaderTest.php
 
 		-
 			message: "#^Class HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitFileReaderTest has an uninitialized readonly property \\$style\\. Assign it in the constructor\\.$#"
@@ -796,11 +571,6 @@ parameters:
 			path: tests/Functional/Service/Git/GitFileReaderTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitFileReaderTest\\:\\:\\$cwd has no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Service/Git/GitFileReaderTest.php
-
-		-
 			message: "#^Property HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitFileReaderTest\\:\\:\\$origCwd \\(string\\|null\\) does not accept string\\|false\\.$#"
 			count: 1
 			path: tests/Functional/Service/Git/GitFileReaderTest.php
@@ -814,11 +584,6 @@ parameters:
 			message: "#^Property HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitFileReaderTest\\:\\:\\$style is unused\\.$#"
 			count: 1
 			path: tests/Functional/Service/Git/GitFileReaderTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$cwd of method Symfony\\\\Component\\\\Process\\\\Process\\:\\:setWorkingDirectory\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
-			path: tests/Functional/TestCliProcess.php
 
 		-
 			message: "#^Parameter \\#1 \\$git of class HubKit\\\\Cli\\\\Handler\\\\BranchAliasHandler constructor expects HubKit\\\\Service\\\\Git, object given\\.$#"
@@ -1641,11 +1406,6 @@ parameters:
 			path: tests/Handler/SplitRepoHandlerTest.php
 
 		-
-			message: "#^Access to an undefined property HubKit\\\\Tests\\\\Handler\\\\SwitchBaseHandlerTest\\:\\:\\$localRepository\\.$#"
-			count: 3
-			path: tests/Handler/SwitchBaseHandlerTest.php
-
-		-
 			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\SwitchBaseHandlerTest\\:\\:assertOutputMatches\\(\\) has parameter \\$expectedLines with no type specified\\.$#"
 			count: 1
 			path: tests/Handler/SwitchBaseHandlerTest.php
@@ -1747,11 +1507,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#6 \\$filesystem of class HubKit\\\\Cli\\\\Handler\\\\SwitchBaseHandler constructor expects HubKit\\\\Service\\\\Filesystem, object given\\.$#"
-			count: 1
-			path: tests/Handler/SwitchBaseHandlerTest.php
-
-		-
-			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\SwitchBaseHandlerTest\\:\\:\\$cwd has no type specified\\.$#"
 			count: 1
 			path: tests/Handler/SwitchBaseHandlerTest.php
 
@@ -2087,11 +1842,6 @@ parameters:
 
 		-
 			message: "#^Method HubKit\\\\Tests\\\\Unit\\\\Helper\\\\BranchAliasResolverTest\\:\\:getInputStream\\(\\) has parameter \\$input with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Unit/Helper/BranchAliasResolverTest.php
-
-		-
-			message: "#^Method class@anonymous/tests/Unit/Helper/BranchAliasResolverTest\\.php\\:120\\:\\:setGitConfig\\(\\) has parameter \\$value with no type specified\\.$#"
 			count: 1
 			path: tests/Unit/Helper/BranchAliasResolverTest.php
 

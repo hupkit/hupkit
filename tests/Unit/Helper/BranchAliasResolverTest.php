@@ -137,7 +137,7 @@ final class BranchAliasResolverTest extends TestCase
                 return '';
             }
 
-            public function setGitConfig(string $config, $value, bool $overwrite = false, string $section = 'local'): void
+            public function setGitConfig(string $config, int | string $value, bool $overwrite = false, string $section = 'local'): void
             {
                 $this->configsSet[$config] = $value;
             }

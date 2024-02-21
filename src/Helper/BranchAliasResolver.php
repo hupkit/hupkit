@@ -27,6 +27,10 @@ class BranchAliasResolver
         string $cwd = null
     ) {
         $this->cwd = $cwd ?? getcwd();
+
+        if ($this->cwd === false) {
+            throw new \RuntimeException('No current working directory.');
+        }
     }
 
     public function getAlias(): string
@@ -61,7 +65,7 @@ class BranchAliasResolver
             return '';
         }
 
-        $composer = json_decode(file_get_contents($this->cwd . '/composer.json'), true, 512, \JSON_THROW_ON_ERROR);
+        $composer = json_decode((string) file_get_contents($this->cwd . '/composer.json'), true, 512, \JSON_THROW_ON_ERROR);
 
         if (! isset($composer['extra']['branch-alias']['dev-' . $branch])) {
             return '';

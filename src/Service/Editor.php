@@ -41,10 +41,10 @@ class Editor
         $process->setTimeout(null);
 
         $this->process->startAndWait($process);
-        $contents = file_get_contents($tmpName);
+        $contents = (string) file_get_contents($tmpName);
 
-        if ($instructions !== '') {
-            $contents = preg_replace("/^# THIS LINE IS AUTOMATICALLY REMOVED;(.++)(\r?\n)/i", '', $contents);
+        if ($instructions !== '' && $contents !== '') {
+            $contents = (string) preg_replace("/^# THIS LINE IS AUTOMATICALLY REMOVED;(.++)(\r?\n)/i", '', $contents);
         }
 
         if ($abortOnEmpty) {

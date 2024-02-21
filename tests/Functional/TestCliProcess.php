@@ -66,6 +66,10 @@ class TestCliProcess extends CliProcess
         }
 
         if ($this->ignoreCwdChange === null || ! ($this->ignoreCwdChange)($cmd->getWorkingDirectory())) {
+            if ($this->cwd === null) {
+                throw new \RuntimeException('Cannot overwrite working directory as non was set. Call setCwd() with a value first.');
+            }
+
             $cmd->setWorkingDirectory($this->cwd);
         }
 
