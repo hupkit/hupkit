@@ -1615,16 +1615,16 @@
         },
         {
             "name": "rollerworks/version",
-            "version": "v0.3.1",
+            "version": "v0.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rollerworks/version.git",
-                "reference": "94b4d192427cb87fed1a3b23e6b4d445ae9fb9fa"
+                "reference": "bea90d8a5d00289417f36d29d5e70eef55aa2115"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rollerworks/version/zipball/94b4d192427cb87fed1a3b23e6b4d445ae9fb9fa",
-                "reference": "94b4d192427cb87fed1a3b23e6b4d445ae9fb9fa",
+                "url": "https://api.github.com/repos/rollerworks/version/zipball/bea90d8a5d00289417f36d29d5e70eef55aa2115",
+                "reference": "bea90d8a5d00289417f36d29d5e70eef55aa2115",
                 "shasum": ""
             },
             "require": {
@@ -1633,8 +1633,8 @@
             "require-dev": {
                 "phpstan/phpstan": "^0.12.33",
                 "phpstan/phpstan-phpunit": "^0.12.13",
-                "phpunit/phpunit": "^7.3.2|^8.5.12",
-                "symfony/phpunit-bridge": "^5.2"
+                "phpunit/phpunit": "^7.3.2|^8.5.12|^9.6",
+                "symfony/phpunit-bridge": "^5.2 || ^6.4"
             },
             "type": "library",
             "extra": {
@@ -1663,9 +1663,9 @@
             "description": "Semantic versioning helper library",
             "support": {
                 "issues": "https://github.com/rollerworks/version/issues",
-                "source": "https://github.com/rollerworks/version/tree/v0.3.1"
+                "source": "https://github.com/rollerworks/version/tree/v0.3.2"
             },
-            "time": "2020-12-15T15:04:13+00:00"
+            "time": "2024-02-22T11:00:01+00:00"
         },
         {
             "name": "symfony/config",
@@ -3475,16 +3475,16 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v5.0.0",
+            "version": "v5.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "4a21235f7e56e713259a6f76bf4b5ea08502b9dc"
+                "reference": "2218c2252c874a4624ab2f613d86ac32d227bc69"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/4a21235f7e56e713259a6f76bf4b5ea08502b9dc",
-                "reference": "4a21235f7e56e713259a6f76bf4b5ea08502b9dc",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/2218c2252c874a4624ab2f613d86ac32d227bc69",
+                "reference": "2218c2252c874a4624ab2f613d86ac32d227bc69",
                 "shasum": ""
             },
             "require": {
@@ -3527,9 +3527,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nikic/PHP-Parser/issues",
-                "source": "https://github.com/nikic/PHP-Parser/tree/v5.0.0"
+                "source": "https://github.com/nikic/PHP-Parser/tree/v5.0.1"
             },
-            "time": "2024-01-07T17:17:35+00:00"
+            "time": "2024-02-21T19:24:10+00:00"
         },
         {
             "name": "phar-io/manifest",
@@ -3980,16 +3980,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.10.58",
+            "version": "1.10.59",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "a23518379ec4defd9e47cbf81019526861623ec2"
+                "reference": "e607609388d3a6d418a50a49f7940e8086798281"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/a23518379ec4defd9e47cbf81019526861623ec2",
-                "reference": "a23518379ec4defd9e47cbf81019526861623ec2",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/e607609388d3a6d418a50a49f7940e8086798281",
+                "reference": "e607609388d3a6d418a50a49f7940e8086798281",
                 "shasum": ""
             },
             "require": {
@@ -4038,7 +4038,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-02-12T20:02:57+00:00"
+            "time": "2024-02-20T13:59:13+00:00"
         },
         {
             "name": "phpstan/phpstan-doctrine",
