@@ -371,7 +371,7 @@ labels: removed-deprecation
         $this->expectMatchingVersionBranchNotExists('3.0');
 
         $this->expectException('RuntimeException');
-        $this->expectExceptionMessage('Tag for version "v0.1.0" already exists, did you mean: v0.1.1 ?');
+        $this->expectExceptionMessage('Tag for version "v0.1.0" already exists, did you mean: v0.1.1, v0.2.0 ?');
 
         $args = $this->getArgs('0.1.0');
         $this->executeHandler($args);
