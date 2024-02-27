@@ -39,6 +39,15 @@ class GitTempRepository
 
         if (! $exists) {
             $this->process->mustRun(['git', 'clone', '--no-checkout', '--origin', 'origin', $repositoryUrl, $tempdir]);
+
+            // When pushing to 'this' temporary-repository Git will fail with the following message
+            //
+            // By default, updating the current branch in a non-bare repository
+            // is denied, because it will make the index and work tree inconsistent.
+            //
+            // As we always reset the working directory - this inconsistency will not affect us.
+            $this->process->run(new Process(['git', 'config', '--local', '--unset', 'receive.denyCurrentBranch'], $tempdir));
+            $this->process->mustRun(new Process(['git', 'config', '--local', 'receive.denyCurrentBranch', 'ignore'], $tempdir));
         } else {
             $this->process->mustRun(new Process(['git', 'fetch', '--tags', 'origin'], $tempdir));
             $this->process->mustRun(new Process(['git', 'reset', '--hard'], $tempdir)); // Ensure the repository state is clean.
