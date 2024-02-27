@@ -42,7 +42,7 @@ class SplitshGit
      * @param string $prefix       Directory prefix, relative to the root directory
      * @param string $url          Git supported URL for pushing the commits
      *
-     * @return array{0: string, 1: string, 2: string}|null Information of the split ['commit-hash', 'url', 'repository-location']]
+     * @return array{0: string, 1: string, 2: string}|null Information of the split ['commit-hash', 'url', 'tempo-repository-location']
      *                                                     or null when prefix doesn't exist
      */
     public function splitTo(string $targetBranch, string $prefix, string $url): ?array
@@ -60,10 +60,11 @@ class SplitshGit
         // NOTE: Always perform the push as git-splitsh in some cases don't produce a new commit as there was already one
         //
         // Push directly to the temp repository, Git allows to push without a remote name.
-        // This is much safer than keeping all the remotes local as this fails with git update (puling-in conflicting tags)
+        // This is much safer than keeping all the remotes local as this fails with git update (pulling-in conflicting tags)
         $this->git->pushToRemote('file://' . $tempDir, $sha . ':refs/heads/' . $targetBranch);
 
         $this->process->mustRun(new Process(['git', 'push', 'origin', $targetBranch . ':refs/heads/' . $targetBranch], $tempDir), 'If the destination does not exist run the `split-create` command.');
+        $this->process->mustRun(new Process(['git', 'reset', '--hard'], $tempDir)); // Required as the HEAD has changed
 
         return [$sha, $url, $tempDir];
     }
@@ -74,9 +75,9 @@ class SplitshGit
      * This method re-uses the information provided by splitTo().
      * Existing tags are silently ignored.
      *
-     * @param string                                             $versionStr Version (without prefix) for the tag name
-     * @param array<string, array{0: string, 1: string, 2: int}> $targets    Targets to tag and push as
-     *                                                                       ['repository-location' => ['commit-hash', 'url', 'commits count']]
+     * @param string                                                    $versionStr Version (without prefix) for the tag name
+     * @param array<string|int, array{0: string, 1: string, 2: string}> $targets    Targets to tag and push as
+     *                                                                              [['commit-hash', 'url', 'tempo-repository-location']]
      */
     public function syncTags(string $versionStr, string $branch, array $targets): void
     {

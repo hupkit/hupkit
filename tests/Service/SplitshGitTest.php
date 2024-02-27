@@ -50,6 +50,7 @@ final class SplitshGitTest extends TestCase
             $processCliProphecy = $this->prophesize(CliProcess::class);
             $processCliProphecy->mustRun([self::SPLITSH_EXECUTABLE, '--prefix', 'src/Bundle/CoreBundle'])->willReturn($this->getGitSplitShResult('2c00338aef823d0c0916fc1b59ef49d0bb76f02f'));
             $processCliProphecy->mustRun(new Process(['git', 'push', 'origin', 'master:refs/heads/master'], '/tmp/hubkit/stor/_core'), 'If the destination does not exist run the `split-create` command.');
+            $processCliProphecy->mustRun(new Process(['git', 'reset', '--hard'], '/tmp/hubkit/stor/_core'));
             $cliProcess = $processCliProphecy->reveal();
 
             $service = new SplitshGit($git, $cliProcess, $this->createMock(LoggerInterface::class), $gitTemp, self::SPLITSH_EXECUTABLE);
