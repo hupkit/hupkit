@@ -41,10 +41,15 @@ trait GitTesterTrait
         return $this->tempDir;
     }
 
-    protected function createGitDirectory(string $directory): string
+    protected function createGitDirectory(string $directory, bool $allowPush = true): string
     {
         mkdir($directory, 0777, true);
         $this->runCliCommand(['git', 'init', '-b', 'master'], $directory);
+
+        if ($allowPush) {
+            (new Process(['git', 'config', '--local', '--unset', 'receive.denyCurrentBranch'], $directory))->run();
+            (new Process(['git', 'config', '--local', 'receive.denyCurrentBranch', 'ignore'], $directory))->mustRun();
+        }
 
         return str_replace('\\', '/', $directory);
     }
@@ -82,6 +87,12 @@ trait GitTesterTrait
 
     protected function commitFileToRepository(string $filename, string $repository, string $contents = '[Empty]'): void
     {
+        $filePath = \dirname($repository . '/' . $filename);
+
+        if (! file_exists($filePath)) {
+            mkdir($filePath, 0777, true);
+        }
+
         file_put_contents($repository . '/' . $filename, $contents);
         $this->runCliCommand(['git', 'add', $filename], $repository);
         $this->runCliCommand(['git', 'commit', '-m', 'I am a dwarf, I am digging a hole'], $repository);

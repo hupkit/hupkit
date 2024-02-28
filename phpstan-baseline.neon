@@ -586,6 +586,61 @@ parameters:
 			path: tests/Functional/Service/Git/GitFileReaderTest.php
 
 		-
+			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitTempRepositoryTest\\:\\:getTempDir\\(\\) should return string but returns string\\|null\\.$#"
+			count: 1
+			path: tests/Functional/Service/Git/GitTempRepositoryTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitTempRepositoryTest\\:\\:givenLocalBranchesExist\\(\\) has parameter \\$branches with no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: tests/Functional/Service/Git/GitTempRepositoryTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$directory of function chdir expects string, string\\|null given\\.$#"
+			count: 1
+			path: tests/Functional/Service/Git/GitTempRepositoryTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
+			count: 1
+			path: tests/Functional/Service/Git/GitTempRepositoryTest.php
+
+		-
+			message: "#^Property HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitTempRepositoryTest\\:\\:\\$origCwd \\(string\\|null\\) does not accept string\\|false\\.$#"
+			count: 1
+			path: tests/Functional/Service/Git/GitTempRepositoryTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\SplitshGitTest\\:\\:getTempDir\\(\\) should return string but returns string\\|null\\.$#"
+			count: 1
+			path: tests/Functional/Service/Git/SplitshGitTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\SplitshGitTest\\:\\:givenLocalBranchesExist\\(\\) has parameter \\$branches with no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: tests/Functional/Service/Git/SplitshGitTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$directory of function chdir expects string, string\\|null given\\.$#"
+			count: 1
+			path: tests/Functional/Service/Git/SplitshGitTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
+			count: 1
+			path: tests/Functional/Service/Git/SplitshGitTest.php
+
+		-
+			message: "#^Parameter \\#3 \\$targets of method HubKit\\\\Service\\\\SplitshGit\\:\\:syncTags\\(\\) expects array\\<int\\|string, array\\{string, string, string\\}\\>, non\\-empty\\-array\\<int, array\\{string, string, string\\}\\|null\\> given\\.$#"
+			count: 1
+			path: tests/Functional/Service/Git/SplitshGitTest.php
+
+		-
+			message: "#^Property HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\SplitshGitTest\\:\\:\\$origCwd \\(string\\|null\\) does not accept string\\|false\\.$#"
+			count: 1
+			path: tests/Functional/Service/Git/SplitshGitTest.php
+
+		-
 			message: "#^Parameter \\#1 \\$git of class HubKit\\\\Cli\\\\Handler\\\\BranchAliasHandler constructor expects HubKit\\\\Service\\\\Git, object given\\.$#"
 			count: 1
 			path: tests/Handler/BranchAliasHandlerTest.php
@@ -1797,6 +1852,11 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$directory of function chdir expects string, string\\|false given\\.$#"
+			count: 1
+			path: tests/Service/SplitshGitTest.php
+
+		-
+			message: "#^Parameter \\#3 \\$targets of method HubKit\\\\Service\\\\SplitshGit\\:\\:syncTags\\(\\) expects array\\<int\\|string, array\\{string, string, string\\}\\>, array\\{/tmp/hubkit/stor/_core\\: array\\{'2c00338aef823d0c091…', 'git@github\\.com\\:park…', 5\\}, /tmp/hubkit/stor/_user\\: array\\{'3eed8083737422fe9ac…', 'git@github\\.com\\:park…', 3\\}\\} given\\.$#"
 			count: 1
 			path: tests/Service/SplitshGitTest.php
 

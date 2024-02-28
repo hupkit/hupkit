@@ -69,7 +69,13 @@ class GitTempRepository
             return;
         }
 
-        $this->process->mustRun(new Process(['git', 'checkout', 'remotes/origin/' . $branchName, '-b', $branchName], $directory));
+        $process = $this->process->run(new Process(['git', 'checkout', 'remotes/origin/' . $branchName, '-b', $branchName], $directory));
+
+        // Either remote branch doesn't exist or no commits found yet, checkout a 'new'
+        // branch by name instead. If this branch exists in the future it's reset anyway.
+        if (! $process->isSuccessful()) {
+            $this->process->mustRun(new Process(['git', 'checkout', '-b', $branchName], $directory));
+        }
     }
 
     private function branchExists(string $directory, string $branch): bool
