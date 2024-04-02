@@ -35,7 +35,7 @@ final class TakeHandler extends GitBaseHandler
         }
 
         $slugTitle = StringUtil::slugify(sprintf('%s %s', $issue['number'], $issue['title']));
-        $base = $args->getOption('base') ?? $this->git->getPrimaryBranch();
+        $base = $args->getOption('base') ?? $this->config->getMainBranch();
 
         $this->guardMaintained($base);
 

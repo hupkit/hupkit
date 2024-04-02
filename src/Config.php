@@ -205,6 +205,11 @@ final class Config
         );
     }
 
+    public function getMainBranch(): string
+    {
+        return $this->getFirstNotNull([['_local', 'main_branch'], ['_main_branch']], 'main');
+    }
+
     /**
      * @param array<string, mixed> $default
      * @param array<string, mixed> $config

@@ -124,10 +124,18 @@ final class GitBranchTest extends TestCase
     public function it_gets_versioned_branches_in_correct_order(): void
     {
         $this->addRemote('upstream', $this->remoteRepository);
-        $this->givenRemoteBranchesExist(['1.0', 'v1.1', '2.0', 'x.1']);
+        $this->givenRemoteBranchesExist(['1.0', 'v1.1', '2.0', '1.x', 'x.1']);
 
-        self::assertSame(['1.0', 'v1.1', '2.0'], $this->git->getVersionBranches('origin'));
+        self::assertSame(['1.0', 'v1.1', '1.x', '2.0'], $this->git->getVersionBranches('origin'));
         self::assertSame([], $this->git->getVersionBranches('upstream'));
+    }
+
+    /** @test */
+    public function it_gets_local_versioned_branches_in_correct_order(): void
+    {
+        $this->givenBranchesExist(['1.0', 'v1.1', '2.0', '1.x', 'x.1']);
+
+        self::assertSame(['1.0', 'v1.1', '1.x', '2.0'], $this->git->getVersionBranches());
     }
 
     /** @test */

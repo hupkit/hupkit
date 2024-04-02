@@ -15,9 +15,11 @@ namespace HubKit\Tests;
 
 use HubKit\Config;
 use HubKit\ConfigFactory;
+use HubKit\Service\Git;
 use HubKit\Service\Git\GitFileReader;
 use HubKit\Tests\Handler\SymfonyStyleTrait;
 use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 
 /**
@@ -64,15 +66,17 @@ final class ConfigFactoryTest extends TestCase
                 ],
             ],
             'current_dir' => __DIR__ . '/Fixtures/config/schema_v1_local',
+            '_main_branch' => 'main',
         ]);
 
         self::assertEquals(
             $config,
-            (new ConfigFactory(
+            $resolved = (new ConfigFactory(
                 __DIR__ . '/Fixtures/config/schema_v1_local',
                 __DIR__ . '/Fixtures/config/schema_v1_global/config.php',
                 $this->createStyle(),
-                $this->getGitFileReaderWithNotExistentFile()
+                $this->getGitFileReaderWithNotExistentFile(),
+                $this->getGit(),
             ))->create()
         );
 
@@ -123,17 +127,20 @@ final class ConfigFactoryTest extends TestCase
                 ],
             ],
             'current_dir' => __DIR__ . '/Fixtures/config/schema_v1_local',
+            '_main_branch' => 'main',
         ]);
 
         self::assertEquals(
             $config,
-            (new ConfigFactory(
+            $resolved = (new ConfigFactory(
                 __DIR__ . '/Fixtures/config/schema_v1_local',
                 __DIR__ . '/Fixtures/config/schema_v1n_global/config.php',
                 $this->createStyle(),
-                $this->getGitFileReaderWithNotExistentFile()
+                $this->getGitFileReaderWithNotExistentFile(),
+                $this->getGit(),
             ))->create()
         );
+        self::assertEquals('main', $resolved->getMainBranch());
 
         $this->assertOutputMatches('Hubkit "schema_version" 1 in configuration is deprecated and will no longer work in v2.0.');
     }
@@ -211,19 +218,307 @@ final class ConfigFactoryTest extends TestCase
                 ],
             ],
             'current_dir' => __DIR__ . '/Fixtures/config/schema_v2_global',
+            '_main_branch' => 'main',
         ]);
 
         self::assertEquals(
             $config,
-            (new ConfigFactory(
+            $resolved = (new ConfigFactory(
                 __DIR__ . '/Fixtures/config/schema_v2_global',
                 __DIR__ . '/Fixtures/config/schema_v2_global/config2.php',
                 $this->createStyle(),
-                $this->getGitFileReaderWithNotExistentFile()
+                $this->getGitFileReaderWithNotExistentFile(),
+                $this->getGit(),
             ))->create()
         );
+        self::assertEquals('main', $resolved->getMainBranch());
 
-        $this->assertNoOutput();
+        $this->assertOutputMatches([
+            'No "main_branch" was not set, this value will default to "main" in HuPKit v2.0.',
+            'The "main_branch" is resolved as "main", set the "main_branch" option in your local configuration to change this.',
+        ]);
+    }
+
+    /** @test */
+    public function it_creates_for_v2_schema_with_master_as_main_branch(): void
+    {
+        $config = new Config([
+            'schema_version' => 2,
+            'github' => [
+                'github.com' => [
+                    'username' => 'test',
+                    'api_token' => 'test-token',
+                ],
+            ],
+            'repositories' => [
+                'github.com' => [
+                    'repos' => [
+                        'park-manager/park-manager' => [
+                            'branches' => [
+                                ':default' => [
+                                    'sync-tags' => true,
+                                    'split' => [
+                                        'src/Bundle/CoreBundle' => ['url' => 'git@github.com:park-manager/core-bundle.git', 'sync-tags' => null],
+                                        'src/Bundle/UserBundle' => ['url' => 'git@github.com:park-manager/user-bundle.git', 'sync-tags' => null],
+                                        'doc' => [
+                                            'url' => 'git@github.com:park-manager/doc.git',
+                                            'sync-tags' => false,
+                                        ],
+                                    ],
+                                    'upmerge' => true,
+                                    'ignore-default' => false,
+                                    'maintained' => true,
+                                ],
+
+                                // Additional branch names for testing
+                                'main' => ['split' => ['doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => null]], 'upmerge' => true, 'sync-tags' => true, 'ignore-default' => false, 'maintained' => true],
+                                'master' => ['split' => ['doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => null]], 'upmerge' => true, 'sync-tags' => true, 'ignore-default' => false, 'maintained' => true],
+
+                                '0.1' => ['split' => ['doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => null]], 'upmerge' => true, 'sync-tags' => true, 'ignore-default' => false, 'maintained' => true],
+                                '1.0' => ['split' => ['doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => null]], 'upmerge' => true, 'sync-tags' => true, 'ignore-default' => false, 'maintained' => true],
+                                '2.0' => ['split' => ['doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => null]], 'upmerge' => true, 'sync-tags' => true, 'ignore-default' => false, 'maintained' => true],
+
+                                // Pattern
+                                '3.x' => ['split' => ['doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => null]], 'upmerge' => true, 'sync-tags' => true, 'ignore-default' => false, 'maintained' => true],
+                                '4.*' => ['split' => ['doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => null]], 'upmerge' => true, 'sync-tags' => true, 'ignore-default' => false, 'maintained' => true],
+
+                                // Regexp (without anchors and options)
+                                '/[1-5]\.[0-9]/' => ['split' => ['doc' => ['url' => 'git@github.com:park-manager/brown.git', 'sync-tags' => null]], 'upmerge' => true, 'sync-tags' => true, 'ignore-default' => false, 'maintained' => true],
+
+                                '10.0' => [
+                                    'sync-tags' => false,
+                                    'split' => [],
+                                    'upmerge' => false,
+                                    'ignore-default' => true,
+                                    'maintained' => false,
+                                ],
+
+                                // Literal branch name, no pattern
+                                '#11.x' => [
+                                    'sync-tags' => false,
+                                    'split' => [
+                                        'doc' => [
+                                            'url' => 'git@github.com:park-manager/doc2.git',
+                                            'sync-tags' => false,
+                                        ],
+                                    ],
+                                    'upmerge' => false,
+                                    'ignore-default' => true,
+                                    'maintained' => true,
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'current_dir' => __DIR__ . '/Fixtures/config/schema_v2_global',
+            '_main_branch' => 'master',
+        ]);
+
+        self::assertEquals(
+            $config,
+            $resolved = (new ConfigFactory(
+                __DIR__ . '/Fixtures/config/schema_v2_global',
+                __DIR__ . '/Fixtures/config/schema_v2_global/config2.php',
+                $this->createStyle(),
+                $this->getGitFileReaderWithNotExistentFile(),
+                $this->getGit('master'),
+            ))->create()
+        );
+        self::assertEquals('master', $resolved->getMainBranch());
+
+        $this->assertOutputMatches([
+            'No "main_branch" was not set, this value will default to "main" in HuPKit v2.0.',
+            'The "main_branch" is resolved as "master", set the "main_branch" option in your local configuration to change this.',
+        ]);
+    }
+
+    /** @test */
+    public function it_creates_for_v2_schema_with_a_versioned_branch_as_main_branch(): void
+    {
+        $config = new Config([
+            'schema_version' => 2,
+            'github' => [
+                'github.com' => [
+                    'username' => 'test',
+                    'api_token' => 'test-token',
+                ],
+            ],
+            'repositories' => [
+                'github.com' => [
+                    'repos' => [
+                        'park-manager/park-manager' => [
+                            'branches' => [
+                                ':default' => [
+                                    'sync-tags' => true,
+                                    'split' => [
+                                        'src/Bundle/CoreBundle' => ['url' => 'git@github.com:park-manager/core-bundle.git', 'sync-tags' => null],
+                                        'src/Bundle/UserBundle' => ['url' => 'git@github.com:park-manager/user-bundle.git', 'sync-tags' => null],
+                                        'doc' => [
+                                            'url' => 'git@github.com:park-manager/doc.git',
+                                            'sync-tags' => false,
+                                        ],
+                                    ],
+                                    'upmerge' => true,
+                                    'ignore-default' => false,
+                                    'maintained' => true,
+                                ],
+
+                                // Additional branch names for testing
+                                'main' => ['split' => ['doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => null]], 'upmerge' => true, 'sync-tags' => true, 'ignore-default' => false, 'maintained' => true],
+                                'master' => ['split' => ['doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => null]], 'upmerge' => true, 'sync-tags' => true, 'ignore-default' => false, 'maintained' => true],
+
+                                '0.1' => ['split' => ['doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => null]], 'upmerge' => true, 'sync-tags' => true, 'ignore-default' => false, 'maintained' => true],
+                                '1.0' => ['split' => ['doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => null]], 'upmerge' => true, 'sync-tags' => true, 'ignore-default' => false, 'maintained' => true],
+                                '2.0' => ['split' => ['doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => null]], 'upmerge' => true, 'sync-tags' => true, 'ignore-default' => false, 'maintained' => true],
+
+                                // Pattern
+                                '3.x' => ['split' => ['doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => null]], 'upmerge' => true, 'sync-tags' => true, 'ignore-default' => false, 'maintained' => true],
+                                '4.*' => ['split' => ['doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => null]], 'upmerge' => true, 'sync-tags' => true, 'ignore-default' => false, 'maintained' => true],
+
+                                // Regexp (without anchors and options)
+                                '/[1-5]\.[0-9]/' => ['split' => ['doc' => ['url' => 'git@github.com:park-manager/brown.git', 'sync-tags' => null]], 'upmerge' => true, 'sync-tags' => true, 'ignore-default' => false, 'maintained' => true],
+
+                                '10.0' => [
+                                    'sync-tags' => false,
+                                    'split' => [],
+                                    'upmerge' => false,
+                                    'ignore-default' => true,
+                                    'maintained' => false,
+                                ],
+
+                                // Literal branch name, no pattern
+                                '#11.x' => [
+                                    'sync-tags' => false,
+                                    'split' => [
+                                        'doc' => [
+                                            'url' => 'git@github.com:park-manager/doc2.git',
+                                            'sync-tags' => false,
+                                        ],
+                                    ],
+                                    'upmerge' => false,
+                                    'ignore-default' => true,
+                                    'maintained' => true,
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'current_dir' => __DIR__ . '/Fixtures/config/schema_v2_global',
+            '_main_branch' => '3.0',
+        ]);
+
+        self::assertEquals(
+            $config,
+            $resolved = (new ConfigFactory(
+                __DIR__ . '/Fixtures/config/schema_v2_global',
+                __DIR__ . '/Fixtures/config/schema_v2_global/config2.php',
+                $this->createStyle(),
+                $this->getGitFileReaderWithNotExistentFile(),
+                $this->getGit(null, ['1.0', '2.0', '3.0']),
+            ))->create()
+        );
+        self::assertEquals('3.0', $resolved->getMainBranch());
+
+        $this->assertOutputMatches([
+            'No "main_branch" was not set, this value will default to "main" in HuPKit v2.0.',
+            'The "main_branch" is resolved as "3.0", set the "main_branch" option in your local configuration to change this.',
+        ]);
+    }
+
+    /** @test */
+    public function it_creates_for_v2_schema_without_any_known_branch_as_main_branch(): void
+    {
+        $config = new Config([
+            'schema_version' => 2,
+            'github' => [
+                'github.com' => [
+                    'username' => 'test',
+                    'api_token' => 'test-token',
+                ],
+            ],
+            'repositories' => [
+                'github.com' => [
+                    'repos' => [
+                        'park-manager/park-manager' => [
+                            'branches' => [
+                                ':default' => [
+                                    'sync-tags' => true,
+                                    'split' => [
+                                        'src/Bundle/CoreBundle' => ['url' => 'git@github.com:park-manager/core-bundle.git', 'sync-tags' => null],
+                                        'src/Bundle/UserBundle' => ['url' => 'git@github.com:park-manager/user-bundle.git', 'sync-tags' => null],
+                                        'doc' => [
+                                            'url' => 'git@github.com:park-manager/doc.git',
+                                            'sync-tags' => false,
+                                        ],
+                                    ],
+                                    'upmerge' => true,
+                                    'ignore-default' => false,
+                                    'maintained' => true,
+                                ],
+
+                                // Additional branch names for testing
+                                'main' => ['split' => ['doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => null]], 'upmerge' => true, 'sync-tags' => true, 'ignore-default' => false, 'maintained' => true],
+                                'master' => ['split' => ['doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => null]], 'upmerge' => true, 'sync-tags' => true, 'ignore-default' => false, 'maintained' => true],
+
+                                '0.1' => ['split' => ['doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => null]], 'upmerge' => true, 'sync-tags' => true, 'ignore-default' => false, 'maintained' => true],
+                                '1.0' => ['split' => ['doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => null]], 'upmerge' => true, 'sync-tags' => true, 'ignore-default' => false, 'maintained' => true],
+                                '2.0' => ['split' => ['doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => null]], 'upmerge' => true, 'sync-tags' => true, 'ignore-default' => false, 'maintained' => true],
+
+                                // Pattern
+                                '3.x' => ['split' => ['doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => null]], 'upmerge' => true, 'sync-tags' => true, 'ignore-default' => false, 'maintained' => true],
+                                '4.*' => ['split' => ['doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => null]], 'upmerge' => true, 'sync-tags' => true, 'ignore-default' => false, 'maintained' => true],
+
+                                // Regexp (without anchors and options)
+                                '/[1-5]\.[0-9]/' => ['split' => ['doc' => ['url' => 'git@github.com:park-manager/brown.git', 'sync-tags' => null]], 'upmerge' => true, 'sync-tags' => true, 'ignore-default' => false, 'maintained' => true],
+
+                                '10.0' => [
+                                    'sync-tags' => false,
+                                    'split' => [],
+                                    'upmerge' => false,
+                                    'ignore-default' => true,
+                                    'maintained' => false,
+                                ],
+
+                                // Literal branch name, no pattern
+                                '#11.x' => [
+                                    'sync-tags' => false,
+                                    'split' => [
+                                        'doc' => [
+                                            'url' => 'git@github.com:park-manager/doc2.git',
+                                            'sync-tags' => false,
+                                        ],
+                                    ],
+                                    'upmerge' => false,
+                                    'ignore-default' => true,
+                                    'maintained' => true,
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'current_dir' => __DIR__ . '/Fixtures/config/schema_v2_global',
+            '_main_branch' => 'main',
+        ]);
+
+        self::assertEquals(
+            $config,
+            $resolved = (new ConfigFactory(
+                __DIR__ . '/Fixtures/config/schema_v2_global',
+                __DIR__ . '/Fixtures/config/schema_v2_global/config2.php',
+                $this->createStyle(),
+                $this->getGitFileReaderWithNotExistentFile(),
+                $this->getGitWithActiveExpected(),
+            ))->create()
+        );
+        self::assertEquals('main', $resolved->getMainBranch());
+
+        $this->assertOutputMatches([
+            'No "main_branch" was not set, this value will default to "main" in HuPKit v2.0.',
+            'The "main_branch" is resolved as "main", set the "main_branch" option in your local configuration to change this.',
+        ]);
     }
 
     /** @test */
@@ -262,6 +557,8 @@ final class ConfigFactoryTest extends TestCase
                 ],
             ],
             '_local' => [
+                'schema_version' => 2,
+                'main_branch' => 'trunk',
                 'branches' => [
                     ':default' => [
                         'upmerge' => true,
@@ -300,13 +597,15 @@ final class ConfigFactoryTest extends TestCase
 
         self::assertEquals(
             $config,
-            (new ConfigFactory(
+            $resolved = (new ConfigFactory(
                 __DIR__ . '/Fixtures/config/schema_v2_local',
                 __DIR__ . '/Fixtures/config/schema_v2_global/config.php',
                 $this->createStyle(),
-                $this->getGitFileReaderWithExistentFile(__DIR__ . '/Fixtures/config/schema_v2_local/.hubkit/config.php')
+                $this->getGitFileReaderWithExistentFile(__DIR__ . '/Fixtures/config/schema_v2_local/.hubkit/config.php'),
+                $this->getGit(),
             ))->create()
         );
+        self::assertEquals('trunk', $resolved->getMainBranch());
 
         $this->assertNoOutput();
     }
@@ -328,18 +627,19 @@ final class ConfigFactoryTest extends TestCase
     public function it_validates_configuration(string $configFile, string $message): void
     {
         $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('Configuration contains one or more errors: ' . $message);
+        $this->expectExceptionMessage('Configuration contains one or more errors. ' . $message);
 
         (new ConfigFactory(
             __DIR__ . '/Fixtures/config/schema_v2_global',
             __DIR__ . '/Fixtures/config/invalid/' . $configFile,
             $this->createStyle(),
-            $this->getGitFileReaderWithNotExistentFile()
+            $this->getGitFileReaderWithNotExistentFile(),
+            $this->getGit(),
         ))->create();
     }
 
     /** @return iterable<string, array{0: string, 1: string}> */
-    public function provideInvalidConfigs(): iterable
+    public static function provideInvalidConfigs(): iterable
     {
         yield 'branches: non versioned branch' => ['invalid_branch_name.php', 'Invalid configuration for path "hubkit.repositories.github.com.repos.park-manager/park-manager.branches": Invalid version or relative pattern "nee", must be either "1.x" or "1.*", or "#1.x" (for an exact branch named 1.x), ":default", "main" or "master", or a regexp like "/0.[1-9]+/".'];
         yield 'branches: v prefix' => ['invalid_branch_pattern.php', 'Invalid configuration for path "hubkit.repositories.github.com.repos.park-manager/park-manager.branches": Invalid version or relative pattern "v2.0", must be either "1.x" or "1.*", or "#1.x" (for an exact branch named 1.x), ":default", "main" or "master", or a regexp like "/0.[1-9]+/".'];
@@ -347,5 +647,106 @@ final class ConfigFactoryTest extends TestCase
         yield 'branches: invalid regexp' => ['invalid_branch_regexp.php', 'Invalid configuration for path "hubkit.repositories.github.com.repos.park-manager/park-manager.branches": Invalid regexp "\/[]\/" error: "preg_match(): Compilation failed: missing terminating ] for character class at offset 2".'];
         yield 'branches: regexp with options' => ['invalid_branch_regexp2.php', 'Invalid configuration for path "hubkit.repositories.github.com.repos.park-manager/park-manager.branches": Invalid regexp "\/\\\\d\\\\.\\\\d+\/s", cannot contain start/end anchor or options. Either "/[5-9]\.x/" not "/^[5-9].x$/i".'];
         yield 'branches: regexp with anchors' => ['invalid_branch_regexp3.php', 'Invalid configuration for path "hubkit.repositories.github.com.repos.park-manager/park-manager.branches": Invalid regexp "\/^\\\\d\\\\.\\\\d+$\/", cannot contain start/end anchor or options. Either "/[5-9]\.x/" not "/^[5-9].x$/i".'];
+    }
+
+    /**
+     * @test
+     *
+     * @dataProvider provideInvalidMainBranches
+     */
+    public function it_requires_main_branch_is_valid(string $branch, string $message): void
+    {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Local configuration contains one or more errors. Invalid configuration for path "hubkit.main_branch": ' . $message);
+
+        $factory = new ConfigFactory(
+            __DIR__ . '/Fixtures/config/schema_v2_global',
+            __DIR__ . '/Fixtures/config/schema_v2_global/config2.php',
+            $this->createStyle(),
+            $this->getGitFileReaderWithNotExistentFile(),
+            $this->getGit(),
+        );
+
+        $factory->resolveLocalConfig(['schema_version' => 2, 'main_branch' => $branch]);
+    }
+
+    /** @return iterable<string, array{0: string, 1: string}> */
+    public static function provideInvalidMainBranches(): iterable
+    {
+        yield 'head ref' => ['head', 'Cannot use Git ref HEAD as branch name.'];
+        yield 'HEAD ref' => ['HEAD', 'Cannot use Git ref HEAD as branch name.'];
+        yield 'heads ref' => ['heads/main', 'Cannot start with Git refs (heads, tags, remotes, notes)/.'];
+        yield 'tags ref' => ['tags/v1.0.0', 'Cannot start with Git refs (heads, tags, remotes, notes)/.'];
+        yield 'remote ref' => ['remotes/upstream/main', 'Cannot start with Git refs (heads, tags, remotes, notes)/.'];
+        yield 'notes ref' => ['notes/pull-request-metadata', 'Cannot start with Git refs (heads, tags, remotes, notes)/.'];
+
+        yield 'double dot' => ['feature../main', 'Invalid name provided, must follow the Git convention for branch names.'];
+        yield 'double slash' => ['feature//main', 'Invalid name provided, must follow the Git convention for branch names.'];
+        yield 'begins with slash' => ['/feature/main', 'Invalid name provided, must follow the Git convention for branch names.'];
+        yield 'ends with slash' => ['feature/main/', 'Invalid name provided, must follow the Git convention for branch names.'];
+        yield 'space character' => ['feature main', 'Invalid name provided, must follow the Git convention for branch names.'];
+        yield 'double-dash' => ['feature--main', 'Invalid name provided, must follow the Git convention for branch names.'];
+        yield 'double-dash with slash' => ['feature/-main', 'Invalid name provided, must follow the Git convention for branch names.'];
+    }
+
+    /**
+     * @test
+     *
+     * @dataProvider provideValidMainBranches
+     */
+    public function it_accepts_valid_main_branch_value(string $branch): void
+    {
+        $factory = new ConfigFactory(
+            __DIR__ . '/Fixtures/config/schema_v2_global',
+            __DIR__ . '/Fixtures/config/schema_v2_global/config2.php',
+            $this->createStyle(),
+            $this->getGitFileReaderWithNotExistentFile(),
+            $this->getGit(),
+        );
+
+        $config = $factory->resolveLocalConfig(['schema_version' => 2, 'main_branch' => $branch]);
+
+        self::assertEquals($branch, $config['main_branch']);
+    }
+
+    /** @return iterable<string, array{0: string}> */
+    public static function provideValidMainBranches(): iterable
+    {
+        yield 'main' => ['main'];
+        yield 'HEAD-ish' => ['HEADing'];
+        yield 'dash' => ['main-master'];
+        yield 'underscore' => ['main_master'];
+        yield 'versioned' => ['2.0'];
+        yield 'relative' => ['2.x'];
+        yield 'nested' => ['development/new'];
+        yield 'nested deep' => ['development/remotes/new'];
+        yield 'unicode' => ["\xCE\xA9"];
+    }
+
+    /** @param array<int, string>|null $versionedBranches */
+    private function getGit(?string $expectedBranch = 'main', ?array $versionedBranches = []): Git
+    {
+        $gitProphecy = $this->prophesize(Git::class);
+        $gitProphecy->branchExists(Argument::any())->willReturn(false);
+
+        if ($expectedBranch) {
+            $gitProphecy->branchExists($expectedBranch)->willReturn(true);
+        }
+
+        if ($versionedBranches) {
+            $gitProphecy->getVersionBranches()->willReturn($versionedBranches);
+        }
+
+        return $gitProphecy->reveal();
+    }
+
+    private function getGitWithActiveExpected(string $branch = 'main'): Git
+    {
+        $gitProphecy = $this->prophesize(Git::class);
+        $gitProphecy->branchExists(Argument::any())->willReturn(false);
+        $gitProphecy->getVersionBranches()->willReturn([]);
+        $gitProphecy->getActiveBranchName()->willReturn($branch);
+
+        return $gitProphecy->reveal();
     }
 }

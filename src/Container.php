@@ -28,7 +28,8 @@ class Container extends \Pimple\Container implements ContainerInterface
             $container['current_dir'],
             $container['config_file'],
             $container['style'],
-            $container['git.file_reader']
+            $container['git.file_reader'],
+            $container['git'],
         ))->create();
 
         $this['guzzle'] = static function (self $container) {

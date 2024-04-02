@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace HubKit;
 
+use HubKit\Service\Git;
 use HubKit\Service\Git\GitFileReader;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
@@ -31,6 +32,7 @@ final class ConfigFactory
         string $configFile,
         private readonly StyleInterface $style,
         private readonly GitFileReader $gitFileReader,
+        private readonly Git $git,
     ) {
         $this->currentDir = self::normalizePath($currentDir);
         $this->configFile = self::normalizePath($configFile);
@@ -81,6 +83,15 @@ final class ConfigFactory
             }
 
             $config['_local'] = $this->resolveLocalConfig($localeConfig);
+        }
+
+        if (! isset($config['_local']['main_branch'])) {
+            // No local configuration provided, but still the main-branch must be resolvable
+            // So store it here, there is no expectation to explicitly get this for a repository.
+            //
+            // In the future the whole concept for using 'global' configuration for a repository
+            // might be dropped in favor of local-only configuration.
+            $config['_main_branch'] = $this->findMainBranch();
         }
 
         $config['current_dir'] = $this->currentDir;
@@ -161,7 +172,7 @@ final class ConfigFactory
         try {
             return (new Processor())->process($treeBuilder->buildTree(), [$config]);
         } catch (ConfigException $e) {
-            throw new \RuntimeException('Configuration contains one or more errors: ' . $e->getMessage(), 1, $e);
+            throw new \RuntimeException('Configuration contains one or more errors. ' . $e->getMessage(), 1, $e);
         }
     }
 
@@ -267,13 +278,14 @@ final class ConfigFactory
      *
      * @return array<string, mixed>
      */
-    private function resolveLocalConfig(array $config): array
+    public function resolveLocalConfig(array $config): array
     {
         $treeBuilder = new TreeBuilder('hubkit');
         $treeBuilder->getRootNode()
             ->ignoreExtraKeys(false)
             ->children()
                 ->integerNode('schema_version')
+                    ->isRequired()
                     ->min(2)
                     ->max(2)
                 ->end()
@@ -284,13 +296,72 @@ final class ConfigFactory
                 ->end()
                 ->scalarNode('host')->defaultNull()->end()
                 ->scalarNode('repository')->defaultNull()->end()
+                ->scalarNode('main_branch')
+                    ->defaultNull()
+                    ->validate()
+                        ->always(function ($v) {
+                            if ($v === null) {
+                                return $this->findMainBranch();
+                            }
+
+                            $v = (string) $v;
+
+                            if (mb_strtoupper($v) === 'HEAD') {
+                                throw new \InvalidArgumentException('Cannot use Git ref HEAD as branch name.');
+                            }
+
+                            if (preg_match('{^(heads|tags|remotes|notes)/}i', $v) === 1) {
+                                throw new \InvalidArgumentException('Cannot start with Git refs (heads, tags, remotes, notes)/.');
+                            }
+
+                            if (preg_match('{^([\p{L}\p{N}]+([./_-]?[\p{L}\p{N}]+)?)+$}ui', $v) !== 1) {
+                                throw new \InvalidArgumentException('Invalid name provided, must follow the Git convention for branch names.');
+                            }
+
+                            return $v;
+                        })
+                    ->end()
+                ->end()
             ->end()
         ;
 
         try {
             return (new Processor())->process($treeBuilder->buildTree(), [$config]);
         } catch (ConfigException $e) {
-            throw new \RuntimeException('Local configuration contains one or more errors: ' . $e->getMessage(), 1, $e);
+            throw new \RuntimeException('Local configuration contains one or more errors. ' . $e->getMessage(), 1, $e);
         }
+    }
+
+    private function findMainBranch(): string
+    {
+        if ($this->git->branchExists('main')) {
+            $branch = 'main';
+        } elseif ($this->git->branchExists('master')) {
+            $branch = 'master';
+        } else {
+            $versions = $this->git->getVersionBranches();
+            /** @var string|null $branch */
+            $branch = array_pop($versions);
+
+            if ($branch === null) {
+                try {
+                    $branch = $this->git->getActiveBranchName();
+                } catch (\Throwable $e) {
+                    $this->style->error([
+                        'Could not detect "main_branch", neither "main", "master" or any versioned branch exist, defaulting to "main".',
+                        $e->getMessage(),
+                    ]);
+
+                    return 'main';
+                }
+            }
+        }
+
+        $this->style->block([
+            'No "main_branch" was not set, this value will default to "main" in HuPKit v2.0.' . "\n" .
+            sprintf('The "main_branch" is resolved as "%s", set the "main_branch" option in your local configuration to change this.', $branch),
+        ], null, 'fg=yellow', ' ! ');
+
+        return $branch;
     }
 }

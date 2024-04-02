@@ -116,6 +116,14 @@ trait GitTesterTrait
         }
     }
 
+    /** @param iterable<string> $branches */
+    protected function givenBranchesExist(iterable $branches): void
+    {
+        foreach ($branches as $branch) {
+            $this->runCliCommand(['git', 'branch', $branch]);
+        }
+    }
+
     protected function setUpstreamRepository(): void
     {
         $upstreamRepos = $this->createBareGitDirectory($this->getTempDir() . '/git3');

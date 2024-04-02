@@ -105,7 +105,11 @@ class Git
         return $activeBranch;
     }
 
-    /** @return string either main, master or a custom configured branch-name */
+    /**
+     * @deprecated use {@see Config::getMainBranch()} instead
+     *
+     * @return string either main, master or a custom configured branch-name
+     */
     public function getPrimaryBranch(): string
     {
         static $branch = null;
@@ -135,13 +139,19 @@ class Git
     }
 
     /** @return array<int, string> ['v1.0', 'v1.5', 'v2.0' '...'] */
-    public function getVersionBranches(string $remote): array
+    public function getVersionBranches(?string $remote = null): array
     {
-        $branches = StringUtil::splitLines(
-            $this->process->mustRun(
-                ['git', 'for-each-ref', '--format', '%(refname:strip=3)', 'refs/remotes/' . $remote]
-            )->getOutput()
-        );
+        if ($remote) {
+            $branches = StringUtil::splitLines(
+                $this->process->mustRun(
+                    ['git', 'for-each-ref', '--format', '%(refname:strip=3)', 'refs/remotes/' . $remote]
+                )->getOutput()
+            );
+        } else {
+            $branches = StringUtil::splitLines(
+                $this->process->mustRun(['git', 'for-each-ref', '--format', '%(refname:short)', 'refs/heads/'])->getOutput()
+            );
+        }
 
         $branches = array_filter($branches, static fn (string $branch) => preg_match('/^v?' . Version::VERSION_REGEX . '$/i', $branch) || preg_match('/^v?(?P<major>\d++)\.(?P<rel>x)$/', $branch));
 
