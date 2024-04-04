@@ -64,9 +64,7 @@ class StringUtil
         return lcfirst(self::concatWords($word));
     }
 
-    /**
-     * Slugify a string.
-     */
+    /** Slugify a string. */
     public static function slugify(string $string): string
     {
         return (new DefaultSlugGenerator(

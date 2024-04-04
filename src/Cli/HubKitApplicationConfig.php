@@ -29,14 +29,10 @@ use Webmozart\Console\Config\DefaultApplicationConfig;
 
 final class HubKitApplicationConfig extends DefaultApplicationConfig
 {
-    /**
-     * The version of the Application.
-     */
+    /** The version of the Application. */
     private const VERSION = '@package_version@';
 
-    /**
-     * @var Container
-     */
+    /** @var Container */
     private $container;
 
     /**
@@ -44,7 +40,7 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
      *
      * @param Container $container The service container (only to be injected during tests)
      */
-    public function __construct(Container $container = null)
+    public function __construct(?Container $container = null)
     {
         if ($container === null) {
             if (! file_exists(__DIR__ . '/../../config.php') && file_exists(__DIR__ . '/../../config.php.dist')) {

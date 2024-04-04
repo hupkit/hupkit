@@ -71,7 +71,7 @@ final class BranchAliasHandlerTest extends TestCase
         $this->executeHandler('v1.2');
     }
 
-    private function executeHandler(string $alias = null): void
+    private function executeHandler(?string $alias = null): void
     {
         $format = ArgsFormat::build()
             ->addArgument(new Argument('alias', Argument::OPTIONAL | Argument::STRING))

@@ -22,9 +22,7 @@ class Editor
         private readonly Filesystem $filesystem
     ) {}
 
-    /**
-     * Launch an external editor and open a temporary file containing the $contents value.
-     */
+    /** Launch an external editor and open a temporary file containing the $contents value. */
     public function fromString(string $contents, bool $abortOnEmpty = true, string $instructions = ''): string
     {
         $editor = $this->getEditorExecutable();

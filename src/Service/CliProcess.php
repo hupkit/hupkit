@@ -56,7 +56,7 @@ class CliProcess
      *
      * @return Process The process that ran
      */
-    public function run(array | Process $cmd, string $error = null, callable $callback = null, int $verbosity = OutputInterface::VERBOSITY_VERY_VERBOSE): Process
+    public function run(array | Process $cmd, ?string $error = null, ?callable $callback = null, int $verbosity = OutputInterface::VERBOSITY_VERY_VERBOSE): Process
     {
         return $this->processHelper->run($this->output, $cmd, $error, $callback, $verbosity);
     }
@@ -78,7 +78,7 @@ class CliProcess
      *
      * @see run()
      */
-    public function mustRun(array | Process $cmd, string $error = null, callable $callback = null): Process
+    public function mustRun(array | Process $cmd, ?string $error = null, ?callable $callback = null): Process
     {
         return $this->processHelper->mustRun($this->output, $cmd, $error, $callback);
     }
@@ -89,7 +89,7 @@ class CliProcess
      * @param Process       $process  The Process
      * @param callable|null $callback A PHP callable
      */
-    public function wrapCallback(Process $process, callable $callback = null): callable
+    public function wrapCallback(Process $process, ?callable $callback = null): callable
     {
         return $this->processHelper->wrapCallback($this->output, $process, $callback);
     }

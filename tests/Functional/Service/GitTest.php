@@ -33,9 +33,7 @@ final class GitTest extends TestCase
         rename(__DIR__ . '/../../Fixtures/git_example_changelog_project/git', __DIR__ . '/../../Fixtures/git_example_changelog_project/.git');
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_returns_all_hubkit_merge_commits(): void
     {
         $expectedResult = [

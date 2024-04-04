@@ -21,7 +21,7 @@ class Filesystem
     private readonly SfFilesystem $fs;
     private array $tempFilenames = [];
 
-    public function __construct(string $tempdir = null, SfFilesystem $sfFilesystem = null)
+    public function __construct(?string $tempdir = null, ?SfFilesystem $sfFilesystem = null)
     {
         $this->fs = $sfFilesystem ?? new SfFilesystem();
         $this->tempdir = ($tempdir ?: sys_get_temp_dir()) . \DIRECTORY_SEPARATOR . 'hubkit';
@@ -36,7 +36,7 @@ class Filesystem
      *
      * @return string The full path to the temporary file
      */
-    public function newTempFilename(string $content = null): string
+    public function newTempFilename(?string $content = null): string
     {
         $tmpName = tempnam($this->tempdir, '');
 
@@ -53,9 +53,7 @@ class Filesystem
         return $tmpName;
     }
 
-    /**
-     * @param string|resource $content
-     */
+    /** @param string|resource $content */
     public function dumpFile(string $filename, $content): void
     {
         $this->fs->dumpFile($this->getAbsolutePath($filename), $content);
@@ -101,7 +99,7 @@ class Filesystem
      *
      * @return string The full path to the temporary directory
      */
-    public function tempDirectory(string $name, bool $clearExisting = true, bool &$exists = null): string
+    public function tempDirectory(string $name, bool $clearExisting = true, ?bool &$exists = null): string
     {
         $tmpName = $this->tempdir . \DIRECTORY_SEPARATOR . 'temp' . \DIRECTORY_SEPARATOR . $name;
         $exists = $this->fs->exists($tmpName);
@@ -123,7 +121,7 @@ class Filesystem
      *
      * @return string The full path to the temporary directory
      */
-    public function storageTempDirectory(string $name, bool $clearExisting = true, bool &$exists = null): string
+    public function storageTempDirectory(string $name, bool $clearExisting = true, ?bool &$exists = null): string
     {
         $tmpName = $this->tempdir . \DIRECTORY_SEPARATOR . 'stor' . \DIRECTORY_SEPARATOR . $name;
         $exists = $this->fs->exists($tmpName);
@@ -162,9 +160,7 @@ class Filesystem
         return chdir($directory);
     }
 
-    /**
-     * @return ($allowFailure is true ? false|string : string)
-     */
+    /** @return ($allowFailure is true ? false|string : string) */
     public function getCwd(bool $allowFailure = false): false | string
     {
         $cwd = getcwd();

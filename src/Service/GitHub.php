@@ -49,7 +49,7 @@ class GitHub
         $this->setRepository($repo['org'], $repo['repo']);
     }
 
-    public function initializeForHost(string $hostname = null): void
+    public function initializeForHost(?string $hostname = null): void
     {
         if ($hostname === null) {
             $hostname = self::DEFAULT_HOST;
@@ -136,9 +136,7 @@ class GitHub
         );
     }
 
-    /**
-     * @return array<string, mixed>
-     */
+    /** @return array<string, mixed> */
     public function getRepoInfo(string $organization, string $name): array
     {
         \assert($this->client !== null);
@@ -345,7 +343,7 @@ class GitHub
         );
     }
 
-    public function createRelease(string $name, string $body, bool $preRelease = false, string $title = null)
+    public function createRelease(string $name, string $body, bool $preRelease = false, ?string $title = null)
     {
         \assert($this->client !== null);
 

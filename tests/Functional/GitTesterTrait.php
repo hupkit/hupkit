@@ -21,7 +21,7 @@ use Symfony\Component\Process\Process;
 trait GitTesterTrait
 {
     protected string $localRepository;
-    protected null | string $cwd = null;
+    protected ?string $cwd = null;
 
     private ?string $tempDir = null;
     private ?OutputInterface $cliOutput = null;
@@ -29,7 +29,7 @@ trait GitTesterTrait
     protected function setUpTempDirectory(): void
     {
         $this->tempDir = realpath(sys_get_temp_dir()) . '/hbk-sut/' . mb_substr(hash('sha256', random_bytes(14)), 0, 16);
-        mkdir($this->tempDir, 0777, true);
+        mkdir($this->tempDir, 0o777, true);
     }
 
     public function getTempDir(): string
@@ -43,7 +43,7 @@ trait GitTesterTrait
 
     protected function createGitDirectory(string $directory, bool $allowPush = true): string
     {
-        mkdir($directory, 0777, true);
+        mkdir($directory, 0o777, true);
         $this->runCliCommand(['git', 'init', '-b', 'master'], $directory);
 
         if ($allowPush) {
@@ -56,16 +56,14 @@ trait GitTesterTrait
 
     protected function createBareGitDirectory(string $directory): string
     {
-        mkdir($directory, 0777, true);
+        mkdir($directory, 0o777, true);
         $this->runCliCommand(['git', 'init', '--bare', '-b', 'master'], $directory);
 
         return str_replace('\\', '/', $directory);
     }
 
-    /**
-     * @param array<int, string> $cmd
-     */
-    protected function runCliCommand(array $cmd, string $cwd = null): Process
+    /** @param array<int, string> $cmd */
+    protected function runCliCommand(array $cmd, ?string $cwd = null): Process
     {
         $process = new Process($cmd, $cwd ?? $this->cwd);
         $process->mustRun();
@@ -73,7 +71,7 @@ trait GitTesterTrait
         return $process;
     }
 
-    protected function getProcessService(string $cwd = null): TestCliProcess
+    protected function getProcessService(?string $cwd = null): TestCliProcess
     {
         return (new TestCliProcess($this->getCliOutput()))->setCwd($cwd ?? $this->cwd);
     }
@@ -90,7 +88,7 @@ trait GitTesterTrait
         $filePath = \dirname($repository . '/' . $filename);
 
         if (! file_exists($filePath)) {
-            mkdir($filePath, 0777, true);
+            mkdir($filePath, 0o777, true);
         }
 
         file_put_contents($repository . '/' . $filename, $contents);
@@ -98,14 +96,12 @@ trait GitTesterTrait
         $this->runCliCommand(['git', 'commit', '-m', 'I am a dwarf, I am digging a hole'], $repository);
     }
 
-    protected function addRemote(string $remoteName, string $remoteRepository, string $sourceRepository = null): void
+    protected function addRemote(string $remoteName, string $remoteRepository, ?string $sourceRepository = null): void
     {
         $this->runCliCommand(['git', 'remote', 'add', $remoteName, 'file://' . $remoteRepository], $sourceRepository);
     }
 
-    /**
-     * @param iterable<string> $branches
-     */
+    /** @param iterable<string> $branches */
     protected function givenRemoteBranchesExist(iterable $branches, string $remote = 'origin'): void
     {
         foreach ($branches as $branch) {

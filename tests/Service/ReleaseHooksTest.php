@@ -226,7 +226,7 @@ final class ReleaseHooksTest extends TestCase
      * @param non-empty-string|null $pre
      * @param non-empty-string|null $post
      */
-    private function getGitFileReader(string $pre = null, string $post = null): GitFileReader
+    private function getGitFileReader(?string $pre = null, ?string $post = null): GitFileReader
     {
         $gitFileReaderProphecy = $this->prophesize(GitFileReader::class);
 

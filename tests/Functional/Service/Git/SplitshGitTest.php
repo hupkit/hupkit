@@ -147,9 +147,7 @@ final class SplitshGitTest extends TestCase
         $this->assertRepositoryTagsEquals(['v1.0.0'], $tempDir . '/split-docs');
     }
 
-    /**
-     * @param string[] $expected
-     */
+    /** @param string[] $expected */
     private function assertRepositoryTagsEquals(array $expected, string $repository): void
     {
         $tags = StringUtil::splitLines($this->cliProcess->mustRun(new Process(['git', 'tag', '--list'], $repository))->getOutput());

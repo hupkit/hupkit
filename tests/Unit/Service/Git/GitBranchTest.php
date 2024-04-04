@@ -148,7 +148,7 @@ final class GitBranchTest extends TestCase
                 $this->style = $style;
             }
 
-            public function getRemoteDiffStatus(string $remoteName, string $localBranch, string $remoteBranch = null): string
+            public function getRemoteDiffStatus(string $remoteName, string $localBranch, ?string $remoteBranch = null): string
             {
                 $this->diffStatusCall = [$remoteName, $localBranch];
 
@@ -160,7 +160,7 @@ final class GitBranchTest extends TestCase
                 $this->pushCall = [$remote, $ref, $setUpstream, $force];
             }
 
-            public function pullRemote(string $remote, string $ref = null): void
+            public function pullRemote(string $remote, ?string $ref = null): void
             {
                 $this->pullCall = [$remote, $ref];
             }

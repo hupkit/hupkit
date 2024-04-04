@@ -338,9 +338,7 @@ final class ConfigFactoryTest extends TestCase
         ))->create();
     }
 
-    /**
-     * @return iterable<string, array{0: string, 1: string}>
-     */
+    /** @return iterable<string, array{0: string, 1: string}> */
     public function provideInvalidConfigs(): iterable
     {
         yield 'branches: non versioned branch' => ['invalid_branch_name.php', 'Invalid configuration for path "hubkit.repositories.github.com.repos.park-manager/park-manager.branches": Invalid version or relative pattern "nee", must be either "1.x" or "1.*", or "#1.x" (for an exact branch named 1.x), ":default", "main" or "master", or a regexp like "/0.[1-9]+/".'];

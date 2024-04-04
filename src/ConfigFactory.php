@@ -44,7 +44,7 @@ final class ConfigFactory
         }
     }
 
-    private static function normalizePath(string $path = null)
+    private static function normalizePath(?string $path = null)
     {
         if ($path === null) {
             return;

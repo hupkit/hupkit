@@ -62,7 +62,7 @@ class Git
      * @see https://gist.github.com/WebPlatformDocs/437f763b948c926ca7ba
      * @see https://stackoverflow.com/questions/3258243/git-check-if-pull-needed
      */
-    public function getRemoteDiffStatus(string $remoteName, string $localBranch, string $remoteBranch = null): string
+    public function getRemoteDiffStatus(string $remoteName, string $localBranch, ?string $remoteBranch = null): string
     {
         if ($remoteBranch === null) {
             $remoteBranch = $localBranch;
@@ -105,9 +105,7 @@ class Git
         return $activeBranch;
     }
 
-    /**
-     * @return string either main, master or a custom configured branch-name
-     */
+    /** @return string either main, master or a custom configured branch-name */
     public function getPrimaryBranch(): string
     {
         static $branch = null;
@@ -136,9 +134,7 @@ class Git
         return trim($this->process->mustRun(['git', 'describe', '--tags', '--abbrev=0', $ref])->getOutput());
     }
 
-    /**
-     * @return array<int, string> ['v1.0', 'v1.5', 'v2.0' '...']
-     */
+    /** @return array<int, string> ['v1.0', 'v1.5', 'v2.0' '...'] */
     public function getVersionBranches(string $remote): array
     {
         $branches = StringUtil::splitLines(
@@ -310,9 +306,7 @@ class Git
         $this->process->run($commands, 'Adding git notes failed.');
     }
 
-    /**
-     * @param array<int, string>|string $ref either a single ref of array of references
-     */
+    /** @param array<int, string>|string $ref either a single ref of array of references */
     public function pushToRemote(string $remote, array | string $ref, bool $setUpstream = false, bool $force = false): void
     {
         $ref = (array) $ref;
@@ -347,7 +341,7 @@ class Git
         $this->process->mustRun(array_merge($command, $ref));
     }
 
-    public function pullRemote(string $remote, string $ref = null): void
+    public function pullRemote(string $remote, ?string $ref = null): void
     {
         $this->guardWorkingTreeReady();
 
@@ -398,9 +392,7 @@ class Git
         $this->process->mustRun($command);
     }
 
-    /**
-     * Checkout a remote branch or create it when it doesn't exit yet.
-     */
+    /** Checkout a remote branch or create it when it doesn't exit yet. */
     public function checkoutRemoteBranch(string $remote, string $branchName, bool $create = true): void
     {
         if ($this->branchExists($branchName)) {
@@ -507,17 +499,13 @@ class Git
         return trim($process->getOutput());
     }
 
-    /**
-     * @return array{'host': string, 'org': string, 'repo': string}
-     */
+    /** @return array{'host': string, 'org': string, 'repo': string} */
     public function getRemoteInfo(string $name = 'upstream'): array
     {
         return self::getGitUrlInfo($this->getGitConfig('remote.' . $name . '.url'));
     }
 
-    /**
-     * @return array{'host': string, 'org': string, 'repo': string}
-     */
+    /** @return array{'host': string, 'org': string, 'repo': string} */
     public static function getGitUrlInfo(string $gitUri): array
     {
         $info = [
@@ -562,7 +550,7 @@ class Git
         return $info;
     }
 
-    public function clone(string $ssh_url, string $remoteName = 'origin', int $depth = null): void
+    public function clone(string $ssh_url, string $remoteName = 'origin', ?int $depth = null): void
     {
         $command = ['git', 'clone', $ssh_url, '.'];
 

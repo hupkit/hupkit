@@ -120,9 +120,7 @@ final class UpMergeHandler extends GitBaseHandler
         return $finalBranches;
     }
 
-    /**
-     * @param string[] $branches
-     */
+    /** @param string[] $branches */
     private function handleMerge(Args $args, string $branch, array $branches): int
     {
         $noSplit = $args->getOption('no-split');
@@ -178,9 +176,7 @@ final class UpMergeHandler extends GitBaseHandler
         return $branches;
     }
 
-    /**
-     * @param string[] $branches
-     */
+    /** @param string[] $branches */
     private function handleDryMerge(Args $args, string $branch, array $branches): int
     {
         try {
@@ -203,9 +199,7 @@ final class UpMergeHandler extends GitBaseHandler
         return 0;
     }
 
-    /**
-     * @param string[] $branches
-     */
+    /** @param string[] $branches */
     private function dryMergeBranches(string $branch, array $branches): void
     {
         $sourceBranch = $branch;

@@ -117,10 +117,8 @@ final class Config
         return true;
     }
 
-    /**
-     * @return array<string, mixed>
-     */
-    public function getForRepository(string $host, string $repository, null | bool &$isLocal = false): array
+    /** @return array<string, mixed> */
+    public function getForRepository(string $host, string $repository, ?bool &$isLocal = false): array
     {
         $globalConfig = $this->get(['repositories', $host, 'repos', $repository], ['branches' => []]);
 
@@ -133,7 +131,7 @@ final class Config
         return $globalConfig;
     }
 
-    public function getBranchConfig(string $branchName, string $host = null, string $repository = null): BranchConfig
+    public function getBranchConfig(string $branchName, ?string $host = null, ?string $repository = null): BranchConfig
     {
         $host ??= $this->activeHost;
         $repository ??= $this->activeRepository;

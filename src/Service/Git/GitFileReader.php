@@ -32,9 +32,7 @@ class GitFileReader
         private readonly GitTempRepository $gitTempRepository
     ) {}
 
-    /**
-     * @param string $path Path relative to repository root
-     */
+    /** @param string $path Path relative to repository root */
     public function fileExists(string $branch, string $path): bool
     {
         if (! $this->gitBranch->isGitDir()) {
@@ -83,9 +81,7 @@ class GitFileReader
         return $this->gitTempRepository->getLocal(mb_substr($this->gitBranch->getGitDirectory(), 0, -5), $branch) . \DIRECTORY_SEPARATOR . $path;
     }
 
-    /**
-     * @param string $path Path relative to repository root
-     */
+    /** @param string $path Path relative to repository root */
     public function fileExistsAtRemote(string $remote, string $branch, string $path): bool
     {
         if (! $this->gitBranch->isGitDir()) {

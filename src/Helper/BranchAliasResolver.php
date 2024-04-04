@@ -24,7 +24,7 @@ class BranchAliasResolver
     public function __construct(
         private readonly StyleInterface $style,
         private readonly Git $git,
-        string $cwd = null
+        ?string $cwd = null
     ) {
         $this->cwd = $cwd ?? getcwd();
 

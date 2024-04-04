@@ -86,9 +86,7 @@ final class ConfigTest extends TestCase
         $config->getOrFail($path);
     }
 
-    /**
-     * @return iterable<int, array<int, mixed>>
-     */
+    /** @return iterable<int, array<int, mixed>> */
     public function provideFailedConfigs(): iterable
     {
         yield ['schemas_version'];

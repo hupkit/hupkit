@@ -32,9 +32,7 @@ final class EditConfigHandlerTest extends ConfigHandlerTestCase
 {
     private ObjectProphecy $finder;
 
-    /**
-     * @before
-     */
+    /** @before */
     public function setupFinder(): void
     {
         $this->finder = $this->prophesize(Finder::class);

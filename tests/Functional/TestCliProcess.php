@@ -21,9 +21,7 @@ class TestCliProcess extends CliProcess
 {
     private ?string $cwd = null;
 
-    /**
-     * @var callable|null
-     */
+    /** @var callable|null */
     private $ignoreCwdChange;
 
     public function setCwd(?string $cwd): self
@@ -40,25 +38,19 @@ class TestCliProcess extends CliProcess
         return $this;
     }
 
-    /**
-     * @param Process|array<int, string> $cmd
-     */
-    public function run(array | Process $cmd, string $error = null, callable $callback = null, int $verbosity = OutputInterface::VERBOSITY_VERY_VERBOSE): Process
+    /** @param Process|array<int, string> $cmd */
+    public function run(array | Process $cmd, ?string $error = null, ?callable $callback = null, int $verbosity = OutputInterface::VERBOSITY_VERY_VERBOSE): Process
     {
         return parent::run($this->wrapProcessorForCmd($cmd), $error, $callback, $verbosity);
     }
 
-    /**
-     * @param Process|array<int, string> $cmd
-     */
-    public function mustRun(array | Process $cmd, string $error = null, callable $callback = null): Process
+    /** @param Process|array<int, string> $cmd */
+    public function mustRun(array | Process $cmd, ?string $error = null, ?callable $callback = null): Process
     {
         return parent::mustRun($this->wrapProcessorForCmd($cmd), $error, $callback);
     }
 
-    /**
-     * @param Process|array<int, string> $cmd
-     */
+    /** @param Process|array<int, string> $cmd */
     private function wrapProcessorForCmd(array | Process $cmd): Process
     {
         if (! $cmd instanceof Process) {

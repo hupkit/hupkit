@@ -435,7 +435,7 @@ labels: removed-deprecation
         $this->git->remoteBranchExists('upstream', $branch)->willReturn(false);
     }
 
-    private function expectTagAndGitHubRelease(string $version, string $message, string $title = null, string $branch = null): string
+    private function expectTagAndGitHubRelease(string $version, string $message, ?string $title = null, ?string $branch = null): string
     {
         $this->branchSplitsh->syncTags($branch ?? 'master', $version)->willReturn(2)->shouldBeCalled();
 
@@ -449,7 +449,7 @@ labels: removed-deprecation
         return $url;
     }
 
-    private function expectEditorReturns(string $input, string $output = null): void
+    private function expectEditorReturns(string $input, ?string $output = null): void
     {
         $this->editor->fromString(PropArgument::containingString($input), true, PropArgument::containingString('Leave file empty to abort operation.'))
             ->willReturn($output ?? $input)

@@ -121,7 +121,7 @@ final class GitFileReaderTest extends TestCase
         self::assertFalse($reader->fileExistsAtRemote('origin', 'master', 'foo2.txt'));
     }
 
-    private function getGitFileReader(string $repository = null): GitFileReader
+    private function getGitFileReader(?string $repository = null): GitFileReader
     {
         $repository ??= $this->rootRepository;
 
@@ -151,9 +151,7 @@ final class GitFileReaderTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_fails_to_get_file_when_not_existent(): void
     {
         $reader = $this->getGitFileReader($this->secondRepository);
@@ -163,9 +161,7 @@ final class GitFileReaderTest extends TestCase
         $reader->getFile('master', 'foo3.txt');
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_fails_to_get_remote_file_when_not_existent(): void
     {
         $reader = $this->getGitFileReader($this->secondRepository);

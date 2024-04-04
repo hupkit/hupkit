@@ -64,7 +64,7 @@ class StatusTable
         $this->output->writeln('');
     }
 
-    public function addRow(string $label, string $status, string $message = null): void
+    public function addRow(string $label, string $status, ?string $message = null): void
     {
         $this->rows[] = [$label, self::STATUS_LABELS[$status], wordwrap((string) $message, 38)];
         $this->statuses[$status] = true;

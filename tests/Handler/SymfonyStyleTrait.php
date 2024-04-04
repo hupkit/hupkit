@@ -24,10 +24,8 @@ trait SymfonyStyleTrait
     protected ArrayInput $input;
     protected StreamOutput $output;
 
-    /**
-     * @return SymfonyStyle
-     */
-    protected function createStyle(array $input = [], OutputInterface $output = null)
+    /** @return SymfonyStyle */
+    protected function createStyle(array $input = [], ?OutputInterface $output = null)
     {
         $this->input = new ArrayInput([]);
         $this->input->setInteractive(true);
@@ -70,7 +68,7 @@ trait SymfonyStyleTrait
         return $display;
     }
 
-    protected function assertOutputMatches($expectedLines, string $output = null, $regex = false): void
+    protected function assertOutputMatches($expectedLines, ?string $output = null, $regex = false): void
     {
         if ($output === null) {
             $output = $this->getDisplay();
@@ -96,7 +94,7 @@ trait SymfonyStyleTrait
         }
     }
 
-    protected function assertOutputNotMatches($lines, string $output = null, $regex = false): void
+    protected function assertOutputNotMatches($lines, ?string $output = null, $regex = false): void
     {
         if ($output === null) {
             $output = $this->getDisplay();
@@ -122,7 +120,7 @@ trait SymfonyStyleTrait
         }
     }
 
-    protected function assertNoOutput(string $output = null): void
+    protected function assertNoOutput(?string $output = null): void
     {
         if ($output === null) {
             $output = $this->getDisplay();

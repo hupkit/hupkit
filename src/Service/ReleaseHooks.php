@@ -25,7 +25,7 @@ class ReleaseHooks extends HookScript
         LoggerInterface $logger,
         private readonly ContainerInterface $container,
         private readonly Git $git,
-        string $cwd = null
+        ?string $cwd = null
     ) {
         parent::__construct($gitFileReader, $logger, $cwd);
     }

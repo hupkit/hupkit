@@ -669,9 +669,7 @@ by who-else at 2014-11-23T14:50:24Z
         $this->assertOutputMatches(['Pull request has been merged.', 'Your local "master" branch is updated.']);
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_asks_for_squash_with_multiple_commits_before_merging_when_asked(): void
     {
         $pr = $this->expectPrInfo();

@@ -28,7 +28,7 @@ abstract class GitBaseHandler implements RequiresGitRepository
         protected Config $config
     ) {}
 
-    protected function informationHeader(string $branch = null): void
+    protected function informationHeader(?string $branch = null): void
     {
         $hostname = $this->github->getHostname();
 
@@ -48,7 +48,7 @@ abstract class GitBaseHandler implements RequiresGitRepository
         }
     }
 
-    protected function guardMaintained(string $branch = null): void
+    protected function guardMaintained(?string $branch = null): void
     {
         $branch ??= $this->git->getActiveBranchName();
         $branchConfig = $this->config->getBranchConfig($branch);

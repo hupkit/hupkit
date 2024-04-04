@@ -134,9 +134,7 @@ class BranchSplitsh
         return $results;
     }
 
-    /**
-     * @return array<string, array<string, mixed>>
-     */
+    /** @return array<string, array<string, mixed>> */
     private function getSplit(BranchConfig $branchConfig): array
     {
         return array_filter($branchConfig->config['split'] ?? [], static fn ($v): bool => $v['url'] !== false);
@@ -185,9 +183,7 @@ class BranchSplitsh
         $this->style->writeln(sprintf('<fg=default;bg=default> [DRY-RUN] Splitting %s to %s</>', $prefix, $config['url']));
     }
 
-    /**
-     * @return int The number of splits
-     */
+    /** @return int The number of splits */
     public function drySplitBranch(string $branch): int
     {
         $splits = $this->getSplit($this->getBranchConfig($branch));

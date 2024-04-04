@@ -41,9 +41,7 @@ class MessageValidator
         return $result;
     }
 
-    /**
-     * @return array{0: string, 1: string, 2: string}|null
-     */
+    /** @return array{0: string, 1: string, 2: string}|null */
     public static function validateMessage(string $message): ?array
     {
         // I wont judge you for swearing, but for merging commits this is unacceptable!

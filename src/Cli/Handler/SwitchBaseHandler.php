@@ -206,9 +206,7 @@ final class SwitchBaseHandler extends GitBaseHandler
         }
     }
 
-    /**
-     * @param array<string, mixed> $pullRequest
-     */
+    /** @param array<string, mixed> $pullRequest */
     private function postHelpComment(array $pullRequest, string $branch): void
     {
         if ($pullRequest['user']['login'] === $this->github->getAuthUsername()) {

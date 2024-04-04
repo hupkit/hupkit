@@ -27,8 +27,8 @@ class BranchConfig
     public function __construct(
         public string $name,
         public array $config,
-        string $configName = null,
-        array $configPath = null
+        ?string $configName = null,
+        ?array $configPath = null
     ) {
         $this->configName = $configName ?? $name;
         $this->configPath = $configPath ?? [];

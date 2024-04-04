@@ -179,9 +179,7 @@ final class ReleaseHandler extends GitBaseHandler
         return 'Initial release.';
     }
 
-    /**
-     * @param array<int, string> $tags
-     */
+    /** @param array<int, string> $tags */
     private function guardTagDoesNotExist(Version $version, array $tags): void
     {
         $tags = array_map(

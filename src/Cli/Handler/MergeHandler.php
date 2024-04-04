@@ -404,9 +404,7 @@ final class MergeHandler extends GitBaseHandler
         $this->style->note(sprintf('Branch "%s" was deleted.', $branch));
     }
 
-    /**
-     * @param array<array-key, array<string, mixed>> $commits
-     */
+    /** @param array<array-key, array<string, mixed>> $commits */
     private function validateMessages(array $commits): void
     {
         $violations = MessageValidator::validateCommitsMessages($commits);
@@ -464,9 +462,7 @@ final class MergeHandler extends GitBaseHandler
         return false;
     }
 
-    /**
-     * @param array<int, array{'status': string}> $checkSuites
-     */
+    /** @param array<int, array{'status': string}> $checkSuites */
     private function hasPendingCheckSuites(array $checkSuites): bool
     {
         foreach ($checkSuites as $checkSuite) {

@@ -526,7 +526,7 @@ final class UpMergeHandlerTest extends TestCase
         return new Args($format);
     }
 
-    private function executeHandler(Args $args = null): int
+    private function executeHandler(?Args $args = null): int
     {
         $handler = new UpMergeHandler(
             $this->createStyle(),

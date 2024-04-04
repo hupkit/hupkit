@@ -60,9 +60,7 @@ class SplitCreatedHandler extends GitBaseHandler
         $this->style->success('Repository splits were created.');
     }
 
-    /**
-     * @return array<string, string>
-     */
+    /** @return array<string, string> */
     private function getSplits(): array
     {
         $repositories = [];
