@@ -88,6 +88,12 @@ return [
     'host' => 'github.com',
     'repository' => 'organization/repository-name',
     
+    // Since v1.3 - which branch is considered the main branch. Either: 'main', 'master', '2.0', or 'trunk'
+    // This configuration is used (among) for upmerging as know the last branch in the list.
+    //
+    // If not set this is automatically guessed at application boot, in v2.0 this will default to 'main'.  
+    //'main_branch' => null,
+    
      // See branches section below for supported configuration 
     'branches' => [],
 ];

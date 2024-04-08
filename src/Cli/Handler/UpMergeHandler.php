@@ -96,7 +96,7 @@ final class UpMergeHandler extends GitBaseHandler
      */
     private function getBranches(string $branch, array $branches): array
     {
-        $defaultBranch = $this->github->getDefaultBranch();
+        $defaultBranch = $this->config->getMainBranch();
 
         if (! \in_array($defaultBranch, $branches, true)) {
             $branches[] = $defaultBranch;

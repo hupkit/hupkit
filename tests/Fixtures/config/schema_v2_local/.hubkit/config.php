@@ -1,6 +1,9 @@
 <?php
 
 return [
+    'schema_version' => 2,
+    'main_branch' => 'trunk',
+
     'branches' => [
         ':default' => [],
         '2.0' => [

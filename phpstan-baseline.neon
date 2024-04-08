@@ -141,6 +141,11 @@ parameters:
 			path: src/Config.php
 
 		-
+			message: "#^Call to an undefined method Symfony\\\\Component\\\\Console\\\\Style\\\\StyleInterface\\:\\:block\\(\\)\\.$#"
+			count: 1
+			path: src/ConfigFactory.php
+
+		-
 			message: "#^Method HubKit\\\\ConfigFactory\\:\\:normalizePath\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: src/ConfigFactory.php
@@ -871,27 +876,27 @@ parameters:
 			path: tests/Handler/EditConfigHandlerTest.php
 
 		-
-			message: "#^Parameter \\#2 \\$git of class class@anonymous/tests/Handler/EditConfigHandlerTest\\.php\\:225 constructor expects HubKit\\\\Service\\\\Git, object given\\.$#"
+			message: "#^Parameter \\#2 \\$git of class class@anonymous/tests/Handler/EditConfigHandlerTest\\.php\\:223 constructor expects HubKit\\\\Service\\\\Git, object given\\.$#"
 			count: 1
 			path: tests/Handler/EditConfigHandlerTest.php
 
 		-
-			message: "#^Parameter \\#3 \\$github of class class@anonymous/tests/Handler/EditConfigHandlerTest\\.php\\:225 constructor expects HubKit\\\\Service\\\\GitHub, object given\\.$#"
+			message: "#^Parameter \\#3 \\$github of class class@anonymous/tests/Handler/EditConfigHandlerTest\\.php\\:223 constructor expects HubKit\\\\Service\\\\GitHub, object given\\.$#"
 			count: 1
 			path: tests/Handler/EditConfigHandlerTest.php
 
 		-
-			message: "#^Parameter \\#5 \\$filesystem of class class@anonymous/tests/Handler/EditConfigHandlerTest\\.php\\:225 constructor expects HubKit\\\\Service\\\\Filesystem, object given\\.$#"
+			message: "#^Parameter \\#5 \\$filesystem of class class@anonymous/tests/Handler/EditConfigHandlerTest\\.php\\:223 constructor expects HubKit\\\\Service\\\\Filesystem, object given\\.$#"
 			count: 1
 			path: tests/Handler/EditConfigHandlerTest.php
 
 		-
-			message: "#^Parameter \\#6 \\$tempRepository of class class@anonymous/tests/Handler/EditConfigHandlerTest\\.php\\:225 constructor expects HubKit\\\\Service\\\\Git\\\\GitTempRepository, object given\\.$#"
+			message: "#^Parameter \\#6 \\$tempRepository of class class@anonymous/tests/Handler/EditConfigHandlerTest\\.php\\:223 constructor expects HubKit\\\\Service\\\\Git\\\\GitTempRepository, object given\\.$#"
 			count: 1
 			path: tests/Handler/EditConfigHandlerTest.php
 
 		-
-			message: "#^Parameter \\#7 \\$finder of class class@anonymous/tests/Handler/EditConfigHandlerTest\\.php\\:225 constructor expects Symfony\\\\Component\\\\Finder\\\\Finder, object given\\.$#"
+			message: "#^Parameter \\#7 \\$finder of class class@anonymous/tests/Handler/EditConfigHandlerTest\\.php\\:223 constructor expects Symfony\\\\Component\\\\Finder\\\\Finder, object given\\.$#"
 			count: 1
 			path: tests/Handler/EditConfigHandlerTest.php
 

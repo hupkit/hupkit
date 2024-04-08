@@ -130,7 +130,7 @@ final class SwitchBaseHandler extends GitBaseHandler
         $activeBranch = $this->git->getActiveBranchName();
 
         if ($activeBranch[0] === '_') {
-            $activeBranch = $this->git->getPrimaryBranch();
+            $activeBranch = $this->config->getMainBranch();
         }
 
         // Always (re)start the rebase process from scratch in case something went horrible wrong.

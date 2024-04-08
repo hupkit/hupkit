@@ -69,6 +69,7 @@ final class UpMergeHandlerTest extends TestCase
                     ],
                 ],
             ],
+            '_main_branch' => 'master',
         ]);
         $this->config->setActiveRepository('github.com', 'park-manager/hubkit');
 
@@ -347,7 +348,17 @@ final class UpMergeHandlerTest extends TestCase
     /** @test */
     public function it_does_nothing_when_current_is_last_branch(): void
     {
-        $this->github->getDefaultBranch()->willReturn('2.3');
+        $this->config = new Config([
+            'repositories' => [
+                'github.com' => [
+                    'repos' => [
+                        'park-manager/park-manager' => [],
+                    ],
+                ],
+            ],
+            '_main_branch' => '2.3',
+        ]);
+        $this->config->setActiveRepository('github.com', 'park-manager/hubkit');
 
         $this->git->getActiveBranchName()->willReturn('2.6');
         $this->git->remoteUpdate('upstream')->shouldBeCalled();
@@ -476,7 +487,17 @@ final class UpMergeHandlerTest extends TestCase
     /** @test */
     public function it_merges_current_branch_into_next_version_branches_without_master_branch(): void
     {
-        $this->github->getDefaultBranch()->willReturn('2.x');
+        $this->config = new Config([
+            'repositories' => [
+                'github.com' => [
+                    'repos' => [
+                        'park-manager/park-manager' => [],
+                    ],
+                ],
+            ],
+            '_main_branch' => '2.x',
+        ]);
+        $this->config->setActiveRepository('github.com', 'park-manager/hubkit');
 
         $this->git->getActiveBranchName()->willReturn('2.3');
         $this->git->remoteUpdate('upstream')->shouldBeCalled();
@@ -598,6 +619,7 @@ final class UpMergeHandlerTest extends TestCase
                     ],
                 ],
             ],
+            '_main_branch' => 'master',
         ]);
         $this->config->setActiveRepository('github.com', 'park-manager/hubkit');
     }
@@ -665,6 +687,7 @@ final class UpMergeHandlerTest extends TestCase
                     ],
                 ],
             ],
+            '_main_branch' => 'master',
         ]);
         $this->config->setActiveRepository('github.com', 'park-manager/hubkit');
     }
