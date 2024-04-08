@@ -251,6 +251,17 @@ class GitHub
         return $pr;
     }
 
+    public function getPullRequestReviews(int $id, bool $withLabels = false): array
+    {
+        \assert($this->client !== null);
+
+        return (new ResultPager($this->client))->fetchAll($this->client->pullRequest()->reviews(), 'all', [
+            $this->organization,
+            $this->repository,
+            $id,
+        ]);
+    }
+
     public function getCommitStatuses(string $org, string $repo, string $hash): array
     {
         \assert($this->client !== null);

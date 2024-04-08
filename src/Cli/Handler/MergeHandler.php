@@ -157,6 +157,7 @@ final class MergeHandler extends GitBaseHandler
         }
 
         $this->determineReviewStatus($pr, $table);
+        $this->determineReviewStatusByLabels($pr, $table);
         $table->render();
 
         if ($table->hasFailureStatus()) {
@@ -164,7 +165,7 @@ final class MergeHandler extends GitBaseHandler
         }
     }
 
-    private function determineReviewStatus(array $pr, StatusTable $table): void
+    private function determineReviewStatusByLabels(array $pr, StatusTable $table): void
     {
         if (! (is_countable($pr['labels']) ? \count($pr['labels']) : 0)) {
             return;
@@ -186,6 +187,28 @@ final class MergeHandler extends GitBaseHandler
 
                 return;
             }
+        }
+    }
+
+    private function determineReviewStatus(array $pr, StatusTable $table): void
+    {
+        $changesRequested = 0;
+        $approved = false;
+
+        foreach ($this->github->getPullRequestReviews($pr['number']) as $review) {
+            if ($review['state'] === 'REQUEST_CHANGES') {
+                ++$changesRequested;
+            } elseif ($review['state'] === 'APPROVED') {
+                $approved = true;
+            }
+        }
+
+        if ($changesRequested > 0) {
+            $table->addRow('Reviewed', 'failure', $changesRequested > 1 ? sprintf('%d reviewers requested changes', $changesRequested) : '1 reviewer requested changes');
+        } elseif ($approved) {
+            $table->addRow('Reviewed', 'success', 'Approved');
+        } else {
+            $table->addRow('Reviewed', 'pending', 'No reviews yet');
         }
     }
 
