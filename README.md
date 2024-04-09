@@ -5,7 +5,7 @@ merging pull requests, creating new releases, merging older versioned branches i
 once and much more.
 
 **Note:** On October 23rd 2023 the repository was moved to it's own organization, and renamed to HuPKit.
-The old PHP namespace has been lest unchanged.
+The old PHP namespace has been left unchanged.
 
 ## Features
 
