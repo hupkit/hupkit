@@ -1,0 +1,33 @@
+---------------------------------------------------------------------------
+
+by sstok at 2024-04-09T11:43:01Z
+
+```
+---------------------------------------------------
+  Item                  Status     Details
+---------------------------------------------------
+  PhpStan (8.2)         FAIL
+  PHP CS Fixer (8.2)    OK
+  PHPUnit (8.1)         OK
+  PHPUnit (8.2)         OK
+  PHPUnit (8.3)         OK
+  Reviewed              Pending    No reviews yet
+---------------------------------------------------
+
+ [WARNING] One or more status checks did not complete or failed. Merge with caution.
+```
+
+```
+------------------------------------------------------------------
+  Item                  Status     Details
+------------------------------------------------------------------
+  PhpStan (8.2)         FAIL
+  PHP CS Fixer (8.2)    OK
+  PHPUnit (8.1)         OK
+  PHPUnit (8.2)         OK
+  PHPUnit (8.3)         OK
+  Reviewed              FAIL       2 reviewers requested changes
+------------------------------------------------------------------
+
+ [WARNING] One or more status checks did not complete or failed. Merge with caution.
+```
