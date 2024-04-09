@@ -208,13 +208,14 @@ by who-else at 2014-11-23T14:50:24Z
         self::assertMatchesRegularExpression(
             <<<'TABLE'
                 {
-                ---------------------------------------------------------------------
+                ----------------------------------------------------------------------
                 \s+Item\s+Status\h+Details\h+
-                ---------------------------------------------------------------------
+                ----------------------------------------------------------------------
                 \h+Ci-tests-PHP6\h+OK\h+Run\h+tests\h+
                 \h+Gentlemans-gazette\h+FAIL\h+Lower\h+button\h+must\h+not\h+be\h+buttoned\h+
                 \h+test\h+run\h+OK\h+Extra\h+info\h+
-                ---------------------------------------------------------------------
+                \h+Reviewed\h+Pending\h+No\h+reviews\h+yet\h+
+                ----------------------------------------------------------------------
                 }
                 TABLE,
             $this->getDisplay()
@@ -941,7 +942,9 @@ by who-else at 2014-11-23T14:50:24Z
     /** @test */
     public function it_shows_status_table_with_all_success(): void
     {
-        $pr = $this->expectPrInfo();
+        $pr = $this->expectPrInfo(reviews: [
+            ['state' => 'APPROVED'],
+        ]);
         $this->expectCommitStatus([
             [
                 'state' => 'success',
@@ -1004,7 +1007,9 @@ by who-else at 2014-11-23T14:50:24Z
      */
     public function it_shows_status_table_with_review_status(array $labels, bool $success = true, string $row = ''): void
     {
-        $pr = $this->expectPrInfo('sstok', $labels);
+        $pr = $this->expectPrInfo('sstok', $labels, reviews: [
+            ['state' => 'APPROVED'],
+        ]);
         $this->expectCommitStatus();
         $this->expectCommits($pr);
 
@@ -1064,6 +1069,107 @@ by who-else at 2014-11-23T14:50:24Z
             [['status: reviewed'], true, 'Reviewed    OK        status: reviewed'],
             [['status: needs work'], false, 'Reviewed    FAIL        status: needs work'],
             [['status: needs review'], false, 'Reviewed    Pending        status: needs review'],
+        ];
+    }
+
+    /**
+     * @test
+     *
+     * @dataProvider provideReviews
+     */
+    public function it_shows_status_table_with_review_status_by_reviews(array $reviews, bool $success, string $row): void
+    {
+        $pr = $this->expectPrInfo(reviews: $reviews);
+        $this->expectCommitStatus();
+        $this->expectCommits($pr);
+
+        $this->github->mergePullRequest(
+            self::PR_NUMBER,
+            'feature #42 Brand new design (sstok)',
+            PropArgument::exact(<<<'BODY'
+                This PR was merged into the 1.0-dev branch.
+
+                Discussion
+                ----------
+
+                There I fixed it
+
+                Commits
+                -------
+
+                06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
+                06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
+
+                BODY
+            ),
+            self::HEAD_SHA,
+            false
+        )->willReturn(['sha' => self::MERGE_SHA]);
+
+        $this->expectNotes();
+        $this->expectLocalUpdate();
+        $this->expectLocalBranchNotExists();
+
+        $args = $this->getArgs();
+        $args->setArgument('number', '42');
+        $this->executeHandler($args);
+
+        $expected = [];
+
+        if ($row) {
+            $expected[] = $row;
+        }
+
+        if (! $success) {
+            $expected[] = 'One or more status checks did not complete or failed. Merge with caution.';
+        } else {
+            $this->assertOutputNotMatches('One or more status checks did not complete or failed. Merge with caution.');
+        }
+
+        $this->assertOutputMatches($expected);
+    }
+
+    public function provideReviews(): iterable
+    {
+        yield [
+            [
+                ['state' => 'APPROVED'],
+            ],
+            true,
+            'Reviewed              OK    Approved',
+        ];
+
+        yield [
+            [
+                ['state' => 'REQUEST_CHANGES'],
+            ],
+            false,
+            'Reviewed              FAIL    1 reviewer requested changes',
+        ];
+
+        yield [
+            [
+                ['state' => 'REQUEST_CHANGES'],
+                ['state' => 'REQUEST_CHANGES'],
+            ],
+            false,
+            'Reviewed              FAIL    2 reviewers requested changes',
+        ];
+
+        yield [
+            [
+                ['state' => 'REQUEST_CHANGES'],
+                ['state' => 'REQUEST_CHANGES'],
+                ['state' => 'APPROVED'],
+            ],
+            false,
+            'Reviewed              FAIL    2 reviewers requested changes',
+        ];
+
+        yield [
+            [],
+            false,
+            'Reviewed              Pending    No reviews yet',
         ];
     }
 
@@ -1339,7 +1445,8 @@ by who-else at 2014-11-23T14:50:24Z
         string $state = 'open',
         $mergeable = true,
         string $body = 'There I fixed it',
-        string $base = 'master'
+        string $base = 'master',
+        array $reviews = [],
     ): array {
         $number = self::PR_NUMBER;
 
@@ -1365,6 +1472,7 @@ by who-else at 2014-11-23T14:50:24Z
                 ),
             ]
         );
+        $this->github->getPullRequestReviews($number)->willReturn($reviews);
 
         return $pr;
     }

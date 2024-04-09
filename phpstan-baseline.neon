@@ -26,6 +26,11 @@ parameters:
 			path: src/Cli/Handler/MergeHandler.php
 
 		-
+			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\MergeHandler\\:\\:determineReviewStatusByLabels\\(\\) has parameter \\$pr with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Cli/Handler/MergeHandler.php
+
+		-
 			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\MergeHandler\\:\\:getCategory\\(\\) has parameter \\$pr with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: src/Cli/Handler/MergeHandler.php
@@ -297,6 +302,11 @@ parameters:
 
 		-
 			message: "#^Method HubKit\\\\Service\\\\GitHub\\:\\:getPullRequestCommitCount\\(\\) has parameter \\$id with no type specified\\.$#"
+			count: 1
+			path: src/Service/GitHub.php
+
+		-
+			message: "#^Method HubKit\\\\Service\\\\GitHub\\:\\:getPullRequestReviews\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: src/Service/GitHub.php
 
@@ -1006,6 +1016,11 @@ parameters:
 			path: tests/Handler/MergeHandlerTest.php
 
 		-
+			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\MergeHandlerTest\\:\\:expectPrInfo\\(\\) has parameter \\$reviews with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/Handler/MergeHandlerTest.php
+
+		-
 			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\MergeHandlerTest\\:\\:expectPrInfo\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Handler/MergeHandlerTest.php
@@ -1032,6 +1047,16 @@ parameters:
 
 		-
 			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\MergeHandlerTest\\:\\:it_shows_status_table_with_review_status\\(\\) has parameter \\$labels with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/Handler/MergeHandlerTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\MergeHandlerTest\\:\\:it_shows_status_table_with_review_status_by_reviews\\(\\) has parameter \\$reviews with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/Handler/MergeHandlerTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\MergeHandlerTest\\:\\:provideReviews\\(\\) return type has no value type specified in iterable type iterable\\.$#"
 			count: 1
 			path: tests/Handler/MergeHandlerTest.php
 
