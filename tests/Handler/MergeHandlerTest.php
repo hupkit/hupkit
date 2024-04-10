@@ -1623,12 +1623,12 @@ by who-else at 2014-11-23T14:50:24Z
     {
         $this->github->getComments(self::PR_NUMBER)->willReturn($notes);
 
-        $this->git->ensureNotesFetching('upstream')->shouldBeCalled();
-        $this->git->remoteUpdate('upstream')->shouldBeCalled();
+        $this->git->ensureNotesFetching(REMOTE_MAIN)->shouldBeCalled();
+        $this->git->remoteUpdate(REMOTE_MAIN)->shouldBeCalled();
         $this->git->addNotes($notesMessage ? PropArgument::containingString($notesMessage) : '', self::MERGE_SHA, 'github-comments')->shouldBeCalled();
 
         if ($notesMessage !== '') {
-            $this->git->pushToRemote('upstream', 'refs/notes/github-comments')->shouldBeCalled();
+            $this->git->pushToRemote(REMOTE_MAIN, 'refs/notes/github-comments')->shouldBeCalled();
         }
     }
 
@@ -1643,7 +1643,7 @@ by who-else at 2014-11-23T14:50:24Z
 
         if ($branchExists) {
             $this->git->checkout('master')->shouldBeCalled();
-            $this->git->pullRemote('upstream', 'master')->shouldBeCalled();
+            $this->git->pullRemote(REMOTE_MAIN, 'master')->shouldBeCalled();
         }
     }
 

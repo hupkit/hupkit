@@ -46,8 +46,8 @@ final class TakeHandler extends GitBaseHandler
             return;
         }
 
-        $this->git->remoteUpdate('upstream');
-        $this->git->checkoutRemoteBranch('upstream', $base);
+        $this->git->remoteUpdate(REMOTE_MAIN);
+        $this->git->checkoutRemoteBranch(REMOTE_MAIN, $base);
         $this->git->checkout($slugTitle, true);
 
         $this->style->success(sprintf('Issue %s taken with base "%s"!', $issue['html_url'], $base));

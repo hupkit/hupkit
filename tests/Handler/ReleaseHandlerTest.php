@@ -114,7 +114,7 @@ labels: removed-deprecation
     {
         $this->git = $this->prophesize(Git::class);
         $this->git->getActiveBranchName()->willReturn('master');
-        $this->git->ensureBranchInSync('upstream', 'master')->will(static function (): void {});
+        $this->git->ensureBranchInSync(REMOTE_MAIN, 'master')->will(static function (): void {});
 
         $this->github = $this->prophesize(GitHub::class);
         $this->github->getHostname()->willReturn('github.com');
@@ -258,7 +258,7 @@ labels: removed-deprecation
         $this->expectTags(['0.1.0', '1.0.0', '2.0.0']);
         $this->expectMatchingVersionBranchExists('3.0');
 
-        $this->git->ensureBranchInSync('upstream', '2.0')->shouldBeCalled();
+        $this->git->ensureBranchInSync(REMOTE_MAIN, '2.0')->shouldBeCalled();
         $this->git->getLogBetweenCommits('2.0.0', '2.0')->willReturn(self::COMMITS);
 
         $this->expectEditorReturns("### Added\n- Introduce a new API for ValuesBag");
@@ -427,12 +427,12 @@ labels: removed-deprecation
 
     private function expectMatchingVersionBranchExists(string $branch = '1.0'): void
     {
-        $this->git->remoteBranchExists('upstream', $branch)->willReturn(true);
+        $this->git->remoteBranchExists(REMOTE_MAIN, $branch)->willReturn(true);
     }
 
     private function expectMatchingVersionBranchNotExists(string $branch = '1.0'): void
     {
-        $this->git->remoteBranchExists('upstream', $branch)->willReturn(false);
+        $this->git->remoteBranchExists(REMOTE_MAIN, $branch)->willReturn(false);
     }
 
     private function expectTagAndGitHubRelease(string $version, string $message, ?string $title = null, ?string $branch = null): string
@@ -440,7 +440,7 @@ labels: removed-deprecation
         $this->branchSplitsh->syncTags($branch ?? 'master', $version)->willReturn(2)->shouldBeCalled();
 
         $this->process->mustRun(['git', 'tag', '-s', 'v' . $version, '-m', 'Release ' . $version])->shouldBeCalled();
-        $this->process->mustRun(['git', 'push', 'upstream', 'v' . $version])->shouldBeCalled();
+        $this->process->mustRun(['git', 'push', REMOTE_MAIN, 'v' . $version])->shouldBeCalled();
 
         $this->github->createRelease('v' . $version, $message, false, $title)->willReturn(
             ['html_url' => $url = 'https://github.com/park-manager/hubkit/releases/tag/v' . $version]

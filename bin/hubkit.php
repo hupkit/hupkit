@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 use HubKit\Cli\HubKitApplicationConfig;
 use HubKit\Container;
+use HubKit\RemotesConfigParser;
 use Symfony\Component\ErrorHandler\DebugClassLoader;
 use Symfony\Component\ErrorHandler\ErrorHandler;
 use Webmozart\Console\ConsoleApplication;
@@ -28,6 +29,15 @@ if (! file_exists(__DIR__ . '/../config.php') && file_exists(__DIR__ . '/../conf
 
     exit(1);
 }
+
+if (file_exists(getcwd() . '/.hk_remotes')) {
+    $remotesNames = RemotesConfigParser::parse((string) file_get_contents(getcwd() . '/.hk_remotes'));
+} else {
+    $remotesNames = [];
+}
+
+define('REMOTE_MAIN', $remotesNames['main'] ?? 'upstream');
+define('REMOTE_FORK', $remotesNames['fork'] ?? 'origin');
 
 $parameters = [];
 $parameters['current_dir'] = getcwd() . '/';

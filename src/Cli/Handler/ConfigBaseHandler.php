@@ -35,7 +35,7 @@ abstract class ConfigBaseHandler extends GitBaseHandler
 
     protected function ensureRemoteIsNotDiverged(): void
     {
-        $diffStatus = $this->git->getRemoteDiffStatus('upstream', '_hubkit');
+        $diffStatus = $this->git->getRemoteDiffStatus(REMOTE_MAIN, '_hubkit');
 
         if ($diffStatus !== Git::STATUS_UP_TO_DATE) {
             throw new \RuntimeException(

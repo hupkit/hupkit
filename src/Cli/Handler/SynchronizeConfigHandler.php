@@ -26,37 +26,37 @@ final class SynchronizeConfigHandler extends GitBaseHandler
 
         $this->style->title('Configuration Synchronizer');
 
-        if (! $this->git->remoteBranchExists('upstream', '_hubkit')) {
+        if (! $this->git->remoteBranchExists(REMOTE_MAIN, '_hubkit')) {
             if (! $this->git->branchExists('_hubkit')) {
                 $this->style->success('HuPKit configuration is not set-up yet, run `init-config` first.');
 
                 return 1;
             }
 
-            $this->git->pushToRemote('upstream', '_hubkit:_hubkit');
+            $this->git->pushToRemote(REMOTE_MAIN, '_hubkit:_hubkit');
 
             $this->style->success('Successfully pushed the _hubkit branch.');
 
             return 0;
         }
 
-        switch ($this->git->getRemoteDiffStatus('upstream', '_hubkit')) {
+        switch ($this->git->getRemoteDiffStatus(REMOTE_MAIN, '_hubkit')) {
             case Git::STATUS_UP_TO_DATE:
-                $this->style->info('Already up-to-date.');
+                $this->style->info('Already up-to-date with remote repository.');
 
                 return 0;
 
             case Git::STATUS_NEED_PULL:
                 $this->style->note('Pulling changes.');
-                $this->git->fetchRemote('upstream', '_hubkit:_hubkit');
-                $this->style->success('Updated your local _hubkit branch.');
+                $this->git->fetchRemote(REMOTE_MAIN, '_hubkit:_hubkit');
+                $this->style->success('Updated your local _hubkit branch with repository repository.');
 
                 return 0;
 
             case Git::STATUS_NEED_PUSH:
-                $this->style->text('Local version is ahead with remote upstream.');
-                $this->git->pushToRemote('upstream', '_hubkit:_hubkit');
-                $this->style->success('Pushed changes to upstream.');
+                $this->style->text('Local version is ahead with remote.');
+                $this->git->pushToRemote(REMOTE_MAIN, '_hubkit:_hubkit');
+                $this->style->success('Pushed changes to remote repository.');
 
                 return 0;
         }

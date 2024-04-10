@@ -193,7 +193,7 @@ final class SelfDiagnoseHandler
 
     private function testUpstreamRemoteSet(StatusTable $table): void
     {
-        $label = 'Git remote "upstream" configured';
+        $label = sprintf('Git remote "%s" configured', REMOTE_MAIN);
 
         if (! $this->git->isGitDir()) {
             $table->addRow($label, 'skipped', 'This is not a Git repository');
@@ -201,12 +201,12 @@ final class SelfDiagnoseHandler
             return;
         }
 
-        $result = $this->git->getGitConfig('remote.upstream.url');
+        $result = $this->git->getGitConfig(sprintf('remote.%s.url', REMOTE_MAIN));
 
         if ($result !== '') {
             $table->addRow($label, 'success', $result);
         } else {
-            $table->addRow($label, 'failure', 'Git remote "upstream" should be configured');
+            $table->addRow($label, 'failure', sprintf('Git remote "%s" should be configured', REMOTE_MAIN));
         }
     }
 
@@ -220,7 +220,7 @@ final class SelfDiagnoseHandler
             return;
         }
 
-        if ($this->git->getGitConfig('remote.upstream.url') === '' || $this->github->getHostname() === '') {
+        if ($this->git->getGitConfig(sprintf('remote.%s.url', REMOTE_MAIN)) === '' || $this->github->getHostname() === '') {
             $table->addRow($label, 'skipped', 'Unable to detect host and repository');
 
             return;
@@ -233,12 +233,12 @@ final class SelfDiagnoseHandler
                 return;
             }
 
-            if ($this->gitFileReader->fileExistsAtRemote('upstream', '_hubkit', 'config.php')) {
-                $status = $this->git->getRemoteDiffStatus('upstream', '_hubkit');
+            if ($this->gitFileReader->fileExistsAtRemote(REMOTE_MAIN, '_hubkit', 'config.php')) {
+                $status = $this->git->getRemoteDiffStatus(REMOTE_MAIN, '_hubkit');
 
                 if ($status !== Git::STATUS_UP_TO_DATE) {
                     $table->addRow($label, 'warning',
-                        sprintf('Branch "_hubkit" is diverged with upstream: %s%sRun sync-config to update', $status, "\n")
+                        sprintf('Branch "_hubkit" is diverged with remote repository: %s%sRun sync-config to update', $status, "\n")
                     );
 
                     return;
@@ -250,17 +250,17 @@ final class SelfDiagnoseHandler
             return;
         }
 
-        if ($this->git->remoteBranchExists('upstream', '_hubkit')) {
-            if ($this->gitFileReader->fileExistsAtRemote('upstream', '_hubkit', 'config.php')) {
-                $table->addRow($label, 'info', 'Found config.php in branch "_hubkit" at remote "upstream", but not local');
+        if ($this->git->remoteBranchExists(REMOTE_MAIN, '_hubkit')) {
+            if ($this->gitFileReader->fileExistsAtRemote(REMOTE_MAIN, '_hubkit', 'config.php')) {
+                $table->addRow($label, 'info', 'Found config.php in branch "_hubkit" at remote repository, but not local');
             } else {
-                $table->addRow($label, 'failure', 'Branch "_hubkit" at upstream exists but config.php was not found');
+                $table->addRow($label, 'failure', 'Branch "_hubkit" at remote repository exists but config.php was not found');
             }
 
             return;
         }
 
-        $table->addRow($label, 'skipped', 'Branch _hubkit" was neither found locally or at remote "upstream"');
+        $table->addRow($label, 'skipped', 'Branch _hubkit" was neither found locally or at remote repository');
     }
 
     private function getGitVersion(): string

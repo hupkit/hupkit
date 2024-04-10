@@ -55,14 +55,14 @@ final class SwitchBaseHandler extends GitBaseHandler
 
         $this->git->ensureRemoteExists($remote, $pullRequest['head']['repo']['ssh_url']);
         $this->git->remoteUpdate($remote);
-        $this->git->remoteUpdate('upstream');
+        $this->git->remoteUpdate(REMOTE_MAIN);
 
         // Operation was already in progress (but gave a conflict).
         if ($this->filesystem->fileExists($this->git->getGitDirectory() . '/.hubkit-switch')) {
             $this->handleIncompleteOperation($remote, $tmpBranch, $branch);
         }
 
-        $this->switchBranchBase($remote, $branch, 'upstream/' . $pullRequest['base']['ref'], $newBase, $tmpBranch);
+        $this->switchBranchBase($remote, $branch, REMOTE_MAIN . '/' . $pullRequest['base']['ref'], $newBase, $tmpBranch);
         $this->pushToRemote($remote, $tmpBranch, $branch);
         $this->deleteTempBranch($tmpBranch);
 
@@ -141,7 +141,7 @@ final class SwitchBaseHandler extends GitBaseHandler
         $this->filesystem->dumpFile($this->git->getGitDirectory() . '/.hubkit-switch', $tmpBranch);
 
         try {
-            $this->process->mustRun(['git', 'rebase', '--onto', 'upstream/' . $newBase, $currentBase, $tmpBranch]);
+            $this->process->mustRun(['git', 'rebase', '--onto', REMOTE_MAIN . '/' . $newBase, $currentBase, $tmpBranch]);
             $this->git->checkout($activeBranch);
         } catch (ProcessFailedException $e) {
             throw new \RuntimeException(
@@ -201,7 +201,7 @@ final class SwitchBaseHandler extends GitBaseHandler
             throw new \InvalidArgumentException(sprintf('Cannot switch base, current base is already "%s".', $newBase));
         }
 
-        if (! $this->git->remoteBranchExists('upstream', $newBase)) {
+        if (! $this->git->remoteBranchExists(REMOTE_MAIN, $newBase)) {
             throw new \InvalidArgumentException(sprintf('Cannot switch base, base branch "%s" does not exists.', $newBase));
         }
     }

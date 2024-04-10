@@ -35,7 +35,7 @@ final class SplitRepoHandler extends GitBaseHandler
     public function handle(Args $args): void
     {
         $this->git->guardWorkingTreeReady();
-        $this->git->remoteUpdate('upstream');
+        $this->git->remoteUpdate(REMOTE_MAIN);
 
         $branch = $this->getBranchName($args);
         $prefix = $args->getOption('prefix');
@@ -72,7 +72,7 @@ final class SplitRepoHandler extends GitBaseHandler
             return $this->git->getActiveBranchName();
         }
 
-        $this->git->checkoutRemoteBranch('upstream', $branch);
+        $this->git->checkoutRemoteBranch(REMOTE_MAIN, $branch);
 
         return $branch;
     }

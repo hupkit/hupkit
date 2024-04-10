@@ -28,7 +28,7 @@ final class InitConfigHandlerTest extends ConfigHandlerTestCase
     public function it_fails_with_already_existing_config_branch(): void
     {
         $this->git->branchExists('_hubkit')->willReturn(true);
-        $this->git->getRemoteDiffStatus('upstream', '_hubkit')->willReturn(Git::STATUS_UP_TO_DATE);
+        $this->git->getRemoteDiffStatus(REMOTE_MAIN, '_hubkit')->willReturn(Git::STATUS_UP_TO_DATE);
 
         $this->expectExceptionObject(new \RuntimeException('The "_hubkit" branch already exists. Run `edit-config` instead.'));
 
@@ -39,7 +39,7 @@ final class InitConfigHandlerTest extends ConfigHandlerTestCase
     public function it_fails_with_already_existing_config_branch_outdated(): void
     {
         $this->git->branchExists('_hubkit')->willReturn(true);
-        $this->git->getRemoteDiffStatus('upstream', '_hubkit')->willReturn(Git::STATUS_DIVERGED);
+        $this->git->getRemoteDiffStatus(REMOTE_MAIN, '_hubkit')->willReturn(Git::STATUS_DIVERGED);
 
         $this->expectExceptionObject(new \RuntimeException('The remote "_hubkit" branch and local branch have diverged. Run the "sync-config" command first.'));
 
@@ -50,7 +50,7 @@ final class InitConfigHandlerTest extends ConfigHandlerTestCase
     public function it_fails_with_already_existing_remove_config_branch(): void
     {
         $this->git->branchExists('_hubkit')->willReturn(false);
-        $this->git->remoteBranchExists('upstream', '_hubkit')->willReturn(true);
+        $this->git->remoteBranchExists(REMOTE_MAIN, '_hubkit')->willReturn(true);
 
         $this->expectExceptionObject(new \RuntimeException(
             'The "_hubkit" branch exists remote, but the branch was not found locally.' . \PHP_EOL .
@@ -64,7 +64,7 @@ final class InitConfigHandlerTest extends ConfigHandlerTestCase
     public function it_it_fails_when_config_file_exists_as_ignored(): void
     {
         $this->git->branchExists('_hubkit')->willReturn(false);
-        $this->git->remoteBranchExists('upstream', '_hubkit')->willReturn(false);
+        $this->git->remoteBranchExists(REMOTE_MAIN, '_hubkit')->willReturn(false);
 
         $this->process->mustRun(['git', 'checkout', '--orphan', '_hubkit'])->shouldBeCalled();
         $this->process->mustRun(['git', 'rm', '-rf', '.'])->shouldBeCalled();
@@ -79,7 +79,7 @@ final class InitConfigHandlerTest extends ConfigHandlerTestCase
     public function it_it_generates_config_branch_with_repository_config(): void
     {
         $this->git->branchExists('_hubkit')->willReturn(false);
-        $this->git->remoteBranchExists('upstream', '_hubkit')->willReturn(false);
+        $this->git->remoteBranchExists(REMOTE_MAIN, '_hubkit')->willReturn(false);
 
         $this->process->mustRun(['git', 'checkout', '--orphan', '_hubkit'])->shouldBeCalled();
         $this->process->mustRun(['git', 'rm', '-rf', '.'])->shouldBeCalled();
@@ -125,7 +125,7 @@ final class InitConfigHandlerTest extends ConfigHandlerTestCase
         $this->github->getRepository()->willReturn('park-manager');
 
         $this->git->branchExists('_hubkit')->willReturn(false);
-        $this->git->remoteBranchExists('upstream', '_hubkit')->willReturn(false);
+        $this->git->remoteBranchExists(REMOTE_MAIN, '_hubkit')->willReturn(false);
 
         $this->process->mustRun(['git', 'checkout', '--orphan', '_hubkit'])->shouldBeCalled();
         $this->process->mustRun(['git', 'rm', '-rf', '.'])->shouldBeCalled();
@@ -185,7 +185,7 @@ final class InitConfigHandlerTest extends ConfigHandlerTestCase
     public function it_it_generates_config_branch_with_repository_config_and_mirrors_files(): void
     {
         $this->git->branchExists('_hubkit')->willReturn(false);
-        $this->git->remoteBranchExists('upstream', '_hubkit')->willReturn(false);
+        $this->git->remoteBranchExists(REMOTE_MAIN, '_hubkit')->willReturn(false);
 
         $this->process->mustRun(['git', 'checkout', '--orphan', '_hubkit'])->shouldBeCalled();
         $this->process->mustRun(['git', 'rm', '-rf', '.'])->shouldBeCalled();

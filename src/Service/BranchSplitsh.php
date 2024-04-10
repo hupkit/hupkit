@@ -52,7 +52,7 @@ class BranchSplitsh
 
     private function getConfigForPrefix(string $branch, string $prefix): mixed
     {
-        $this->git->ensureBranchInSync('upstream', $branch);
+        $this->git->ensureBranchInSync(REMOTE_MAIN, $branch);
         $this->splitshGit->checkPrecondition();
 
         $branchConfig = $this->getBranchConfig($branch);
@@ -113,7 +113,7 @@ class BranchSplitsh
             return [];
         }
 
-        $this->git->ensureBranchInSync('upstream', $branch);
+        $this->git->ensureBranchInSync(REMOTE_MAIN, $branch);
         $this->splitshGit->checkPrecondition();
 
         $results = [];

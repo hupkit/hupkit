@@ -367,16 +367,16 @@ final class MergeHandler extends GitBaseHandler
             );
         }
 
-        $this->git->ensureNotesFetching('upstream');
+        $this->git->ensureNotesFetching(REMOTE_MAIN);
 
         // Pull-request was merged remote, so to make adding notes possible
         // we need the actual reference local. Don't use pull as the working dir
         // could be stale.
-        $this->git->remoteUpdate('upstream');
+        $this->git->remoteUpdate(REMOTE_MAIN);
         $this->git->addNotes($commentText, $sha, 'github-comments');
 
         if ($commentText !== '') {
-            $this->git->pushToRemote('upstream', 'refs/notes/github-comments');
+            $this->git->pushToRemote(REMOTE_MAIN, 'refs/notes/github-comments');
         }
     }
 
@@ -393,7 +393,7 @@ final class MergeHandler extends GitBaseHandler
         }
 
         $this->git->checkout($branch);
-        $this->git->pullRemote('upstream', $branch);
+        $this->git->pullRemote(REMOTE_MAIN, $branch);
 
         $this->style->success(sprintf('Your local "%s" branch is updated.', $branch));
 

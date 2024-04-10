@@ -123,11 +123,11 @@ final class GitBranchTest extends TestCase
     /** @test */
     public function it_gets_versioned_branches_in_correct_order(): void
     {
-        $this->addRemote('upstream', $this->remoteRepository);
+        $this->addRemote(REMOTE_MAIN, $this->remoteRepository);
         $this->givenRemoteBranchesExist(['1.0', 'v1.1', '2.0', '1.x', 'x.1']);
 
         self::assertSame(['1.0', 'v1.1', '1.x', '2.0'], $this->git->getVersionBranches('origin'));
-        self::assertSame([], $this->git->getVersionBranches('upstream'));
+        self::assertSame([], $this->git->getVersionBranches(REMOTE_MAIN));
     }
 
     /** @test */
@@ -143,16 +143,16 @@ final class GitBranchTest extends TestCase
     {
         $this->setUpstreamRepository();
         $this->givenRemoteBranchesExist(['2.0', '1.x']);
-        $this->givenRemoteBranchesExist(['3.0'], 'upstream');
+        $this->givenRemoteBranchesExist(['3.0'], REMOTE_MAIN);
 
         self::assertTrue($this->git->remoteBranchExists('origin', 'master'));
         self::assertTrue($this->git->remoteBranchExists('origin', '1.x'));
         self::assertTrue($this->git->remoteBranchExists('origin', '2.0'));
 
         self::assertFalse($this->git->remoteBranchExists('origin', '3.0'));
-        self::assertTrue($this->git->remoteBranchExists('upstream', '3.0'));
-        self::assertFalse($this->git->remoteBranchExists('upstream', '1.x'));
-        self::assertFalse($this->git->remoteBranchExists('upstream', '2.0'));
+        self::assertTrue($this->git->remoteBranchExists(REMOTE_MAIN, '3.0'));
+        self::assertFalse($this->git->remoteBranchExists(REMOTE_MAIN, '1.x'));
+        self::assertFalse($this->git->remoteBranchExists(REMOTE_MAIN, '2.0'));
     }
 
     /** @test */

@@ -510,7 +510,7 @@ class Git
     }
 
     /** @return array{'host': string, 'org': string, 'repo': string} */
-    public function getRemoteInfo(string $name = 'upstream'): array
+    public function getRemoteInfo(string $name = REMOTE_MAIN): array
     {
         return self::getGitUrlInfo($this->getGitConfig('remote.' . $name . '.url'));
     }
