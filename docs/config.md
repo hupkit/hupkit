@@ -267,6 +267,36 @@ either a 'push url' or an array with following options
 **Note:** Missing directories are ignored with a warning. In HuPKit v2.0 this behavior is bound to change,
 use the branches configuration to ensure to paths are missing.
 
+Remote names
+------------
+
+By default HuPKit uses "upstream" as the remote-name for the main-repository.
+If for any reason you need to change this, either because you use a different
+convention or only use "origin" without a fork, you can use a local configuration
+file to change this.
+
+Add a ".hk_remotes" file at the root-level of your repository with the following contents:
+
+```ini
+; Commented line
+
+main = upstream
+fork = origin
+```
+
+The config "main" is the main repository which all team-members pull and push from,
+"fork" is your own fork (if any).
+
+**Note:** This is about remote _names_ not actual repository url's.
+
+A line can contain either a comment _or_ a variable, no overwrites, no different names
+and not comments at the end of a declaration.
+
+**Caution:** This file should be ignored by Git as it only applies to your own local 
+`.git/config` file. 
+
+Use the `-v` flag with any command to see which value is used.
+
 ### Whats next?
 
 Run the `self-diagnose` command to ensure everything is configured correctly.

@@ -127,8 +127,8 @@ trait GitTesterTrait
     protected function setUpstreamRepository(): void
     {
         $upstreamRepos = $this->createBareGitDirectory($this->getTempDir() . '/git3');
-        $this->addRemote('upstream', $upstreamRepos, $this->localRepository);
-        $this->runCliCommand(['git', 'push', 'upstream', 'master'], $this->localRepository);
+        $this->addRemote(REMOTE_MAIN, $upstreamRepos, $this->localRepository);
+        $this->runCliCommand(['git', 'push', REMOTE_MAIN, 'master'], $this->localRepository);
     }
 
     protected function givenLocalBranchesExist(iterable $branches): void

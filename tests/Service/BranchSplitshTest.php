@@ -127,7 +127,7 @@ final class BranchSplitshTest extends TestCase
     /** @test */
     public function splits_prefix_to_destinations_with_no_explicit_config(): void
     {
-        $this->git->ensureBranchInSync('upstream', '4.0')->shouldBeCalled();
+        $this->git->ensureBranchInSync(REMOTE_MAIN, '4.0')->shouldBeCalled();
         $this->expectGitSplit('src/Module/CoreModule', 'git@github.com:hubkit-sandbox/core-module.git', 'cc1', '4.0');
 
         self::assertEquals(
@@ -162,7 +162,7 @@ final class BranchSplitshTest extends TestCase
     /** @test */
     public function splits_prefix_to_destinations_with_explicit_config(): void
     {
-        $this->git->ensureBranchInSync('upstream', '2.1')->shouldBeCalled();
+        $this->git->ensureBranchInSync(REMOTE_MAIN, '2.1')->shouldBeCalled();
         $this->expectGitSplit('lobster', 'git@github.com:hubkit-sandbox/pinchy.git', 'cc1', '2.1');
 
         self::assertEquals(
@@ -181,7 +181,7 @@ final class BranchSplitshTest extends TestCase
     /** @test */
     public function split_prefix_to_destinations_fails_for_missing_prefix_configuration(): void
     {
-        $this->git->ensureBranchInSync('upstream', '4.1')->shouldBeCalled();
+        $this->git->ensureBranchInSync(REMOTE_MAIN, '4.1')->shouldBeCalled();
 
         $this->expectExceptionObject(new \InvalidArgumentException(
             'Unable to split repository at prefix: No entry found for "[repositories][github.com][repos][hubkit-sandbox/empire][branches][:default][split][pinchy]".'
@@ -193,7 +193,7 @@ final class BranchSplitshTest extends TestCase
     /** @test */
     public function splits_branch_to_destinations_with_no_explicit_config(): void
     {
-        $this->git->ensureBranchInSync('upstream', '4.0')->shouldBeCalled();
+        $this->git->ensureBranchInSync(REMOTE_MAIN, '4.0')->shouldBeCalled();
         $this->expectGitSplit('src/Module/CoreModule', 'git@github.com:hubkit-sandbox/core-module.git', 'cc1', '4.0');
         $this->expectGitSplit('src/Module/WebhostingModule', 'git@github.com:hubkit-sandbox/webhosting-module.git', 'cc2', '4.0');
 
@@ -216,7 +216,7 @@ final class BranchSplitshTest extends TestCase
     /** @test */
     public function splits_branch_to_destinations_with_explicit_config(): void
     {
-        $this->git->ensureBranchInSync('upstream', '2.1')->shouldBeCalled();
+        $this->git->ensureBranchInSync(REMOTE_MAIN, '2.1')->shouldBeCalled();
         $this->expectGitSplit('src/Module/CoreModule', 'git@github.com:hubkit-sandbox/core-module.git', 'cc1', '2.1');
         $this->expectGitSplit('src/Module/WebhostingModule', 'git@github.com:hubkit-sandbox/webhosting-module.git', 'cc2', '2.1');
         $this->expectGitSplit('lobster', 'git@github.com:hubkit-sandbox/pinchy.git', 'cc3', '2.1');
@@ -242,7 +242,7 @@ final class BranchSplitshTest extends TestCase
     /** @test */
     public function splits_branch_to_destinations_with_explicit_config2(): void
     {
-        $this->git->ensureBranchInSync('upstream', 'master')->shouldBeCalled();
+        $this->git->ensureBranchInSync(REMOTE_MAIN, 'master')->shouldBeCalled();
         $this->expectGitSplit('src/Module/CoreModule', 'git@github.com:hubkit-sandbox/core-module.git', 'cc1');
         $this->expectGitSplit('src/Module/WebhostingModule', 'git@github.com:hubkit-sandbox/webhosting-module.git', 'cc2');
         $this->expectGitSplit('docs', 'git@github.com:hubkit-sandbox/docs.git', 'cc3');
@@ -295,7 +295,7 @@ final class BranchSplitshTest extends TestCase
     /** @test */
     public function dry_splits_prefix_to_destinations_with_no_explicit_config(): void
     {
-        $this->git->ensureBranchInSync('upstream', '4.0')->shouldBeCalled();
+        $this->git->ensureBranchInSync(REMOTE_MAIN, '4.0')->shouldBeCalled();
         $this->expectNoSplitPerformed();
 
         $this->getBranchSplitsh()->drySplitAtPrefix('4.0', 'src/Module/CoreModule');
@@ -309,7 +309,7 @@ final class BranchSplitshTest extends TestCase
     /** @test */
     public function dry_splits_prefix_to_destinations_with_explicit_config(): void
     {
-        $this->git->ensureBranchInSync('upstream', '2.1')->shouldBeCalled();
+        $this->git->ensureBranchInSync(REMOTE_MAIN, '2.1')->shouldBeCalled();
         $this->expectNoSplitPerformed();
 
         $this->getBranchSplitsh()->drySplitAtPrefix('2.1', 'lobster');
@@ -323,7 +323,7 @@ final class BranchSplitshTest extends TestCase
     /** @test */
     public function dry_split_prefix_to_destinations_fails_for_missing_prefix_configuration(): void
     {
-        $this->git->ensureBranchInSync('upstream', '2.1')->shouldBeCalled();
+        $this->git->ensureBranchInSync(REMOTE_MAIN, '2.1')->shouldBeCalled();
 
         $this->expectExceptionObject(new \InvalidArgumentException(
             'Unable to split repository at prefix: No entry found for "[repositories][github.com][repos][hubkit-sandbox/empire][branches][2.x][split][pinchy]".'
@@ -335,7 +335,7 @@ final class BranchSplitshTest extends TestCase
     /** @test */
     public function dry_split_prefix_to_destinations_fails_for_disabled_prefix_configuration(): void
     {
-        $this->git->ensureBranchInSync('upstream', '6.1')->shouldBeCalled();
+        $this->git->ensureBranchInSync(REMOTE_MAIN, '6.1')->shouldBeCalled();
 
         $this->expectExceptionObject(new \InvalidArgumentException(
             'Unable to split repository at prefix: Entry is disabled for "[repositories][github.com][repos][hubkit-sandbox/empire][branches][6.x][split][src/Module/WebhostingModule]".'

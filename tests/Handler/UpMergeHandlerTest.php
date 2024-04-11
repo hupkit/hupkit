@@ -81,17 +81,17 @@ final class UpMergeHandlerTest extends TestCase
     public function it_merges_current_branch_into_next_version_branch(): void
     {
         $this->git->getActiveBranchName()->willReturn('2.3');
-        $this->git->remoteUpdate('upstream')->shouldBeCalled();
+        $this->git->remoteUpdate(REMOTE_MAIN)->shouldBeCalled();
 
-        $this->git->getVersionBranches('upstream')->willReturn(['2.2', '2.3', '2.5', '2.6']);
+        $this->git->getVersionBranches(REMOTE_MAIN)->willReturn(['2.2', '2.3', '2.5', '2.6']);
 
-        $this->git->ensureBranchInSync('upstream', '2.3')->shouldBeCalled();
-        $this->git->checkoutRemoteBranch('upstream', '2.5')->shouldBeCalled();
-        $this->git->ensureBranchInSync('upstream', '2.5')->shouldBeCalled();
+        $this->git->ensureBranchInSync(REMOTE_MAIN, '2.3')->shouldBeCalled();
+        $this->git->checkoutRemoteBranch(REMOTE_MAIN, '2.5')->shouldBeCalled();
+        $this->git->ensureBranchInSync(REMOTE_MAIN, '2.5')->shouldBeCalled();
         $this->process->mustRun(['git', 'merge', '--no-ff', '--log', '2.3'])->shouldBeCalled();
 
         $this->git->checkout('2.3')->shouldBeCalled();
-        $this->git->pushToRemote('upstream', ['2.5'])->shouldBeCalled();
+        $this->git->pushToRemote(REMOTE_MAIN, ['2.5'])->shouldBeCalled();
 
         $this->branchSplitsh->splitBranch('2.5')->willReturn([]);
 
@@ -106,17 +106,17 @@ final class UpMergeHandlerTest extends TestCase
         $this->expectConfigHasSplits();
 
         $this->git->getActiveBranchName()->willReturn('2.3');
-        $this->git->remoteUpdate('upstream')->shouldBeCalled();
+        $this->git->remoteUpdate(REMOTE_MAIN)->shouldBeCalled();
 
-        $this->git->getVersionBranches('upstream')->willReturn(['2.2', '2.3', '2.5', '2.6']);
+        $this->git->getVersionBranches(REMOTE_MAIN)->willReturn(['2.2', '2.3', '2.5', '2.6']);
 
-        $this->git->ensureBranchInSync('upstream', '2.3')->shouldBeCalled();
-        $this->git->checkoutRemoteBranch('upstream', '2.5')->shouldBeCalled();
-        $this->git->ensureBranchInSync('upstream', '2.5')->shouldBeCalled();
+        $this->git->ensureBranchInSync(REMOTE_MAIN, '2.3')->shouldBeCalled();
+        $this->git->checkoutRemoteBranch(REMOTE_MAIN, '2.5')->shouldBeCalled();
+        $this->git->ensureBranchInSync(REMOTE_MAIN, '2.5')->shouldBeCalled();
         $this->process->mustRun(['git', 'merge', '--no-ff', '--log', '2.3'])->shouldBeCalled();
 
         $this->git->checkout('2.3')->shouldBeCalled();
-        $this->git->pushToRemote('upstream', ['2.5'])->shouldBeCalled();
+        $this->git->pushToRemote(REMOTE_MAIN, ['2.5'])->shouldBeCalled();
 
         $this->executeHandler($this->getArgs()->setOption('no-split', true));
 
@@ -127,17 +127,17 @@ final class UpMergeHandlerTest extends TestCase
     public function it_merges_current_branch_into_next_relative_version_branch(): void
     {
         $this->git->getActiveBranchName()->willReturn('2.3');
-        $this->git->remoteUpdate('upstream')->shouldBeCalled();
+        $this->git->remoteUpdate(REMOTE_MAIN)->shouldBeCalled();
 
-        $this->git->getVersionBranches('upstream')->willReturn(['2.2', '2.3', '2.x']);
+        $this->git->getVersionBranches(REMOTE_MAIN)->willReturn(['2.2', '2.3', '2.x']);
 
-        $this->git->ensureBranchInSync('upstream', '2.3')->shouldBeCalled();
-        $this->git->checkoutRemoteBranch('upstream', '2.x')->shouldBeCalled();
-        $this->git->ensureBranchInSync('upstream', '2.x')->shouldBeCalled();
+        $this->git->ensureBranchInSync(REMOTE_MAIN, '2.3')->shouldBeCalled();
+        $this->git->checkoutRemoteBranch(REMOTE_MAIN, '2.x')->shouldBeCalled();
+        $this->git->ensureBranchInSync(REMOTE_MAIN, '2.x')->shouldBeCalled();
         $this->process->mustRun(['git', 'merge', '--no-ff', '--log', '2.3'])->shouldBeCalled();
 
         $this->git->checkout('2.3')->shouldBeCalled();
-        $this->git->pushToRemote('upstream', ['2.x'])->shouldBeCalled();
+        $this->git->pushToRemote(REMOTE_MAIN, ['2.x'])->shouldBeCalled();
 
         $this->branchSplitsh->splitBranch('2.x')->willReturn([]);
 
@@ -150,17 +150,17 @@ final class UpMergeHandlerTest extends TestCase
     public function it_merges_to_master_when_current_branch_is_last_version(): void
     {
         $this->git->getActiveBranchName()->willReturn('2.6');
-        $this->git->remoteUpdate('upstream')->shouldBeCalled();
+        $this->git->remoteUpdate(REMOTE_MAIN)->shouldBeCalled();
 
-        $this->git->getVersionBranches('upstream')->willReturn(['2.2', '2.3', '2.5', '2.6']);
+        $this->git->getVersionBranches(REMOTE_MAIN)->willReturn(['2.2', '2.3', '2.5', '2.6']);
 
-        $this->git->ensureBranchInSync('upstream', '2.6')->shouldBeCalled();
-        $this->git->checkoutRemoteBranch('upstream', 'master')->shouldBeCalled();
-        $this->git->ensureBranchInSync('upstream', 'master')->shouldBeCalled();
+        $this->git->ensureBranchInSync(REMOTE_MAIN, '2.6')->shouldBeCalled();
+        $this->git->checkoutRemoteBranch(REMOTE_MAIN, 'master')->shouldBeCalled();
+        $this->git->ensureBranchInSync(REMOTE_MAIN, 'master')->shouldBeCalled();
         $this->process->mustRun(['git', 'merge', '--no-ff', '--log', '2.6'])->shouldBeCalled();
 
         $this->git->checkout('2.6')->shouldBeCalled();
-        $this->git->pushToRemote('upstream', ['master'])->shouldBeCalled();
+        $this->git->pushToRemote(REMOTE_MAIN, ['master'])->shouldBeCalled();
 
         $this->branchSplitsh->splitBranch('master')->willReturn([]);
 
@@ -173,8 +173,8 @@ final class UpMergeHandlerTest extends TestCase
     public function it_does_nothing_when_current_branch_is_not_a_version(): void
     {
         $this->git->getActiveBranchName()->willReturn('master');
-        $this->git->remoteUpdate('upstream')->shouldBeCalled();
-        $this->git->getVersionBranches('upstream')->willReturn(['2.2', '2.3', '2.5', '2.6']);
+        $this->git->remoteUpdate(REMOTE_MAIN)->shouldBeCalled();
+        $this->git->getVersionBranches(REMOTE_MAIN)->willReturn(['2.2', '2.3', '2.5', '2.6']);
 
         $this->executeHandler();
     }
@@ -182,18 +182,18 @@ final class UpMergeHandlerTest extends TestCase
     /** @test */
     public function it_merges_custom_branch_into_next_version_branch(): void
     {
-        $this->git->remoteUpdate('upstream')->shouldBeCalled();
+        $this->git->remoteUpdate(REMOTE_MAIN)->shouldBeCalled();
 
-        $this->git->getVersionBranches('upstream')->willReturn(['2.2', '2.3', '2.5', '2.6']);
-        $this->git->checkoutRemoteBranch('upstream', '2.3')->shouldBeCalled();
-        $this->git->ensureBranchInSync('upstream', '2.3')->shouldBeCalled();
+        $this->git->getVersionBranches(REMOTE_MAIN)->willReturn(['2.2', '2.3', '2.5', '2.6']);
+        $this->git->checkoutRemoteBranch(REMOTE_MAIN, '2.3')->shouldBeCalled();
+        $this->git->ensureBranchInSync(REMOTE_MAIN, '2.3')->shouldBeCalled();
 
-        $this->git->checkoutRemoteBranch('upstream', '2.5')->shouldBeCalled();
-        $this->git->ensureBranchInSync('upstream', '2.5')->shouldBeCalled();
+        $this->git->checkoutRemoteBranch(REMOTE_MAIN, '2.5')->shouldBeCalled();
+        $this->git->ensureBranchInSync(REMOTE_MAIN, '2.5')->shouldBeCalled();
         $this->process->mustRun(['git', 'merge', '--no-ff', '--log', '2.3'])->shouldBeCalled();
 
         $this->git->checkout('2.3')->shouldBeCalled();
-        $this->git->pushToRemote('upstream', ['2.5'])->shouldBeCalled();
+        $this->git->pushToRemote(REMOTE_MAIN, ['2.5'])->shouldBeCalled();
 
         $this->branchSplitsh->splitBranch('2.5')->willReturn([]);
 
@@ -208,30 +208,30 @@ final class UpMergeHandlerTest extends TestCase
     public function it_merges_current_branch_into_next_version_branches(): void
     {
         $this->git->getActiveBranchName()->willReturn('2.3');
-        $this->git->remoteUpdate('upstream')->shouldBeCalled();
+        $this->git->remoteUpdate(REMOTE_MAIN)->shouldBeCalled();
 
-        $this->git->getVersionBranches('upstream')->willReturn(['2.2', '2.3', '2.5', '2.6', '2.x']);
+        $this->git->getVersionBranches(REMOTE_MAIN)->willReturn(['2.2', '2.3', '2.5', '2.6', '2.x']);
 
-        $this->git->ensureBranchInSync('upstream', '2.3')->shouldBeCalled();
+        $this->git->ensureBranchInSync(REMOTE_MAIN, '2.3')->shouldBeCalled();
 
-        $this->git->checkoutRemoteBranch('upstream', '2.5')->shouldBeCalled();
-        $this->git->ensureBranchInSync('upstream', '2.5')->shouldBeCalled();
+        $this->git->checkoutRemoteBranch(REMOTE_MAIN, '2.5')->shouldBeCalled();
+        $this->git->ensureBranchInSync(REMOTE_MAIN, '2.5')->shouldBeCalled();
         $this->process->mustRun(['git', 'merge', '--no-ff', '--log', '2.3'])->shouldBeCalled();
 
-        $this->git->checkoutRemoteBranch('upstream', '2.6')->shouldBeCalled();
-        $this->git->ensureBranchInSync('upstream', '2.6')->shouldBeCalled();
+        $this->git->checkoutRemoteBranch(REMOTE_MAIN, '2.6')->shouldBeCalled();
+        $this->git->ensureBranchInSync(REMOTE_MAIN, '2.6')->shouldBeCalled();
         $this->process->mustRun(['git', 'merge', '--no-ff', '--log', '2.5'])->shouldBeCalled();
 
-        $this->git->checkoutRemoteBranch('upstream', '2.x')->shouldBeCalled();
-        $this->git->ensureBranchInSync('upstream', '2.x')->shouldBeCalled();
+        $this->git->checkoutRemoteBranch(REMOTE_MAIN, '2.x')->shouldBeCalled();
+        $this->git->ensureBranchInSync(REMOTE_MAIN, '2.x')->shouldBeCalled();
         $this->process->mustRun(['git', 'merge', '--no-ff', '--log', '2.6'])->shouldBeCalled();
 
-        $this->git->checkoutRemoteBranch('upstream', 'master')->shouldBeCalled();
-        $this->git->ensureBranchInSync('upstream', 'master')->shouldBeCalled();
+        $this->git->checkoutRemoteBranch(REMOTE_MAIN, 'master')->shouldBeCalled();
+        $this->git->ensureBranchInSync(REMOTE_MAIN, 'master')->shouldBeCalled();
         $this->process->mustRun(['git', 'merge', '--no-ff', '--log', '2.x'])->shouldBeCalled();
 
         $this->git->checkout('2.3')->shouldBeCalled();
-        $this->git->pushToRemote('upstream', ['2.5', '2.6', '2.x', 'master'])->shouldBeCalled();
+        $this->git->pushToRemote(REMOTE_MAIN, ['2.5', '2.6', '2.x', 'master'])->shouldBeCalled();
 
         foreach (['2.5', '2.6', '2.x', 'master'] as $branchTarget) {
             $this->branchSplitsh->splitBranch($branchTarget)->willReturn([]);
@@ -257,30 +257,30 @@ final class UpMergeHandlerTest extends TestCase
         }
 
         $this->git->getActiveBranchName()->willReturn('2.3');
-        $this->git->remoteUpdate('upstream')->shouldBeCalled();
+        $this->git->remoteUpdate(REMOTE_MAIN)->shouldBeCalled();
 
-        $this->git->getVersionBranches('upstream')->willReturn(['2.2', '2.3', '2.5', '2.6', '2.x']);
+        $this->git->getVersionBranches(REMOTE_MAIN)->willReturn(['2.2', '2.3', '2.5', '2.6', '2.x']);
 
-        $this->git->ensureBranchInSync('upstream', '2.3')->shouldBeCalled();
+        $this->git->ensureBranchInSync(REMOTE_MAIN, '2.3')->shouldBeCalled();
 
-        $this->git->checkoutRemoteBranch('upstream', '2.5')->shouldBeCalled();
-        $this->git->ensureBranchInSync('upstream', '2.5')->shouldBeCalled();
+        $this->git->checkoutRemoteBranch(REMOTE_MAIN, '2.5')->shouldBeCalled();
+        $this->git->ensureBranchInSync(REMOTE_MAIN, '2.5')->shouldBeCalled();
         $this->process->mustRun(['git', 'merge', '--no-ff', '--log', '2.3'])->shouldBeCalled();
 
-        $this->git->checkoutRemoteBranch('upstream', '2.6')->shouldBeCalled();
-        $this->git->ensureBranchInSync('upstream', '2.6')->shouldBeCalled();
+        $this->git->checkoutRemoteBranch(REMOTE_MAIN, '2.6')->shouldBeCalled();
+        $this->git->ensureBranchInSync(REMOTE_MAIN, '2.6')->shouldBeCalled();
         $this->process->mustRun(['git', 'merge', '--no-ff', '--log', '2.5'])->shouldBeCalled();
 
-        $this->git->checkoutRemoteBranch('upstream', '2.x')->shouldBeCalled();
-        $this->git->ensureBranchInSync('upstream', '2.x')->shouldBeCalled();
+        $this->git->checkoutRemoteBranch(REMOTE_MAIN, '2.x')->shouldBeCalled();
+        $this->git->ensureBranchInSync(REMOTE_MAIN, '2.x')->shouldBeCalled();
         $this->process->mustRun(['git', 'merge', '--no-ff', '--log', '2.6'])->shouldBeCalled();
 
-        $this->git->checkoutRemoteBranch('upstream', 'master')->shouldBeCalled();
-        $this->git->ensureBranchInSync('upstream', 'master')->shouldBeCalled();
+        $this->git->checkoutRemoteBranch(REMOTE_MAIN, 'master')->shouldBeCalled();
+        $this->git->ensureBranchInSync(REMOTE_MAIN, 'master')->shouldBeCalled();
         $this->process->mustRun(['git', 'merge', '--no-ff', '--log', '2.x'])->shouldBeCalled();
 
         $this->git->checkout('2.3')->shouldBeCalled();
-        $this->git->pushToRemote('upstream', ['2.5', '2.6', '2.x', 'master'])->shouldBeCalled();
+        $this->git->pushToRemote(REMOTE_MAIN, ['2.5', '2.6', '2.x', 'master'])->shouldBeCalled();
 
         $this->executeHandler($this->getArgs()->setOption('all', true));
 
@@ -298,30 +298,30 @@ final class UpMergeHandlerTest extends TestCase
         $this->expectConfigHasSplits();
 
         $this->git->getActiveBranchName()->willReturn('2.3');
-        $this->git->remoteUpdate('upstream')->shouldBeCalled();
+        $this->git->remoteUpdate(REMOTE_MAIN)->shouldBeCalled();
 
-        $this->git->getVersionBranches('upstream')->willReturn(['2.2', '2.3', '2.5', '2.6', '2.x']);
+        $this->git->getVersionBranches(REMOTE_MAIN)->willReturn(['2.2', '2.3', '2.5', '2.6', '2.x']);
 
-        $this->git->ensureBranchInSync('upstream', '2.3')->shouldBeCalled();
+        $this->git->ensureBranchInSync(REMOTE_MAIN, '2.3')->shouldBeCalled();
 
-        $this->git->checkoutRemoteBranch('upstream', '2.5')->shouldBeCalled();
-        $this->git->ensureBranchInSync('upstream', '2.5')->shouldBeCalled();
+        $this->git->checkoutRemoteBranch(REMOTE_MAIN, '2.5')->shouldBeCalled();
+        $this->git->ensureBranchInSync(REMOTE_MAIN, '2.5')->shouldBeCalled();
         $this->process->mustRun(['git', 'merge', '--no-ff', '--log', '2.3'])->shouldBeCalled();
 
-        $this->git->checkoutRemoteBranch('upstream', '2.6')->shouldBeCalled();
-        $this->git->ensureBranchInSync('upstream', '2.6')->shouldBeCalled();
+        $this->git->checkoutRemoteBranch(REMOTE_MAIN, '2.6')->shouldBeCalled();
+        $this->git->ensureBranchInSync(REMOTE_MAIN, '2.6')->shouldBeCalled();
         $this->process->mustRun(['git', 'merge', '--no-ff', '--log', '2.5'])->shouldBeCalled();
 
-        $this->git->checkoutRemoteBranch('upstream', '2.x')->shouldBeCalled();
-        $this->git->ensureBranchInSync('upstream', '2.x')->shouldBeCalled();
+        $this->git->checkoutRemoteBranch(REMOTE_MAIN, '2.x')->shouldBeCalled();
+        $this->git->ensureBranchInSync(REMOTE_MAIN, '2.x')->shouldBeCalled();
         $this->process->mustRun(['git', 'merge', '--no-ff', '--log', '2.6'])->shouldBeCalled();
 
-        $this->git->checkoutRemoteBranch('upstream', 'master')->shouldBeCalled();
-        $this->git->ensureBranchInSync('upstream', 'master')->shouldBeCalled();
+        $this->git->checkoutRemoteBranch(REMOTE_MAIN, 'master')->shouldBeCalled();
+        $this->git->ensureBranchInSync(REMOTE_MAIN, 'master')->shouldBeCalled();
         $this->process->mustRun(['git', 'merge', '--no-ff', '--log', '2.x'])->shouldBeCalled();
 
         $this->git->checkout('2.3')->shouldBeCalled();
-        $this->git->pushToRemote('upstream', ['2.5', '2.6', '2.x', 'master'])->shouldBeCalled();
+        $this->git->pushToRemote(REMOTE_MAIN, ['2.5', '2.6', '2.x', 'master'])->shouldBeCalled();
 
         $this->executeHandler($this->getArgs()->setOption('all', true)->setOption('no-split', true));
 
@@ -337,8 +337,8 @@ final class UpMergeHandlerTest extends TestCase
     public function it_does_nothing_with_all_when_current_branch_is_not_a_version(): void
     {
         $this->git->getActiveBranchName()->willReturn('master');
-        $this->git->remoteUpdate('upstream')->shouldBeCalled();
-        $this->git->getVersionBranches('upstream')->willReturn(['2.2', '2.3', '2.5', '2.6']);
+        $this->git->remoteUpdate(REMOTE_MAIN)->shouldBeCalled();
+        $this->git->getVersionBranches(REMOTE_MAIN)->willReturn(['2.2', '2.3', '2.5', '2.6']);
 
         self::assertSame(1, $this->executeHandler($this->getArgs()->setOption('all', true)));
 
@@ -361,9 +361,9 @@ final class UpMergeHandlerTest extends TestCase
         $this->config->setActiveRepository('github.com', 'park-manager/hubkit');
 
         $this->git->getActiveBranchName()->willReturn('2.6');
-        $this->git->remoteUpdate('upstream')->shouldBeCalled();
+        $this->git->remoteUpdate(REMOTE_MAIN)->shouldBeCalled();
 
-        $this->git->getVersionBranches('upstream')->willReturn(['2.2', '2.3', '2.5', '2.6']);
+        $this->git->getVersionBranches(REMOTE_MAIN)->willReturn(['2.2', '2.3', '2.5', '2.6']);
 
         $this->executeHandler();
 
@@ -373,11 +373,11 @@ final class UpMergeHandlerTest extends TestCase
     /** @test */
     public function error_message_contains_original_exception_message(): void
     {
-        $this->git->remoteUpdate('upstream')->shouldBeCalled();
+        $this->git->remoteUpdate(REMOTE_MAIN)->shouldBeCalled();
 
-        $this->git->getVersionBranches('upstream')->willReturn(['2.2', '2.3', '2.5', '2.6']);
-        $this->git->checkoutRemoteBranch('upstream', '2.3')->shouldBeCalled();
-        $this->git->ensureBranchInSync('upstream', '2.3')->willThrow(
+        $this->git->getVersionBranches(REMOTE_MAIN)->willReturn(['2.2', '2.3', '2.5', '2.6']);
+        $this->git->checkoutRemoteBranch(REMOTE_MAIN, '2.3')->shouldBeCalled();
+        $this->git->ensureBranchInSync(REMOTE_MAIN, '2.3')->willThrow(
             new \RuntimeException('Local branch is not up-to-date.')
         );
 
@@ -393,20 +393,20 @@ final class UpMergeHandlerTest extends TestCase
         $this->git->checkout('1.3')->shouldBeCalled();
 
         $this->git->getActiveBranchName()->willReturn('1.3');
-        $this->git->remoteUpdate('upstream')->shouldBeCalled();
+        $this->git->remoteUpdate(REMOTE_MAIN)->shouldBeCalled();
 
-        $this->git->getVersionBranches('upstream')->willReturn(['1.3', '2.2', '2.3', '2.5', '2.6', '2.x', '3.0']);
-        $this->git->ensureBranchInSync('upstream', '1.3')->shouldBeCalled();
+        $this->git->getVersionBranches(REMOTE_MAIN)->willReturn(['1.3', '2.2', '2.3', '2.5', '2.6', '2.x', '3.0']);
+        $this->git->ensureBranchInSync(REMOTE_MAIN, '1.3')->shouldBeCalled();
 
-        $this->git->checkoutRemoteBranch('upstream', '3.0')->shouldBeCalled();
-        $this->git->ensureBranchInSync('upstream', '3.0')->shouldBeCalled();
+        $this->git->checkoutRemoteBranch(REMOTE_MAIN, '3.0')->shouldBeCalled();
+        $this->git->ensureBranchInSync(REMOTE_MAIN, '3.0')->shouldBeCalled();
         $this->process->mustRun(['git', 'merge', '--no-ff', '--log', '1.3'])->shouldBeCalled();
 
-        $this->git->checkoutRemoteBranch('upstream', 'master')->shouldBeCalled();
-        $this->git->ensureBranchInSync('upstream', 'master')->shouldBeCalled();
+        $this->git->checkoutRemoteBranch(REMOTE_MAIN, 'master')->shouldBeCalled();
+        $this->git->ensureBranchInSync(REMOTE_MAIN, 'master')->shouldBeCalled();
         $this->process->mustRun(['git', 'merge', '--no-ff', '--log', '3.0'])->shouldBeCalled();
 
-        $this->git->pushToRemote('upstream', ['3.0', 'master'])->shouldBeCalled();
+        $this->git->pushToRemote(REMOTE_MAIN, ['3.0', 'master'])->shouldBeCalled();
 
         foreach (['3.0', 'master'] as $branchTarget) {
             $this->branchSplitsh->splitBranch($branchTarget)->willReturn([]);
@@ -430,9 +430,9 @@ final class UpMergeHandlerTest extends TestCase
         $this->expectConfigHasUpmergeDisabled();
 
         $this->git->getActiveBranchName()->willReturn('2.6');
-        $this->git->remoteUpdate('upstream')->shouldBeCalled();
+        $this->git->remoteUpdate(REMOTE_MAIN)->shouldBeCalled();
 
-        $this->git->getVersionBranches('upstream')->willReturn(['2.2', '2.3', '2.5', '2.6']);
+        $this->git->getVersionBranches(REMOTE_MAIN)->willReturn(['2.2', '2.3', '2.5', '2.6']);
 
         self::assertSame(1, $this->executeHandler());
 
@@ -443,11 +443,11 @@ final class UpMergeHandlerTest extends TestCase
     public function it_dry_merges_current_branch_into_next_version_branch(): void
     {
         $this->git->getActiveBranchName()->willReturn('2.3');
-        $this->git->remoteUpdate('upstream')->shouldBeCalled();
+        $this->git->remoteUpdate(REMOTE_MAIN)->shouldBeCalled();
 
-        $this->git->getVersionBranches('upstream')->willReturn(['2.2', '2.3', '2.5', '2.6']);
-        $this->git->ensureBranchInSync('upstream', '2.3')->shouldBeCalled();
-        $this->git->ensureBranchInSync('upstream', '2.5')->shouldBeCalled();
+        $this->git->getVersionBranches(REMOTE_MAIN)->willReturn(['2.2', '2.3', '2.5', '2.6']);
+        $this->git->ensureBranchInSync(REMOTE_MAIN, '2.3')->shouldBeCalled();
+        $this->git->ensureBranchInSync(REMOTE_MAIN, '2.5')->shouldBeCalled();
 
         $this->branchSplitsh->drySplitBranch('2.5')->shouldBeCalled();
 
@@ -460,14 +460,14 @@ final class UpMergeHandlerTest extends TestCase
     public function it_dry_merges_current_branch_into_next_version_branches(): void
     {
         $this->git->getActiveBranchName()->willReturn('2.3');
-        $this->git->remoteUpdate('upstream')->shouldBeCalled();
+        $this->git->remoteUpdate(REMOTE_MAIN)->shouldBeCalled();
 
-        $this->git->getVersionBranches('upstream')->willReturn(['2.2', '2.3', '2.5', '2.6', '2.x']);
-        $this->git->ensureBranchInSync('upstream', '2.3')->shouldBeCalled();
-        $this->git->ensureBranchInSync('upstream', '2.5')->shouldBeCalled();
-        $this->git->ensureBranchInSync('upstream', '2.6')->shouldBeCalled();
-        $this->git->ensureBranchInSync('upstream', '2.x')->shouldBeCalled();
-        $this->git->ensureBranchInSync('upstream', 'master')->shouldBeCalled();
+        $this->git->getVersionBranches(REMOTE_MAIN)->willReturn(['2.2', '2.3', '2.5', '2.6', '2.x']);
+        $this->git->ensureBranchInSync(REMOTE_MAIN, '2.3')->shouldBeCalled();
+        $this->git->ensureBranchInSync(REMOTE_MAIN, '2.5')->shouldBeCalled();
+        $this->git->ensureBranchInSync(REMOTE_MAIN, '2.6')->shouldBeCalled();
+        $this->git->ensureBranchInSync(REMOTE_MAIN, '2.x')->shouldBeCalled();
+        $this->git->ensureBranchInSync(REMOTE_MAIN, 'master')->shouldBeCalled();
 
         $this->branchSplitsh->drySplitBranch('2.5')->shouldBeCalled();
         $this->branchSplitsh->drySplitBranch('2.6')->shouldBeCalled();
@@ -500,26 +500,26 @@ final class UpMergeHandlerTest extends TestCase
         $this->config->setActiveRepository('github.com', 'park-manager/hubkit');
 
         $this->git->getActiveBranchName()->willReturn('2.3');
-        $this->git->remoteUpdate('upstream')->shouldBeCalled();
+        $this->git->remoteUpdate(REMOTE_MAIN)->shouldBeCalled();
 
-        $this->git->getVersionBranches('upstream')->willReturn(['2.2', '2.3', '2.5', '2.6', '2.x']);
+        $this->git->getVersionBranches(REMOTE_MAIN)->willReturn(['2.2', '2.3', '2.5', '2.6', '2.x']);
 
-        $this->git->ensureBranchInSync('upstream', '2.3')->shouldBeCalled();
+        $this->git->ensureBranchInSync(REMOTE_MAIN, '2.3')->shouldBeCalled();
 
-        $this->git->checkoutRemoteBranch('upstream', '2.5')->shouldBeCalled();
-        $this->git->ensureBranchInSync('upstream', '2.5')->shouldBeCalled();
+        $this->git->checkoutRemoteBranch(REMOTE_MAIN, '2.5')->shouldBeCalled();
+        $this->git->ensureBranchInSync(REMOTE_MAIN, '2.5')->shouldBeCalled();
         $this->process->mustRun(['git', 'merge', '--no-ff', '--log', '2.3'])->shouldBeCalled();
 
-        $this->git->checkoutRemoteBranch('upstream', '2.6')->shouldBeCalled();
-        $this->git->ensureBranchInSync('upstream', '2.6')->shouldBeCalled();
+        $this->git->checkoutRemoteBranch(REMOTE_MAIN, '2.6')->shouldBeCalled();
+        $this->git->ensureBranchInSync(REMOTE_MAIN, '2.6')->shouldBeCalled();
         $this->process->mustRun(['git', 'merge', '--no-ff', '--log', '2.5'])->shouldBeCalled();
 
-        $this->git->checkoutRemoteBranch('upstream', '2.x')->shouldBeCalled();
-        $this->git->ensureBranchInSync('upstream', '2.x')->shouldBeCalled();
+        $this->git->checkoutRemoteBranch(REMOTE_MAIN, '2.x')->shouldBeCalled();
+        $this->git->ensureBranchInSync(REMOTE_MAIN, '2.x')->shouldBeCalled();
         $this->process->mustRun(['git', 'merge', '--no-ff', '--log', '2.6'])->shouldBeCalled();
 
         $this->git->checkout('2.3')->shouldBeCalled();
-        $this->git->pushToRemote('upstream', ['2.5', '2.6', '2.x'])->shouldBeCalled();
+        $this->git->pushToRemote(REMOTE_MAIN, ['2.5', '2.6', '2.x'])->shouldBeCalled();
 
         $this->branchSplitsh->splitBranch('2.5')->willReturn([]);
         $this->branchSplitsh->splitBranch('2.6')->willReturn([]);

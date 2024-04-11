@@ -24,7 +24,7 @@ class SplitCreatedHandler extends GitBaseHandler
     public function handle(Args $args): void
     {
         $this->git->guardWorkingTreeReady();
-        $this->git->remoteUpdate('upstream');
+        $this->git->remoteUpdate(REMOTE_MAIN);
 
         $this->style->title('Repository Split Create');
         $this->informationHeader();

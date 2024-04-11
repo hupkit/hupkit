@@ -36,7 +36,7 @@ class EditConfigHandler extends ConfigBaseHandler
         }
 
         if (! $this->git->branchExists('_hubkit')) {
-            if ($this->git->remoteBranchExists('upstream', '_hubkit')) {
+            if ($this->git->remoteBranchExists(REMOTE_MAIN, '_hubkit')) {
                 throw new \RuntimeException(
                     'The "_hubkit" branch exists remote, but the branch was not found locally.' . \PHP_EOL .
                     'Run the "sync-config" command to pull-in the remote branch.' . \PHP_EOL
@@ -60,7 +60,7 @@ class EditConfigHandler extends ConfigBaseHandler
             'The "_hubkit" configuration branch was checked out.',
             'Make sure to add and commit once you are done.',
             sprintf('After you are done run `git checkout %s`.', $activeBranch),
-            'And run the `sync-config` command to push the configuration to the upstream repository.',
+            'And run the `sync-config` command to push the configuration to the remote repository.',
         ]);
     }
 

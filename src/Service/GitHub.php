@@ -39,10 +39,10 @@ class GitHub
 
     public function autoConfigure(Git $git): void
     {
-        $repo = $git->getRemoteInfo('upstream');
+        $repo = $git->getRemoteInfo(REMOTE_MAIN);
 
         if ($repo['org'] === '') {
-            throw new \RuntimeException('Remote "upstream" is missing or is missing information, unable to configure GitHub gateway.');
+            throw new \RuntimeException(sprintf('Remote "%s" is missing or is missing information, unable to configure GitHub gateway.', REMOTE_MAIN));
         }
 
         $this->initializeForHost($repo['host']);

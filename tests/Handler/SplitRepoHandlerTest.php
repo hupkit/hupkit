@@ -45,7 +45,7 @@ final class SplitRepoHandlerTest extends TestCase
     {
         $this->git = $this->prophesize(Git::class);
         $this->git->guardWorkingTreeReady()->shouldBeCalled();
-        $this->git->remoteUpdate('upstream')->shouldBeCalled();
+        $this->git->remoteUpdate(REMOTE_MAIN)->shouldBeCalled();
         $this->git->getActiveBranchName()->willReturn('master');
 
         $this->github = $this->prophesize(GitHub::class);
@@ -117,7 +117,7 @@ final class SplitRepoHandlerTest extends TestCase
     /** @test */
     public function it_splits_with_current_branch(): void
     {
-        $this->git->checkoutRemoteBranch('upstream', 'master')->shouldNotBeCalled();
+        $this->git->checkoutRemoteBranch(REMOTE_MAIN, 'master')->shouldNotBeCalled();
         $this->splitshGit->splitBranch('master')->willReturn(['core' => ['42431142', 'url']]);
 
         $args = $this->getArgs();
@@ -134,7 +134,7 @@ final class SplitRepoHandlerTest extends TestCase
     /** @test */
     public function it_dry_splits_with_current_branch(): void
     {
-        $this->git->checkoutRemoteBranch('upstream', 'master')->shouldNotBeCalled();
+        $this->git->checkoutRemoteBranch(REMOTE_MAIN, 'master')->shouldNotBeCalled();
         $this->splitshGit->drySplitBranch('master')->willReturn(2);
 
         $args = $this->getArgs();
@@ -153,7 +153,7 @@ final class SplitRepoHandlerTest extends TestCase
     /** @test */
     public function it_splits_specific_branch(): void
     {
-        $this->git->checkoutRemoteBranch('upstream', '2.0')->shouldBeCalled();
+        $this->git->checkoutRemoteBranch(REMOTE_MAIN, '2.0')->shouldBeCalled();
         $this->splitshGit->splitBranch('2.0')->willReturn(['core' => ['42431142', 'url']]);
 
         $args = $this->getArgs();
@@ -171,7 +171,7 @@ final class SplitRepoHandlerTest extends TestCase
     /** @test */
     public function it_splits_at_specific_prefix(): void
     {
-        $this->git->checkoutRemoteBranch('upstream', 'master')->shouldNotBeCalled();
+        $this->git->checkoutRemoteBranch(REMOTE_MAIN, 'master')->shouldNotBeCalled();
         $this->splitshGit->splitAtPrefix('master', 'src/Module/CoreModule')->willReturn(['core' => ['42431142', 'url']]);
 
         $args = $this->getArgs();
@@ -189,7 +189,7 @@ final class SplitRepoHandlerTest extends TestCase
     /** @test */
     public function it_dry_splits_at_specific_prefix(): void
     {
-        $this->git->checkoutRemoteBranch('upstream', 'master')->shouldNotBeCalled();
+        $this->git->checkoutRemoteBranch(REMOTE_MAIN, 'master')->shouldNotBeCalled();
         $this->splitshGit->drySplitAtPrefix('master', 'src/Module/CoreModule')->shouldBeCalled();
 
         $args = $this->getArgs();

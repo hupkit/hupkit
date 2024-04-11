@@ -24,6 +24,10 @@
 
         <env name="COLUMNS" value="272" />
         <env name="LINES" value="52" />
+
+        <!-- Use the test_ prefix to ensure no references are missed -->
+        <const name="REMOTE_MAIN" value="test_upstream" />
+        <const name="REMOTE_FORK" value="test_origin" />
     </php>
 
     <coverage>

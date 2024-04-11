@@ -135,7 +135,7 @@ final class GitConfigTest extends TestCase
     /** @test */
     public function it_gets_remote_info(): void
     {
-        $this->git->ensureRemoteExists('upstream', 'https://github.com/park-manager/hubkit');
+        $this->git->ensureRemoteExists(REMOTE_MAIN, 'https://github.com/park-manager/hubkit');
 
         self::assertEquals(
             [
@@ -143,7 +143,7 @@ final class GitConfigTest extends TestCase
                 'org' => 'park-manager',
                 'repo' => 'hubkit',
             ],
-            $this->git->getRemoteInfo('upstream')
+            $this->git->getRemoteInfo(REMOTE_MAIN)
         );
     }
 

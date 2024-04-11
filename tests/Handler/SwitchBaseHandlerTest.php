@@ -106,7 +106,7 @@ final class SwitchBaseHandlerTest extends TestCase
     /** @test */
     public function it_does_not_switch_to_non_existent_base(): void
     {
-        $this->git->remoteBranchExists('upstream', '2.0')->willReturn(false);
+        $this->git->remoteBranchExists(REMOTE_MAIN, '2.0')->willReturn(false);
         $this->github->getPullRequest(12)->willReturn([
             'state' => 'open',
             'base' => [
@@ -124,7 +124,7 @@ final class SwitchBaseHandlerTest extends TestCase
     public function it_does_not_switch_when_wc_is_not_ready(): void
     {
         $this->git->isWorkingTreeReady()->willReturn(false);
-        $this->git->remoteBranchExists('upstream', '2.0')->willReturn(true);
+        $this->git->remoteBranchExists(REMOTE_MAIN, '2.0')->willReturn(true);
         $this->github->getPullRequest(12)->willReturn([
             'state' => 'open',
             'base' => [
@@ -165,10 +165,10 @@ final class SwitchBaseHandlerTest extends TestCase
         $this->expectWorkingTreeReady();
         $this->git->getActiveBranchName()->willReturn('main');
 
-        $this->git->remoteBranchExists('upstream', '2.0')->will(self::trackReturn(Git::class, true));
+        $this->git->remoteBranchExists(REMOTE_MAIN, '2.0')->will(self::trackReturn(Git::class, true));
         $this->git->ensureRemoteExists('sstok', 'git://github.com/sstok/hupkit.git')->will(self::trackNoReturn(Git::class));
         $this->git->remoteUpdate('sstok')->will(self::trackNoReturn(Git::class));
-        $this->git->remoteUpdate('upstream')->shouldBeCalled();
+        $this->git->remoteUpdate(REMOTE_MAIN)->shouldBeCalled();
 
         $this->git->getGitDirectory()->willReturn($gitDir = '/:local');
         $this->filesystem->fileExists($gitDir . '/.hubkit-switch')->will(self::trackReturn(Filesystem::class, false));
@@ -182,7 +182,7 @@ final class SwitchBaseHandlerTest extends TestCase
         $this->git->checkout($tmpBranch, true)->will(self::trackNoReturn(Git::class));
         $this->filesystem->dumpFile($gitDir . '/.hubkit-switch', $tmpBranch)->will(self::trackNoReturn(Filesystem::class));
 
-        $this->process->mustRun(['git', 'rebase', '--onto', 'upstream/2.0', 'upstream/main', $tmpBranch])->will(self::trackReturn(CliProcess::class, $this->createMock(Process::class)));
+        $this->process->mustRun(['git', 'rebase', '--onto', REMOTE_MAIN . '/2.0', REMOTE_MAIN . '/main', $tmpBranch])->will(self::trackReturn(CliProcess::class, $this->createMock(Process::class)));
         $this->git->checkout('main')->will(self::trackNoReturn(Git::class));
 
         // Apply changes
@@ -197,7 +197,7 @@ final class SwitchBaseHandlerTest extends TestCase
 
         // Ensure all calls where made in the correct order.
         self::assertSame([
-            [Git::class, 'remoteBranchExists', ['upstream', '2.0']],
+            [Git::class, 'remoteBranchExists', [REMOTE_MAIN, '2.0']],
             [Git::class, 'ensureRemoteExists', ['sstok', 'git://github.com/sstok/hupkit.git']],
             [Git::class, 'remoteUpdate', ['sstok']],
             [Filesystem::class, 'fileExists', ['/:local/.hubkit-switch']],
@@ -206,7 +206,7 @@ final class SwitchBaseHandlerTest extends TestCase
             [Git::class, 'checkoutRemoteBranch', ['sstok', 'bug/new-feature-1', false]],
             [Git::class, 'checkout', ['_temp/sstok--bug/new-feature-1--2.0', true]],
             [Filesystem::class, 'dumpFile', ['/:local/.hubkit-switch', '_temp/sstok--bug/new-feature-1--2.0']],
-            [CliProcess::class, 'mustRun', [['git', 'rebase', '--onto', 'upstream/2.0', 'upstream/main', '_temp/sstok--bug/new-feature-1--2.0']]],
+            [CliProcess::class, 'mustRun', [['git', 'rebase', '--onto', REMOTE_MAIN . '/2.0', REMOTE_MAIN . '/main', '_temp/sstok--bug/new-feature-1--2.0']]],
             [Git::class, 'checkout', ['main']],
             [CliProcess::class, 'mustRun', [['git', 'push', '--force', 'sstok', '_temp/sstok--bug/new-feature-1--2.0:bug/new-feature-1'], 'Push failed (access disabled?)']],
             [CliProcess::class, 'run', [['git', 'branch', '-D', '_temp/sstok--bug/new-feature-1--2.0']]],
@@ -256,10 +256,10 @@ final class SwitchBaseHandlerTest extends TestCase
         $this->expectWorkingTreeReady();
         $this->git->getActiveBranchName()->willReturn('main');
 
-        $this->git->remoteBranchExists('upstream', '2.0')->will(self::trackReturn(Git::class, true));
+        $this->git->remoteBranchExists(REMOTE_MAIN, '2.0')->will(self::trackReturn(Git::class, true));
         $this->git->ensureRemoteExists('sstok', 'git://github.com/sstok/hupkit.git')->will(self::trackNoReturn(Git::class));
         $this->git->remoteUpdate('sstok')->will(self::trackNoReturn(Git::class));
-        $this->git->remoteUpdate('upstream')->shouldBeCalled();
+        $this->git->remoteUpdate(REMOTE_MAIN)->shouldBeCalled();
 
         $this->git->getGitDirectory()->willReturn($gitDir = '/:local');
         $this->filesystem->fileExists($gitDir . '/.hubkit-switch')->will(self::trackReturn(Filesystem::class, true));
@@ -299,10 +299,10 @@ final class SwitchBaseHandlerTest extends TestCase
         $this->expectWorkingTreeReady();
         $this->git->getActiveBranchName()->willReturn('main');
 
-        $this->git->remoteBranchExists('upstream', '2.0')->will(self::trackReturn(Git::class, true));
+        $this->git->remoteBranchExists(REMOTE_MAIN, '2.0')->will(self::trackReturn(Git::class, true));
         $this->git->ensureRemoteExists('sstok', 'git://github.com/sstok/hupkit.git')->will(self::trackNoReturn(Git::class));
         $this->git->remoteUpdate('sstok')->will(self::trackNoReturn(Git::class));
-        $this->git->remoteUpdate('upstream')->shouldBeCalled();
+        $this->git->remoteUpdate(REMOTE_MAIN)->shouldBeCalled();
 
         $this->git->getGitDirectory()->willReturn($gitDir = '/:local');
         $this->filesystem->fileExists($gitDir . '/.hubkit-switch')->will(self::trackReturn(Filesystem::class, true));
@@ -317,7 +317,7 @@ final class SwitchBaseHandlerTest extends TestCase
         $this->git->checkout($tmpBranch, true)->will(self::trackNoReturn(Git::class));
         $this->filesystem->dumpFile($gitDir . '/.hubkit-switch', $tmpBranch)->will(self::trackNoReturn(Filesystem::class));
 
-        $this->process->mustRun(['git', 'rebase', '--onto', 'upstream/2.0', 'upstream/main', $tmpBranch])->will(self::trackReturn(CliProcess::class, $this->createMock(Process::class)));
+        $this->process->mustRun(['git', 'rebase', '--onto', REMOTE_MAIN . '/2.0', REMOTE_MAIN . '/main', $tmpBranch])->will(self::trackReturn(CliProcess::class, $this->createMock(Process::class)));
         $this->git->checkout('main')->will(self::trackNoReturn(Git::class));
 
         // Apply changes
@@ -339,7 +339,7 @@ final class SwitchBaseHandlerTest extends TestCase
 
         // Ensure all calls where made in the correct order.
         self::assertSame([
-            [Git::class, 'remoteBranchExists', ['upstream', '2.0']],
+            [Git::class, 'remoteBranchExists', [REMOTE_MAIN, '2.0']],
             [Git::class, 'ensureRemoteExists', ['sstok', 'git://github.com/sstok/hupkit.git']],
             [Git::class, 'remoteUpdate', ['sstok']],
             [Filesystem::class, 'fileExists', ['/:local/.hubkit-switch']],
@@ -349,7 +349,7 @@ final class SwitchBaseHandlerTest extends TestCase
             [Git::class, 'checkoutRemoteBranch', ['sstok', 'bug/new-feature-1', false]],
             [Git::class, 'checkout', ['_temp/sstok--bug/new-feature-1--2.0', true]],
             [Filesystem::class, 'dumpFile', ['/:local/.hubkit-switch', '_temp/sstok--bug/new-feature-1--2.0']],
-            [CliProcess::class, 'mustRun', [['git', 'rebase', '--onto', 'upstream/2.0', 'upstream/main', '_temp/sstok--bug/new-feature-1--2.0']]],
+            [CliProcess::class, 'mustRun', [['git', 'rebase', '--onto', REMOTE_MAIN . '/2.0', REMOTE_MAIN . '/main', '_temp/sstok--bug/new-feature-1--2.0']]],
             [Git::class, 'checkout', ['main']],
             [CliProcess::class, 'mustRun', [['git', 'push', '--force', 'sstok', '_temp/sstok--bug/new-feature-1--2.0:bug/new-feature-1'], 'Push failed (access disabled?)']],
             [CliProcess::class, 'run', [['git', 'branch', '-D', '_temp/sstok--bug/new-feature-1--2.0']]],
@@ -399,10 +399,10 @@ final class SwitchBaseHandlerTest extends TestCase
         $this->expectWorkingTreeReady();
         $this->git->getActiveBranchName()->willReturn('main');
 
-        $this->git->remoteBranchExists('upstream', '2.0')->will(self::trackReturn(Git::class, true));
+        $this->git->remoteBranchExists(REMOTE_MAIN, '2.0')->will(self::trackReturn(Git::class, true));
         $this->git->ensureRemoteExists('sstok', 'git://github.com/sstok/hupkit.git')->will(self::trackNoReturn(Git::class));
         $this->git->remoteUpdate('sstok')->will(self::trackNoReturn(Git::class));
-        $this->git->remoteUpdate('upstream')->shouldBeCalled();
+        $this->git->remoteUpdate(REMOTE_MAIN)->shouldBeCalled();
 
         $this->git->getGitDirectory()->willReturn($gitDir = '/:local');
         $this->filesystem->fileExists($gitDir . '/.hubkit-switch')->will(self::trackReturn(Filesystem::class, true));
@@ -420,7 +420,7 @@ final class SwitchBaseHandlerTest extends TestCase
         $this->git->checkout($tmpBranch, true)->will(self::trackNoReturn(Git::class));
         $this->filesystem->dumpFile($gitDir . '/.hubkit-switch', $tmpBranch)->will(self::trackNoReturn(Filesystem::class));
 
-        $this->process->mustRun(['git', 'rebase', '--onto', 'upstream/2.0', 'upstream/main', $tmpBranch])->will(self::trackReturn(CliProcess::class, $this->createMock(Process::class)));
+        $this->process->mustRun(['git', 'rebase', '--onto', REMOTE_MAIN . '/2.0', REMOTE_MAIN . '/main', $tmpBranch])->will(self::trackReturn(CliProcess::class, $this->createMock(Process::class)));
         $this->git->checkout('main')->will(self::trackNoReturn(Git::class));
 
         // Apply changes
@@ -442,7 +442,7 @@ final class SwitchBaseHandlerTest extends TestCase
 
         // Ensure all calls where made in the correct order.
         self::assertSame([
-            [Git::class, 'remoteBranchExists', ['upstream', '2.0']],
+            [Git::class, 'remoteBranchExists', [REMOTE_MAIN, '2.0']],
             [Git::class, 'ensureRemoteExists', ['sstok', 'git://github.com/sstok/hupkit.git']],
             [Git::class, 'remoteUpdate', ['sstok']],
             [Filesystem::class, 'fileExists', ['/:local/.hubkit-switch']],
@@ -454,7 +454,7 @@ final class SwitchBaseHandlerTest extends TestCase
             [Git::class, 'checkoutRemoteBranch', ['sstok', 'bug/new-feature-1', false]],
             [Git::class, 'checkout', ['_temp/sstok--bug/new-feature-1--2.0', true]],
             [Filesystem::class, 'dumpFile', ['/:local/.hubkit-switch', '_temp/sstok--bug/new-feature-1--2.0']],
-            [CliProcess::class, 'mustRun', [['git', 'rebase', '--onto', 'upstream/2.0', 'upstream/main', '_temp/sstok--bug/new-feature-1--2.0']]],
+            [CliProcess::class, 'mustRun', [['git', 'rebase', '--onto', REMOTE_MAIN . '/2.0', REMOTE_MAIN . '/main', '_temp/sstok--bug/new-feature-1--2.0']]],
             [Git::class, 'checkout', ['main']],
             [CliProcess::class, 'mustRun', [['git', 'push', '--force', 'sstok', '_temp/sstok--bug/new-feature-1--2.0:bug/new-feature-1'], 'Push failed (access disabled?)']],
             [CliProcess::class, 'run', [['git', 'branch', '-D', '_temp/sstok--bug/new-feature-1--2.0']]],
@@ -504,10 +504,10 @@ final class SwitchBaseHandlerTest extends TestCase
         $this->expectWorkingTreeReady();
         $this->git->getActiveBranchName()->willReturn('main');
 
-        $this->git->remoteBranchExists('upstream', '2.0')->will(self::trackReturn(Git::class, true));
+        $this->git->remoteBranchExists(REMOTE_MAIN, '2.0')->will(self::trackReturn(Git::class, true));
         $this->git->ensureRemoteExists('sstok', 'git://github.com/sstok/hupkit.git')->will(self::trackNoReturn(Git::class));
         $this->git->remoteUpdate('sstok')->will(self::trackNoReturn(Git::class));
-        $this->git->remoteUpdate('upstream')->shouldBeCalled();
+        $this->git->remoteUpdate(REMOTE_MAIN)->shouldBeCalled();
 
         $this->git->getGitDirectory()->willReturn($gitDir = '/:local');
         $this->filesystem->fileExists($gitDir . '/.hubkit-switch')->will(self::trackReturn(Filesystem::class, true));
@@ -525,7 +525,7 @@ final class SwitchBaseHandlerTest extends TestCase
         $this->git->checkout($tmpBranch, true)->will(self::trackNoReturn(Git::class));
         $this->filesystem->dumpFile($gitDir . '/.hubkit-switch', $tmpBranch)->will(self::trackNoReturn(Filesystem::class));
 
-        $this->process->mustRun(['git', 'rebase', '--onto', 'upstream/2.0', 'upstream/main', $tmpBranch])->will(self::trackReturn(CliProcess::class, $this->createMock(Process::class)));
+        $this->process->mustRun(['git', 'rebase', '--onto', REMOTE_MAIN . '/2.0', REMOTE_MAIN . '/main', $tmpBranch])->will(self::trackReturn(CliProcess::class, $this->createMock(Process::class)));
         $this->git->checkout('main')->will(self::trackNoReturn(Git::class));
 
         // Apply changes
@@ -547,7 +547,7 @@ final class SwitchBaseHandlerTest extends TestCase
 
         // Ensure all calls where made in the correct order.
         self::assertSame([
-            [Git::class, 'remoteBranchExists', ['upstream', '2.0']],
+            [Git::class, 'remoteBranchExists', [REMOTE_MAIN, '2.0']],
             [Git::class, 'ensureRemoteExists', ['sstok', 'git://github.com/sstok/hupkit.git']],
             [Git::class, 'remoteUpdate', ['sstok']],
             [Filesystem::class, 'fileExists', ['/:local/.hubkit-switch']],
@@ -561,7 +561,7 @@ final class SwitchBaseHandlerTest extends TestCase
             [Git::class, 'checkoutRemoteBranch', ['sstok', 'bug/new-feature-1', false]],
             [Git::class, 'checkout', ['_temp/sstok--bug/new-feature-1--2.0', true]],
             [Filesystem::class, 'dumpFile', ['/:local/.hubkit-switch', '_temp/sstok--bug/new-feature-1--2.0']],
-            [CliProcess::class, 'mustRun', [['git', 'rebase', '--onto', 'upstream/2.0', 'upstream/main', '_temp/sstok--bug/new-feature-1--2.0']]],
+            [CliProcess::class, 'mustRun', [['git', 'rebase', '--onto', REMOTE_MAIN . '/2.0', REMOTE_MAIN . '/main', '_temp/sstok--bug/new-feature-1--2.0']]],
             [Git::class, 'checkout', ['main']],
             [CliProcess::class, 'mustRun', [['git', 'push', '--force', 'sstok', '_temp/sstok--bug/new-feature-1--2.0:bug/new-feature-1'], 'Push failed (access disabled?)']],
             [CliProcess::class, 'run', [['git', 'branch', '-D', '_temp/sstok--bug/new-feature-1--2.0']]],

@@ -58,7 +58,7 @@ final class ReleaseHandler extends GitBaseHandler
         $versionStr = (string) $version;
 
         $this->validateBranchCompatibility($branch, $version);
-        $this->git->ensureBranchInSync('upstream', $branch);
+        $this->git->ensureBranchInSync(REMOTE_MAIN, $branch);
 
         $this->style->writeln(
             [
@@ -88,7 +88,7 @@ final class ReleaseHandler extends GitBaseHandler
         $this->branchSplitsh->syncTags($branch, $versionStr);
 
         $this->process->mustRun(['git', 'tag', '-s', 'v' . $versionStr, '-m', 'Release ' . $versionStr]);
-        $this->process->mustRun(['git', 'push', 'upstream', 'v' . $versionStr]);
+        $this->process->mustRun(['git', 'push', REMOTE_MAIN, 'v' . $versionStr]);
 
         $release = $this->github->createRelease('v' . $versionStr, $changelog, $args->getOption('pre-release'), $args->getOption('title'));
 
@@ -107,7 +107,7 @@ final class ReleaseHandler extends GitBaseHandler
             return;
         }
 
-        if ($this->git->remoteBranchExists('upstream', $expected = $version->major . '.' . $version->minor)) {
+        if ($this->git->remoteBranchExists(REMOTE_MAIN, $expected = $version->major . '.' . $version->minor)) {
             $this->style->warning(
                 [
                     sprintf('This release will be created for the "%s" branch.', $branch),

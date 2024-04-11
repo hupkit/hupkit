@@ -43,7 +43,7 @@ final class SplitCreatedHandlerTest extends TestCase
     {
         $this->git = $this->prophesize(Git::class);
         $this->git->guardWorkingTreeReady()->shouldBeCalled();
-        $this->git->remoteUpdate('upstream')->shouldBeCalled();
+        $this->git->remoteUpdate(REMOTE_MAIN)->shouldBeCalled();
         $this->git->getActiveBranchName()->willReturn('master');
 
         $this->github = $this->prophesize(GitHub::class);

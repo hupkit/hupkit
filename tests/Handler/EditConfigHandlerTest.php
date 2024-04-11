@@ -42,7 +42,7 @@ final class EditConfigHandlerTest extends ConfigHandlerTestCase
     public function it_does_nothing_when_already_checked_out(): void
     {
         $this->git->getActiveBranchName()->willReturn('_hubkit');
-        $this->git->getRemoteDiffStatus('upstream', '_hubkit')->willReturn(Git::STATUS_UP_TO_DATE);
+        $this->git->getRemoteDiffStatus(REMOTE_MAIN, '_hubkit')->willReturn(Git::STATUS_UP_TO_DATE);
 
         $this->executeHandler();
 
@@ -53,7 +53,7 @@ final class EditConfigHandlerTest extends ConfigHandlerTestCase
     public function it_fails_with_already_existing_config_branch_outdated(): void
     {
         $this->git->branchExists('_hubkit')->willReturn(true);
-        $this->git->getRemoteDiffStatus('upstream', '_hubkit')->willReturn(Git::STATUS_DIVERGED);
+        $this->git->getRemoteDiffStatus(REMOTE_MAIN, '_hubkit')->willReturn(Git::STATUS_DIVERGED);
 
         $this->expectExceptionObject(new \RuntimeException('The remote "_hubkit" branch and local branch have diverged. Run the "sync-config" command first.'));
 
@@ -64,7 +64,7 @@ final class EditConfigHandlerTest extends ConfigHandlerTestCase
     public function it_fails_with_non_existing_config_branch(): void
     {
         $this->git->branchExists('_hubkit')->willReturn(false);
-        $this->git->remoteBranchExists('upstream', '_hubkit')->willReturn(false);
+        $this->git->remoteBranchExists(REMOTE_MAIN, '_hubkit')->willReturn(false);
 
         $this->expectExceptionObject(new \RuntimeException('The "_hubkit" branch does not exist yet. Run `init-config` first.'));
 
@@ -75,7 +75,7 @@ final class EditConfigHandlerTest extends ConfigHandlerTestCase
     public function it_fails_with_already_existing_remove_config_branch(): void
     {
         $this->git->branchExists('_hubkit')->willReturn(false);
-        $this->git->remoteBranchExists('upstream', '_hubkit')->willReturn(true);
+        $this->git->remoteBranchExists(REMOTE_MAIN, '_hubkit')->willReturn(true);
 
         $this->expectExceptionObject(new \RuntimeException(
             'The "_hubkit" branch exists remote, but the branch was not found locally.' . \PHP_EOL .
@@ -95,8 +95,8 @@ final class EditConfigHandlerTest extends ConfigHandlerTestCase
     public function it_fails_overwritten_ignored_files(array $gitIgnoreFiles, array $foundFiles = [], array $existingFiles = []): void
     {
         $this->git->branchExists('_hubkit')->willReturn(true);
-        $this->git->remoteBranchExists('upstream', '_hubkit')->willReturn(true);
-        $this->git->getRemoteDiffStatus('upstream', '_hubkit')->willReturn(Git::STATUS_UP_TO_DATE);
+        $this->git->remoteBranchExists(REMOTE_MAIN, '_hubkit')->willReturn(true);
+        $this->git->getRemoteDiffStatus(REMOTE_MAIN, '_hubkit')->willReturn(Git::STATUS_UP_TO_DATE);
 
         $this->filesystem->getCwd()->willReturn($cwd = ':/home/Jessie/project-name');
         $this->tempRepository->getLocal($cwd, '_hubkit')->willReturn($tempDirectory = ':/tmp/very-random-location-project');
@@ -192,8 +192,8 @@ final class EditConfigHandlerTest extends ConfigHandlerTestCase
     public function it_checks_out_config_branch(): void
     {
         $this->git->branchExists('_hubkit')->willReturn(true);
-        $this->git->remoteBranchExists('upstream', '_hubkit')->willReturn(true);
-        $this->git->getRemoteDiffStatus('upstream', '_hubkit')->willReturn(Git::STATUS_UP_TO_DATE);
+        $this->git->remoteBranchExists(REMOTE_MAIN, '_hubkit')->willReturn(true);
+        $this->git->getRemoteDiffStatus(REMOTE_MAIN, '_hubkit')->willReturn(Git::STATUS_UP_TO_DATE);
 
         $this->git->getActiveBranchName()->willReturn('master');
         $this->git->checkout('_hubkit')->shouldBeCalled();
@@ -213,7 +213,7 @@ final class EditConfigHandlerTest extends ConfigHandlerTestCase
             'The "_hubkit" configuration branch was checked out.',
             'Make sure to add and commit once you are done.',
             sprintf('After you are done run `git checkout %s`.', 'master'),
-            'And run the `sync-config` command to push the configuration to the upstream repository.',
+            'And run the `sync-config` command to push the configuration to the remote repository.',
         ]);
     }
 
