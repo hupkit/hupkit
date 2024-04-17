@@ -294,7 +294,7 @@ final class ConfigFactory
                             throw new \InvalidArgumentException(sprintf('Invalid branch-alias for %s, should should be a string to prevent casting mismatches.', $name));
                         }
 
-                        if (! preg_match('/^([1-9]\d*\.\d+)$/', (string) $label)) {
+                        if (! preg_match('/^([1-9]\d*\.\d+)$/', $label)) {
                             throw new \InvalidArgumentException(sprintf('Invalid branch-alias for %s, should consists of major and minor version without any prefix or suffix. like: 1.2. Got: %s', $name, $label));
                         }
 
