@@ -22,6 +22,7 @@ use HubKit\Service\Git;
 use HubKit\Service\GitHub;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument as PropArgument;
+use Prophecy\Argument\Token\TokenInterface;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
@@ -143,6 +144,7 @@ by who-else at 2014-11-23T14:50:24Z
 :+1:
 ');
 
+        $this->expectMetadata('feature', $pr['title']);
         $this->expectLocalUpdate();
         $this->expectLocalBranchNotExists();
 
@@ -195,6 +197,7 @@ by who-else at 2014-11-23T14:50:24Z
             false
         )->willReturn(['sha' => self::MERGE_SHA]);
 
+        $this->expectMetadata('feature', $pr['title']);
         $this->expectLocalUpdate();
         $this->expectLocalBranchNotExists();
 
@@ -286,6 +289,7 @@ by who-else at 2014-11-23T14:50:24Z
 :+1:
 ');
 
+        $this->expectMetadata('feature', $pr['title']);
         $this->expectLocalUpdate(false);
         $this->expectLocalBranchNotExists();
 
@@ -331,6 +335,7 @@ by who-else at 2014-11-23T14:50:24Z
             false
         )->willReturn(['sha' => self::MERGE_SHA]);
 
+        $this->expectMetadata('feature', $pr['title']);
         $this->expectNotes();
         $this->expectLocalUpdate(true, false);
         $this->expectLocalBranchNotExists();
@@ -376,6 +381,7 @@ by who-else at 2014-11-23T14:50:24Z
         )->willReturn(['sha' => self::MERGE_SHA]);
 
         $this->expectNotes();
+        $this->expectMetadata('feature', $pr['title']);
         $this->expectLocalUpdate(false);
         $this->expectLocalBranchNotExists();
 
@@ -418,6 +424,7 @@ by who-else at 2014-11-23T14:50:24Z
         )->willReturn(['sha' => self::MERGE_SHA]);
 
         $this->expectNotes();
+        $this->expectMetadata('feature', $pr['title']);
         $this->expectLocalUpdate();
         $this->expectLocalBranchNotExists();
 
@@ -459,6 +466,7 @@ by who-else at 2014-11-23T14:50:24Z
         )->willReturn(['sha' => self::MERGE_SHA]);
 
         $this->expectNotes();
+        $this->expectMetadata('feature', $pr['title']);
         $this->expectLocalUpdate();
         $this->expectLocalBranchExists(false);
 
@@ -507,6 +515,7 @@ by who-else at 2014-11-23T14:50:24Z
         )->willReturn(['sha' => self::MERGE_SHA]);
 
         $this->expectNotes();
+        $this->expectMetadata('feature', $pr['title']);
         $this->expectLocalUpdate();
         $this->expectLocalBranchExists();
 
@@ -555,6 +564,7 @@ by who-else at 2014-11-23T14:50:24Z
         )->willReturn(['sha' => self::MERGE_SHA]);
 
         $this->expectNotes();
+        $this->expectMetadata('feature', $pr['title']);
         $this->expectLocalUpdate();
         $this->expectLocalBranchExists(true, false);
 
@@ -603,6 +613,7 @@ by who-else at 2014-11-23T14:50:24Z
         )->willReturn(['sha' => self::MERGE_SHA]);
 
         $this->expectNotes();
+        $this->expectMetadata('feature', $pr['title']);
         $this->expectLocalUpdate();
         $this->expectLocalBranchExists(false, false);
 
@@ -658,6 +669,7 @@ by who-else at 2014-11-23T14:50:24Z
         )->willReturn(['sha' => self::MERGE_SHA]);
 
         $this->expectNotes();
+        $this->expectMetadata('feature', $pr['title']);
         $this->expectLocalUpdate();
         $this->expectLocalBranchNotExists();
 
@@ -701,6 +713,7 @@ by who-else at 2014-11-23T14:50:24Z
         )->willReturn(['sha' => self::MERGE_SHA]);
 
         $this->expectNotes();
+        $this->expectMetadata('feature', $pr['title']);
         $this->expectLocalUpdate();
         $this->expectLocalBranchNotExists();
 
@@ -759,6 +772,7 @@ by who-else at 2014-11-23T14:50:24Z
 :+1:
 ');
 
+        $this->expectMetadata('feature', $pr['title'], authors: ['doctor-wo', 'sstok']);
         $this->expectLocalUpdate();
         $this->expectLocalBranchNotExists();
 
@@ -819,6 +833,7 @@ by who-else at 2014-11-23T14:50:24Z
 :+1:
 ');
 
+        $this->expectMetadata('feature', $pr['title']);
         $this->expectLocalUpdate();
         $this->expectLocalBranchNotExists();
 
@@ -861,6 +876,7 @@ by who-else at 2014-11-23T14:50:24Z
             false
         )->willReturn(['sha' => self::MERGE_SHA]);
 
+        $this->expectMetadata('feature', $pr['title']);
         $this->expectNotes();
         $this->expectLocalUpdate();
         $this->expectLocalBranchNotExists();
@@ -920,6 +936,7 @@ by who-else at 2014-11-23T14:50:24Z
             false
         )->willReturn(['sha' => self::MERGE_SHA]);
 
+        $this->expectMetadata('feature', $pr['title']);
         $this->expectNotes();
         $this->expectLocalUpdate();
         $this->expectLocalBranchNotExists();
@@ -981,6 +998,7 @@ by who-else at 2014-11-23T14:50:24Z
             false
         )->willReturn(['sha' => self::MERGE_SHA]);
 
+        $this->expectMetadata('feature', $pr['title']);
         $this->expectNotes();
         $this->expectLocalUpdate();
         $this->expectLocalBranchNotExists();
@@ -1035,6 +1053,7 @@ by who-else at 2014-11-23T14:50:24Z
             false
         )->willReturn(['sha' => self::MERGE_SHA]);
 
+        $this->expectMetadata('feature', $pr['title']);
         $this->expectNotes();
         $this->expectLocalUpdate();
         $this->expectLocalBranchNotExists();
@@ -1105,6 +1124,7 @@ by who-else at 2014-11-23T14:50:24Z
             false
         )->willReturn(['sha' => self::MERGE_SHA]);
 
+        $this->expectMetadata('feature', $pr['title']);
         $this->expectNotes();
         $this->expectLocalUpdate();
         $this->expectLocalBranchNotExists();
@@ -1203,6 +1223,7 @@ by who-else at 2014-11-23T14:50:24Z
             true
         )->willReturn(['sha' => self::MERGE_SHA]);
 
+        $this->expectMetadata('feature', $pr['title'], labels: ['deprecation', 'bc-break']);
         $this->expectNotes();
         $this->expectLocalUpdate();
         $this->expectLocalBranchNotExists();
@@ -1316,6 +1337,7 @@ by who-else at 2014-11-23T14:50:24Z
             false
         )->willReturn(['sha' => self::MERGE_SHA]);
 
+        $this->expectMetadata('feature', $pr['title']);
         $this->expectNotes();
         $this->expectLocalUpdate();
         $this->expectLocalBranchNotExists();
@@ -1654,5 +1676,50 @@ by who-else at 2014-11-23T14:50:24Z
     private function expectNoSplits(): void
     {
         $this->branchSplitsh->splitBranch('master')->shouldNotBeCalled();
+    }
+
+    private function expectMetadata(string $category, string $title, array $labels = [], array $authors = ['sstok']): void
+    {
+        $this->git->addNotes(
+            new JsonValueToken([
+                'schema' => 1,
+                'id' => self::PR_NUMBER,
+                'category' => $category,
+                'title' => $title,
+                'flags' => $labels,
+                'authors' => $authors,
+            ]), self::MERGE_SHA, 'pr-metadata')->shouldBeCalled();
+        $this->git->pushToRemote(REMOTE_MAIN, 'refs/notes/pr-metadata')->shouldBeCalled();
+    }
+}
+
+class JsonValueToken implements TokenInterface
+{
+    /** @param array<string, mixed> $argument */
+    public function __construct(private array $argument) {}
+
+    public function scoreArgument(mixed $argument): bool | int
+    {
+        if (! \is_string($argument)) {
+            return false;
+        }
+
+        try {
+            $decoded = json_decode($argument, true, 512, \JSON_THROW_ON_ERROR);
+        } catch (\JsonException) {
+            return false;
+        }
+
+        return $decoded === $this->argument ? 8 : false;
+    }
+
+    public function isLast(): bool
+    {
+        return false;
+    }
+
+    public function __toString(): string
+    {
+        return json_encode($this->argument, \JSON_THROW_ON_ERROR);
     }
 }
