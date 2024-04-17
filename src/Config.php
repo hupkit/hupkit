@@ -118,8 +118,19 @@ final class Config
     }
 
     /** @return array<string, mixed> */
-    public function getForRepository(string $host, string $repository, ?bool &$isLocal = false): array
+    public function getForRepository(?string $host = null, ?string $repository = null, ?bool &$isLocal = false): array
     {
+        $host ??= $this->activeHost;
+        $repository ??= $this->activeRepository;
+
+        if ($host === null) {
+            throw new \InvalidArgumentException('Argument $host cannot be empty, and could not be resolved from default.');
+        }
+
+        if ($repository === null) {
+            throw new \InvalidArgumentException('Argument $repository cannot be empty, and could not be resolved from default');
+        }
+
         $globalConfig = $this->get(['repositories', $host, 'repos', $repository], ['branches' => []]);
 
         if ($this->activeHost === $host && $this->activeRepository === $repository) {

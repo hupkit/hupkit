@@ -96,6 +96,16 @@ return [
     
      // See branches section below for supported configuration 
     'branches' => [],
+
+    // Branches-alias for 'unstable' branches
+    //
+    // This only applies to branches that are not explicitly versioned (like 1.0, 1.5)
+    // The value should be a stable major.minor version (not: 0.5, master, 1.5-dev, 1.2-beta1) but 1.0, 1.5, 23.4
+    // 'branches_alias' => [
+    //     // 'main' => '1.0',
+    //     // 'dev/main' => '1.0',
+    //     // '1.x' => '1.5',
+    // ],
 ];
 ````
 

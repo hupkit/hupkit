@@ -21,6 +21,7 @@ use Prophecy\Prophecy\ObjectProphecy;
 use Webmozart\Console\Api\Args\Args;
 use Webmozart\Console\Api\Args\Format\ArgsFormat;
 use Webmozart\Console\Api\Args\Format\Argument;
+use Webmozart\Console\Api\Args\Format\Option;
 use Webmozart\Console\IO\BufferedIO;
 
 /**
@@ -29,6 +30,7 @@ use Webmozart\Console\IO\BufferedIO;
 final class BranchAliasHandlerTest extends TestCase
 {
     use ProphecyTrait;
+    use SymfonyStyleTrait;
 
     private ObjectProphecy $git;
     private BufferedIO $io;
@@ -75,6 +77,7 @@ final class BranchAliasHandlerTest extends TestCase
     {
         $format = ArgsFormat::build()
             ->addArgument(new Argument('alias', Argument::OPTIONAL | Argument::STRING))
+            ->addOption(new Option('no-warning', null, Option::BOOLEAN))
             ->getFormat()
         ;
 
@@ -84,7 +87,7 @@ final class BranchAliasHandlerTest extends TestCase
             $args->setArgument('alias', $alias);
         }
 
-        $handler = new BranchAliasHandler($this->git->reveal());
+        $handler = new BranchAliasHandler($this->git->reveal(), $this->createStyle());
         $handler->handle($args, $this->io);
     }
 }

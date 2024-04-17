@@ -214,21 +214,20 @@ final class MergeHandler extends GitBaseHandler
 
     private function getBaseBranchLabel(string $ref): string
     {
-        $primary = $this->git->getPrimaryBranch();
-
-        // Only the 'primary' branch is aliased.
-        if ($ref !== $primary) {
+        // Already a stable branch-name, only named ones like 'main'/'master',
+        // or relatives '1.x' or '0.1' are aliased.
+        if (preg_match('/^([1-9]\d*\.\d+)$/', $ref)) {
             return $ref;
         }
 
         // Resolve branch-alias here so it's shown before the category is asked.
-        $branchLabel = $this->aliasResolver->getAlias();
+        $branchLabel = $this->aliasResolver->getAlias($ref);
         $detectedBy = $this->aliasResolver->getDetectedBy();
 
         $this->style->text(
             sprintf(
                 '<fg=cyan>%s branch is aliased</> as <fg=cyan>%s</> <fg=yellow>(detected by %s)</>',
-                $primary,
+                $ref,
                 $branchLabel,
                 $detectedBy
             )

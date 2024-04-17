@@ -18,9 +18,7 @@ namespace HubKit;
  */
 final class RemotesConfigParser
 {
-    /**
-     * @return array{main?: string, fork?: string}
-     */
+    /** @return array{main?: string, fork?: string} */
     public static function parse(string $content): array
     {
         if (trim($content) === '') {

@@ -64,10 +64,9 @@ final class MergeHandlerTest extends TestCase
 
         $this->git = $this->prophesize(Git::class);
         $this->git->getActiveBranchName()->willReturn('master');
-        $this->git->getPrimaryBranch()->willReturn('master');
 
         $this->aliasResolver = $this->prophesize(BranchAliasResolver::class);
-        $this->aliasResolver->getAlias()->willReturn('1.0-dev');
+        $this->aliasResolver->getAlias('master')->willReturn('1.0-dev');
         $this->aliasResolver->getDetectedBy()->willReturn('composer.json "extra.branch-alias.dev-master"');
 
         $this->config = new Config([
