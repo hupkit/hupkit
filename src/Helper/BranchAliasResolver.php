@@ -13,29 +13,25 @@ declare(strict_types=1);
 
 namespace HubKit\Helper;
 
+use HubKit\Config;
+use HubKit\Service\Filesystem;
 use HubKit\Service\Git;
 use Symfony\Component\Console\Style\StyleInterface;
 
 class BranchAliasResolver
 {
-    private readonly string $cwd;
     private string $detectedBy = '';
 
     public function __construct(
+        private readonly Filesystem $filesystem,
         private readonly StyleInterface $style,
         private readonly Git $git,
-        ?string $cwd = null
-    ) {
-        $this->cwd = $cwd ?? getcwd();
+        private readonly Config $config,
+    ) {}
 
-        if ($this->cwd === false) {
-            throw new \RuntimeException('No current working directory.');
-        }
-    }
-
-    public function getAlias(): string
+    public function getAlias(?string $branch = null): string
     {
-        $branch = $this->git->getPrimaryBranch();
+        $branch ??= $this->git->getActiveBranchName();
         $alias = $this->getAliasByComposer($branch);
 
         if ($alias !== '') {
@@ -44,8 +40,24 @@ class BranchAliasResolver
             return $alias;
         }
 
+        $alias = $this->config->getForRepository()['branches_alias'][$branch] ?? '';
+
+        if ($alias !== '') {
+            $this->detectedBy = 'configuration [branches_alias][' . $branch . ']';
+
+            return $alias;
+        }
+
         $this->detectedBy = 'Git config "branch.' . $branch . '.alias"';
         $alias = $this->git->getGitConfig('branch.' . $branch . '.alias');
+
+        $this->style->caution(
+            sprintf(
+                'Usage of %s is deprecated and will be removed in v2.0. Add either an "extra.branch-alias.dev-%s" in composer.json or add branches_alias.%2$s to the repository local configuration.',
+                $this->detectedBy,
+                $branch
+            )
+        );
 
         if ($alias !== '') {
             return $alias;
@@ -61,11 +73,11 @@ class BranchAliasResolver
 
     private function getAliasByComposer(string $branch): string
     {
-        if (! file_exists($this->cwd . '/composer.json')) {
+        if (! $this->filesystem->fileExists('./composer.json')) {
             return '';
         }
 
-        $composer = json_decode((string) file_get_contents($this->cwd . '/composer.json'), true, 512, \JSON_THROW_ON_ERROR);
+        $composer = json_decode($this->filesystem->getFileContents('./composer.json'), true, 512, \JSON_THROW_ON_ERROR);
 
         if (! isset($composer['extra']['branch-alias']['dev-' . $branch])) {
             return '';
@@ -95,7 +107,7 @@ class BranchAliasResolver
             'Branch alias',
             null,
             static function ($value) {
-                if (! preg_match('/^\d+\.\d+$/', $value)) {
+                if (! preg_match('/^([1-9]\d*\.\d+)$/', (string) $value)) {
                     throw new \InvalidArgumentException(
                         'A branch alias consists of major and minor version without any prefix or suffix. like: 1.2'
                     );

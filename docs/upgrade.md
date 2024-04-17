@@ -1,6 +1,24 @@
 Upgrade HuPKit
 ==============
 
+Upgrade to v1.3.0-BETA2
+-----------------------
+
+Storing the branch-alias in Git configuration is now deprecated and will be removed
+in v2.0. Either add the `extra.branch-alias.dev-main` in composer.json or 
+add `"branches_alias.main"` to the repository local configuration:
+
+```php
+return [
+    // ...
+
+    'branches_alias' => [
+        'main' => '1.0',
+    ],
+
+];
+```
+
 Upgrade to v1.2.0-BETA6
 -----------------------
 

@@ -195,6 +195,7 @@ final class ConfigFactory
                         ->arrayPrototype()
                             ->children()
                                 ->append($this->addBranchesNode())
+                                ->append($this->addBranchesAliasNode())
                             ->end()
                         ->end()
                     ->end()
@@ -273,6 +274,41 @@ final class ConfigFactory
         ;
     }
 
+    private function addBranchesAliasNode(): ArrayNodeDefinition
+    {
+        return (new TreeBuilder('branches_alias'))
+            ->getRootNode()
+            ->normalizeKeys(false)
+            ->useAttributeAsKey('name')
+            ->validate()
+                ->always()
+                ->then(static function ($v): array {
+                    foreach ($v as $name => $label) {
+                        try {
+                            self::validateBranchName($name);
+                        } catch (\InvalidArgumentException $e) {
+                            throw new \InvalidArgumentException(sprintf('Invalid branch-name %s: %s', json_encode($name), $e->getMessage()), 0, $e);
+                        }
+
+                        if (! \is_string($label)) {
+                            throw new \InvalidArgumentException(sprintf('Invalid branch-alias for %s, should should be a string to prevent casting mismatches.', $name));
+                        }
+
+                        if (! preg_match('/^([1-9]\d*\.\d+)$/', (string) $label)) {
+                            throw new \InvalidArgumentException(sprintf('Invalid branch-alias for %s, should consists of major and minor version without any prefix or suffix. like: 1.2. Got: %s', $name, $label));
+                        }
+
+                        $v[$name] = $label . '-dev';
+                    }
+
+                    return $v;
+                })
+            ->end()
+            ->scalarPrototype()
+            ->end()
+        ;
+    }
+
     /**
      * @param array<string, mixed> $config
      *
@@ -290,6 +326,7 @@ final class ConfigFactory
                     ->max(2)
                 ->end()
                 ->append($this->addBranchesNode())
+                ->append($this->addBranchesAliasNode())
                 ->enumNode('adapter')
                     ->values(['github'])
                     ->defaultValue('github')
@@ -299,27 +336,7 @@ final class ConfigFactory
                 ->scalarNode('main_branch')
                     ->defaultNull()
                     ->validate()
-                        ->always(function ($v) {
-                            if ($v === null) {
-                                return $this->findMainBranch();
-                            }
-
-                            $v = (string) $v;
-
-                            if (mb_strtoupper($v) === 'HEAD') {
-                                throw new \InvalidArgumentException('Cannot use Git ref HEAD as branch name.');
-                            }
-
-                            if (preg_match('{^(heads|tags|remotes|notes)/}i', $v) === 1) {
-                                throw new \InvalidArgumentException('Cannot start with Git refs (heads, tags, remotes, notes)/.');
-                            }
-
-                            if (preg_match('{^([\p{L}\p{N}]+([./_-]?[\p{L}\p{N}]+)?)+$}ui', $v) !== 1) {
-                                throw new \InvalidArgumentException('Invalid name provided, must follow the Git convention for branch names.');
-                            }
-
-                            return $v;
-                        })
+                        ->always(fn ($v) => $v === null ? $this->findMainBranch() : self::validateBranchName((string) $v))
                     ->end()
                 ->end()
             ->end()
@@ -363,5 +380,22 @@ final class ConfigFactory
         ], null, 'fg=yellow', ' ! ');
 
         return $branch;
+    }
+
+    private static function validateBranchName(string $v): string
+    {
+        if (mb_strtoupper($v) === 'HEAD') {
+            throw new \InvalidArgumentException('Cannot use Git ref HEAD as branch name.');
+        }
+
+        if (preg_match('{^(heads|tags|remotes|notes)/}i', $v) === 1) {
+            throw new \InvalidArgumentException('Cannot start with Git refs (heads, tags, remotes, notes)/.');
+        }
+
+        if (preg_match('{^([\p{L}\p{N}]+([./_-]?[\p{L}\p{N}]+)?)+$}ui', $v) !== 1) {
+            throw new \InvalidArgumentException('Invalid name provided, must follow the Git convention for branch names.');
+        }
+
+        return $v;
     }
 }

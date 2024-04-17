@@ -45,6 +45,7 @@ final class ConfigFactoryTest extends TestCase
                 'github.com' => [
                     'repos' => [
                         'park-manager/park-manager' => [
+                            'branches_alias' => [],
                             'branches' => [
                                 ':default' => [
                                     'sync-tags' => true,
@@ -106,6 +107,7 @@ final class ConfigFactoryTest extends TestCase
                 'github.com' => [
                     'repos' => [
                         'park-manager/park-manager' => [
+                            'branches_alias' => [],
                             'branches' => [
                                 ':default' => [
                                     'sync-tags' => true,
@@ -160,6 +162,7 @@ final class ConfigFactoryTest extends TestCase
                 'github.com' => [
                     'repos' => [
                         'park-manager/park-manager' => [
+                            'branches_alias' => [],
                             'branches' => [
                                 ':default' => [
                                     'sync-tags' => true,
@@ -254,6 +257,7 @@ final class ConfigFactoryTest extends TestCase
                 'github.com' => [
                     'repos' => [
                         'park-manager/park-manager' => [
+                            'branches_alias' => [],
                             'branches' => [
                                 ':default' => [
                                     'sync-tags' => true,
@@ -348,6 +352,7 @@ final class ConfigFactoryTest extends TestCase
                 'github.com' => [
                     'repos' => [
                         'park-manager/park-manager' => [
+                            'branches_alias' => [],
                             'branches' => [
                                 ':default' => [
                                     'sync-tags' => true,
@@ -442,6 +447,7 @@ final class ConfigFactoryTest extends TestCase
                 'github.com' => [
                     'repos' => [
                         'park-manager/park-manager' => [
+                            'branches_alias' => [],
                             'branches' => [
                                 ':default' => [
                                     'sync-tags' => true,
@@ -536,6 +542,7 @@ final class ConfigFactoryTest extends TestCase
                 'github.com' => [
                     'repos' => [
                         'park-manager/park-manager' => [
+                            'branches_alias' => [],
                             'branches' => [
                                 ':default' => [
                                     'sync-tags' => true,
@@ -559,6 +566,7 @@ final class ConfigFactoryTest extends TestCase
             '_local' => [
                 'schema_version' => 2,
                 'main_branch' => 'trunk',
+                'branches_alias' => [],
                 'branches' => [
                     ':default' => [
                         'upmerge' => true,
@@ -721,6 +729,59 @@ final class ConfigFactoryTest extends TestCase
         yield 'nested' => ['development/new'];
         yield 'nested deep' => ['development/remotes/new'];
         yield 'unicode' => ["\xCE\xA9"];
+    }
+
+    /** @test */
+    public function it_accepts_branches_aliasing(): void
+    {
+        $factory = new ConfigFactory(
+            __DIR__ . '/Fixtures/config/schema_v2_global',
+            __DIR__ . '/Fixtures/config/schema_v2_global/config2.php',
+            $this->createStyle(),
+            $this->getGitFileReaderWithNotExistentFile(),
+            $this->getGit(),
+        );
+
+        $config = $factory->resolveLocalConfig([
+            'schema_version' => 2,
+            'main_branch' => 'main',
+        ]);
+
+        self::assertEquals([
+            'schema_version' => 2,
+            'main_branch' => 'main',
+            'branches' => [],
+            'branches_alias' => [],
+            'adapter' => 'github',
+            'host' => null,
+            'repository' => null,
+        ], $config);
+
+        $config = $factory->resolveLocalConfig([
+            'schema_version' => 2,
+            'main_branch' => 'main',
+            'branches' => [],
+            'branches_alias' => [
+                'main' => '2.0',
+                'dev/trunk' => '3.0',
+            ],
+            'adapter' => 'github',
+            'host' => null,
+            'repository' => null,
+        ]);
+
+        self::assertEquals([
+            'schema_version' => 2,
+            'main_branch' => 'main',
+            'branches' => [],
+            'branches_alias' => [
+                'main' => '2.0-dev',
+                'dev/trunk' => '3.0-dev',
+            ],
+            'adapter' => 'github',
+            'host' => null,
+            'repository' => null,
+        ], $config);
     }
 
     /** @param array<int, string>|null $versionedBranches */

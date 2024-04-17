@@ -276,7 +276,7 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
                     $this->container['git'],
                     $this->container['github'],
                     $this->container['config'],
-                    new BranchAliasResolver($this->container['style'], $this->container['git'], getcwd()),
+                    new BranchAliasResolver($this->container['filesystem'], $this->container['style'], $this->container['git'], $this->container['config']),
                     new SingleLineChoiceQuestionHelper(),
                     $this->container['branch_splitsh_git']
                 );
@@ -301,11 +301,13 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
             ->end()
 
             ->beginCommand('branch-alias')
-            ->setDescription('Set/get the "primary" branch-alias. Omit alias argument to get the current alias.')
+            ->setDescription('[DEPRECATED] Set/get the "primary" branch-alias. Omit alias argument to get the current alias.')
             ->addArgument('alias', Argument::OPTIONAL | Argument::STRING, 'New alias to assign (omit to get the current alias)')
+            ->addOption('no-warning', null, Option::BOOLEAN, 'Hide the the deprecation warning if you need the pure value')
             ->setHandler(function () {
                 return new Handler\BranchAliasHandler(
-                    $this->container['git']
+                    $this->container['git'],
+                    $this->container['style'],
                 );
             })
             ->end()
