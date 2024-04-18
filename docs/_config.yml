@@ -1,4 +1,5 @@
-remote_theme: niklasbuschmann/contrast@v3.0
+remote_theme: mmistakes/minimal-mistakes
+theme: jekyll-theme-slate
 
 plugins:
   - jekyll-remote-theme
