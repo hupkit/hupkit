@@ -21,6 +21,16 @@ parameters:
 			path: src/Cli/Handler/MergeHandler.php
 
 		-
+			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\MergeHandler\\:\\:addMetadata\\(\\) has parameter \\$authors with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Cli/Handler/MergeHandler.php
+
+		-
+			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\MergeHandler\\:\\:addMetadata\\(\\) has parameter \\$pr with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Cli/Handler/MergeHandler.php
+
+		-
 			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\MergeHandler\\:\\:determineReviewStatus\\(\\) has parameter \\$pr with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: src/Cli/Handler/MergeHandler.php
@@ -1062,6 +1072,16 @@ parameters:
 
 		-
 			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\MergeHandlerTest\\:\\:expectLocalBranchExists\\(\\) has parameter \\$removeRemote with no type specified\\.$#"
+			count: 1
+			path: tests/Handler/MergeHandlerTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\MergeHandlerTest\\:\\:expectMetadata\\(\\) has parameter \\$authors with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/Handler/MergeHandlerTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\MergeHandlerTest\\:\\:expectMetadata\\(\\) has parameter \\$labels with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Handler/MergeHandlerTest.php
 

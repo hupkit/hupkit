@@ -78,7 +78,7 @@ final class MergeHandler extends GitBaseHandler
         $authors = [];
 
         $message = $this->getCommitMessage($pr, $authors, $branchLabel, $squash);
-        $title = $this->getCommitTitle($pr, $this->getCategory($pr, $args), $authors);
+        $title = $this->getCommitTitle($pr, $category = $this->getCategory($pr, $args), $authors);
 
         $mergeHash = $this->github->mergePullRequest($id, $title, $message, $pr['head']['sha'], $squash)['sha'];
 
@@ -88,6 +88,7 @@ final class MergeHandler extends GitBaseHandler
 
         $this->style->text('<fg=yellow>Pushing notes please wait...</>');
         $this->addCommentsToMergeCommit($pr, $mergeHash);
+        $this->addMetadata($mergeHash, $category, $pr, $authors);
 
         $this->style->success('Pull request has been merged.');
 
@@ -494,5 +495,35 @@ final class MergeHandler extends GitBaseHandler
         }
 
         return false;
+    }
+
+    private function addMetadata(string $sha, string $category, array $pr, array $authors): void
+    {
+        $labels = [];
+        $labelToMergeLabel = [
+            'deprecation' => 'deprecation',
+            'deprecation removal' => 'removed-deprecation',
+            'bc break' => 'bc-break',
+        ];
+
+        foreach ($pr['labels'] as $label) {
+            $labelName = mb_strtolower($label['name']);
+
+            if (isset($labelToMergeLabel[$labelName])) {
+                $labels[] = $labelToMergeLabel[$labelName];
+            }
+        }
+
+        $metadata = [
+            'schema' => 1,
+            'id' => $pr['number'],
+            'category' => $category,
+            'title' => $pr['title'],
+            'flags' => $labels,
+            'authors' => array_values($authors),
+        ];
+
+        $this->git->addNotes(json_encode($metadata, \JSON_THROW_ON_ERROR), $sha, 'pr-metadata');
+        $this->git->pushToRemote(REMOTE_MAIN, 'refs/notes/pr-metadata');
     }
 }

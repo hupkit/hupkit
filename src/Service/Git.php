@@ -308,6 +308,7 @@ class Git
             'notes',
             '--ref=' . $ref,
             'add',
+            '--no-stripspace',
             '-F',
             $tmpName,
             $commitHash,
