@@ -296,6 +296,20 @@ final class ConfigTest extends TestCase
                             'noop' => ['url' => 'git@github.com:hubkit-sandbox/noop.git'],
                         ],
                     ],
+                    'main' => [
+                        'sync-tags' => true,
+                        'split' => [
+                            'src/Module/CoreModule' => ['url' => 'git@github.com:hubkit-sandbox/core4-module.git'],
+                            'src/Module/WebhostingModule' => ['url' => 'git@github.com:hubkit-sandbox/webhosting4-module.git'],
+                        ],
+                    ],
+                    '#master' => [
+                        'sync-tags' => true,
+                        'split' => [
+                            'src/Module/CoreModule' => ['url' => 'git@github.com:hubkit-sandbox/core5-module.git'],
+                            'src/Module/WebhostingModule' => ['url' => 'git@github.com:hubkit-sandbox/webhosting5-module.git'],
+                        ],
+                    ],
                 ],
             ],
         ]);
@@ -474,6 +488,38 @@ final class ConfigTest extends TestCase
                 configPath: ['repositories', 'github.com', 'repos', 'hubkit-sandbox/application', 'branches', '11.0'],
             ),
             $config->getBranchConfig('11.0', 'github.com', 'hubkit-sandbox/application')
+        );
+
+        self::assertEquals(
+            new BranchConfig(
+                'main',
+                [
+                    'sync-tags' => true,
+                    'split' => [
+                        'src/Module/CoreModule' => ['url' => 'git@github.com:hubkit-sandbox/core4-module.git'],
+                        'src/Module/WebhostingModule' => ['url' => 'git@github.com:hubkit-sandbox/webhosting4-module.git'],
+                    ],
+                ],
+                configName: 'main',
+                configPath: ['_local', 'branches', 'main'],
+            ),
+            $config->getBranchConfig('main', 'github.com', 'hubkit-sandbox/empire')
+        );
+
+        self::assertEquals(
+            new BranchConfig(
+                '#master',
+                [
+                    'sync-tags' => true,
+                    'split' => [
+                        'src/Module/CoreModule' => ['url' => 'git@github.com:hubkit-sandbox/core5-module.git'],
+                        'src/Module/WebhostingModule' => ['url' => 'git@github.com:hubkit-sandbox/webhosting5-module.git'],
+                    ],
+                ],
+                configName: '#master',
+                configPath: ['_local', 'branches', '#master'],
+            ),
+            $config->getBranchConfig('master', 'github.com', 'hubkit-sandbox/empire')
         );
     }
 }

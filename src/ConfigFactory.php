@@ -214,16 +214,33 @@ final class ConfigFactory
                 ->always()
                 ->then(static function ($v): array {
                     foreach ($v as $name => $config) {
+                        if ($name === ':default') {
+                            continue;
+                        }
+
                         if ($name[0] === '/') {
                             if (@preg_match($name, 'test') === false) {
-                                throw new \InvalidArgumentException(sprintf('Invalid regexp %s error: %s.', json_encode($name), json_encode(error_get_last()['message'] ?? 'Unknown')));
+                                throw new \InvalidArgumentException(sprintf('Invalid regexp %s error: %s.', json_encode($name, \JSON_UNESCAPED_SLASHES), json_encode(error_get_last()['message'] ?? 'Unknown')), \JSON_UNESCAPED_SLASHES);
                             }
 
                             if (preg_match('{[\$\^]|/\w+$}', $name) > 0) {
                                 throw new \InvalidArgumentException(sprintf('Invalid regexp %s, cannot contain start/end anchor or options. Either "/[5-9]\.x/" not "/^[5-9].x$/i".', json_encode($name)));
                             }
-                        } elseif (preg_match('{^(:default|main|master|(#\d+\.x)|(\d+\.([x*]|\d+)))$}', $name) === 0) {
-                            throw new \InvalidArgumentException(sprintf('Invalid version or relative pattern %s, must be either "1.x" or "1.*", or "#1.x" (for an exact branch named 1.x), ":default", "main" or "master", or a regexp like "/0.[1-9]+/".', json_encode($name)));
+                        } else {
+                            if ($name[0] === '#') {
+                                $name = mb_substr($name, 1);
+                            }
+
+                            // 1.* would be invalid as branch-name
+                            if (preg_match('{^(\d+\.\*)$}', $name) === 1) {
+                                continue;
+                            }
+
+                            try {
+                                self::validateBranchName($name);
+                            } catch (\InvalidArgumentException $e) {
+                                throw new \InvalidArgumentException(sprintf('Invalid branch-name or relative pattern %s, must be either "1.x" or "1.*", or "#1.x" (for an exact branch named 1.x), ":default", any valid branch-name, or a regexp like "/0.[1-9]+/". Error: %s', json_encode($name, \JSON_UNESCAPED_SLASHES), $e->getMessage()), 0, $e);
+                            }
                         }
                     }
 

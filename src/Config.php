@@ -168,7 +168,7 @@ final class Config
          */
         $default = $branches[':default'] ?? [];
 
-        if (isset($branches['#' . $branchName]) && str_ends_with($branchName, '.x')) {
+        if (isset($branches['#' . $branchName])) {
             $branchName = '#' . $branchName;
         }
 

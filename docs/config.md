@@ -184,13 +184,13 @@ return [
 Each repository has a 'branches' configuration to either set the configuration
 for all branches using `:default`, or per specific branch `2.0`.
 
-A branch name can be either `:default` (see below), `main` _or_ `master`,
+A branch name can be either `:default` (see below), any valid branch-name,
 a minor-version pattern `2.x`/`v2.*`, or a regexp (without anchors or options)
 like `/[1-2]\.\d+/`.
 
 **Note:** When an actual branch is named like a pattern (`1.x`) use `#1.x` instead.
 
-The `:default` branch defines the default configuration for all branches, and
+The `:default` branch defines the default configuration for _all_ branches, and
 is later merged with the configuration of a specific branch. Use `'ignore-default' => true`
 for a specific branch configuration to ignore inherited defaults.
 
@@ -204,7 +204,9 @@ Use `false` to mark a branch as unmaintained and skip upmerging to *and*
 from this branch, this will give a warning whenever this branch is used
 for either merging, releasing, taking an issue, etc.
 
-**Tip:** Use regex ranges like `/[12].\d+/` to mark multiple versions at once.
+**Tip:** Use regexes like `/[12]\.\d+/` or `/main|dev/trunk|(12\.0)/` to use multiple 
+versions or names at once (no anchors or head grouping, `/main|master/` not 
+`/(main|12\.0)/`).
 
 Each branch has the following options:
 
@@ -213,7 +215,7 @@ Each branch has the following options:
 | `sync-tags`      | Boolean | `true`    | _Only when 'split' targets are configured_,<br/>whether new tags should be synchronized when creating a release. |
 | `ignore-default` | Boolean | `false`   | Whether the ':default' configuration should be ignored.                                                          |
 | `upmerge`        | Boolean | `true`    | Set to false to disable upmerge for this branch configuration, and continue with next possible version.          |
-| `split`          | array   | `[]`      | See [Repository splitting](#splitting) for details.                                                                       |
+| `split`          | array   | `[]`      | See [Repository splitting](#splitting) for details.                                                              |
 | `maintained`     | Boolean | `true`    | `true` when maintained, use `false` as config value shorthand.                                                   |
 
 ```php
@@ -231,6 +233,9 @@ Each branch has the following options:
             'docs' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => false],
         ],
     ],
+    'main' => [ // Can be any valid branch-name: dev/trunk, master, development
+        'src/Module/CustomerModule' => 'git@github.com:hubkit-sandbox/customer-module.git',
+    ],   
     '1.0' => false, // Mark branch as unmaintained
     '2.x' => [ // '2.x' is a pattern equivalent to '/2\.\d+/'
         'upmerge' => false, // Disable upmerge for this branch, effectively all of the '2.x' range are skipped
@@ -255,6 +260,8 @@ Each branch has the following options:
     ],
 ],
 ```
+
+**Note:** A branch cannot start with Git refs `(heads, tags, remotes, notes)/`, or be `HEAD`.
 
 #### Repository splitting (`split` config)
 <a name="splitting"></a>
