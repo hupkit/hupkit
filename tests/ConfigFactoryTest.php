@@ -630,31 +630,63 @@ final class ConfigFactoryTest extends TestCase
     /**
      * @test
      *
-     * @dataProvider provideInvalidConfigs
+     * @dataProvider provideInvalidBranchNames
      */
-    public function it_validates_configuration(string $configFile, string $message): void
+    public function it_validates_branches_naming(string $branchName, string $message): void
     {
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('Configuration contains one or more errors. ' . $message);
-
-        (new ConfigFactory(
-            __DIR__ . '/Fixtures/config/schema_v2_global',
-            __DIR__ . '/Fixtures/config/invalid/' . $configFile,
+        $factory = new ConfigFactory(
+            __DIR__ . '/Fixtures/config/schema_v2_local',
+            __DIR__ . '/Fixtures/config/schema_v2_global/config.php',
             $this->createStyle(),
             $this->getGitFileReaderWithNotExistentFile(),
             $this->getGit(),
-        ))->create();
+        );
+
+        try {
+            $factory->resolveLocalConfig([
+                'schema_version' => 2,
+                'branches' => [
+                    $branchName => [
+                        'split' => [
+                            'doc' => [
+                                'url' => 'git@github.com:park-manager/doc.git',
+                                'sync-tags' => false,
+                            ],
+                        ],
+                    ],
+                ],
+            ]);
+
+            self::fail('Expected exception to be thrown.');
+        } catch (\RuntimeException $e) {
+            self::assertEquals('Local configuration contains one or more errors. Invalid configuration for path "hubkit.branches": ' . $message, $e->getMessage());
+        }
     }
 
     /** @return iterable<string, array{0: string, 1: string}> */
-    public static function provideInvalidConfigs(): iterable
+    public static function provideInvalidBranchNames(): iterable
     {
-        yield 'branches: non versioned branch' => ['invalid_branch_name.php', 'Invalid configuration for path "hubkit.repositories.github.com.repos.park-manager/park-manager.branches": Invalid version or relative pattern "nee", must be either "1.x" or "1.*", or "#1.x" (for an exact branch named 1.x), ":default", "main" or "master", or a regexp like "/0.[1-9]+/".'];
-        yield 'branches: v prefix' => ['invalid_branch_pattern.php', 'Invalid configuration for path "hubkit.repositories.github.com.repos.park-manager/park-manager.branches": Invalid version or relative pattern "v2.0", must be either "1.x" or "1.*", or "#1.x" (for an exact branch named 1.x), ":default", "main" or "master", or a regexp like "/0.[1-9]+/".'];
-        yield 'branches: wildcard for major' => ['invalid_branch_pattern2.php', 'Invalid configuration for path "hubkit.repositories.github.com.repos.park-manager/park-manager.branches": Invalid version or relative pattern "x.0", must be either "1.x" or "1.*", or "#1.x" (for an exact branch named 1.x), ":default", "main" or "master", or a regexp like "/0.[1-9]+/".'];
-        yield 'branches: invalid regexp' => ['invalid_branch_regexp.php', 'Invalid configuration for path "hubkit.repositories.github.com.repos.park-manager/park-manager.branches": Invalid regexp "\/[]\/" error: "preg_match(): Compilation failed: missing terminating ] for character class at offset 2".'];
-        yield 'branches: regexp with options' => ['invalid_branch_regexp2.php', 'Invalid configuration for path "hubkit.repositories.github.com.repos.park-manager/park-manager.branches": Invalid regexp "\/\\\\d\\\\.\\\\d+\/s", cannot contain start/end anchor or options. Either "/[5-9]\.x/" not "/^[5-9].x$/i".'];
-        yield 'branches: regexp with anchors' => ['invalid_branch_regexp3.php', 'Invalid configuration for path "hubkit.repositories.github.com.repos.park-manager/park-manager.branches": Invalid regexp "\/^\\\\d\\\\.\\\\d+$\/", cannot contain start/end anchor or options. Either "/[5-9]\.x/" not "/^[5-9].x$/i".'];
+        // Any valid branch name, including non versioned
+        // Disallow deep references branch-names, HEAD, etc.
+
+        yield 'head ref' => ['head', 'Invalid branch-name or relative pattern "head", must be either "1.x" or "1.*", or "#1.x" (for an exact branch named 1.x), ":default", any valid branch-name, or a regexp like "/0.[1-9]+/". Error: Cannot use Git ref HEAD as branch name.'];
+        yield 'HEAD ref' => ['HEAD', 'Invalid branch-name or relative pattern "HEAD", must be either "1.x" or "1.*", or "#1.x" (for an exact branch named 1.x), ":default", any valid branch-name, or a regexp like "/0.[1-9]+/". Error: Cannot use Git ref HEAD as branch name.'];
+        yield '#HEAD ref' => ['#HEAD', 'Invalid branch-name or relative pattern "HEAD", must be either "1.x" or "1.*", or "#1.x" (for an exact branch named 1.x), ":default", any valid branch-name, or a regexp like "/0.[1-9]+/". Error: Cannot use Git ref HEAD as branch name.']; // Nice try
+        yield 'heads ref' => ['heads/main', 'Invalid branch-name or relative pattern "heads/main", must be either "1.x" or "1.*", or "#1.x" (for an exact branch named 1.x), ":default", any valid branch-name, or a regexp like "/0.[1-9]+/". Error: Cannot start with Git refs (heads, tags, remotes, notes)/.'];
+        yield 'tags ref' => ['tags/v1.0.0', 'Invalid branch-name or relative pattern "tags/v1.0.0", must be either "1.x" or "1.*", or "#1.x" (for an exact branch named 1.x), ":default", any valid branch-name, or a regexp like "/0.[1-9]+/". Error: Cannot start with Git refs (heads, tags, remotes, notes)/.'];
+        yield 'remote ref' => ['remotes/upstream/main', 'Invalid branch-name or relative pattern "remotes/upstream/main", must be either "1.x" or "1.*", or "#1.x" (for an exact branch named 1.x), ":default", any valid branch-name, or a regexp like "/0.[1-9]+/". Error: Cannot start with Git refs (heads, tags, remotes, notes)/.'];
+        yield 'notes ref' => ['notes/pull-request-metadata', 'Invalid branch-name or relative pattern "notes/pull-request-metadata", must be either "1.x" or "1.*", or "#1.x" (for an exact branch named 1.x), ":default", any valid branch-name, or a regexp like "/0.[1-9]+/". Error: Cannot start with Git refs (heads, tags, remotes, notes)/.'];
+
+        yield 'double dot' => ['feature../main', 'Invalid branch-name or relative pattern "feature../main", must be either "1.x" or "1.*", or "#1.x" (for an exact branch named 1.x), ":default", any valid branch-name, or a regexp like "/0.[1-9]+/". Error: Invalid name provided, must follow the Git convention for branch names.'];
+        yield 'double slash' => ['feature//main', 'Invalid branch-name or relative pattern "feature//main", must be either "1.x" or "1.*", or "#1.x" (for an exact branch named 1.x), ":default", any valid branch-name, or a regexp like "/0.[1-9]+/". Error: Invalid name provided, must follow the Git convention for branch names.'];
+        yield 'ends with slash' => ['feature/main/', 'Invalid branch-name or relative pattern "feature/main/", must be either "1.x" or "1.*", or "#1.x" (for an exact branch named 1.x), ":default", any valid branch-name, or a regexp like "/0.[1-9]+/". Error: Invalid name provided, must follow the Git convention for branch names.'];
+        yield 'space character' => ['feature main', 'Invalid branch-name or relative pattern "feature main", must be either "1.x" or "1.*", or "#1.x" (for an exact branch named 1.x), ":default", any valid branch-name, or a regexp like "/0.[1-9]+/". Error: Invalid name provided, must follow the Git convention for branch names.'];
+        yield 'double-dash' => ['feature--main', 'Invalid branch-name or relative pattern "feature--main", must be either "1.x" or "1.*", or "#1.x" (for an exact branch named 1.x), ":default", any valid branch-name, or a regexp like "/0.[1-9]+/". Error: Invalid name provided, must follow the Git convention for branch names.'];
+        yield 'double-dash with slash' => ['feature/-main', 'Invalid branch-name or relative pattern "feature/-main", must be either "1.x" or "1.*", or "#1.x" (for an exact branch named 1.x), ":default", any valid branch-name, or a regexp like "/0.[1-9]+/". Error: Invalid name provided, must follow the Git convention for branch names.'];
+
+        yield 'invalid regexp' => ['/[]/', 'Invalid regexp "/[]/" error: "preg_match(): Compilation failed: missing terminating ] for character class at offset 2".'];
+        yield 'regexp with options' => ['/\d\.\d+/s', 'Invalid regexp "\/\\\\d\\\\.\\\\d+\/s", cannot contain start/end anchor or options. Either "/[5-9]\.x/" not "/^[5-9].x$/i".'];
+        yield 'regexp with anchors' => ['/^\d\.\d+$/', 'Invalid regexp "\/^\\\\d\\\\.\\\\d+$\/", cannot contain start/end anchor or options. Either "/[5-9]\.x/" not "/^[5-9].x$/i".'];
     }
 
     /**
