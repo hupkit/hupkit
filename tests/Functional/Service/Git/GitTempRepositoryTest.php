@@ -95,6 +95,15 @@ final class GitTempRepositoryTest extends TestCase
     }
 
     /** @test */
+    public function it_creates_temporary_repository_for_specific_branch_without_switching(): void
+    {
+        $location = $this->gitTempRepository->getLocal($this->rootRepository, 'master');
+        $location2 = $this->gitTempRepository->getLocal($this->rootRepository, '_hubkit', true);
+
+        self::assertNotSame($location, $location2);
+    }
+
+    /** @test */
     public function it_updates_temporary_repository_for_specific_branch(): void
     {
         $location = $this->gitTempRepository->getLocal($this->rootRepository, 'master');
