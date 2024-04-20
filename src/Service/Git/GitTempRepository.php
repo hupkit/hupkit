@@ -28,14 +28,22 @@ class GitTempRepository
         private readonly Filesystem $filesystem
     ) {}
 
-    public function getLocal(string $directory, ?string $branch = null): string
+    /**
+     * @param bool $boundToBranch bind to the temp-location to $branch (to prevent switching during
+     *                            the process)
+     */
+    public function getLocal(string $directory, ?string $branch = null, bool $boundToBranch = false): string
     {
-        return $this->getRemote('file://' . $directory, $branch);
+        return $this->getRemote('file://' . $directory, $branch, $boundToBranch);
     }
 
-    public function getRemote(string $repositoryUrl, ?string $branch = null): string
+    /**
+     * @param bool $boundToBranch bind to the temp-location to $branch (to prevent switching during
+     *                            the process)
+     */
+    public function getRemote(string $repositoryUrl, ?string $branch = null, bool $boundToBranch = false): string
     {
-        $tempdir = $this->filesystem->storageTempDirectory('repo_' . sha1($repositoryUrl), false, $exists);
+        $tempdir = $this->filesystem->storageTempDirectory('repo_' . sha1($repositoryUrl . ($boundToBranch ? '~' . $branch : '')), false, $exists);
 
         if (! $exists) {
             $this->process->mustRun(['git', 'clone', '--no-checkout', '--origin', 'origin', $repositoryUrl, $tempdir]);
