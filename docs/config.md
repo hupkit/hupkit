@@ -307,8 +307,9 @@ The config "main" is the main repository which all team-members pull and push fr
 
 **Note:** This is about remote _names_ not actual repository url's.
 
-A line can contain either a comment _or_ a variable, no overwrites, no different names
-and not comments at the end of a declaration.
+The file format is similar to an ini-file, a line can contain either a comment (`; Commment`) 
+_or_ a variable ("main" or "fork"), no overwrites, no different names (than shown), 
+and comments can only be used on their own line (not at the end of a variable declaration).
 
 **Caution:** This file should be ignored by Git as it only applies to your own local
 `.git/config` file.
