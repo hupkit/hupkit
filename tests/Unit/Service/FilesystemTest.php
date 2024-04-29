@@ -34,18 +34,20 @@ final class FilesystemTest extends TestCase
     public const MOCK_TMP_DIR = '{:temp:}';
 
     private ?string $tempDir = null;
+    private ?string $cacheDir = null;
 
     /** @before */
     public function setUpTempDirectoryPath(): void
     {
         $this->tempDir = realpath(sys_get_temp_dir()) . '/hbk-fs/' . mb_substr(hash('sha256', random_bytes(8)), 0, 10);
+        $this->cacheDir = realpath(sys_get_temp_dir()) . '/hbk-cfs/' . mb_substr(hash('sha256', random_bytes(8)), 0, 10) . '/.hubkit_cache';
         self::assertDirectoryDoesNotExist($this->tempDir); // Pre-condition
     }
 
     /** @test */
     public function it_creates_a_temp_file_with_no_contents(): void
     {
-        $filesystem = new Filesystem($this->tempDir);
+        $filesystem = new Filesystem($this->tempDir, $this->cacheDir);
 
         $filename = $filesystem->newTempFilename();
 
@@ -59,7 +61,7 @@ final class FilesystemTest extends TestCase
     /** @test */
     public function it_creates_a_temp_file_with_contents(): void
     {
-        $filesystem = new Filesystem($this->tempDir);
+        $filesystem = new Filesystem($this->tempDir, $this->cacheDir);
 
         $filename = $filesystem->newTempFilename('Test, test. I am Testing my tests for you');
 
@@ -77,11 +79,12 @@ final class FilesystemTest extends TestCase
 
         $sfFilesystem = $this->prophesize(SfFilesystem::class);
         $sfFilesystem->mkdir('{:temp:}/hubkit')->shouldBeCalledOnce();
+        $sfFilesystem->mkdir('{:temp:}/.hubkit_cache')->shouldBeCalledOnce();
         $sfFilesystem->exists($path)->willReturn(false);
         $sfFilesystem->remove(Argument::any())->shouldNotBeCalled();
         $sfFilesystem->mkdir($path)->shouldBeCalledOnce();
 
-        $filesystem = new Filesystem(self::MOCK_TMP_DIR, $sfFilesystem->reveal());
+        $filesystem = new Filesystem(self::MOCK_TMP_DIR, self::MOCK_TMP_DIR . '/.hubkit_cache', $sfFilesystem->reveal());
 
         self::assertEquals($path, $filesystem->tempDirectory('split'));
     }
@@ -98,11 +101,12 @@ final class FilesystemTest extends TestCase
 
         $sfFilesystem = $this->prophesize(SfFilesystem::class);
         $sfFilesystem->mkdir('{:temp:}/hubkit')->shouldBeCalledOnce();
+        $sfFilesystem->mkdir('{:temp:}/.hubkit_cache')->shouldBeCalledOnce();
         $sfFilesystem->exists($path)->willReturn(true);
         $sfFilesystem->remove($path)->shouldBeCalledOnce();
         $sfFilesystem->mkdir($path)->shouldBeCalledOnce();
 
-        $filesystem = new Filesystem(self::MOCK_TMP_DIR, $sfFilesystem->reveal());
+        $filesystem = new Filesystem(self::MOCK_TMP_DIR, self::MOCK_TMP_DIR . '/.hubkit_cache', $sfFilesystem->reveal());
 
         self::assertEquals($path, $filesystem->tempDirectory('split'));
     }
@@ -132,7 +136,7 @@ final class FilesystemTest extends TestCase
                 }
             )
         )->shouldBeCalledOnce();
-        $filesystem = new Filesystem($this->tempDir, $sfFilesystem->reveal());
+        $filesystem = new Filesystem($this->tempDir, $this->cacheDir, $sfFilesystem->reveal());
 
         $filesystem->tempDirectory('split1');
         $filesystem->tempDirectory('split2');
