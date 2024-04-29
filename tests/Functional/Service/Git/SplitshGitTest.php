@@ -67,7 +67,7 @@ final class SplitshGitTest extends TestCase
         $this->createGitDirectory($tempDir . '/split-validator');
         $this->createGitDirectory($tempDir . '/split-doctrine');
 
-        $this->filesystem = new Filesystem($tempDir);
+        $this->filesystem = new Filesystem($tempDir, $tempDir . '/.hubkit_cache');
         $this->cliProcess = $this->getProcessService($this->rootRepository);
         $this->cliProcess->ignoreCwdChangeWhen(static fn (string $val): bool => true);
 

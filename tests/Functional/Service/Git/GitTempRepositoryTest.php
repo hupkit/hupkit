@@ -48,9 +48,9 @@ final class GitTempRepositoryTest extends TestCase
 
         $this->cwd = $this->rootRepository;
 
-        $this->filesystem ??= new Filesystem($tempDir);
+        $this->filesystem ??= new Filesystem($tempDir, cacheDir: sys_get_temp_dir() . '/hubkit_gfs_test/.hubkit_cache');
         $this->cliProcess = $this->getProcessService($this->rootRepository);
-        $this->cliProcess->ignoreCwdChangeWhen(static fn (string $val): bool => str_contains($val, '/hubkit/stor/repo_'));
+        $this->cliProcess->ignoreCwdChangeWhen(static fn (string $val): bool => str_contains($val, '/hubkit_gfs_test/.hubkit_cache/repo_'));
 
         $this->gitTempRepository ??= new GitTempRepository($this->cliProcess, $this->filesystem);
     }

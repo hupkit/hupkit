@@ -18,15 +18,23 @@ use Symfony\Component\Filesystem\Filesystem as SfFilesystem;
 class Filesystem
 {
     private readonly string $tempdir;
+    private readonly string $cacheDir;
     private readonly SfFilesystem $fs;
     private array $tempFilenames = [];
 
-    public function __construct(?string $tempdir = null, ?SfFilesystem $sfFilesystem = null)
+    public function __construct(?string $tempdir = null, ?string $cacheDir = null, ?SfFilesystem $sfFilesystem = null)
     {
         $this->fs = $sfFilesystem ?? new SfFilesystem();
+
         $this->tempdir = ($tempdir ?: sys_get_temp_dir()) . \DIRECTORY_SEPARATOR . 'hubkit';
+        $this->cacheDir = $cacheDir ?: ($_SERVER['HOME'] . \DIRECTORY_SEPARATOR . '.hubkit_cache');
+
+        if (! str_ends_with($this->cacheDir, '.hubkit_cache')) {
+            throw new \RuntimeException(sprintf('Cache directory is expected to end with ".hubkit_cache", got: %s', $this->cacheDir));
+        }
 
         $this->fs->mkdir($this->tempdir);
+        $this->fs->mkdir($this->cacheDir);
     }
 
     /**
@@ -123,11 +131,12 @@ class Filesystem
      */
     public function storageTempDirectory(string $name, bool $clearExisting = true, ?bool &$exists = null): string
     {
-        $tmpName = $this->tempdir . \DIRECTORY_SEPARATOR . 'stor' . \DIRECTORY_SEPARATOR . $name;
+        $tmpName = $this->cacheDir . \DIRECTORY_SEPARATOR . $name;
         $exists = $this->fs->exists($tmpName);
 
         if ($clearExisting && $exists) {
             $this->fs->remove($tmpName);
+            $exists = false;
         }
 
         $this->fs->mkdir($tmpName);
@@ -148,6 +157,7 @@ class Filesystem
     public function clearTempFolder(): void
     {
         $this->fs->remove($this->tempdir);
+        $this->fs->remove($this->cacheDir);
     }
 
     public function getFilesystem(): SfFilesystem
@@ -175,5 +185,10 @@ class Filesystem
     public function getTempdir(): string
     {
         return $this->tempdir;
+    }
+
+    public function getCacheDir(): string
+    {
+        return $this->cacheDir;
     }
 }

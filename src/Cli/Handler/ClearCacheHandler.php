@@ -44,7 +44,18 @@ final class ClearCacheHandler
                 ++$files;
             }
 
-            $this->style->comment(sprintf('Cache directory %s', $this->filesystem->getTempdir()));
+            /** @var \SplFileInfo $file */
+            foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($this->filesystem->getCacheDir(), \RecursiveDirectoryIterator::CURRENT_AS_FILEINFO | \RecursiveDirectoryIterator::SKIP_DOTS)) as $file) {
+                if (! $file->isFile()) {
+                    continue;
+                }
+
+                $size += $file->getSize() ?: 0;
+                ++$files;
+            }
+
+            $this->style->comment(sprintf('Temporary directory %s', $this->filesystem->getTempdir()));
+            $this->style->comment(sprintf('Cache directory %s', $this->filesystem->getCacheDir()));
             $this->style->comment(sprintf('Removed %s file taking-up %s of space', $files, Helper::formatMemory($size)));
         }
 

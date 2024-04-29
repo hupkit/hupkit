@@ -72,7 +72,7 @@ class Container extends \Pimple\Container implements ContainerInterface
             $container['git'],
         );
 
-        $this['filesystem'] = static fn () => new Service\Filesystem();
+        $this['filesystem'] = static fn () => new Service\Filesystem(cacheDir: $_SERVER['HUBKIT_CACHE_DIR'] ?? null);
 
         $this['editor'] = static fn (self $container) => new Service\Editor($container['process'], $container['filesystem']);
 
