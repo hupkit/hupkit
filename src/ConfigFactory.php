@@ -86,7 +86,7 @@ final class ConfigFactory
         }
 
         if (! isset($config['_local']['main_branch'])) {
-            // No local configuration provided, but still the main-branch must be resolvable
+            // No local configuration provided, but still the main-branch must be resolvable.
             // So store it here, there is no expectation to explicitly get this for a repository.
             //
             // In the future the whole concept for using 'global' configuration for a repository

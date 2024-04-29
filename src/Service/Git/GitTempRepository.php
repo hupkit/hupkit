@@ -29,7 +29,7 @@ class GitTempRepository
     ) {}
 
     /**
-     * @param bool $boundToBranch bind to the temp-location to $branch (to prevent switching during
+     * @param bool $boundToBranch bind the temp-location to $branch (to prevent switching during
      *                            the process)
      */
     public function getLocal(string $directory, ?string $branch = null, bool $boundToBranch = false): string
@@ -38,7 +38,7 @@ class GitTempRepository
     }
 
     /**
-     * @param bool $boundToBranch bind to the temp-location to $branch (to prevent switching during
+     * @param bool $boundToBranch bind the temp-location to $branch (to prevent switching during
      *                            the process)
      */
     public function getRemote(string $repositoryUrl, ?string $branch = null, bool $boundToBranch = false): string

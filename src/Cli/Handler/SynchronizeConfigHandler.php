@@ -49,7 +49,7 @@ final class SynchronizeConfigHandler extends GitBaseHandler
             case Git::STATUS_NEED_PULL:
                 $this->style->note('Pulling changes.');
                 $this->git->fetchRemote(REMOTE_MAIN, '_hubkit:_hubkit');
-                $this->style->success('Updated your local _hubkit branch with repository repository.');
+                $this->style->success('Updated your local _hubkit branch with remote repository.');
 
                 return 0;
 
