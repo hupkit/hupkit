@@ -12,8 +12,9 @@ $ hupkit merge 22
 
 And choose a category (feature, refactor, bug, minor, style, security).
 
-**Note:** You may get a warning that some checks are pending, depending on your
-repository's branch protection you may not be able to merge then.
+> [!NOTE]
+> You may get a warning that some checks are pending, depending on your
+> repository's branch protection you may not be able to merge then.
 
 Once the pull request is merged your local branch (if existent) is automatically
 updated. Use the `--no-pull` option to skip pulling changes to your local base branch.
@@ -21,9 +22,10 @@ updated. Use the `--no-pull` option to skip pulling changes to your local base b
 If you are the author of the pull request, your "feature" branch is automatically
 removed as it's no longer needed. Use the `--no-cleanup` option to skip this.
 
-**Note:** The branch is only removed when it's fully merged to the target branch.
+> [!NOTE]
+> The branch is only removed when it's fully merged to the target branch.
 
-## Bat on the back
+## Pat on the back
 
 Once the pull request is merged the author (unless you are merging your own)
 automatically gets little "pat on the back" for there work.
@@ -36,8 +38,9 @@ $ hupkit merge 22 --pat=':beers: @author !'
 
 Or use the `--no-pat` option to skip it for this merge.
 
-**Caution:** The `!` has a special meaning in the shell, use single quotes
-to prevent expansion.
+> [!CAUTION]
+> The `!` character has a special meaning in the shell, use single quotes
+> to prevent expansion.
 
 ## Squash
 

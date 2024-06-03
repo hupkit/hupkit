@@ -50,7 +50,8 @@ return function (Container $container, Version $version, string $branch, ?string
 };
 ```
 
-**Note:** The hook is executed in the HuPKit application's context, you have full access to entire applications flow!
+> [!NOTE]
+> The hook is executed in the HuPKit application's context, you have full access to entire applications flow!
 
 While possible it's' best not to load external dependencies as there is currently no promise this will work
 when HuPKit uses similar dependencies. In this case it might be better to use the `process` service to execute
@@ -126,8 +127,9 @@ return function (Container $container, Version $version, string $branch, ?string
 
 ### Creating a pull request for the release (pre-release)
 
-**Caution:** This technique is not to be used as-is, understand the risk and be sure to apply enough
-error protections.
+> [!IMPORTANT]
+> This technique is not to be used as-is, understand the risk and be sure to apply enough
+> error protections.
 
 ```php
 <?php

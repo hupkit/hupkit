@@ -5,8 +5,9 @@ A special feature of HuPKit is the ability to handle monolith project developmen
 instead of having separate Git repositories for each package, all are housed in a
 central repository from where all work is coordinated.
 
-**Before you continue make sure [splitsh-lite](https://github.com/splitsh/lite) is
-installed and can be found in your `PATH` environment (no `alias`!).**
+> [!NOTE]
+> Before you continue make sure [splitsh-lite](https://github.com/splitsh/lite)
+> is installed and can be found in your `PATH` environment (no `alias`!).
 
 ### Configuration
 

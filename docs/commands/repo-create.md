@@ -10,8 +10,9 @@ $ hupkit repo-create hupkit/hupkit
 This creates the "hupkit" repository in the "hupkit" organization. To create a
 private repository (may require a paid plan) use the `--private` option.
 
-**Tip:** Since HuPKit v1.2 use the `split-create` command to automatically create
-repositories for split targets.
+> [!TIP]
+> Since HuPKit v1.2 use the `split-create` command to automatically create
+> repositories for split targets.
 
 # Special options
 

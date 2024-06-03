@@ -1,6 +1,10 @@
 branch-alias
 ============
 
+>
+> This command is deprecated since v1.3, set a `branches_alias` instead
+> `['branches_alias.main' => '1.2']` in the repository local configuration, at root level.
+
 Set/get the "master" branch-alias. Omit the `alias` argument to get the current alias.
 
 To set a branch-alias for the "master" branch use:

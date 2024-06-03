@@ -6,10 +6,11 @@ merging pull requests, creating new releases, merging older versioned branches i
 once and much more.
 
 You need at least PHP 8.1, Git 2.10 and a GitHub account (GitHub Enterprise is supported).
-HuPKit works but is not fully tested on Windows.
+_HuPKit is not fully tested on Windows._
 
-**Note:** On October 23rd 2023 the repository was moved to it's own organization, and renamed 
-to HuPKit. The old PHP namespace has been left unchanged. In version 2.0 this will change.
+> [!NOTE]
+> On October 23rd 2023 the repository was moved to it's own organization, and renamed 
+> to HuPKit. The old PHP namespace has been left unchanged. In version 2.0 this will change.
 
 HuPKit is provided under the [MIT license](https://github.com/hupkit/hupkit/LICENSE) and maintained by Sebastiaan Stok 
 (aka. [@sstok](https://github.com/sstok)).
@@ -47,8 +48,9 @@ and you don't install it with Composer global.
 To install HuPKit first choose a directory where you want to keep the installation.
 Eg. `~/.hupkit` or any of your choice.
 
-**Caution:** Make sure you don't use a directory that is accessible by
-others (like the web server root) as this may expose your API access-token!
+> [!CAUTION]
+> Make sure you don't use a directory that is accessible by
+> others (like the web server root) as this may expose your API access-token!
 
 Download HuPKit by cloning the repository:
 

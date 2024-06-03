@@ -4,8 +4,7 @@ changelog
 Generate a changelog, formatted according to http://keepachangelog.com/
 with all detectable changes between releases (the specified) commits.
 
-**Caution:**
-
+> [!IMPORTANT]
 > The changelog auto formatting works because of some conventions used in HuPKit.
 >
 > Only pull requests that were merged with the [merge](merge.md) command (not the merge button!)
@@ -58,7 +57,8 @@ but if you prefer you can include these empty sections using the `--all` option.
 - nothing
 ```
 
-**Note:** Security is placed higher then the original spec to ensure they are noticed.
+> [!NOTE]
+> Security is placed higher than the original spec to ensure these changes are noticed.
 
 ## Single line formatting
 

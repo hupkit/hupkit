@@ -4,8 +4,9 @@ Container Services
 Hook scripts have access to the application workflow, and can use a
 number of services for special operations like Git asking interaction.
 
-**Note:** The `github` service is automatically configured, don't
-call `autoConfigure()` as this will break the application.
+> [!NOTE]
+> The `github` service is automatically configured, don't
+> call `autoConfigure()` as this will break the application.
 
 Call `createForHost()` instead if you must access another GitHub account.
 

@@ -17,11 +17,9 @@ A version is expected to follow the SemVer format, eg. `v1.0.0`, `0.1.0` or `v1.
 The leading `v` is automatically added when missing and the meta version (alpha, beta, rc) is
 turned to uppercase.
 
-**Tip:**
-
+> [!TIP]
 > The version is automatically expended, so `1.0` is expended to `1.0.0`.
->
-> And versions are validated against gaps, so you can't make a mistake.
+> And versions are validated against gaps to prevent mistakes.
 
 ## Special options
 

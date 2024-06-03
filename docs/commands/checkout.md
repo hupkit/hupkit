@@ -8,7 +8,8 @@ and branch name to prevent conflicts with your local branches, eg. `sstok--great
 hupkit checkout 123
 ```
 
-**Note:** If the branch already exists it's updated instead.
+> [!NOTE]
+> If the branch already exists it's updated instead.
 
 Unless the author of the pull request disabled this feature, it's possible to push new changes
 to the user's fork by simply using either `git push author-name`.

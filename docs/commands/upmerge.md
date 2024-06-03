@@ -22,9 +22,10 @@ $ hupkit upmerge
 
 That's it! The command automatically detects which branch `1.0` is to be merged into.
 
-**Caution:** The `upmerge` command uses the Semantic Versioning schematics, versions
-are automatically detected based on there precedence. **Don't use this command when
-you use GitFlow!**
+> [!CAUTION]
+> The `upmerge` command uses the Semantic Versioning schematics, versions
+> are automatically detected based on there precedence. 
+> **Don't use this command when you use GitFlow!**
 
 Need to merge more then one branch? Use `--all` option to merge the current branch
 into the "next preceded version" branch, and that one into the it's next, and finally

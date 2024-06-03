@@ -15,4 +15,5 @@ When this happens you can simple resolve the conflicts as you would with using `
 then once all conflicts are resolved. Run the `switch-base` command (with the original parameters)
 again and it will continue as normal.
 
-**Do not push these changes manually as this will not update the pull-request target base.**
+> [!CAUTION]
+> Do not push these changes manually as this will not update the pull-request target base.
