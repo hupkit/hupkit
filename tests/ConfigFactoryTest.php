@@ -615,7 +615,10 @@ final class ConfigFactoryTest extends TestCase
         );
         self::assertEquals('trunk', $resolved->getMainBranch());
 
-        $this->assertNoOutput();
+        $this->assertOutputMatches([
+            'Setting repositories in global configuration is deprecated since HuPKit v1.4 and will be removed in v2.0.',
+            'Use local repository configurations instead.',
+        ]);
     }
 
     private function getGitFileReaderWithExistentFile(string $fileLocation): GitFileReader
