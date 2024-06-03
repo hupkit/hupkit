@@ -19,8 +19,9 @@ To get the branch-alias for the "master" branch use the command without any argu
 $ hupkit branch-alias
 ```
 
-**Note:** In the past "master" was used as the default name, which has changed in recent
-years to main. HuPKit will try and detect whether main or master is used.
+> [NOTE]
+> In the past "master" was used as the default name, which has changed in recent
+> years to main. HuPKit will try and detect whether main or master is used.
 
 ## Composer branch-alias
 

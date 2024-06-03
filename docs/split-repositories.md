@@ -37,7 +37,8 @@ of commits and targets.
 If you need to merge more then one pull-request you properly want to hold-of
 the split operation till you're done.
 
-**Caution:** Splitting is automatically skipped when the `--no-pull` option is provided.
+> [!CAUTION]
+> Splitting is automatically skipped when the `--no-pull` option is provided.
 
 ## Splitting during a release
 

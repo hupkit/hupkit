@@ -27,9 +27,10 @@ The pre/post release hook scripts are now expected to be stored in the _"hubkit"
 *Using the ".hubkit directory at the root of the repository is still supported, but will no longer work
 in HuPKit v2.0.*
 
-**Caution:** Hooks are loaded from a temporary location *outside of the repository*, use the `__DIR__`
-constant to load files from the the temp-location, use `$container['current_dir']`
-to get the actual location to the project repository.
+> [!CAUTION]
+> Hooks are loaded from a temporary location *outside of the repository*, use the `__DIR__`
+> constant to load files from the the temp-location, use `$container['current_dir']`
+> to get the actual location to the project repository.
 
 The services already use the correct current location (the repository root).
 
@@ -74,7 +75,8 @@ Upgrade to v1.2.0-BETA4
 The configuration format was changed to allow for more advanced features, change
 the `schema_version` to 2 and update the new structure.
 
-**Note:** The old configuration format still works (until the next major release of HuPKit) but will give a warning.
+> [!NOTE]
+> The old configuration format still works (until the next major release of HuPKit) but will give a warning.
 
 For config.php the new structure as follows, see the [Configuration](config.md) chapter for all options.
 

@@ -19,8 +19,9 @@ Both the pre and post hooks work the same way, but are executed at different sta
 Add a PHP  script named either `pre-release.php` or `post-release.php` at the root folder
 of the "_hubkit" [configuration branch](config.md#local-configuration).
 
-**Caution:** Prior to HuPKit v1.2 scripts were expected in the ".hubkit" folder at the root folder
-of the repository. Make sure to use the latest available release to prevent unexpected behavior.
+> [!CAUTION]
+> Prior to HuPKit v1.2 scripts were expected in the ".hubkit" folder at the root folder
+> of the repository. Make sure to use the latest available release to prevent unexpected behavior.
 
 With the following contents:
 

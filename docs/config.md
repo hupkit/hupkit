@@ -311,8 +311,9 @@ The file format is similar to an ini-file, a line can contain either a comment (
 _or_ a variable ("main" or "fork"), no overwrites, no different names (than shown), 
 and comments can only be used on their own line (not at the end of a variable declaration).
 
-**Caution:** This file should be ignored by Git as it only applies to your own local
-`.git/config` file.
+> > [!IMPORTANT]
+> This file should be ignored by Git as it only applies to your own local
+> `.git/config` file.
 
 Use the `-v` flag with any command to see which value is used.
 
