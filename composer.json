@@ -69,7 +69,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-1.x": "1.3-dev"
+            "dev-1.x": "1.4-dev"
         }
     }
 }
