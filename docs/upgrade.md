@@ -1,6 +1,15 @@
 Upgrade HuPKit
 ==============
 
+Upgrade to v1.4.0-BETA1
+-----------------------
+
+Using global configuration for repositories is now deprecated and will be removed
+in v2.0. Use repository local configuration instead.
+
+Use the `init-config` command for each repository to import the global configuration,
+then manually remove the repository in the global configuration.
+
 Upgrade to v1.3.0-BETA2
 -----------------------
 

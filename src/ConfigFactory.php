@@ -26,6 +26,7 @@ final class ConfigFactory
     private string $currentDir;
     private string $configFile;
     private ?string $localConfigFile = null;
+    private bool $detectedGlobalRepositories = false;
 
     public function __construct(
         string $currentDir,
@@ -90,8 +91,17 @@ final class ConfigFactory
             // So store it here, there is no expectation to explicitly get this for a repository.
             //
             // In the future the whole concept for using 'global' configuration for a repository
-            // might be dropped in favor of local-only configuration.
+            // is removed in favor of local-only configuration.
             $config['_main_branch'] = $this->findMainBranch();
+        }
+
+        if ($this->detectedGlobalRepositories) {
+            $this->style->caution(
+                <<<MSG
+                    Setting repositories in global configuration is deprecated since HuPKit v1.4 and will be removed in v2.0.
+                    Use local repository configurations instead.
+                    MSG
+            );
         }
 
         $config['current_dir'] = $this->currentDir;
@@ -163,6 +173,14 @@ final class ConfigFactory
 
                     $v['repositories'] = $repositories;
                     unset($v['repos']);
+
+                    return $v;
+                })
+            ->end()
+            ->validate()
+                ->ifTrue(static fn ($v): bool => \count($v['repositories']) > 0)
+                ->then(function (array $v): array {
+                    $this->detectedGlobalRepositories = true;
 
                     return $v;
                 })
