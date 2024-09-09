@@ -76,7 +76,7 @@ final class MessageValidatorTest extends TestCase
         self::assertEquals(
             [MessageValidator::SEVERITY_HIGH, 'Description contains unacceptable contents', $message],
             MessageValidator::validateMessage($message),
-            sprintf('Message "%s" should be considered unacceptable', $message)
+            \sprintf('Message "%s" should be considered unacceptable', $message)
         );
     }
 
@@ -85,7 +85,7 @@ final class MessageValidatorTest extends TestCase
         self::assertEquals(
             [MessageValidator::SEVERITY_MID, 'Unrelated commits or work in progress?', $message],
             MessageValidator::validateMessage($message),
-            sprintf('Message "%s" should be considered unacceptable', $message)
+            \sprintf('Message "%s" should be considered unacceptable', $message)
         );
     }
 
@@ -93,7 +93,7 @@ final class MessageValidatorTest extends TestCase
     {
         self::assertNull(
             MessageValidator::validateMessage($message),
-            sprintf('Message "%s" should be considered acceptable', $message)
+            \sprintf('Message "%s" should be considered acceptable', $message)
         );
     }
 

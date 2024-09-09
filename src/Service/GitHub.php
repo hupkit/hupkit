@@ -42,7 +42,7 @@ class GitHub
         $repo = $git->getRemoteInfo(REMOTE_MAIN);
 
         if ($repo['org'] === '') {
-            throw new \RuntimeException(sprintf('Remote "%s" is missing or is missing information, unable to configure GitHub gateway.', REMOTE_MAIN));
+            throw new \RuntimeException(\sprintf('Remote "%s" is missing or is missing information, unable to configure GitHub gateway.', REMOTE_MAIN));
         }
 
         $this->initializeForHost($repo['host']);

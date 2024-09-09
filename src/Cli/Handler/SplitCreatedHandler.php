@@ -86,7 +86,7 @@ class SplitCreatedHandler extends GitBaseHandler
         try {
             $url = $gitHub->getRepoInfo($org, $repo)['html_url'];
 
-            $this->style->writeln(sprintf('<fg=yellow> [INFO] Repository %s already exists.</>', OutputFormatter::escape($url)));
+            $this->style->writeln(\sprintf('<fg=yellow> [INFO] Repository %s already exists.</>', OutputFormatter::escape($url)));
         } catch (GitHubRuntimeException $e) {
             if ($e->getCode() !== 404) {
                 throw $e;
@@ -94,7 +94,7 @@ class SplitCreatedHandler extends GitBaseHandler
 
             $url = $gitHub->createRepo($org, $repo, public: $public, hasIssues: false)['html_url'];
 
-            $this->style->writeln(sprintf('<fg=green> [OK] Repository %s was created.</>', OutputFormatter::escape($url)));
+            $this->style->writeln(\sprintf('<fg=green> [OK] Repository %s was created.</>', OutputFormatter::escape($url)));
         }
     }
 }

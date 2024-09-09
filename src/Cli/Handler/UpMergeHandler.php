@@ -48,7 +48,7 @@ final class UpMergeHandler extends GitBaseHandler
         $branches = $this->git->getVersionBranches(REMOTE_MAIN);
 
         if (! \in_array($branch, $branches, true)) {
-            $this->style->error(sprintf('Branch "%s" is not a supported version branch.', $branch));
+            $this->style->error(\sprintf('Branch "%s" is not a supported version branch.', $branch));
 
             return 1;
         }
@@ -56,7 +56,7 @@ final class UpMergeHandler extends GitBaseHandler
         $branchConfig = $this->config->getBranchConfig($branch);
 
         if (! ($branchConfig->config['upmerge'] ?? true)) {
-            $this->style->error(sprintf('Branch "%s" has upmerge disabled by "%s".', $branch, $branchConfig->configName));
+            $this->style->error(\sprintf('Branch "%s" has upmerge disabled by "%s".', $branch, $branchConfig->configName));
 
             return 1;
         }
@@ -109,7 +109,7 @@ final class UpMergeHandler extends GitBaseHandler
             $branchConfig = $this->config->getBranchConfig($branchName);
 
             if (! ($branchConfig->config['upmerge'] ?? true)) {
-                $this->style->note(sprintf('Branch "%s" has upmerge disabled by "%s", and will be skipped.', $branchName, $branchConfig->configName));
+                $this->style->note(\sprintf('Branch "%s" has upmerge disabled by "%s", and will be skipped.', $branchName, $branchConfig->configName));
 
                 continue;
             }
@@ -162,7 +162,7 @@ final class UpMergeHandler extends GitBaseHandler
             $this->git->ensureBranchInSync(REMOTE_MAIN, $destBranch);
             $this->process->mustRun(['git', 'merge', '--no-ff', '--log', $sourceBranch]);
 
-            $this->style->note(sprintf('Merged "%s" into "%s"', $sourceBranch, $destBranch));
+            $this->style->note(\sprintf('Merged "%s" into "%s"', $sourceBranch, $destBranch));
 
             if (! $noSplit) {
                 $this->branchSplitsh->splitBranch($destBranch);
@@ -206,7 +206,7 @@ final class UpMergeHandler extends GitBaseHandler
 
         foreach ($branches as $destBranch) {
             $this->git->ensureBranchInSync(REMOTE_MAIN, $destBranch);
-            $this->style->note(sprintf('[DRY-RUN] Merged "%s" into "%s"', $sourceBranch, $destBranch));
+            $this->style->note(\sprintf('[DRY-RUN] Merged "%s" into "%s"', $sourceBranch, $destBranch));
             $this->branchSplitsh->drySplitBranch($destBranch);
 
             $sourceBranch = $destBranch;

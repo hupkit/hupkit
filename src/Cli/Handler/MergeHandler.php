@@ -57,7 +57,7 @@ final class MergeHandler extends GitBaseHandler
         $this->informationHeader($pr['base']['ref']);
         $this->style->writeln(
             [
-                sprintf('Merging Pull Request <fg=yellow>%d: %s</>', $pr['number'], $pr['title']),
+                \sprintf('Merging Pull Request <fg=yellow>%d: %s</>', $pr['number'], $pr['title']),
                 '<fg=yellow>' . $pr['html_url'] . '</>',
                 '',
             ]
@@ -205,7 +205,7 @@ final class MergeHandler extends GitBaseHandler
         }
 
         if ($changesRequested > 0) {
-            $table->addRow('Reviewed', 'failure', $changesRequested > 1 ? sprintf('%d reviewers requested changes', $changesRequested) : '1 reviewer requested changes');
+            $table->addRow('Reviewed', 'failure', $changesRequested > 1 ? \sprintf('%d reviewers requested changes', $changesRequested) : '1 reviewer requested changes');
         } elseif ($approved) {
             $table->addRow('Reviewed', 'success', 'Approved');
         } else {
@@ -226,7 +226,7 @@ final class MergeHandler extends GitBaseHandler
         $detectedBy = $this->aliasResolver->getDetectedBy();
 
         $this->style->text(
-            sprintf(
+            \sprintf(
                 '<fg=cyan>%s branch is aliased</> as <fg=cyan>%s</> <fg=yellow>(detected by %s)</>',
                 $ref,
                 $branchLabel,
@@ -240,9 +240,9 @@ final class MergeHandler extends GitBaseHandler
     private function getCommitMessage(array $pr, array &$authors, string $branchLabel, bool $squash = false): string
     {
         if ($squash) {
-            $message = sprintf('This PR was squashed before being merged into the %s branch.', $branchLabel) . "\n";
+            $message = \sprintf('This PR was squashed before being merged into the %s branch.', $branchLabel) . "\n";
         } else {
-            $message = sprintf('This PR was merged into the %s branch.', $branchLabel) . "\n";
+            $message = \sprintf('This PR was merged into the %s branch.', $branchLabel) . "\n";
         }
 
         $message .= $this->prLabelsToMergeMessage($pr['labels']);
@@ -278,7 +278,7 @@ final class MergeHandler extends GitBaseHandler
 
     private function getCommitTitle(array $pr, string $category, array $authors): string
     {
-        return sprintf('%s #%d %s (%s)', $category, $pr['number'], $pr['title'], implode(', ', $authors));
+        return \sprintf('%s #%d %s (%s)', $category, $pr['number'], $pr['title'], implode(', ', $authors));
     }
 
     private function getCategory(array $pr, Args $args): string
@@ -359,7 +359,7 @@ final class MergeHandler extends GitBaseHandler
             COMMENT;
 
         foreach ($this->github->getComments($pr['number']) as $comment) {
-            $commentText .= sprintf(
+            $commentText .= \sprintf(
                 $commentTemplate,
                 $comment['user']['login'],
                 $comment['created_at'],
@@ -395,7 +395,7 @@ final class MergeHandler extends GitBaseHandler
         $this->git->checkout($branch);
         $this->git->pullRemote(REMOTE_MAIN, $branch);
 
-        $this->style->success(sprintf('Your local "%s" branch is updated.', $branch));
+        $this->style->success(\sprintf('Your local "%s" branch is updated.', $branch));
 
         return true;
     }
@@ -420,11 +420,11 @@ final class MergeHandler extends GitBaseHandler
         if ('' !== $remote = $this->git->getGitConfig('branch.' . $branch . '.remote')) {
             $this->git->deleteRemoteBranch($remote, $branch);
         } else {
-            $this->style->note(sprintf('No remote configured for branch "%s", skipping deletion.', $branch));
+            $this->style->note(\sprintf('No remote configured for branch "%s", skipping deletion.', $branch));
         }
 
         $this->git->deleteBranch($branch, true);
-        $this->style->note(sprintf('Branch "%s" was deleted.', $branch));
+        $this->style->note(\sprintf('Branch "%s" was deleted.', $branch));
     }
 
     /** @param array<array-key, array<string, mixed>> $commits */
@@ -449,7 +449,7 @@ final class MergeHandler extends GitBaseHandler
 
         $this->style->warning('On or more commits are problematic, make sure this is correct.');
         $this->style->writeln(
-            array_map(static fn ($element) => sprintf(' * <fg=yellow>%s</>', implode("\n   ", StringUtil::splitLines($element))), $messages)
+            array_map(static fn ($element) => \sprintf(' * <fg=yellow>%s</>', implode("\n   ", StringUtil::splitLines($element))), $messages)
         );
         $this->style->newLine();
 

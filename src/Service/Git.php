@@ -282,7 +282,7 @@ class Git
     public function deleteBranch(string $name, bool $allowFailure = false): void
     {
         if ($allowFailure) {
-            $this->process->run(['git', 'branch', '-d', $name], sprintf('Could not delete branch "%s".', $name));
+            $this->process->run(['git', 'branch', '-d', $name], \sprintf('Could not delete branch "%s".', $name));
         } else {
             $this->process->mustRun(['git', 'branch', '-d', $name]);
         }
@@ -290,7 +290,7 @@ class Git
 
     public function deleteBranchWithForce(string $name): void
     {
-        $this->process->run(['git', 'branch', '-D', $name], sprintf('Could not delete branch "%s".', $name));
+        $this->process->run(['git', 'branch', '-D', $name], \sprintf('Could not delete branch "%s".', $name));
     }
 
     public function addNotes(string $notes, string $commitHash, string $ref = 'github-comments'): void
@@ -325,7 +325,7 @@ class Git
             static function ($ref) {
                 if ($ref[0] === ':') {
                     throw new \RuntimeException(
-                        sprintf(
+                        \sprintf(
                             'Push target "%s" does not include the local branch-name, please report this bug!',
                             $ref
                         )
@@ -437,7 +437,7 @@ class Git
 
         if (! \in_array('+refs/notes/*:refs/notes/*', $fetches, true)) {
             $this->style->note(
-                sprintf('Set fetching of notes for remote "%s".', $remote)
+                \sprintf('Set fetching of notes for remote "%s".', $remote)
             );
 
             $this->process->mustRun(
@@ -452,19 +452,19 @@ class Git
 
         if ($status === self::STATUS_NEED_PULL) {
             $this->style->note(
-                sprintf('Your local branch "%s" is outdated, running git pull.', $localBranch)
+                \sprintf('Your local branch "%s" is outdated, running git pull.', $localBranch)
             );
 
             $this->pullRemote($remote, $localBranch);
         } elseif ($status === self::STATUS_DIVERGED) {
             throw new \RuntimeException(
                 'Cannot safely perform the operation. ' .
-                sprintf('Your local and remote version of branch "%s" have differed.', $localBranch) .
+                \sprintf('Your local and remote version of branch "%s" have differed.', $localBranch) .
                 ' Please resolve this problem manually.'
             );
         } elseif (! $allowPush && $status === self::STATUS_NEED_PUSH) {
             throw new \RuntimeException(
-                sprintf('Branch "%s" contains commits not existing in the remote version.', $localBranch) .
+                \sprintf('Branch "%s" contains commits not existing in the remote version.', $localBranch) .
                 'Push is prohibited for this operation. Create a new branch and do a `git reset --hard`.'
             );
         }
@@ -473,7 +473,7 @@ class Git
     public function ensureRemoteExists(string $name, string $url): void
     {
         if ($url !== $this->getGitConfig('remote.' . $name . '.url')) {
-            $this->style->note(sprintf('Adding remote "%s" with "%s".', $name, $url));
+            $this->style->note(\sprintf('Adding remote "%s" with "%s".', $name, $url));
 
             if (! $this->getGitConfig('remote.' . $name . '.url')) {
                 $this->process->mustRun(['git', 'remote', 'add', $name, $url]);
@@ -487,7 +487,7 @@ class Git
     {
         if (! $overwrite && $this->getGitConfig($config, $section) !== '') {
             throw new \RuntimeException(
-                sprintf(
+                \sprintf(
                     'Unable to set git config "%s" at %s, because the value is already set.',
                     $config,
                     $section
@@ -536,7 +536,7 @@ class Git
             $url = parse_url($gitUri);
 
             if ($url === false) {
-                throw new \InvalidArgumentException(sprintf('Malformed Git url "%s".', $gitUri));
+                throw new \InvalidArgumentException(\sprintf('Malformed Git url "%s".', $gitUri));
             }
 
             $info['host'] = $url['host'];

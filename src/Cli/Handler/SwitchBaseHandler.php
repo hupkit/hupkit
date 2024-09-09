@@ -75,13 +75,13 @@ final class SwitchBaseHandler extends GitBaseHandler
         if ($this->git->branchExists($branch)) {
             $this->style->note(
                 [
-                    sprintf('A local branch "%s" exists but was not updated.', $branch),
-                    sprintf('If you want to update your local branch run: git reset --hard %s/%s', $remote, $branch),
+                    \sprintf('A local branch "%s" exists but was not updated.', $branch),
+                    \sprintf('If you want to update your local branch run: git reset --hard %s/%s', $remote, $branch),
                 ]
             );
         }
 
-        $this->style->success(sprintf('Pull request %s base was switched from "%s" to "%s".',
+        $this->style->success(\sprintf('Pull request %s base was switched from "%s" to "%s".',
             $pullRequest['html_url'],
             $pullRequest['base']['ref'],
             $newBase
@@ -98,7 +98,7 @@ final class SwitchBaseHandler extends GitBaseHandler
         if ($tmpWorkingBranch !== $this->git->getActiveBranchName()) {
             $this->style->warning(
                 [
-                    sprintf('Another switch operation was already in process for "%s"!', $tmpWorkingBranch),
+                    \sprintf('Another switch operation was already in process for "%s"!', $tmpWorkingBranch),
                     'You can continue with the previous operation or abort it (this cannot be undone).',
                     'By aborting the previous operation you will loose all work in that temp working-branch!',
                 ]
@@ -198,11 +198,11 @@ final class SwitchBaseHandler extends GitBaseHandler
     private function guardValidBase(string $newBase, string $current): void
     {
         if ($newBase === $current) {
-            throw new \InvalidArgumentException(sprintf('Cannot switch base, current base is already "%s".', $newBase));
+            throw new \InvalidArgumentException(\sprintf('Cannot switch base, current base is already "%s".', $newBase));
         }
 
         if (! $this->git->remoteBranchExists(REMOTE_MAIN, $newBase)) {
-            throw new \InvalidArgumentException(sprintf('Cannot switch base, base branch "%s" does not exists.', $newBase));
+            throw new \InvalidArgumentException(\sprintf('Cannot switch base, base branch "%s" does not exists.', $newBase));
         }
     }
 

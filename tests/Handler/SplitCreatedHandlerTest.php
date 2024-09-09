@@ -53,7 +53,7 @@ final class SplitCreatedHandlerTest extends TestCase
         $this->github->getAuthUsername()->willReturn('sstok');
 
         $this->github->getRepoInfo('hubkit-sandbox', 'empire')->willReturn(['private' => false]);
-        $this->github->createRepo(Argument::any(), Argument::any(), Argument::any(), Argument::any())->will(static fn (array $a) => throw new \InvalidArgumentException(sprintf('Creation for %s/%s was not expected', $a[0], $a[1])));
+        $this->github->createRepo(Argument::any(), Argument::any(), Argument::any(), Argument::any())->will(static fn (array $a) => throw new \InvalidArgumentException(\sprintf('Creation for %s/%s was not expected', $a[0], $a[1])));
 
         $this->config = new Config([
             'schema_version' => 2,
@@ -260,7 +260,7 @@ final class SplitCreatedHandlerTest extends TestCase
     {
         $this->github->getRepoInfo('hubkit-sandbox', $name)->willThrow(new GitHubRuntimeException('Not Found', 404));
         $this->github->createRepo($organization, $name, $public, false)->willReturn(
-            ['html_url' => sprintf('https://github.com/%s/%s', $organization, $name)]
+            ['html_url' => \sprintf('https://github.com/%s/%s', $organization, $name)]
         );
     }
 
@@ -279,7 +279,7 @@ final class SplitCreatedHandlerTest extends TestCase
         $prophecy->getHostname()->willReturn($host);
 
         $prophecy->getRepoInfo(Argument::any(), Argument::any())->willThrow(new GitHubRuntimeException('Not Found', 404));
-        $prophecy->createRepo(Argument::any(), Argument::any(), Argument::any(), Argument::any())->will(static fn (array $a) => throw new \InvalidArgumentException(sprintf('Creation for %s/%s was not expected at host %s', $a[0], $a[1], $host)));
+        $prophecy->createRepo(Argument::any(), Argument::any(), Argument::any(), Argument::any())->will(static fn (array $a) => throw new \InvalidArgumentException(\sprintf('Creation for %s/%s was not expected at host %s', $a[0], $a[1], $host)));
 
         foreach ($exists as $repo) {
             $prophecy->getRepoInfo(...explode('/', $repo))->willReturn(['html_url' => "https://{$host}/{$repo}"]);

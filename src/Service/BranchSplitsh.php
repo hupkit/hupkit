@@ -45,7 +45,7 @@ class BranchSplitsh
     public function splitAtPrefix(string $branch, string $prefix): ?array
     {
         $config = $this->getConfigForPrefix($branch, $prefix);
-        $this->style->writeln(sprintf('<fg=default;bg=default> Splitting %s to %s</>', $prefix, $config['url']));
+        $this->style->writeln(\sprintf('<fg=default;bg=default> Splitting %s to %s</>', $prefix, $config['url']));
 
         return $this->splitshGit->splitTo($branch, $prefix, $config['url']);
     }
@@ -59,7 +59,7 @@ class BranchSplitsh
 
         if (! isset($branchConfig->config['split'][$prefix])) {
             throw new \InvalidArgumentException(
-                sprintf(
+                \sprintf(
                     'Unable to split repository at prefix: No entry found for "[%s][split][%s]".',
                     implode('][', $branchConfig->configPath),
                     $prefix
@@ -71,7 +71,7 @@ class BranchSplitsh
 
         if ($config['url'] === false) {
             throw new \InvalidArgumentException(
-                sprintf(
+                \sprintf(
                     'Unable to split repository at prefix: Entry is disabled for "[%s][split][%s]".',
                     implode('][', $branchConfig->configPath),
                     $prefix
@@ -91,9 +91,9 @@ class BranchSplitsh
         );
 
         if (empty($branchConfig->config['split'])) {
-            $this->style->text(sprintf('No repository-split targets were found in config "[%s]".', implode('][', $branchConfig->configPath)));
+            $this->style->text(\sprintf('No repository-split targets were found in config "[%s]".', implode('][', $branchConfig->configPath)));
         } elseif ($branch !== $branchConfig->configName) {
-            $this->style->text(sprintf('Repository-split configuration for branch <fg=yellow>%s</> resolved from <fg=yellow>%s</>.', $branch, $branchConfig->configName));
+            $this->style->text(\sprintf('Repository-split configuration for branch <fg=yellow>%s</> resolved from <fg=yellow>%s</>.', $branch, $branchConfig->configName));
         }
 
         return $branchConfig;
@@ -118,7 +118,7 @@ class BranchSplitsh
 
         $results = [];
 
-        $this->style->section(sprintf('Splitting from %s to %d destinations', $branch, \count($splits)));
+        $this->style->section(\sprintf('Splitting from %s to %d destinations', $branch, \count($splits)));
 
         foreach ($splits as $prefix => $config) {
             $split = $this->splitshGit->splitTo($branch, $prefix, $config['url']);
@@ -128,7 +128,7 @@ class BranchSplitsh
             }
 
             $results[$prefix] = $split;
-            $this->style->writeln(sprintf('<fg=default;bg=default> Splitting %s to %s</>', $prefix, $config['url']));
+            $this->style->writeln(\sprintf('<fg=default;bg=default> Splitting %s to %s</>', $prefix, $config['url']));
         }
 
         return $results;
@@ -164,7 +164,7 @@ class BranchSplitsh
 
         foreach ($splits as $prefix => $split) {
             if (($branchConfig->config['split'][$prefix]['sync-tags'] ?? $branchConfig->config['sync-tags'] ?? true) === false) {
-                $this->style->writeln(sprintf('<fg=default;bg=default> Repository-split tag synchronizing is disabled for directory %s</>', $prefix));
+                $this->style->writeln(\sprintf('<fg=default;bg=default> Repository-split tag synchronizing is disabled for directory %s</>', $prefix));
 
                 continue;
             }
@@ -180,7 +180,7 @@ class BranchSplitsh
     {
         $config = $this->getConfigForPrefix($branch, $prefix);
 
-        $this->style->writeln(sprintf('<fg=default;bg=default> [DRY-RUN] Splitting %s to %s</>', $prefix, $config['url']));
+        $this->style->writeln(\sprintf('<fg=default;bg=default> [DRY-RUN] Splitting %s to %s</>', $prefix, $config['url']));
     }
 
     /** @return int The number of splits */
@@ -194,10 +194,10 @@ class BranchSplitsh
 
         $this->splitshGit->checkPrecondition();
 
-        $this->style->section(sprintf('Would be splitting branch %s to %d destinations', $branch, \count($splits)));
+        $this->style->section(\sprintf('Would be splitting branch %s to %d destinations', $branch, \count($splits)));
 
         foreach ($splits as $prefix => $config) {
-            $this->style->writeln(sprintf('<fg=default;bg=default> [DRY-RUN] Splitting %s to %s</>', $prefix, $config['url']));
+            $this->style->writeln(\sprintf('<fg=default;bg=default> [DRY-RUN] Splitting %s to %s</>', $prefix, $config['url']));
         }
 
         return \count($splits);

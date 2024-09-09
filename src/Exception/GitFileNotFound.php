@@ -17,11 +17,11 @@ final class GitFileNotFound extends \RuntimeException
 {
     public static function atBranch(string $branch, string $path): self
     {
-        return new self(sprintf('File in Git local repository could not be found. In branch "%s" at path "%s".', $branch, $path));
+        return new self(\sprintf('File in Git local repository could not be found. In branch "%s" at path "%s".', $branch, $path));
     }
 
     public static function atRemote(string $remote, string $branch, string $path): self
     {
-        return new self(sprintf('File in Git remote repository could not be found. For remote "%s" in branch "%s" at path "%s".', $remote, $branch, $path));
+        return new self(\sprintf('File in Git remote repository could not be found. For remote "%s" in branch "%s" at path "%s".', $remote, $branch, $path));
     }
 }

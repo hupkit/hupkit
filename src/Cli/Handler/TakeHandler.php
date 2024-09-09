@@ -34,7 +34,7 @@ final class TakeHandler extends GitBaseHandler
             throw new \InvalidArgumentException('Cannot take closed issue.');
         }
 
-        $slugTitle = StringUtil::slugify(sprintf('%s %s', $issue['number'], $issue['title']));
+        $slugTitle = StringUtil::slugify(\sprintf('%s %s', $issue['number'], $issue['title']));
         $base = $args->getOption('base') ?? $this->config->getMainBranch();
 
         $this->guardMaintained($base);
@@ -50,6 +50,6 @@ final class TakeHandler extends GitBaseHandler
         $this->git->checkoutRemoteBranch(REMOTE_MAIN, $base);
         $this->git->checkout($slugTitle, true);
 
-        $this->style->success(sprintf('Issue %s taken with base "%s"!', $issue['html_url'], $base));
+        $this->style->success(\sprintf('Issue %s taken with base "%s"!', $issue['html_url'], $base));
     }
 }

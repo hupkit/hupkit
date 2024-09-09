@@ -62,7 +62,7 @@ final class ReleaseHandler extends GitBaseHandler
 
         $this->style->writeln(
             [
-                sprintf(
+                \sprintf(
                     '<fg=cyan>Preparing release</> <fg=yellow>%s</> <fg=cyan>(target branch</> <fg=yellow>%s</><fg=cyan>)</>',
                     $versionStr,
                     $branch
@@ -77,7 +77,7 @@ final class ReleaseHandler extends GitBaseHandler
             $changelog = $this->editor->fromString(
                 $changelog,
                 true,
-                sprintf('Release "%s" for branch "%s". Leave file empty to abort operation.', $versionStr, $branch)
+                \sprintf('Release "%s" for branch "%s". Leave file empty to abort operation.', $versionStr, $branch)
             );
         }
 
@@ -94,7 +94,7 @@ final class ReleaseHandler extends GitBaseHandler
 
         $this->releaseHooks->postRelease($version, $branch, $args->getOption('title'), $changelog);
 
-        $this->style->success([sprintf('Successfully released %s', $versionStr), $release['html_url']]);
+        $this->style->success([\sprintf('Successfully released %s', $versionStr), $release['html_url']]);
     }
 
     private function validateBranchCompatibility(string $branch, Version $version): void
@@ -110,8 +110,8 @@ final class ReleaseHandler extends GitBaseHandler
         if ($this->git->remoteBranchExists(REMOTE_MAIN, $expected = $version->major . '.' . $version->minor)) {
             $this->style->warning(
                 [
-                    sprintf('This release will be created for the "%s" branch.', $branch),
-                    sprintf(
+                    \sprintf('This release will be created for the "%s" branch.', $branch),
+                    \sprintf(
                         'But a branch with version pattern "%s" exists, did you target the correct branch?',
                         $expected
                     ),
@@ -200,7 +200,7 @@ final class ReleaseHandler extends GitBaseHandler
         );
 
         throw new \RuntimeException(
-            sprintf(
+            \sprintf(
                 'Tag for version "v%s" already exists, did you mean: v%s ?',
                 (string) $version,
                 implode(', v', $suggested)

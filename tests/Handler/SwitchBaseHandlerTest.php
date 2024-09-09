@@ -272,7 +272,7 @@ final class SwitchBaseHandlerTest extends TestCase
             self::fail('Expected exception.');
         } catch (\RuntimeException $e) {
             self::assertEquals('Failed! Cannot perform switch while another operation is still pending. Please abort previous operation first.', $e->getMessage());
-            $this->assertOutputMatches(sprintf('Another switch operation was already in process for "%s"!', $tmpBranch));
+            $this->assertOutputMatches(\sprintf('Another switch operation was already in process for "%s"!', $tmpBranch));
         }
     }
 
@@ -331,7 +331,7 @@ final class SwitchBaseHandlerTest extends TestCase
         $this->executeHandler($this->getArgs(12, '2.0'), ['yes']);
 
         $this->assertOutputMatches([
-            sprintf('Another switch operation was already in process for "%s"!', $tmpBranch),
+            \sprintf('Another switch operation was already in process for "%s"!', $tmpBranch),
             'Do you want to abort the previous operation?',
             'Pull request https://github.com/sstok/hupkit/pull/12 base was switched from "main" to "2.0".',
         ]);
@@ -434,7 +434,7 @@ final class SwitchBaseHandlerTest extends TestCase
         $this->executeHandler($this->getArgs(12, '2.0'), ['no', 'yes']);
 
         $this->assertOutputMatches([
-            sprintf('Another switch operation was already in process for "%s"!', $tmpBranch),
+            \sprintf('Another switch operation was already in process for "%s"!', $tmpBranch),
             'Do you want to abort the previous operation?',
             'Do you want to continue the previous operation?',
             'Pull request https://github.com/sstok/hupkit/pull/12 base was switched from "main" to "2.0".',
@@ -539,7 +539,7 @@ final class SwitchBaseHandlerTest extends TestCase
         $this->executeHandler($this->getArgs(12, '2.0'), ['no', 'yes']);
 
         $this->assertOutputMatches([
-            sprintf('Another switch operation was already in process for "%s"!', $tmpBranch),
+            \sprintf('Another switch operation was already in process for "%s"!', $tmpBranch),
             'Do you want to abort the previous operation?',
             'Do you want to continue the previous operation?',
             'Pull request https://github.com/sstok/hupkit/pull/12 base was switched from "main" to "2.0".',

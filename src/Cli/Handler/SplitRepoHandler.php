@@ -81,13 +81,13 @@ final class SplitRepoHandler extends GitBaseHandler
     {
         if ($dryRun) {
             $this->branchSplitsh->drySplitAtPrefix($branch, $prefix);
-            $this->style->success(sprintf('[DRY-RUN] Repository directory "%s" were split into there destination.', $prefix));
+            $this->style->success(\sprintf('[DRY-RUN] Repository directory "%s" were split into there destination.', $prefix));
 
             return;
         }
 
         if ($this->branchSplitsh->splitAtPrefix($branch, $prefix) !== null) {
-            $this->style->success(sprintf('Repository directory "%s" were split into there destination.', $prefix));
+            $this->style->success(\sprintf('Repository directory "%s" were split into there destination.', $prefix));
         }
     }
 }

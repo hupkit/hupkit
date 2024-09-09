@@ -57,10 +57,10 @@ final class CheckoutHandler extends GitBaseHandler
         } else {
             $this->git->checkoutRemoteBranch($remote, $pullRequest['head']['ref'], create: false);
             $this->git->checkout($branch, true);
-            $this->process->run(['git', 'branch', '--set-upstream-to', sprintf('%s/%s', $remote, $pullRequest['head']['ref']), $branch]);
+            $this->process->run(['git', 'branch', '--set-upstream-to', \sprintf('%s/%s', $remote, $pullRequest['head']['ref']), $branch]);
         }
 
-        $this->style->success(sprintf('Pull request %s is checked out!', $pullRequest['html_url']));
+        $this->style->success(\sprintf('Pull request %s is checked out!', $pullRequest['html_url']));
     }
 
     private function ensureBranchInSync(string $remote, string $branch, string $remoteBranch): void
@@ -73,7 +73,7 @@ final class CheckoutHandler extends GitBaseHandler
 
         if ($this->git::STATUS_NEED_PULL === $status) {
             $this->style->note(
-                sprintf('Your local branch "%s" is outdated, running git pull.', $branch)
+                \sprintf('Your local branch "%s" is outdated, running git pull.', $branch)
             );
 
             $this->git->pullRemote($remote);

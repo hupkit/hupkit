@@ -53,7 +53,7 @@ abstract class HookScript
 
         if (! \is_callable($hookCallback)) {
             throw new \InvalidArgumentException(
-                sprintf(
+                \sprintf(
                     'Expected script file "%s" to return a callable, got "%s" instead.',
                     $scriptFile,
                     \gettype($hookCallback)

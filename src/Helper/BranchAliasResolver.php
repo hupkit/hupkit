@@ -52,7 +52,7 @@ class BranchAliasResolver
         $alias = $this->git->getGitConfig('branch.' . $branch . '.alias');
 
         $this->style->caution(
-            sprintf(
+            \sprintf(
                 'Usage of %s is deprecated and will be removed in v2.0. Add either an "extra.branch-alias.dev-%s" in composer.json or add branches_alias.%2$s to the repository local configuration.',
                 $this->detectedBy,
                 $branch

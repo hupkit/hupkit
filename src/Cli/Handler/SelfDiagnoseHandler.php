@@ -42,7 +42,7 @@ final class SelfDiagnoseHandler
         $table = new StatusTable($this->style);
 
         if (version_compare($version, '2.10.0', 'lt')) {
-            $table->addRow('Git version', 'failure', sprintf('Git version "%s" should be upgraded to at least 2.10.0', $version));
+            $table->addRow('Git version', 'failure', \sprintf('Git version "%s" should be upgraded to at least 2.10.0', $version));
         } else {
             $table->addRow('Git version', 'success', $version);
         }
@@ -118,7 +118,7 @@ final class SelfDiagnoseHandler
                     VarExporter::export(
                         $this->config->getForRepository(
                             $this->github->getHostname(),
-                            sprintf('%s/%s', $this->github->getOrganization(), $this->github->getRepository())
+                            \sprintf('%s/%s', $this->github->getOrganization(), $this->github->getRepository())
                         )
                     )
                 )
@@ -131,7 +131,7 @@ final class SelfDiagnoseHandler
     private function testGitHubConfigurations(StatusTable $table): void
     {
         foreach ($this->config->get('github', []) as $hostname => $authentication) {
-            $label = sprintf('GitHub "%s" authentication', $hostname);
+            $label = \sprintf('GitHub "%s" authentication', $hostname);
 
             try {
                 $this->github->initializeForHost($hostname);
@@ -145,31 +145,31 @@ final class SelfDiagnoseHandler
     private function testRequiredGitConfig(StatusTable $table, string $config): void
     {
         $result = $this->git->getGitConfig($config, 'global');
-        $label = sprintf('Git "%s" configured', $config);
+        $label = \sprintf('Git "%s" configured', $config);
 
         if ($result !== '') {
             $table->addRow($label, 'success', $result);
         } else {
-            $table->addRow($label, 'failure', sprintf('Missing "%s" in global Git config', $config));
+            $table->addRow($label, 'failure', \sprintf('Missing "%s" in global Git config', $config));
         }
     }
 
     private function testAdvisedGitConfigValue(StatusTable $table, string $config, string $expected, string $message): void
     {
         $result = $this->git->getGitConfig($config, 'global');
-        $label = sprintf('Git "%s" configured', $config);
+        $label = \sprintf('Git "%s" configured', $config);
 
         if ($expected === $result) {
             $table->addRow($label, 'success', $result);
         } else {
-            $table->addRow($label, 'warning', str_contains($message, '%s') ? sprintf($message, $result) : $message);
+            $table->addRow($label, 'warning', str_contains($message, '%s') ? \sprintf($message, $result) : $message);
         }
     }
 
     private function testOptionalGitConfig(StatusTable $table, string $config, string $message): void
     {
         $result = $this->git->getGitConfig($config, 'global');
-        $label = sprintf('Git "%s" configured', $config);
+        $label = \sprintf('Git "%s" configured', $config);
 
         if ($result !== '') {
             $table->addRow($label, 'success', $result);
@@ -182,18 +182,18 @@ final class SelfDiagnoseHandler
     {
         $finder = new ExecutableFinder();
         $result = $finder->find($executable, '');
-        $label = sprintf('Executable "%s" found in PATH', $executable);
+        $label = \sprintf('Executable "%s" found in PATH', $executable);
 
         if ($result !== '') {
             $table->addRow($label, 'success', $result);
         } else {
-            $table->addRow($label, 'warning', str_contains($message, '%s') ? sprintf($message, $result) : $message);
+            $table->addRow($label, 'warning', str_contains($message, '%s') ? \sprintf($message, $result) : $message);
         }
     }
 
     private function testUpstreamRemoteSet(StatusTable $table): void
     {
-        $label = sprintf('Git remote "%s" configured', REMOTE_MAIN);
+        $label = \sprintf('Git remote "%s" configured', REMOTE_MAIN);
 
         if (! $this->git->isGitDir()) {
             $table->addRow($label, 'skipped', 'This is not a Git repository');
@@ -201,12 +201,12 @@ final class SelfDiagnoseHandler
             return;
         }
 
-        $result = $this->git->getGitConfig(sprintf('remote.%s.url', REMOTE_MAIN));
+        $result = $this->git->getGitConfig(\sprintf('remote.%s.url', REMOTE_MAIN));
 
         if ($result !== '') {
             $table->addRow($label, 'success', $result);
         } else {
-            $table->addRow($label, 'failure', sprintf('Git remote "%s" should be configured', REMOTE_MAIN));
+            $table->addRow($label, 'failure', \sprintf('Git remote "%s" should be configured', REMOTE_MAIN));
         }
     }
 
@@ -220,7 +220,7 @@ final class SelfDiagnoseHandler
             return;
         }
 
-        if ($this->git->getGitConfig(sprintf('remote.%s.url', REMOTE_MAIN)) === '' || $this->github->getHostname() === '') {
+        if ($this->git->getGitConfig(\sprintf('remote.%s.url', REMOTE_MAIN)) === '' || $this->github->getHostname() === '') {
             $table->addRow($label, 'skipped', 'Unable to detect host and repository');
 
             return;
@@ -238,7 +238,7 @@ final class SelfDiagnoseHandler
 
                 if ($status !== Git::STATUS_UP_TO_DATE) {
                     $table->addRow($label, 'warning',
-                        sprintf('Branch "_hubkit" is diverged with remote repository: %s%sRun sync-config to update', $status, "\n")
+                        \sprintf('Branch "_hubkit" is diverged with remote repository: %s%sRun sync-config to update', $status, "\n")
                     );
 
                     return;

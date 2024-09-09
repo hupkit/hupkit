@@ -33,7 +33,7 @@ abstract class GitBaseHandler implements RequiresGitRepository
         $hostname = $this->github->getHostname();
 
         $this->style->writeln(
-            sprintf(
+            \sprintf(
                 '<fg=cyan>Working on</> <fg=yellow>%s%s/%s</> <fg=cyan>(branch</> <fg=yellow>%s</><fg=cyan>)</>',
                 $hostname === GitHub::DEFAULT_HOST ? '' : $hostname . ':',
                 $this->github->getOrganization(),
@@ -54,7 +54,7 @@ abstract class GitBaseHandler implements RequiresGitRepository
         $branchConfig = $this->config->getBranchConfig($branch);
 
         if (($branchConfig->config['maintained'] ?? true) === false) {
-            $this->style->warning(sprintf('The "%s" branch is marked as unmaintained!', $branch));
+            $this->style->warning(\sprintf('The "%s" branch is marked as unmaintained!', $branch));
 
             if (! $this->style->confirm('Do you want to continue this operation anyway?', false)) {
                 throw new \RuntimeException('User aborted.');

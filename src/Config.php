@@ -64,7 +64,7 @@ final class Config
         $value = $this->get($keys, $invalid = new \stdClass());
 
         if ($value === $invalid) {
-            throw new \InvalidArgumentException(sprintf('Unable to find config "[%s]"', implode('][', $keys)));
+            throw new \InvalidArgumentException(\sprintf('Unable to find config "[%s]"', implode('][', $keys)));
         }
 
         return $value;
@@ -184,7 +184,7 @@ final class Config
             if ($configName[0] === '/') {
                 $normalizedName = trim($configName, '/');
 
-                if (preg_match(sprintf('/^(%s)$/', $normalizedName), $branchName) === 1) {
+                if (preg_match(\sprintf('/^(%s)$/', $normalizedName), $branchName) === 1) {
                     return new BranchConfig(
                         $branchName,
                         $this->branchesConfig($default, $config),
@@ -195,7 +195,7 @@ final class Config
             } elseif (preg_match('{^\d+\.([x*]|\d+)$}', $configName) === 1) {
                 $normalizedName = str_replace(['x', '*', '.'], ['\d+', '\d+', '\\.'], mb_strtolower($configName));
 
-                if (preg_match(sprintf('/^%s$/', $normalizedName), $branchName) === 1) {
+                if (preg_match(\sprintf('/^%s$/', $normalizedName), $branchName) === 1) {
                     return new BranchConfig(
                         $branchName,
                         $this->branchesConfig($default, $config),

@@ -57,7 +57,7 @@ final class ConfigFactory
 
         if ($realPath === false) {
             throw new \InvalidArgumentException(
-                sprintf('Unable to normalize path "%s", no such file or directory.', $path)
+                \sprintf('Unable to normalize path "%s", no such file or directory.', $path)
             );
         }
 
@@ -238,11 +238,11 @@ final class ConfigFactory
 
                         if ($name[0] === '/') {
                             if (@preg_match($name, 'test') === false) {
-                                throw new \InvalidArgumentException(sprintf('Invalid regexp %s error: %s.', json_encode($name, \JSON_UNESCAPED_SLASHES), json_encode(error_get_last()['message'] ?? 'Unknown')), \JSON_UNESCAPED_SLASHES);
+                                throw new \InvalidArgumentException(\sprintf('Invalid regexp %s error: %s.', json_encode($name, \JSON_UNESCAPED_SLASHES), json_encode(error_get_last()['message'] ?? 'Unknown')), \JSON_UNESCAPED_SLASHES);
                             }
 
                             if (preg_match('{[\$\^]|/\w+$}', $name) > 0) {
-                                throw new \InvalidArgumentException(sprintf('Invalid regexp %s, cannot contain start/end anchor or options. Either "/[5-9]\.x/" not "/^[5-9].x$/i".', json_encode($name)));
+                                throw new \InvalidArgumentException(\sprintf('Invalid regexp %s, cannot contain start/end anchor or options. Either "/[5-9]\.x/" not "/^[5-9].x$/i".', json_encode($name)));
                             }
                         } else {
                             if ($name[0] === '#') {
@@ -257,7 +257,7 @@ final class ConfigFactory
                             try {
                                 self::validateBranchName($name);
                             } catch (\InvalidArgumentException $e) {
-                                throw new \InvalidArgumentException(sprintf('Invalid branch-name or relative pattern %s, must be either "1.x" or "1.*", or "#1.x" (for an exact branch named 1.x), ":default", any valid branch-name, or a regexp like "/0.[1-9]+/". Error: %s', json_encode($name, \JSON_UNESCAPED_SLASHES), $e->getMessage()), 0, $e);
+                                throw new \InvalidArgumentException(\sprintf('Invalid branch-name or relative pattern %s, must be either "1.x" or "1.*", or "#1.x" (for an exact branch named 1.x), ":default", any valid branch-name, or a regexp like "/0.[1-9]+/". Error: %s', json_encode($name, \JSON_UNESCAPED_SLASHES), $e->getMessage()), 0, $e);
                             }
                         }
                     }
@@ -322,15 +322,15 @@ final class ConfigFactory
                         try {
                             self::validateBranchName($name);
                         } catch (\InvalidArgumentException $e) {
-                            throw new \InvalidArgumentException(sprintf('Invalid branch-name %s: %s', json_encode($name), $e->getMessage()), 0, $e);
+                            throw new \InvalidArgumentException(\sprintf('Invalid branch-name %s: %s', json_encode($name), $e->getMessage()), 0, $e);
                         }
 
                         if (! \is_string($label)) {
-                            throw new \InvalidArgumentException(sprintf('Invalid branch-alias for %s, should should be a string to prevent casting mismatches.', $name));
+                            throw new \InvalidArgumentException(\sprintf('Invalid branch-alias for %s, should should be a string to prevent casting mismatches.', $name));
                         }
 
                         if (! preg_match('/^([1-9]\d*\.\d+)$/', $label)) {
-                            throw new \InvalidArgumentException(sprintf('Invalid branch-alias for %s, should consists of major and minor version without any prefix or suffix. like: 1.2. Got: %s', $name, $label));
+                            throw new \InvalidArgumentException(\sprintf('Invalid branch-alias for %s, should consists of major and minor version without any prefix or suffix. like: 1.2. Got: %s', $name, $label));
                         }
 
                         $v[$name] = $label . '-dev';
@@ -411,7 +411,7 @@ final class ConfigFactory
 
         $this->style->block([
             'No "main_branch" was not set, this value will default to "main" in HuPKit v2.0.' . "\n" .
-            sprintf('The "main_branch" is resolved as "%s", set the "main_branch" option in your local configuration to change this.', $branch),
+            \sprintf('The "main_branch" is resolved as "%s", set the "main_branch" option in your local configuration to change this.', $branch),
         ], null, 'fg=yellow', ' ! ');
 
         return $branch;

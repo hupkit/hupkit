@@ -57,7 +57,7 @@ final class RemotesConfigParserTest extends TestCase
     public function it_does_not_accept_comments_at_declaration(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage(sprintf('Unable to process file ".hk_remotes" at line %d, expected declaration (`name=value` or `name=va_lue`), empty line or comment (`; comment`), got: %s', 1, 'foo=bar; Comment'));
+        $this->expectExceptionMessage(\sprintf('Unable to process file ".hk_remotes" at line %d, expected declaration (`name=value` or `name=va_lue`), empty line or comment (`; comment`), got: %s', 1, 'foo=bar; Comment'));
 
         RemotesConfigParser::parse('foo=bar; Comment');
     }

@@ -106,7 +106,7 @@ final class InitConfigHandlerTest extends ConfigHandlerTestCase
         $this->assertOutputMatches([
             'Generating empty "_hubkit" branch.',
             'The "_hubkit" configuration branch was created, edit the config.php file with your favorite editor.',
-            sprintf('After you are done run `git checkout %s`.', 'master'),
+            \sprintf('After you are done run `git checkout %s`.', 'master'),
         ]);
 
         $this->assertOutputNotMatches('The .hubkit directory was found and it\'s files copied to the "_hubkit" configuration branch.');
@@ -152,7 +152,7 @@ final class InitConfigHandlerTest extends ConfigHandlerTestCase
         $this->assertOutputMatches([
             'Generating empty "_hubkit" branch.',
             'The "_hubkit" configuration branch was created, edit the config.php file with your favorite editor.',
-            sprintf('After you are done run `git checkout %s`.', 'master'),
+            \sprintf('After you are done run `git checkout %s`.', 'master'),
         ]);
 
         $this->assertOutputNotMatches('The .hubkit directory was found and it\'s files copied to the "_hubkit" configuration branch.');
@@ -217,7 +217,7 @@ final class InitConfigHandlerTest extends ConfigHandlerTestCase
             'Generating empty "_hubkit" branch.',
             'The .hubkit directory was found and it\'s files copied to the "_hubkit" configuration branch.',
             'The "_hubkit" configuration branch was created, edit the config.php file with your favorite editor.',
-            sprintf('After you are done run `git checkout %s`.', 'master'),
+            \sprintf('After you are done run `git checkout %s`.', 'master'),
         ]);
 
         self::assertConfigFileEquals([

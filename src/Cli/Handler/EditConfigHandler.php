@@ -59,7 +59,7 @@ class EditConfigHandler extends ConfigBaseHandler
         $this->style->success([
             'The "_hubkit" configuration branch was checked out.',
             'Make sure to add and commit once you are done.',
-            sprintf('After you are done run `git checkout %s`.', $activeBranch),
+            \sprintf('After you are done run `git checkout %s`.', $activeBranch),
             'And run the `sync-config` command to push the configuration to the remote repository.',
         ]);
     }
@@ -89,7 +89,7 @@ class EditConfigHandler extends ConfigBaseHandler
 
         if (\count($found) > 0) {
             throw new \RuntimeException(
-                sprintf(
+                \sprintf(
                     "One or more git-ignored files where found in the \"_hubkit\" branch, these would be overwritten when checking out.\n" .
                     "\nTemporarily move or rename these files:\n\n  * %s",
                     implode("\n  * ", $found)

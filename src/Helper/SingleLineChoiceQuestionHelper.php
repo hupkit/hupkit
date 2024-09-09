@@ -29,13 +29,13 @@ class SingleLineChoiceQuestionHelper extends QuestionHelper
         }
 
         $text = OutputFormatter::escape($question->getQuestion());
-        $text = sprintf(' <info>%s</info> ', $text);
+        $text = \sprintf(' <info>%s</info> ', $text);
 
         $default = $question->getDefault();
         $defaultLabel = '';
 
         if ($default !== null) {
-            $defaultLabel = sprintf(' [<comment>%s</comment>] ', OutputFormatter::escape((string) $default));
+            $defaultLabel = \sprintf(' [<comment>%s</comment>] ', OutputFormatter::escape((string) $default));
         }
 
         $output->write($text);

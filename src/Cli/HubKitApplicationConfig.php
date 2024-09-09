@@ -45,7 +45,7 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
         if ($container === null) {
             if (! file_exists(__DIR__ . '/../../config.php') && file_exists(__DIR__ . '/../../config.php.dist')) {
                 throw new \InvalidArgumentException(
-                    sprintf('Please copy "%s.dist" to "%1$s" and change the API token.', __DIR__ . '/../../config.php')
+                    \sprintf('Please copy "%s.dist" to "%1$s" and change the API token.', __DIR__ . '/../../config.php')
                 );
             }
 
@@ -118,7 +118,7 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
                 }
 
                 if ($this->container['style']->isVerbose()) {
-                    $this->container['style']->note(sprintf('Remote names set as: main=%s, fork=%s', REMOTE_MAIN, REMOTE_FORK));
+                    $this->container['style']->note(\sprintf('Remote names set as: main=%s, fork=%s', REMOTE_MAIN, REMOTE_FORK));
                 }
             }
         );
@@ -286,7 +286,7 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
             ->beginCommand('switch-base')
             ->setDescription('Switch the base of a pull request (and perform a rebase to prevent unwanted commits)')
             ->addArgument('number', Argument::REQUIRED | Argument::INTEGER, 'The number of the pull request to switch')
-            ->addArgument('new-base', Argument::REQUIRED | Argument::STRING, sprintf('New base of the pull-request (must exist in remote "%s")', REMOTE_MAIN))
+            ->addArgument('new-base', Argument::REQUIRED | Argument::STRING, \sprintf('New base of the pull-request (must exist in remote "%s")', REMOTE_MAIN))
             ->addOption('skip-help', null, Option::NO_VALUE | Option::BOOLEAN, 'Skip the help message posted to the PR.')
             ->setHandler(function () {
                 return new Handler\SwitchBaseHandler(

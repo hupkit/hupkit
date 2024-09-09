@@ -39,7 +39,7 @@ final class RepositoryCreateHandler
 
         $this->style->success(
             [
-                sprintf(
+                \sprintf(
                     'Repository "%s/%s" was created.',
                     $organization,
                     $name

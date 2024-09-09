@@ -54,9 +54,9 @@ final class ClearCacheHandler
                 ++$files;
             }
 
-            $this->style->comment(sprintf('Temporary directory %s', $this->filesystem->getTempdir()));
-            $this->style->comment(sprintf('Cache directory %s', $this->filesystem->getCacheDir()));
-            $this->style->comment(sprintf('Removed %s file taking-up %s of space', $files, Helper::formatMemory($size)));
+            $this->style->comment(\sprintf('Temporary directory %s', $this->filesystem->getTempdir()));
+            $this->style->comment(\sprintf('Cache directory %s', $this->filesystem->getCacheDir()));
+            $this->style->comment(\sprintf('Removed %s file taking-up %s of space', $files, Helper::formatMemory($size)));
         }
 
         $this->filesystem->clearTempFolder();

@@ -34,15 +34,15 @@ final class RemotesConfigParser
             }
 
             if (! preg_match('/^(?P<name>[a-z+]+)\h*=\h*(?P<value>[a-z]+(?:_?[a-z]+)*?)$/', $line, $matches)) {
-                throw new \InvalidArgumentException(sprintf('Unable to process file ".hk_remotes" at line %d, expected declaration (`name=value` or `name=va_lue`), empty line or comment (`; comment`), got: %s', $i + 1, $line));
+                throw new \InvalidArgumentException(\sprintf('Unable to process file ".hk_remotes" at line %d, expected declaration (`name=value` or `name=va_lue`), empty line or comment (`; comment`), got: %s', $i + 1, $line));
             }
 
             if (isset($vars[$matches['name']])) {
-                throw new \InvalidArgumentException(sprintf('Unable to process file ".hk_remotes" at line %d, declaration %s already set.', $i + 1, $matches['name']));
+                throw new \InvalidArgumentException(\sprintf('Unable to process file ".hk_remotes" at line %d, declaration %s already set.', $i + 1, $matches['name']));
             }
 
             if ($matches['name'] !== 'main' && $matches['name'] !== 'fork') {
-                throw new \InvalidArgumentException(sprintf('Unable to process file ".hk_remotes" at line %d, declaration %s is not accepted, only "main" or "fork".', $i + 1, $matches['name']));
+                throw new \InvalidArgumentException(\sprintf('Unable to process file ".hk_remotes" at line %d, declaration %s is not accepted, only "main" or "fork".', $i + 1, $matches['name']));
             }
 
             $vars[$matches['name']] = $matches['value'];

@@ -30,7 +30,7 @@ class Filesystem
         $this->cacheDir = $cacheDir ?: ($_SERVER['HOME'] . \DIRECTORY_SEPARATOR . '.hubkit_cache');
 
         if (! str_ends_with($this->cacheDir, '.hubkit_cache')) {
-            throw new \RuntimeException(sprintf('Cache directory is expected to end with ".hubkit_cache", got: %s', $this->cacheDir));
+            throw new \RuntimeException(\sprintf('Cache directory is expected to end with ".hubkit_cache", got: %s', $this->cacheDir));
         }
 
         $this->fs->mkdir($this->tempdir);
@@ -72,7 +72,7 @@ class Filesystem
         $contents = file_get_contents($this->getAbsolutePath($filename));
 
         if ($contents === false) {
-            throw new \RuntimeException(sprintf('Unable to get contents of file %s', $filename));
+            throw new \RuntimeException(\sprintf('Unable to get contents of file %s', $filename));
         }
 
         return $contents;

@@ -81,7 +81,7 @@ final class ConfigTest extends TestCase
         ], $config->getOrFail('github'));
         self::assertSame('sstok', $config->getOrFail(['github', 'github.com', 'username']));
 
-        $this->expectExceptionObject(new \InvalidArgumentException(sprintf('Unable to find config "[%s]"', implode('][', (array) $path))));
+        $this->expectExceptionObject(new \InvalidArgumentException(\sprintf('Unable to find config "[%s]"', implode('][', (array) $path))));
 
         $config->getOrFail($path);
     }

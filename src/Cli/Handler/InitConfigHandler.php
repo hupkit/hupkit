@@ -68,7 +68,7 @@ final class InitConfigHandler extends ConfigBaseHandler
         $this->style->success([
             'The "_hubkit" configuration branch was created, edit the config.php file with your favorite editor.',
             'Make sure to add to and commit once you are done.',
-            sprintf('After you are done run `git checkout %s`.', $activeBranch),
+            \sprintf('After you are done run `git checkout %s`.', $activeBranch),
             'And finally run the `sync-config` command to push the configuration to the remote repository.',
         ]);
 
@@ -117,7 +117,7 @@ final class InitConfigHandler extends ConfigBaseHandler
     {
         $config = $this->config->getForRepository(
             $host = $this->github->getHostname(),
-            $repository = sprintf('%s/%s', $this->github->getOrganization(), $this->github->getRepository())
+            $repository = \sprintf('%s/%s', $this->github->getOrganization(), $this->github->getRepository())
         );
         $config['host'] = $host;
         $config['repository'] = $repository;

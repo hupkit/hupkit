@@ -93,7 +93,7 @@ class ChangelogRenderer
             $title = '[BC BREAK] ' . $title;
         }
 
-        return sprintf('- %s [#%d](%s/issues/%2$d)', trim($title), $item['number'], $url) . "\n";
+        return \sprintf('- %s [#%d](%s/issues/%2$d)', trim($title), $item['number'], $url) . "\n";
     }
 
     private function getItemsPerCategories(string $base, string $head): array

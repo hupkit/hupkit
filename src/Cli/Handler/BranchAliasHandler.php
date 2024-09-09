@@ -34,7 +34,7 @@ final class BranchAliasHandler implements RequiresGitRepository
 
         if (! $args->getOption('no-warning')) {
             $this->style->caution(
-                sprintf(
+                \sprintf(
                     'Usage of the "branch-alias" command is deprecated and will be removed in v2.0. Add either an "extra.branch-alias.dev-%s" in composer.json or add branches_alias.%1$s to the repository local configuration.',
                     $branch
                 )

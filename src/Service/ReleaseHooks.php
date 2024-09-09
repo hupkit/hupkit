@@ -53,7 +53,7 @@ class ReleaseHooks extends HookScript
 
         if (! $this->git->isWorkingTreeReady()) {
             throw new \InvalidArgumentException(
-                sprintf(
+                \sprintf(
                     'Expected script file "%s" to leave a clean state after execution. Changed files must be committed by the script.',
                     $scriptFile
                 )
