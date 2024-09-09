@@ -306,6 +306,11 @@ parameters:
 			path: src/Service/GitHub.php
 
 		-
+			message: "#^Method HubKit\\\\Service\\\\GitHub\\:\\:getPullRequestFiles\\(\\) return type has no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: src/Service/GitHub.php
+
+		-
 			message: "#^Method HubKit\\\\Service\\\\GitHub\\:\\:getPullRequestReviews\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: src/Service/GitHub.php
@@ -1087,6 +1092,11 @@ parameters:
 
 		-
 			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\MergeHandlerTest\\:\\:expectNotes\\(\\) has parameter \\$notes with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/Handler/MergeHandlerTest.php
+
+		-
+			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\MergeHandlerTest\\:\\:expectPrInfo\\(\\) has parameter \\$fileNames with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Handler/MergeHandlerTest.php
 

@@ -406,6 +406,15 @@ final class ConfigFactory
                         ->always(fn ($v) => $v === null ? $this->findMainBranch() : self::validateBranchName((string) $v))
                     ->end()
                 ->end()
+                ->arrayNode('pull_request')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->enumNode('split')
+                            ->values(['all', 'changed-only', 'none'])
+                            ->defaultValue('all')
+                        ->end()
+                    ->end()
+                ->end()
             ->end()
         ;
 

@@ -221,6 +221,12 @@ final class Config
         return $this->getFirstNotNull([['_local', 'main_branch'], ['_main_branch']], 'main');
     }
 
+    /** @return array{split: string} */
+    public function getPullRequestConfig(): array
+    {
+        return $this->get(['_local', 'pull_request'], ['split' => 'all']);
+    }
+
     /**
      * @param array<string, mixed> $default
      * @param array<string, mixed> $config

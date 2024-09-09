@@ -97,6 +97,15 @@ return [
     //     // 'dev/main' => '1.0',
     //     // '1.x' => '1.5',
     // ],
+    
+    // Since v1.4
+    //'pull_request' => [
+           // Either:
+           //  * 'all' (default)
+           //  * 'changed-only' (only split changed files matched in prefixes)
+           //  * 'none' (don't split, some as the `--no-split option` for the `merge` command)
+    //    'split' => 'all',
+    //],
 ];
 ````
 
