@@ -154,6 +154,62 @@ final class SplitshGitTest extends TestCase
         $service->checkPrecondition();
     }
 
+    /** @test */
+    public function it_gets_only_changed_prefixes(): void
+    {
+        $this->assertSame(
+            [],
+            SplitshGit::filterOnlyChangedPrefixes(
+                ['src/Core' => []],
+                [
+                    'src/User/User.php',
+                    'src/Core2/SearchFactory.php',
+                ],
+                $ignored,
+            ),
+        );
+        $this->assertEquals(['src/Core' => []], $ignored);
+
+        $this->assertSame(
+            ['src/Core' => []],
+            SplitshGit::filterOnlyChangedPrefixes(
+                ['src/Core' => [], 'src/Validator' => []],
+                [
+                    'src/User/User.php',
+                    'src/Core/SearchFactory.php',
+                ],
+                $ignored
+            ),
+        );
+        $this->assertEquals(['src/Validator' => []], $ignored);
+
+        $this->assertSame(
+            ['src/Core' => [], 'src/User' => []],
+            SplitshGit::filterOnlyChangedPrefixes(
+                ['src/Core' => [], 'src/User' => []],
+                [
+                    'src/User/User.php',
+                    'src/Core/SearchFactory.php',
+                ],
+                $ignored
+            ),
+        );
+        $this->assertEquals([], $ignored);
+
+        $this->assertSame(
+            ['src/Core' => []],
+            SplitshGit::filterOnlyChangedPrefixes(
+                ['src/Core' => [], 'src/User' => []],
+                [
+                    'src/User.php',
+                    'src/Core/SearchFactory.php',
+                ],
+                $ignored
+            ),
+        );
+        $this->assertEquals(['src/User' => []], $ignored);
+    }
+
     private function getGitSplitShResult(string $hash): Process
     {
         $processProphecy = $this->prophesize(Process::class);

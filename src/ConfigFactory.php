@@ -279,7 +279,7 @@ final class ConfigFactory
                         ->arrayPrototype()
                             ->normalizeKeys(false)
                             ->beforeNormalization()
-                                ->ifTrue(static fn ($v): bool => is_string($v) || $v === false)
+                                ->ifTrue(static fn ($v): bool => \is_string($v) || $v === false)
                                 ->then(static fn ($v): array => ['url' => $v])
                             ->end()
                             ->children()

@@ -179,6 +179,20 @@ final class BranchSplitshTest extends TestCase
     }
 
     /** @test */
+    public function splits_prefix_to_destinations_ignored_unchanged_prefixes(): void
+    {
+        $this->git->ensureBranchInSync(REMOTE_MAIN, '2.1')->shouldBeCalled();
+        $this->expectGitSplit('lobster', 'git@github.com:hubkit-sandbox/pinchy.git', 'cc1', '2.1');
+
+        self::assertNull($this->getBranchSplitsh()->splitAtPrefix('2.1', 'lobster', ['src/lobster']));
+
+        $this->assertOutputMatches([
+            'Repository-split configuration for branch 2.1 resolved from 2.x.',
+            'No changed files where matched for "lobster". And the split was ignored.',
+        ]);
+    }
+
+    /** @test */
     public function split_prefix_to_destinations_fails_for_missing_prefix_configuration(): void
     {
         $this->git->ensureBranchInSync(REMOTE_MAIN, '4.1')->shouldBeCalled();
@@ -210,6 +224,33 @@ final class BranchSplitshTest extends TestCase
             'Splitting from 4.0 to 2 destinations',
             'Splitting src/Module/CoreModule to git@github.com:hubkit-sandbox/core-module.git',
             'Splitting src/Module/WebhostingModule to git@github.com:hubkit-sandbox/webhosting-module.git',
+        ]);
+    }
+
+    /** @test */
+    public function splits_branch_to_destinations_ignoring_unchanged_prefixes(): void
+    {
+        $this->git->ensureBranchInSync(REMOTE_MAIN, '4.0')->shouldBeCalled();
+        $this->expectGitSplit('src/Module/CoreModule', 'git@github.com:hubkit-sandbox/core-module.git', 'cc1', '4.0');
+
+        self::assertEquals(
+            [
+                'src/Module/CoreModule' => ['/tmp/hubkit/stor/src/Module/CoreModule' => ['cc1', 'git@github.com:hubkit-sandbox/core-module.git']],
+            ],
+            $this->getBranchSplitsh()->splitBranch('4.0', [
+                'src/Module/CoreModule/CoreModule.php',
+                'src/Module/CoreModule/DependencyInjection/Configuration.php',
+                'src/Module/UserModule/DependencyInjection/Configuration.php',
+                'doc/Module/WebhostingModule/index.rst',
+            ])
+        );
+
+        $this->assertOutputMatches([
+            'Repository-split configuration for branch 4.0 resolved from :default.',
+            'Splitting from 4.0 to 1 destination',
+            'Splitting src/Module/CoreModule to git@github.com:hubkit-sandbox/core-module.git',
+            'No changed files where matched for the following listed prefixes. And the splits have been ignored.',
+            '* src/Module/WebhostingModule',
         ]);
     }
 
