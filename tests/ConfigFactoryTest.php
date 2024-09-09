@@ -713,6 +713,63 @@ final class ConfigFactoryTest extends TestCase
         $factory->resolveLocalConfig(['schema_version' => 2, 'main_branch' => $branch]);
     }
 
+    /**
+     * @test
+     *
+     * @dataProvider provideInvalidSplitPrefixes
+     */
+    public function it_validates_split_prefixes(string $prefix, string $message): void
+    {
+        $factory = new ConfigFactory(
+            __DIR__ . '/Fixtures/config/schema_v2_local',
+            __DIR__ . '/Fixtures/config/schema_v2_global/config.php',
+            $this->createStyle(),
+            $this->getGitFileReaderWithNotExistentFile(),
+            $this->getGit(),
+        );
+
+        try {
+            $factory->resolveLocalConfig([
+                'schema_version' => 2,
+                'branches' => [
+                    'main' => [
+                        'split' => [
+                            'src/Core' => [
+                                'url' => 'git@github.com:park-manager/core.git',
+                            ],
+                            $prefix => [
+                                'url' => 'git@github.com:park-manager/doc.git',
+                                'sync-tags' => false,
+                            ],
+                        ],
+                    ],
+                ],
+            ]);
+
+            self::fail('Expected exception to be thrown.');
+        } catch (\RuntimeException $e) {
+            self::assertEquals('Local configuration contains one or more errors. Invalid configuration for path "hubkit.branches.main": ' . $message, $e->getMessage());
+        }
+    }
+
+    /** @return iterable<int, array{0: string, 1: string}> */
+    public static function provideInvalidSplitPrefixes(): iterable
+    {
+        yield ['/he', 'Invalid prefix "/he". Cannot start or end with a slash.'];
+        yield ['he/', 'Invalid prefix "he/". Cannot start or end with a slash.'];
+        yield ['/he/', 'Invalid prefix "/he/". Cannot start or end with a slash.'];
+        yield ['he/wat/', 'Invalid prefix "he/wat/". Cannot start or end with a slash.'];
+        yield ['he/../wat', 'Invalid prefix "he/../wat". Must be a path relative to the root directory, without backtracking.'];
+
+        yield [' he', 'Invalid prefix " he". Cannot start or end with space characters.'];
+        yield ['he ', 'Invalid prefix "he ". Cannot start or end with space characters.'];
+        yield ["he\n/he", 'Invalid prefix "he\n/he". Cannot contain newline characters.'];
+        yield [' ', 'Invalid prefix " ". Cannot start or end with space characters.'];
+        yield ['', 'A prefix cannot be empty.'];
+
+        yield ['src/core', 'Prefix "src/core" is already set as "src/Core".'];
+    }
+
     /** @return iterable<string, array{0: string, 1: string}> */
     public static function provideInvalidMainBranches(): iterable
     {

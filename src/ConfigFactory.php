@@ -279,11 +279,7 @@ final class ConfigFactory
                         ->arrayPrototype()
                             ->normalizeKeys(false)
                             ->beforeNormalization()
-                                ->ifString()
-                                ->then(static fn ($v): array => ['url' => $v])
-                            ->end()
-                            ->beforeNormalization()
-                                ->ifTrue(static fn ($v): bool => $v === false)
+                                ->ifTrue(static fn ($v): bool => is_string($v) || $v === false)
                                 ->then(static fn ($v): array => ['url' => $v])
                             ->end()
                             ->children()
@@ -304,6 +300,42 @@ final class ConfigFactory
                 ->validate()
                     ->ifTrue(static fn (array $v): bool => $v['maintained'] === false)
                     ->then(static fn (): array => ['maintained' => false, 'upmerge' => false, 'sync-tags' => false, 'ignore-default' => true, 'split' => []])
+                ->end()
+                ->validate()
+                    ->always()
+                    ->then(static function ($v): array {
+                        $found = [];
+
+                        foreach ($v['split'] as $prefix => $config) {
+                            if (preg_match('{^\s|\s$}', $prefix)) {
+                                throw new \InvalidArgumentException(\sprintf('Invalid prefix %s. Cannot start or end with space characters.', json_encode($prefix, \JSON_UNESCAPED_SLASHES)));
+                            }
+
+                            if (preg_match('{[\n\r]}', $prefix)) {
+                                throw new \InvalidArgumentException(\sprintf('Invalid prefix %s. Cannot contain newline characters.', json_encode($prefix, \JSON_UNESCAPED_SLASHES)));
+                            }
+
+                            if ($prefix === '') {
+                                throw new \InvalidArgumentException('A prefix cannot be empty.');
+                            }
+
+                            if ($prefix[0] === '/' || str_ends_with($prefix, '/')) {
+                                throw new \InvalidArgumentException(\sprintf('Invalid prefix %s. Cannot start or end with a slash.', json_encode($prefix, \JSON_UNESCAPED_SLASHES)));
+                            }
+
+                            if (str_contains($prefix, '/../')) {
+                                throw new \InvalidArgumentException(\sprintf('Invalid prefix %s. Must be a path relative to the root directory, without backtracking.', json_encode($prefix, \JSON_UNESCAPED_SLASHES)));
+                            }
+
+                            if (isset($found[mb_strtolower($prefix)])) {
+                                throw new \InvalidArgumentException(\sprintf('Prefix %s is already set as %s.', json_encode($prefix, \JSON_UNESCAPED_SLASHES), json_encode($found[mb_strtolower($prefix)], \JSON_UNESCAPED_SLASHES)));
+                            }
+
+                            $found[mb_strtolower($prefix)] = $prefix;
+                        }
+
+                        return $v;
+                    })
                 ->end()
             ->end()
         ;
