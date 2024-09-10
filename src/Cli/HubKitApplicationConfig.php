@@ -352,6 +352,7 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
             ->addOption('no-edit', null, Option::NO_VALUE | Option::BOOLEAN, 'Don\'t open the editor for editing the release page')
             ->addOption('title', null, Option::REQUIRED_VALUE | Option::NULLABLE | Option::STRING, 'Custom title for the release (added after version)')
             ->addOption('pre-release', null, Option::NO_VALUE | Option::BOOLEAN, 'Mark as pre-release (not production ready)')
+            ->addOption('force-split-all', null, Option::NO_VALUE | Option::BOOLEAN, 'Force splitting of all, overwriting the "release.split" configuration')
             ->setHandler(function () {
                 return new Handler\ReleaseHandler(
                     $this->container['style'],

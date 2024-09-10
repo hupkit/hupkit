@@ -415,6 +415,15 @@ final class ConfigFactory
                         ->end()
                     ->end()
                 ->end()
+                ->arrayNode('release')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->enumNode('split')
+                            ->values(['all', 'changed-only'])
+                            ->defaultValue('all')
+                        ->end()
+                    ->end()
+                ->end()
             ->end()
         ;
 
