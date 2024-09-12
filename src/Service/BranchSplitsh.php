@@ -171,7 +171,7 @@ class BranchSplitsh
      *
      * @return int The number of tags synchronized
      */
-    public function syncTags(string $branch, string $versionStr, ?string $onlyChangesSince = null): int
+    public function syncTags(string $branch, string $versionStr, ?string $onlyChangesSince = null, ?bool $signed = true): int
     {
         if ($onlyChangesSince !== null) {
             $changedFiles = $this->git->getFileChangesBetween($onlyChangesSince, $branch);
@@ -196,7 +196,7 @@ class BranchSplitsh
 
             $this->style->writeln(\sprintf('<fg=default;bg=default> Tagging split release for directory %s</>', $prefix));
 
-            $this->splitshGit->syncTag($versionStr, $split[1], $branch, $split[0]);
+            $this->splitshGit->syncTag($versionStr, $split[1], $branch, $split[0], $signed);
             ++$count;
         }
 

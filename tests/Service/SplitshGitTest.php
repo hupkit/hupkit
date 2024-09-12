@@ -68,7 +68,7 @@ final class SplitshGitTest extends TestCase
     public function it_syncs_tag_into_target(): void
     {
         $processCliProphecy = $this->prophesize(CliProcess::class);
-        $processCliProphecy->run(new Process(['git', 'tag', 'v1.0.0', '2c00338aef823d0c0916fc1b59ef49d0bb76f02f', '-s', '-m', 'Release 1.0.0'], '/tmp/hubkit/stor/_core'))->shouldBeCalledTimes(1);
+        $processCliProphecy->run(new Process(['git', 'tag', 'v1.0.0', '2c00338aef823d0c0916fc1b59ef49d0bb76f02f', '-m', 'Release 1.0.0', '--sign'], '/tmp/hubkit/stor/_core'))->shouldBeCalledTimes(1);
         $processCliProphecy->run(new Process(['git', 'push', 'origin', 'v1.0.0'], '/tmp/hubkit/stor/_core'));
         $cliProcess = $processCliProphecy->reveal();
 
@@ -87,14 +87,60 @@ final class SplitshGitTest extends TestCase
     }
 
     /** @test */
+    public function it_syncs_tag_into_target_with_signing_disabled(): void
+    {
+        $processCliProphecy = $this->prophesize(CliProcess::class);
+        $processCliProphecy->run(new Process(['git', 'tag', 'v1.0.0', '2c00338aef823d0c0916fc1b59ef49d0bb76f02f', '-m', 'Release 1.0.0', '--no-sign'], '/tmp/hubkit/stor/_core'))->shouldBeCalledTimes(1);
+        $processCliProphecy->run(new Process(['git', 'push', 'origin', 'v1.0.0'], '/tmp/hubkit/stor/_core'));
+        $cliProcess = $processCliProphecy->reveal();
+
+        $gitTempProphecy = $this->prophesize(GitTempRepository::class);
+        $gitTempProphecy->getRemote('git@github.com:park-manager/core.git', '1.0')->willReturn('/tmp/hubkit/stor/_core');
+        $gitTemp = $gitTempProphecy->reveal();
+
+        $service = new SplitshGit($this->createMock(Git::class), $cliProcess, $this->createMock(LoggerInterface::class), $gitTemp, self::SPLITSH_EXECUTABLE);
+
+        $service->syncTag(
+            '1.0.0',
+            'git@github.com:park-manager/core.git',
+            '1.0',
+            '2c00338aef823d0c0916fc1b59ef49d0bb76f02f',
+            signed: false
+        );
+    }
+
+    /** @test */
+    public function it_syncs_tag_into_target_with_signing_set_auto(): void
+    {
+        $processCliProphecy = $this->prophesize(CliProcess::class);
+        $processCliProphecy->run(new Process(['git', 'tag', 'v1.0.0', '2c00338aef823d0c0916fc1b59ef49d0bb76f02f', '-m', 'Release 1.0.0'], '/tmp/hubkit/stor/_core'))->shouldBeCalledTimes(1);
+        $processCliProphecy->run(new Process(['git', 'push', 'origin', 'v1.0.0'], '/tmp/hubkit/stor/_core'));
+        $cliProcess = $processCliProphecy->reveal();
+
+        $gitTempProphecy = $this->prophesize(GitTempRepository::class);
+        $gitTempProphecy->getRemote('git@github.com:park-manager/core.git', '1.0')->willReturn('/tmp/hubkit/stor/_core');
+        $gitTemp = $gitTempProphecy->reveal();
+
+        $service = new SplitshGit($this->createMock(Git::class), $cliProcess, $this->createMock(LoggerInterface::class), $gitTemp, self::SPLITSH_EXECUTABLE);
+
+        $service->syncTag(
+            '1.0.0',
+            'git@github.com:park-manager/core.git',
+            '1.0',
+            '2c00338aef823d0c0916fc1b59ef49d0bb76f02f',
+            signed: null
+        );
+    }
+
+    /** @test */
     public function it_syncs_tag_into_targets(): void
     {
         $processCliProphecy = $this->prophesize(CliProcess::class);
 
-        $processCliProphecy->run(new Process(['git', 'tag', 'v1.0.0', '2c00338aef823d0c0916fc1b59ef49d0bb76f02f', '-s', '-m', 'Release 1.0.0'], '/tmp/hubkit/stor/_core'))->shouldBeCalledTimes(1);
+        $processCliProphecy->run(new Process(['git', 'tag', 'v1.0.0', '2c00338aef823d0c0916fc1b59ef49d0bb76f02f', '-m', 'Release 1.0.0', '--sign'], '/tmp/hubkit/stor/_core'))->shouldBeCalledTimes(1);
         $processCliProphecy->run(new Process(['git', 'push', 'origin', 'v1.0.0'], '/tmp/hubkit/stor/_core'));
 
-        $processCliProphecy->run(new Process(['git', 'tag', 'v1.0.0', '3eed8083737422fe9ac2da9f4348423089fceb7f', '-s', '-m', 'Release 1.0.0'], '/tmp/hubkit/stor/_user'))->shouldBeCalledTimes(1);
+        $processCliProphecy->run(new Process(['git', 'tag', 'v1.0.0', '3eed8083737422fe9ac2da9f4348423089fceb7f', '-m', 'Release 1.0.0', '--sign'], '/tmp/hubkit/stor/_user'))->shouldBeCalledTimes(1);
         $processCliProphecy->run(new Process(['git', 'push', 'origin', 'v1.0.0'], '/tmp/hubkit/stor/_user'));
 
         $cliProcess = $processCliProphecy->reveal();
@@ -113,6 +159,68 @@ final class SplitshGitTest extends TestCase
                 '/tmp/hubkit/stor/_core' => ['2c00338aef823d0c0916fc1b59ef49d0bb76f02f', 'git@github.com:park-manager/core.git', 5],
                 '/tmp/hubkit/stor/_user' => ['3eed8083737422fe9ac2da9f4348423089fceb7f', 'git@github.com:park-manager/user.git', 3],
             ]
+        );
+    }
+
+    /** @test */
+    public function it_syncs_tag_into_targets_with_signing_disabled(): void
+    {
+        $processCliProphecy = $this->prophesize(CliProcess::class);
+
+        $processCliProphecy->run(new Process(['git', 'tag', 'v1.0.0', '2c00338aef823d0c0916fc1b59ef49d0bb76f02f', '-m', 'Release 1.0.0', '--no-sign'], '/tmp/hubkit/stor/_core'))->shouldBeCalledTimes(1);
+        $processCliProphecy->run(new Process(['git', 'push', 'origin', 'v1.0.0'], '/tmp/hubkit/stor/_core'));
+
+        $processCliProphecy->run(new Process(['git', 'tag', 'v1.0.0', '3eed8083737422fe9ac2da9f4348423089fceb7f', '-m', 'Release 1.0.0', '--no-sign'], '/tmp/hubkit/stor/_user'))->shouldBeCalledTimes(1);
+        $processCliProphecy->run(new Process(['git', 'push', 'origin', 'v1.0.0'], '/tmp/hubkit/stor/_user'));
+
+        $cliProcess = $processCliProphecy->reveal();
+
+        $gitTempProphecy = $this->prophesize(GitTempRepository::class);
+        $gitTempProphecy->getRemote('git@github.com:park-manager/core.git', '1.0')->willReturn('/tmp/hubkit/stor/_core');
+        $gitTempProphecy->getRemote('git@github.com:park-manager/user.git', '1.0')->willReturn('/tmp/hubkit/stor/_user');
+        $gitTemp = $gitTempProphecy->reveal();
+
+        $service = new SplitshGit($this->createMock(Git::class), $cliProcess, $this->createMock(LoggerInterface::class), $gitTemp, self::SPLITSH_EXECUTABLE);
+
+        $service->syncTags(
+            '1.0.0',
+            '1.0',
+            [
+                '/tmp/hubkit/stor/_core' => ['2c00338aef823d0c0916fc1b59ef49d0bb76f02f', 'git@github.com:park-manager/core.git', 5],
+                '/tmp/hubkit/stor/_user' => ['3eed8083737422fe9ac2da9f4348423089fceb7f', 'git@github.com:park-manager/user.git', 3],
+            ],
+            signed: false
+        );
+    }
+
+    /** @test */
+    public function it_syncs_tag_into_targets_with_signing_set_auto(): void
+    {
+        $processCliProphecy = $this->prophesize(CliProcess::class);
+
+        $processCliProphecy->run(new Process(['git', 'tag', 'v1.0.0', '2c00338aef823d0c0916fc1b59ef49d0bb76f02f', '-m', 'Release 1.0.0'], '/tmp/hubkit/stor/_core'))->shouldBeCalledTimes(1);
+        $processCliProphecy->run(new Process(['git', 'push', 'origin', 'v1.0.0'], '/tmp/hubkit/stor/_core'));
+
+        $processCliProphecy->run(new Process(['git', 'tag', 'v1.0.0', '3eed8083737422fe9ac2da9f4348423089fceb7f', '-m', 'Release 1.0.0'], '/tmp/hubkit/stor/_user'))->shouldBeCalledTimes(1);
+        $processCliProphecy->run(new Process(['git', 'push', 'origin', 'v1.0.0'], '/tmp/hubkit/stor/_user'));
+
+        $cliProcess = $processCliProphecy->reveal();
+
+        $gitTempProphecy = $this->prophesize(GitTempRepository::class);
+        $gitTempProphecy->getRemote('git@github.com:park-manager/core.git', '1.0')->willReturn('/tmp/hubkit/stor/_core');
+        $gitTempProphecy->getRemote('git@github.com:park-manager/user.git', '1.0')->willReturn('/tmp/hubkit/stor/_user');
+        $gitTemp = $gitTempProphecy->reveal();
+
+        $service = new SplitshGit($this->createMock(Git::class), $cliProcess, $this->createMock(LoggerInterface::class), $gitTemp, self::SPLITSH_EXECUTABLE);
+
+        $service->syncTags(
+            '1.0.0',
+            '1.0',
+            [
+                '/tmp/hubkit/stor/_core' => ['2c00338aef823d0c0916fc1b59ef49d0bb76f02f', 'git@github.com:park-manager/core.git', 5],
+                '/tmp/hubkit/stor/_user' => ['3eed8083737422fe9ac2da9f4348423089fceb7f', 'git@github.com:park-manager/user.git', 3],
+            ],
+            signed: null
         );
     }
 

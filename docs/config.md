@@ -113,6 +113,9 @@ return [
           // 'all' (default)
           // 'changed-only' (only create split releases for prefixes that have changed since the last release)
     //    'split' => 'all',
+    
+          // Either: true (default; enabled), false (explicitly disabled), or null (use Git config 'tag.gpgSign')
+    //    'signed' => true,
     //],
 ];
 ````

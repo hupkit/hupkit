@@ -103,7 +103,7 @@ final class SplitshGitTest extends TestCase
         self::assertNotNull($this->splitshGit->splitTo('master', 'docs', 'file://' . $tempDir . '/split-docs'));
         self::assertNull($this->splitshGit->splitTo('master', 'doctrine', 'file://' . $tempDir . '/split-doctrine'));
 
-        // Refs were updated but not HEAD not
+        // Refs were updated but not the HEAD
         $this->runCliCommand(['git', 'reset', '--hard'], $tempDir . '/split-core');
         $this->runCliCommand(['git', 'reset', '--hard'], $tempDir . '/split-validator');
         $this->runCliCommand(['git', 'reset', '--hard'], $tempDir . '/split-docs');
@@ -135,12 +135,66 @@ final class SplitshGitTest extends TestCase
         $splits[] = $this->splitshGit->splitTo('master', 'lib/validator', 'file://' . $tempDir . '/split-validator');
         $splits[] = $this->splitshGit->splitTo('master', 'docs', 'file://' . $tempDir . '/split-docs');
 
-        // Refs were updated but not HEAD not
+        // Refs were updated but not the HEAD
         $this->runCliCommand(['git', 'reset', '--hard'], $tempDir . '/split-core');
         $this->runCliCommand(['git', 'reset', '--hard'], $tempDir . '/split-validator');
         $this->runCliCommand(['git', 'reset', '--hard'], $tempDir . '/split-docs');
 
         $this->splitshGit->syncTags('1.0.0', 'master', $splits);
+
+        $this->assertRepositoryTagsEquals(['v1.0.0'], $tempDir . '/split-core');
+        $this->assertRepositoryTagsEquals(['v1.0.0'], $tempDir . '/split-validator');
+        $this->assertRepositoryTagsEquals(['v1.0.0'], $tempDir . '/split-docs');
+    }
+
+    /** @test */
+    public function it_syncs_tags_non_signed(): void
+    {
+        $tempDir = $this->getTempDir();
+
+        $this->assertRepositoryTagsEquals([], $tempDir . '/split-core');
+        $this->assertRepositoryTagsEquals([], $tempDir . '/split-validator');
+        $this->assertRepositoryTagsEquals([], $tempDir . '/split-docs');
+
+        /** @var array<int, array{0: string, 1: string, 2: string}> $splits */
+        $splits = [];
+        $splits[] = $this->splitshGit->splitTo('master', 'lib/core', 'file://' . $tempDir . '/split-core');
+        $splits[] = $this->splitshGit->splitTo('master', 'lib/validator', 'file://' . $tempDir . '/split-validator');
+        $splits[] = $this->splitshGit->splitTo('master', 'docs', 'file://' . $tempDir . '/split-docs');
+
+        // Refs were updated but not the HEAD
+        $this->runCliCommand(['git', 'reset', '--hard'], $tempDir . '/split-core');
+        $this->runCliCommand(['git', 'reset', '--hard'], $tempDir . '/split-validator');
+        $this->runCliCommand(['git', 'reset', '--hard'], $tempDir . '/split-docs');
+
+        $this->splitshGit->syncTags('1.0.0', 'master', $splits, false);
+
+        $this->assertRepositoryTagsEquals(['v1.0.0'], $tempDir . '/split-core');
+        $this->assertRepositoryTagsEquals(['v1.0.0'], $tempDir . '/split-validator');
+        $this->assertRepositoryTagsEquals(['v1.0.0'], $tempDir . '/split-docs');
+    }
+
+    /** @test */
+    public function it_syncs_tags_auto_signed(): void
+    {
+        $tempDir = $this->getTempDir();
+
+        $this->assertRepositoryTagsEquals([], $tempDir . '/split-core');
+        $this->assertRepositoryTagsEquals([], $tempDir . '/split-validator');
+        $this->assertRepositoryTagsEquals([], $tempDir . '/split-docs');
+
+        /** @var array<int, array{0: string, 1: string, 2: string}> $splits */
+        $splits = [];
+        $splits[] = $this->splitshGit->splitTo('master', 'lib/core', 'file://' . $tempDir . '/split-core');
+        $splits[] = $this->splitshGit->splitTo('master', 'lib/validator', 'file://' . $tempDir . '/split-validator');
+        $splits[] = $this->splitshGit->splitTo('master', 'docs', 'file://' . $tempDir . '/split-docs');
+
+        // Refs were updated but not the HEAD
+        $this->runCliCommand(['git', 'reset', '--hard'], $tempDir . '/split-core');
+        $this->runCliCommand(['git', 'reset', '--hard'], $tempDir . '/split-validator');
+        $this->runCliCommand(['git', 'reset', '--hard'], $tempDir . '/split-docs');
+
+        $this->splitshGit->syncTags('1.0.0', 'master', $splits, null);
 
         $this->assertRepositoryTagsEquals(['v1.0.0'], $tempDir . '/split-core');
         $this->assertRepositoryTagsEquals(['v1.0.0'], $tempDir . '/split-validator');

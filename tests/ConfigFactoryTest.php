@@ -602,7 +602,7 @@ final class ConfigFactoryTest extends TestCase
                 'pull_request' => [
                     'split' => 'all',
                 ],
-                'release' => ['split' => 'all'],
+                'release' => ['split' => 'all', 'signed' => true],
             ],
             'current_dir' => __DIR__ . '/Fixtures/config/schema_v2_local',
         ]);
@@ -854,7 +854,7 @@ final class ConfigFactoryTest extends TestCase
             'pull_request' => [
                 'split' => 'all',
             ],
-            'release' => ['split' => 'all'],
+            'release' => ['split' => 'all', 'signed' => true],
         ], $config);
 
         $config = $factory->resolveLocalConfig([
@@ -887,7 +887,7 @@ final class ConfigFactoryTest extends TestCase
             'pull_request' => [
                 'split' => 'all',
             ],
-            'release' => ['split' => 'all'],
+            'release' => ['split' => 'all', 'signed' => true],
         ], $config);
     }
 

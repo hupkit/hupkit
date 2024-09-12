@@ -558,10 +558,27 @@ final class ConfigTest extends TestCase
             '_local' => [
                 'release' => [
                     'split' => 'changed-only',
+                    'signed' => true,
                 ],
             ],
         ]);
+        self::assertEquals(['split' => 'changed-only', 'signed' => true], $config->getReleaseConfig());
 
-        self::assertEquals(['split' => 'changed-only'], $config->getReleaseConfig());
+        $config = new Config([
+            'schema_version' => 2,
+            'github' => [
+                'github.com' => [
+                    'username' => 'sstok',
+                    'api_token' => 'CHANGE-ME',
+                ],
+            ],
+            '_local' => [
+                'release' => [
+                    'split' => 'changed-only',
+                    'signed' => null,
+                ],
+            ],
+        ]);
+        self::assertEquals(['split' => 'changed-only', 'signed' => null], $config->getReleaseConfig());
     }
 }
