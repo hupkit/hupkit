@@ -262,6 +262,17 @@ class GitHub
         ]);
     }
 
+    public function getPullRequestFiles(int $id): iterable
+    {
+        \assert($this->client !== null);
+
+        return (new ResultPager($this->client))->fetchAllLazy($this->client->pullRequest(), 'files', [
+            $this->organization,
+            $this->repository,
+            $id,
+        ]);
+    }
+
     public function getCommitStatuses(string $org, string $repo, string $hash): array
     {
         \assert($this->client !== null);

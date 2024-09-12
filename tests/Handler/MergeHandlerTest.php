@@ -1237,6 +1237,254 @@ by who-else at 2014-11-23T14:50:24Z
     }
 
     /** @test */
+    public function it_splits_a_pr_with_only_changed_prefixes(): void
+    {
+        $this->config = new Config([
+            'repositories' => [
+                'github.com' => [
+                    'repos' => [
+                        'park-manager/hubkit' => [],
+                    ],
+                ],
+            ],
+            '_local' => [
+                'sync-tags' => true,
+                'branches' => [
+                    '2.0' => [
+                        'split' => [
+                            'src/Component/Core' => ['url' => 'git@github.com:park-manager/core.git', 'sync-tags' => false],
+                            'src/Component/Model' => ['url' => 'git@github.com:park-manager/model.git', 'sync-tags' => false],
+                            'doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => false],
+                        ],
+                    ],
+                ],
+                'pull_request' => [
+                    'split' => 'changed-only',
+                ],
+            ],
+        ]);
+        $this->config->setActiveRepository('github.com', 'park-manager/hubkit');
+
+        $this->branchSplitsh->splitBranch('master')->shouldNotBeCalled();
+        $this->branchSplitsh->splitBranch('master', $files = ['src/Component/Core/User.php', 'src/doc/brown.php'])->shouldBeCalled();
+
+        $pr = $this->expectPrInfo(fileNames: $files);
+        $this->expectCommitStatus();
+        $this->expectCommits($pr);
+
+        $this->github->mergePullRequest(
+            self::PR_NUMBER,
+            'feature #42 Brand new design (sstok)',
+            PropArgument::exact(<<<'BODY'
+                This PR was merged into the 1.0-dev branch.
+
+                Discussion
+                ----------
+
+                There I fixed it
+
+                Commits
+                -------
+
+                06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
+                06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
+
+                BODY
+            ),
+            self::HEAD_SHA,
+            false
+        )->willReturn(['sha' => self::MERGE_SHA]);
+
+        $this->expectNotes();
+        $this->expectMetadata('feature', $pr['title']);
+        $this->expectLocalUpdate();
+        $this->expectLocalBranchExists();
+
+        $args = $this->getArgs();
+        $args->setArgument('number', '42');
+        $this->executeHandler($args, 'feature');
+
+        $this->assertOutputMatches(
+            [
+                'Pull request has been merged.',
+                'Branch "feature-something" was deleted.',
+                'Your local "master" branch is updated.',
+            ]
+        );
+    }
+
+    /** @test */
+    public function it_splits_a_pr_full_when_changed_files_is_to_large_and_confirmed(): void
+    {
+        $this->config = new Config([
+            'repositories' => [
+                'github.com' => [
+                    'repos' => [
+                        'park-manager/hubkit' => [],
+                    ],
+                ],
+            ],
+            '_local' => [
+                'sync-tags' => true,
+                'branches' => [
+                    '2.0' => [
+                        'split' => [
+                            'src/Component/Core' => ['url' => 'git@github.com:park-manager/core.git', 'sync-tags' => false],
+                            'src/Component/Model' => ['url' => 'git@github.com:park-manager/model.git', 'sync-tags' => false],
+                            'doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => false],
+                        ],
+                    ],
+                ],
+                'pull_request' => [
+                    'split' => 'changed-only',
+                ],
+            ],
+        ]);
+        $this->config->setActiveRepository('github.com', 'park-manager/hubkit');
+
+        $this->branchSplitsh->splitBranch('master')->shouldNotBeCalled();
+        $this->branchSplitsh->splitBranch('master', [])->shouldBeCalled();
+
+        $files = [];
+
+        for ($i = 1; $i < 305; ++$i) {
+            $files[] = 'src/Component/User/File' . $i;
+        }
+
+        $pr = $this->expectPrInfo(fileNames: $files);
+        $this->expectCommitStatus();
+        $this->expectCommits($pr);
+
+        $this->github->mergePullRequest(
+            self::PR_NUMBER,
+            'feature #42 Brand new design (sstok)',
+            PropArgument::exact(<<<'BODY'
+                This PR was merged into the 1.0-dev branch.
+
+                Discussion
+                ----------
+
+                There I fixed it
+
+                Commits
+                -------
+
+                06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
+                06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
+
+                BODY
+            ),
+            self::HEAD_SHA,
+            false
+        )->willReturn(['sha' => self::MERGE_SHA]);
+
+        $this->expectNotes();
+        $this->expectMetadata('feature', $pr['title']);
+        $this->expectLocalUpdate();
+        $this->expectLocalBranchExists();
+
+        $args = $this->getArgs();
+        $args->setArgument('number', '42');
+        $this->executeHandler($args, 'feature', ['yes']);
+
+        $this->assertOutputMatches(
+            [
+                'Pull request has been merged.',
+                'Branch "feature-something" was deleted.',
+                'Your local "master" branch is updated.',
+                'More than 300 files have been changed. Cannot perform a changed-only split.',
+                'Do you want to continue with a complete split instead?',
+            ]
+        );
+    }
+
+    /** @test */
+    public function it_skips_splits_when_changed_files_is_to_large_and_not_confirmed(): void
+    {
+        $this->config = new Config([
+            'repositories' => [
+                'github.com' => [
+                    'repos' => [
+                        'park-manager/hubkit' => [],
+                    ],
+                ],
+            ],
+            '_local' => [
+                'sync-tags' => true,
+                'branches' => [
+                    '2.0' => [
+                        'split' => [
+                            'src/Component/Core' => ['url' => 'git@github.com:park-manager/core.git', 'sync-tags' => false],
+                            'src/Component/Model' => ['url' => 'git@github.com:park-manager/model.git', 'sync-tags' => false],
+                            'doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => false],
+                        ],
+                    ],
+                ],
+                'pull_request' => [
+                    'split' => 'changed-only',
+                ],
+            ],
+        ]);
+        $this->config->setActiveRepository('github.com', 'park-manager/hubkit');
+
+        $this->branchSplitsh->splitBranch('master')->shouldNotBeCalled();
+        $this->branchSplitsh->splitBranch('master', [])->shouldNotBeCalled();
+
+        $files = [];
+
+        for ($i = 1; $i < 305; ++$i) {
+            $files[] = 'src/Component/User/File' . $i;
+        }
+
+        $pr = $this->expectPrInfo(fileNames: $files);
+        $this->expectCommitStatus();
+        $this->expectCommits($pr);
+
+        $this->github->mergePullRequest(
+            self::PR_NUMBER,
+            'feature #42 Brand new design (sstok)',
+            PropArgument::exact(<<<'BODY'
+                This PR was merged into the 1.0-dev branch.
+
+                Discussion
+                ----------
+
+                There I fixed it
+
+                Commits
+                -------
+
+                06f57b45415f0456719d578ca5003f9683b941fb Properly handle repository requirement
+                06f57b45415f0456719d578ca5003f9683b941fe PullRequestMergeHandler was already committed
+
+                BODY
+            ),
+            self::HEAD_SHA,
+            false
+        )->willReturn(['sha' => self::MERGE_SHA]);
+
+        $this->expectNotes();
+        $this->expectMetadata('feature', $pr['title']);
+        $this->expectLocalUpdate();
+        $this->expectLocalBranchExists();
+
+        $args = $this->getArgs();
+        $args->setArgument('number', '42');
+        $this->executeHandler($args, 'feature', ['no']);
+
+        $this->assertOutputMatches(
+            [
+                'Pull request has been merged.',
+                'Branch "feature-something" was deleted.',
+                'Your local "master" branch is updated.',
+                'More than 300 files have been changed. Cannot perform a changed-only split.',
+                'Do you want to continue with a complete split instead?',
+                'Split was skipped.',
+            ]
+        );
+    }
+
+    /** @test */
     public function it_checks_pr_is_open(): void
     {
         $this->expectPrInfo('sstok', [], 'closed');
@@ -1468,6 +1716,7 @@ by who-else at 2014-11-23T14:50:24Z
         string $body = 'There I fixed it',
         string $base = 'master',
         array $reviews = [],
+        array $fileNames = [],
     ): array {
         $number = self::PR_NUMBER;
 
@@ -1493,7 +1742,13 @@ by who-else at 2014-11-23T14:50:24Z
                 ),
             ]
         );
+
         $this->github->getPullRequestReviews($number)->willReturn($reviews);
+
+        if ($fileNames) {
+            $fileNames = array_map(static fn (string $file): array => ['filename' => $file], $fileNames);
+            $this->github->getPullRequestFiles($number)->willReturn($fileNames);
+        }
 
         return $pr;
     }

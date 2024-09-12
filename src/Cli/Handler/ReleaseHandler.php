@@ -85,7 +85,7 @@ final class ReleaseHandler extends GitBaseHandler
 
         // Perform the sub-split and tagging first as it's easier to recover from split error
         // then being able to re-run the release command on the source repository.
-        $this->branchSplitsh->syncTags($branch, $versionStr);
+        $this->handleSplitReleases($branch, $versionStr, $args->getOption('force-split-all'));
 
         $this->process->mustRun(['git', 'tag', '-s', 'v' . $versionStr, '-m', 'Release ' . $versionStr]);
         $this->process->mustRun(['git', 'push', REMOTE_MAIN, 'v' . $versionStr]);
@@ -206,5 +206,22 @@ final class ReleaseHandler extends GitBaseHandler
                 implode(', v', $suggested)
             )
         );
+    }
+
+    private function handleSplitReleases(string $branch, string $versionStr, bool $forceAll): void
+    {
+        if ($this->config->getReleaseConfig()['split'] === 'all' || $forceAll) {
+            $this->branchSplitsh->syncTags($branch, $versionStr);
+
+            return;
+        }
+
+        $previousRelease = $this->git->getLastTagOnBranch($branch, true);
+
+        if ($previousRelease) {
+            $this->style->block(\sprintf('Creating split-releases <options=underscore>only for changes</> since "%s".', $previousRelease), 'INFO', 'fg=green', ' ', false, false);
+        }
+
+        $this->branchSplitsh->syncTags($branch, $versionStr, $previousRelease);
     }
 }

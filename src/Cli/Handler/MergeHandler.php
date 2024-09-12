@@ -93,7 +93,7 @@ final class MergeHandler extends GitBaseHandler
         $this->style->success('Pull request has been merged.');
 
         if (! $args->getOption('no-pull') && $this->updateLocalBranch($pr['base']['ref']) && ! $args->getOption('no-split')) {
-            $this->branchSplitsh->splitBranch($pr['base']['ref']);
+            $this->handleSplitOperation($pr['base']['ref'], $pr['number']);
         }
 
         if (! $args->getOption('squash') && ! $args->getOption('no-cleanup')) {
@@ -525,5 +525,54 @@ final class MergeHandler extends GitBaseHandler
 
         $this->git->addNotes(json_encode($metadata, \JSON_THROW_ON_ERROR), $sha, 'pr-metadata');
         $this->git->pushToRemote(REMOTE_MAIN, 'refs/notes/pr-metadata');
+    }
+
+    private function handleSplitOperation(string $ref, int $number): void
+    {
+        $split = $this->config->getPullRequestConfig()['split'];
+
+        if ($split === 'none') {
+            return;
+        }
+
+        if ($split === 'all') {
+            $this->branchSplitsh->splitBranch($ref);
+
+            return;
+        }
+
+        $changedFiles = [];
+        $i = 0;
+
+        // Changes only.
+        //
+        // Each page contains 30 items, we limit the total of pages to 10.
+        // 200 file changes for a PR is average (excluding CS fixes).
+        //
+        // GitHub limits total of files to 3000;
+        // 3000 equals around a 100 API calls, and might hit the rate-limit.
+        foreach ($this->github->getPullRequestFiles($number) as $file) {
+            $changedFiles[] = $file['filename'];
+
+            if ($i > 300) {
+                break;
+            }
+
+            ++$i;
+        }
+
+        if ($i > 300) {
+            $this->style->warning('More than 300 files have been changed. Cannot perform a changed-only split.');
+
+            if (! $this->style->confirm('Do you want to continue with a complete split instead?')) {
+                $this->style->note('Split was skipped.');
+
+                return;
+            }
+
+            $changedFiles = [];
+        }
+
+        $this->branchSplitsh->splitBranch($ref, $changedFiles);
     }
 }

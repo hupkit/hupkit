@@ -37,14 +37,24 @@ class BranchSplitsh
      * Target configuration and whether this branch should be split et all
      * is automatically resolved from the configuration.
      *
-     * @param string $branch The source branch to split from
-     * @param string $prefix Directory prefix, relative to the root directory
+     * @param string   $branch      The source branch to split from
+     * @param string   $prefix      Directory prefix, relative to the root directory
+     * @param string[] $filterFiles An optional list of files to check if any matches in the $prefix.
+     *                              When passed, only when the files are matched in the prefix the
+     *                              split is performed, null is returned otherwise
      *
      * @return array{0: string, 1: string, 2: string}|null Same as {@link SplitshGit::splitTo}
      */
-    public function splitAtPrefix(string $branch, string $prefix): ?array
+    public function splitAtPrefix(string $branch, string $prefix, array $filterFiles = []): ?array
     {
         $config = $this->getConfigForPrefix($branch, $prefix);
+
+        if ($filterFiles && ! SplitshGit::isPrefixInChangedFiles($prefix, $filterFiles)) {
+            $this->style->note(\sprintf('No changed files where matched for "%s". And the split was ignored.', $prefix));
+
+            return null;
+        }
+
         $this->style->writeln(\sprintf('<fg=default;bg=default> Splitting %s to %s</>', $prefix, $config['url']));
 
         return $this->splitshGit->splitTo($branch, $prefix, $config['url']);
@@ -103,9 +113,12 @@ class BranchSplitsh
      * Split all from the branch to their destinations, unlike splitTo()
      * this will pass when no destinations are found.
      *
+     * @param string[] $filterFiles An optional list of files to check if any matches in the prefixes.
+     *                              When passed, only prefixes matched in the files list are split
+     *
      * @return array<string, array{0: string, 1: string, 2: string}>
      */
-    public function splitBranch(string $branch): array
+    public function splitBranch(string $branch, array $filterFiles = []): array
     {
         $splits = $this->getSplit($this->getBranchConfig($branch));
 
@@ -116,7 +129,10 @@ class BranchSplitsh
         $this->git->ensureBranchInSync(REMOTE_MAIN, $branch);
         $this->splitshGit->checkPrecondition();
 
+        $ignored = [];
         $results = [];
+
+        $splits = SplitshGit::filterOnlyChangedPrefixes($splits, $filterFiles, $ignored);
 
         $this->style->section(\sprintf('Splitting from %s to %d destinations', $branch, \count($splits)));
 
@@ -129,6 +145,11 @@ class BranchSplitsh
 
             $results[$prefix] = $split;
             $this->style->writeln(\sprintf('<fg=default;bg=default> Splitting %s to %s</>', $prefix, $config['url']));
+        }
+
+        if ($ignored) {
+            $this->style->note('No changed files where matched for the following listed prefixes. And the splits have been ignored.');
+            $this->style->listing(array_keys($ignored));
         }
 
         return $results;
@@ -150,9 +171,13 @@ class BranchSplitsh
      *
      * @return int The number of tags synchronized
      */
-    public function syncTags(string $branch, string $versionStr): int
+    public function syncTags(string $branch, string $versionStr, ?string $onlyChangesSince = null): int
     {
-        $splits = $this->splitBranch($branch);
+        if ($onlyChangesSince !== null) {
+            $changedFiles = $this->git->getFileChangesBetween($onlyChangesSince, $branch);
+        }
+
+        $splits = $this->splitBranch($branch, $changedFiles ?? []);
 
         // Check if there are any splits to prevent duplicate messages.
         if (\count($splits) === 0) {
@@ -169,6 +194,8 @@ class BranchSplitsh
                 continue;
             }
 
+            $this->style->writeln(\sprintf('<fg=default;bg=default> Tagging split release for directory %s</>', $prefix));
+
             $this->splitshGit->syncTag($versionStr, $split[1], $branch, $split[0]);
             ++$count;
         }
@@ -176,15 +203,38 @@ class BranchSplitsh
         return $count;
     }
 
-    public function drySplitAtPrefix(string $branch, string $prefix): void
+    /**
+     * Simulate (dry-run) splitting the prefix directory into another repository.
+     *
+     * Target configuration and whether this branch should be split et all
+     * is automatically resolved from the configuration.
+     *
+     * @param string   $branch      The source branch to split from
+     * @param string   $prefix      Directory prefix, relative to the root directory
+     * @param string[] $filterFiles An optional list of files to check if any matches in the $prefix.
+     *                              When passed, only when the files are matched in the prefix the
+     *                              split is performed, null is returned otherwise
+     */
+    public function drySplitAtPrefix(string $branch, string $prefix, array $filterFiles = []): void
     {
         $config = $this->getConfigForPrefix($branch, $prefix);
+
+        if ($filterFiles && SplitshGit::isPrefixInChangedFiles($prefix, $filterFiles)) {
+            $this->style->note(\sprintf('No changed files where matched for "%s". And the split would have been ignored.', $prefix));
+
+            return;
+        }
 
         $this->style->writeln(\sprintf('<fg=default;bg=default> [DRY-RUN] Splitting %s to %s</>', $prefix, $config['url']));
     }
 
-    /** @return int The number of splits */
-    public function drySplitBranch(string $branch): int
+    /**
+     * @param string[] $filterFiles An optional list of files to check if any matches in the prefixes.
+     *                              When passed, only prefixes matched in the files list are split
+     *
+     * @return int The number of splits
+     */
+    public function drySplitBranch(string $branch, array $filterFiles = []): int
     {
         $splits = $this->getSplit($this->getBranchConfig($branch));
 
@@ -194,10 +244,18 @@ class BranchSplitsh
 
         $this->splitshGit->checkPrecondition();
 
+        $ignored = [];
+        $splits = SplitshGit::filterOnlyChangedPrefixes($splits, $filterFiles, $ignored);
+
         $this->style->section(\sprintf('Would be splitting branch %s to %d destinations', $branch, \count($splits)));
 
         foreach ($splits as $prefix => $config) {
             $this->style->writeln(\sprintf('<fg=default;bg=default> [DRY-RUN] Splitting %s to %s</>', $prefix, $config['url']));
+        }
+
+        if ($ignored) {
+            $this->style->note('No changed files where matched for the following listed prefixes. And the splits would bee ignored.');
+            $this->style->listing(array_keys($ignored));
         }
 
         return \count($splits);

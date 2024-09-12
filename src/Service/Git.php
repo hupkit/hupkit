@@ -133,9 +133,22 @@ class Git
         return $branch;
     }
 
-    public function getLastTagOnBranch(string $ref = 'HEAD'): string
+    /**
+     * @return ($allowFailure is true ? string|null : string)
+     *
+     * @throws \RuntimeException
+     */
+    public function getLastTagOnBranch(string $ref = 'HEAD', bool $allowFailure = false): ?string
     {
-        return trim($this->process->mustRun(['git', 'describe', '--tags', '--abbrev=0', $ref])->getOutput());
+        try {
+            return trim($this->process->mustRun(['git', 'describe', '--tags', '--abbrev=0', $ref])->getOutput());
+        } catch (\RuntimeException $e) {
+            if (! $allowFailure) {
+                throw $e;
+            }
+
+            return null;
+        }
     }
 
     /** @return array<int, string> ['v1.0', 'v1.5', 'v2.0' '...'] */
@@ -251,6 +264,29 @@ class Git
         );
 
         return array_values(array_filter($results));
+    }
+
+    /**
+     * Returns a list of changed files between two ranges (either commit or branch-name).
+     *
+     * @return string[]
+     */
+    public function getFileChangesBetween(string $start, string $end): array
+    {
+        $results = StringUtil::splitLines($this->process->mustRun(
+            [
+                'git',
+                '--no-pager',
+                'log',
+                '--oneline',
+                '--no-color',
+                '--pretty=format:', // Ensures we only get the names, and not the commit refs
+                '--name-only',
+                $start . '..' . $end,
+            ]
+        )->getOutput());
+
+        return array_values(array_unique(array_filter($results)));
     }
 
     public function remoteBranchExists(string $remote, string $branch): bool

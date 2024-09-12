@@ -183,6 +183,140 @@ labels: removed-deprecation
     }
 
     /** @test */
+    public function it_creates_a_new_release_with_changed_only_split_without_existing_tags(): void
+    {
+        $this->config = new Config(
+            [
+                '_local' => [
+                    'branches' => [
+                        ':default' => [
+                            'split' => [
+                                'src/Component/Core' => ['url' => 'git@github.com:park-manager/core.git', 'sync-tags' => true],
+                                'src/Component/Model' => ['url' => 'git@github.com:park-manager/model.git', 'sync-tags' => true],
+                                'doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => false],
+                            ],
+                        ],
+                    ],
+                    'release' => ['split' => 'changed-only'],
+                ],
+            ],
+        );
+        $this->config->setActiveRepository('github.com', 'park-manager/park-manager');
+
+        $this->expectTags([], 'master');
+        $this->expectMatchingVersionBranchNotExists();
+        $this->expectEditorReturns('Initial release.');
+
+        $url = $this->expectTagAndGitHubRelease('1.0.0', 'Initial release.', branch: 'master', since: null);
+
+        $args = $this->getArgs('1.0');
+        $this->executeHandler($args);
+
+        $this->assertOutputMatches(
+            [
+                'Provided version: 1.0.0',
+                'Preparing release 1.0.0 (target branch master)',
+                'Please wait...',
+                'Successfully released 1.0.0',
+                $url,
+            ]
+        );
+
+        $this->assertOutputNotMatches('Creating split-releases only for changes since');
+    }
+
+    /** @test */
+    public function it_creates_a_new_release_with_changed_only_split_with_existing_tags(): void
+    {
+        $this->config = new Config(
+            [
+                '_local' => [
+                    'branches' => [
+                        ':default' => [
+                            'split' => [
+                                'src/Component/Core' => ['url' => 'git@github.com:park-manager/core.git', 'sync-tags' => true],
+                                'src/Component/Model' => ['url' => 'git@github.com:park-manager/model.git', 'sync-tags' => true],
+                                'doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => false],
+                            ],
+                        ],
+                    ],
+                    'release' => ['split' => 'changed-only'],
+                ],
+            ],
+        );
+        $this->config->setActiveRepository('github.com', 'park-manager/park-manager');
+
+        $this->expectTags(['1.2.0', '2.0.0'], 'master');
+        $this->expectMatchingVersionBranchNotExists('2.1');
+
+        $this->git->getLogBetweenCommits('2.0.0', 'master')->willReturn(self::COMMITS);
+
+        $this->expectEditorReturns("### Added\n- Introduce a new API for ValuesBag");
+
+        $url = $this->expectTagAndGitHubRelease('2.1.0', "### Added\n- Introduce a new API for ValuesBag", branch: 'master', since: '2.0.0');
+
+        $args = $this->getArgs('2.1');
+        $this->executeHandler($args);
+
+        $this->assertOutputMatches(
+            [
+                'Provided version: 2.1.0',
+                'Preparing release 2.1.0 (target branch master)',
+                'Please wait...',
+                'Creating split-releases only for changes since "2.0.0".',
+                'Successfully released 2.1.0',
+                $url,
+            ]
+        );
+    }
+
+    /** @test */
+    public function it_creates_a_new_release_with_changed_only_split_forced_all(): void
+    {
+        $this->config = new Config(
+            [
+                '_local' => [
+                    'branches' => [
+                        ':default' => [
+                            'split' => [
+                                'src/Component/Core' => ['url' => 'git@github.com:park-manager/core.git', 'sync-tags' => true],
+                                'src/Component/Model' => ['url' => 'git@github.com:park-manager/model.git', 'sync-tags' => true],
+                                'doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => false],
+                            ],
+                        ],
+                    ],
+                    'release' => ['split' => 'changed-only'],
+                ],
+            ],
+        );
+        $this->config->setActiveRepository('github.com', 'park-manager/park-manager');
+
+        $this->expectTags(['1.2.0', '2.0.0'], 'master');
+        $this->expectMatchingVersionBranchNotExists('2.1');
+
+        $this->git->getLogBetweenCommits('2.0.0', 'master')->willReturn(self::COMMITS);
+        $this->expectEditorReturns("### Added\n- Introduce a new API for ValuesBag");
+
+        $url = $this->expectTagAndGitHubRelease('2.1.0', "### Added\n- Introduce a new API for ValuesBag");
+
+        $args = $this->getArgs('2.1');
+        $args->setOption('force-split-all', true);
+        $this->executeHandler($args);
+
+        $this->assertOutputMatches(
+            [
+                'Provided version: 2.1.0',
+                'Preparing release 2.1.0 (target branch master)',
+                'Please wait...',
+                'Successfully released 2.1.0',
+                $url,
+            ]
+        );
+
+        $this->assertOutputNotMatches('Creating split-releases only for changes since');
+    }
+
+    /** @test */
     public function it_creates_a_new_release_for_current_branch_with_existing_tags_and_no_gap(): void
     {
         $this->expectTags(['0.1.0', '1.0.0-BETA1']);
@@ -383,6 +517,7 @@ labels: removed-deprecation
             ->addOption(new Option('all-categories', null, Option::NO_VALUE | Option::BOOLEAN))
             ->addOption(new Option('no-edit', null, Option::NO_VALUE | Option::BOOLEAN))
             ->addOption(new Option('pre-release', null, Option::BOOLEAN))
+            ->addOption(new Option('force-split-all', null, Option::BOOLEAN))
             ->addOption(new Option('title', null, Option::REQUIRED_VALUE | Option::NULLABLE | Option::STRING))
             ->addArgument(new Argument('version', Argument::REQUIRED | Argument::STRING))
             ->getFormat()
@@ -411,7 +546,7 @@ labels: removed-deprecation
         $handler->handle($args, $this->io);
     }
 
-    private function expectTags(array $tags = []): void
+    private function expectTags(array $tags = [], ?string $branch = 'HEAD'): void
     {
         $process = $this->prophesize(Process::class);
         $process->getOutput()->willReturn(implode("\n", $tags));
@@ -420,8 +555,10 @@ labels: removed-deprecation
 
         if ($tags === []) {
             $this->git->getLastTagOnBranch()->willThrow(ProcessFailedException::class);
+            $this->git->getLastTagOnBranch($branch, true)->willReturn(null);
         } else {
-            $this->git->getLastTagOnBranch()->willReturn(end($tags));
+            $this->git->getLastTagOnBranch()->willReturn($lastTag = end($tags));
+            $this->git->getLastTagOnBranch($branch, true)->willReturn($lastTag);
         }
     }
 
@@ -435,9 +572,13 @@ labels: removed-deprecation
         $this->git->remoteBranchExists(REMOTE_MAIN, $branch)->willReturn(false);
     }
 
-    private function expectTagAndGitHubRelease(string $version, string $message, ?string $title = null, ?string $branch = null): string
+    private function expectTagAndGitHubRelease(string $version, string $message, ?string $title = null, ?string $branch = null, string | false | null $since = false): string
     {
-        $this->branchSplitsh->syncTags($branch ?? 'master', $version)->willReturn(2)->shouldBeCalled();
+        if ($since !== false) {
+            $this->branchSplitsh->syncTags($branch ?? 'master', $version, $since)->willReturn(1)->shouldBeCalled();
+        } else {
+            $this->branchSplitsh->syncTags($branch ?? 'master', $version)->willReturn(2)->shouldBeCalled();
+        }
 
         $this->process->mustRun(['git', 'tag', '-s', 'v' . $version, '-m', 'Release ' . $version])->shouldBeCalled();
         $this->process->mustRun(['git', 'push', REMOTE_MAIN, 'v' . $version])->shouldBeCalled();

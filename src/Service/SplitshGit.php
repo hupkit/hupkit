@@ -114,4 +114,61 @@ class SplitshGit
             );
         }
     }
+
+    /**
+     * Returns a list of prefixes that are matched in the $changedFiles.
+     *
+     * Note: Prefixes MUST not start or end with a slash.
+     * Files may begin with a begin slash (trimmed).
+     *
+     * @param array<string, array<string, mixed>> $prefixes     ['src/Core' => ..., 'docs'=> ..., 'lib/Bridge/PhpUnit'=> ...]
+     * @param string[]                            $changedFiles ['src/core/SearchFactory.php', '/src/Validator/InputValidator.php']
+     * @param array<string, array<string, mixed>> $ignored      An assoc array with prefixes ignored for not being matched
+     *
+     * @return array<string, array<string, mixed>> The $prefixes filtered
+     */
+    public static function filterOnlyChangedPrefixes(array $prefixes, array $changedFiles, ?array &$ignored): array
+    {
+        $changedFiles = array_unique($changedFiles);
+        $changedFiles = array_map(static fn (string $file): string => ltrim($file, '/'), $changedFiles);
+        $ignored = [];
+
+        if (\count($changedFiles) < 1) {
+            return $prefixes;
+        }
+
+        $pathsList = implode("\n", $changedFiles);
+
+        foreach ($prefixes as $prefix => $config) {
+            if (preg_match_all('#^' . preg_quote($prefix, '#') . '/#mi', $pathsList) < 1) {
+                $ignored[$prefix] = $config;
+                unset($prefixes[$prefix]);
+            }
+        }
+
+        return $prefixes;
+    }
+
+    /**
+     * Returns whether the prefix is matched in the $changedFiles.
+     *
+     * Note: A Prefix MUST not start or end with a slash.
+     * Files may begin with a begin slash (trimmed).
+     *
+     * @param string   $prefix       'src/Core', 'docs', or 'lib/Bridge/PhpUnit'
+     * @param string[] $changedFiles ['src/core/SearchFactory.php', '/src/Validator/InputValidator.php']
+     */
+    public static function isPrefixInChangedFiles(string $prefix, array $changedFiles): bool
+    {
+        $changedFiles = array_unique($changedFiles);
+        $changedFiles = array_map(static fn (string $file): string => ltrim($file, '/'), $changedFiles);
+
+        if (\count($changedFiles) < 1) {
+            return true;
+        }
+
+        $pathsList = implode("\n", $changedFiles);
+
+        return preg_match_all('#^' . preg_quote($prefix, '#') . '/#mi', $pathsList) > 0;
+    }
 }

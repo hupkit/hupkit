@@ -522,4 +522,46 @@ final class ConfigTest extends TestCase
             $config->getBranchConfig('master', 'github.com', 'hubkit-sandbox/empire')
         );
     }
+
+    /** @test */
+    public function it_gets_pull_request_config(): void
+    {
+        $config = new Config([
+            'schema_version' => 2,
+            'github' => [
+                'github.com' => [
+                    'username' => 'sstok',
+                    'api_token' => 'CHANGE-ME',
+                ],
+            ],
+            '_local' => [
+                'pull_request' => [
+                    'split' => 'changed-only',
+                ],
+            ],
+        ]);
+
+        self::assertEquals(['split' => 'changed-only'], $config->getPullRequestConfig());
+    }
+
+    /** @test */
+    public function it_gets_release_config(): void
+    {
+        $config = new Config([
+            'schema_version' => 2,
+            'github' => [
+                'github.com' => [
+                    'username' => 'sstok',
+                    'api_token' => 'CHANGE-ME',
+                ],
+            ],
+            '_local' => [
+                'release' => [
+                    'split' => 'changed-only',
+                ],
+            ],
+        ]);
+
+        self::assertEquals(['split' => 'changed-only'], $config->getReleaseConfig());
+    }
 }

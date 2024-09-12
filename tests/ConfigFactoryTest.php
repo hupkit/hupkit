@@ -599,6 +599,10 @@ final class ConfigFactoryTest extends TestCase
                 'adapter' => 'github',
                 'host' => null,
                 'repository' => null,
+                'pull_request' => [
+                    'split' => 'all',
+                ],
+                'release' => ['split' => 'all'],
             ],
             'current_dir' => __DIR__ . '/Fixtures/config/schema_v2_local',
         ]);
@@ -847,6 +851,10 @@ final class ConfigFactoryTest extends TestCase
             'adapter' => 'github',
             'host' => null,
             'repository' => null,
+            'pull_request' => [
+                'split' => 'all',
+            ],
+            'release' => ['split' => 'all'],
         ], $config);
 
         $config = $factory->resolveLocalConfig([
@@ -860,6 +868,9 @@ final class ConfigFactoryTest extends TestCase
             'adapter' => 'github',
             'host' => null,
             'repository' => null,
+            'pull_request' => [
+                'split' => 'all',
+            ],
         ]);
 
         self::assertEquals([
@@ -873,6 +884,10 @@ final class ConfigFactoryTest extends TestCase
             'adapter' => 'github',
             'host' => null,
             'repository' => null,
+            'pull_request' => [
+                'split' => 'all',
+            ],
+            'release' => ['split' => 'all'],
         ], $config);
     }
 

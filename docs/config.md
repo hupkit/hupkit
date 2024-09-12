@@ -97,6 +97,23 @@ return [
     //     // 'dev/main' => '1.0',
     //     // '1.x' => '1.5',
     // ],
+
+    // Since v1.4
+    //'pull_request' => [
+           // Either:
+           //  * 'all' (default)
+           //  * 'changed-only' (only split changed files matched in prefixes)
+           //  * 'none' (don't split, some as the `--no-split option` for the `merge` command)
+    //    'split' => 'all',
+    //],
+
+    // Since v1.4
+    //'release' => [         
+          // Either:
+          // 'all' (default)
+          // 'changed-only' (only create split releases for prefixes that have changed since the last release)
+    //    'split' => 'all',
+    //],
 ];
 ````
 
@@ -227,7 +244,7 @@ return [
     'branches' => [
         ':default' => [
             // ...
-        
+
             'split' => [
                 'src/Module/CoreModule' => 'git@github.com:hubkit-sandbox/core-module.git',
                 'src/Module/WebhostingModule' => 'git@github.com:hubkit-sandbox/webhosting-module.git',
@@ -282,7 +299,7 @@ The config "main" is the main repository which all team-members pull and push fr
 > This is about remote _names_ not actual repository url's.
 
 The file format is similar to an ini-file, a line can contain either a comment (`; Commment`)
-_or_ a variable ("main" or "fork"), no overwrites, no different names (than shown), 
+_or_ a variable ("main" or "fork"), no overwrites, no different names (than shown),
 and comments can only be used on their own line (not at the end of a variable declaration).
 
 > [!IMPORTANT]
