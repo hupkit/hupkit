@@ -197,7 +197,7 @@ labels: removed-deprecation
                             ],
                         ],
                     ],
-                    'release' => ['split' => 'changed-only'],
+                    'release' => ['split' => 'changed-only', 'signed' => true],
                 ],
             ],
         );
@@ -240,7 +240,7 @@ labels: removed-deprecation
                             ],
                         ],
                     ],
-                    'release' => ['split' => 'changed-only'],
+                    'release' => ['split' => 'changed-only', 'signed' => true],
                 ],
             ],
         );
@@ -285,7 +285,7 @@ labels: removed-deprecation
                             ],
                         ],
                     ],
-                    'release' => ['split' => 'changed-only'],
+                    'release' => ['split' => 'changed-only', 'signed' => true],
                 ],
             ],
         );
@@ -486,6 +486,84 @@ labels: removed-deprecation
     }
 
     /** @test */
+    public function it_creates_a_new_release_with_signing_disabled(): void
+    {
+        $this->config = new Config([
+            '_local' => [
+                'branches' => [
+                    ':default' => [
+                        'split' => [],
+                    ],
+                ],
+                'release' => ['split' => 'all', 'signed' => false],
+            ],
+        ]);
+        $this->config->setActiveRepository('github.com', 'park-manager/park-manager');
+
+        $this->expectTags(['0.1.0', '1.0.0-BETA1']);
+        $this->expectMatchingVersionBranchNotExists();
+
+        $this->git->getLogBetweenCommits('1.0.0-BETA1', 'master')->willReturn(self::COMMITS);
+
+        $this->expectEditorReturns("### Added\n- Introduce a new API for ValuesBag");
+
+        $url = $this->expectTagAndGitHubRelease('1.0.0', "### Added\n- Introduce a new API for ValuesBag", signed: false);
+
+        $args = $this->getArgs('1.0');
+        $this->executeHandler($args);
+
+        $this->assertOutputMatches(
+            [
+                'Provided version: 1.0.0',
+                'Preparing release 1.0.0 (target branch master)',
+                'Please wait...',
+                'Signing of Git tags is disabled.',
+                'Successfully released 1.0.0',
+                $url,
+            ]
+        );
+    }
+
+    /** @test */
+    public function it_creates_a_new_release_with_signing_set_to_auto(): void
+    {
+        $this->config = new Config([
+            '_local' => [
+                'branches' => [
+                    ':default' => [
+                        'split' => [],
+                    ],
+                ],
+                'release' => ['split' => 'all', 'signed' => null],
+            ],
+        ]);
+        $this->config->setActiveRepository('github.com', 'park-manager/park-manager');
+
+        $this->expectTags(['0.1.0', '1.0.0-BETA1']);
+        $this->expectMatchingVersionBranchNotExists();
+
+        $this->git->getLogBetweenCommits('1.0.0-BETA1', 'master')->willReturn(self::COMMITS);
+
+        $this->expectEditorReturns("### Added\n- Introduce a new API for ValuesBag");
+
+        $url = $this->expectTagAndGitHubRelease('1.0.0', "### Added\n- Introduce a new API for ValuesBag", signed: null);
+
+        $args = $this->getArgs('1.0');
+        $this->executeHandler($args);
+
+        $this->assertOutputMatches(
+            [
+                'Provided version: 1.0.0',
+                'Preparing release 1.0.0 (target branch master)',
+                'Please wait...',
+                'Successfully released 1.0.0',
+                $url,
+            ]
+        );
+        $this->assertOutputNotMatches('Signing of Git tags is disabled.');
+    }
+
+    /** @test */
     public function it_fails_when_tag_already_exists(): void
     {
         $this->expectTags(['v0.1.0', 'v0.2.0', 'v0.3.0', '1.0.0-BETA1', '1.0.0']);
@@ -572,15 +650,25 @@ labels: removed-deprecation
         $this->git->remoteBranchExists(REMOTE_MAIN, $branch)->willReturn(false);
     }
 
-    private function expectTagAndGitHubRelease(string $version, string $message, ?string $title = null, ?string $branch = null, string | false | null $since = false): string
+    private function expectTagAndGitHubRelease(string $version, string $message, ?string $title = null, ?string $branch = null, string | false | null $since = false, ?bool $signed = true): string
     {
         if ($since !== false) {
-            $this->branchSplitsh->syncTags($branch ?? 'master', $version, $since)->willReturn(1)->shouldBeCalled();
+            $this->branchSplitsh->syncTags($branch ?? 'master', $version, $since, $signed)->willReturn(1)->shouldBeCalled();
         } else {
-            $this->branchSplitsh->syncTags($branch ?? 'master', $version)->willReturn(2)->shouldBeCalled();
+            $this->branchSplitsh->syncTags($branch ?? 'master', $version, null, $signed)->willReturn(2)->shouldBeCalled();
         }
 
-        $this->process->mustRun(['git', 'tag', '-s', 'v' . $version, '-m', 'Release ' . $version])->shouldBeCalled();
+        $cmd = ['git', 'tag', 'v' . $version, '-m', 'Release ' . $version];
+
+        // When null: don't explicitly sign the tag;
+        // When the `tag.gpgSign` Git config is set, signing will happen automatically.
+        if ($signed === true) {
+            $cmd[] = '--sign';
+        } elseif ($signed === false) {
+            $cmd[] = '--no-sign';
+        }
+
+        $this->process->mustRun($cmd)->shouldBeCalled();
         $this->process->mustRun(['git', 'push', REMOTE_MAIN, 'v' . $version])->shouldBeCalled();
 
         $this->github->createRelease('v' . $version, $message, false, $title)->willReturn(

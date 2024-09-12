@@ -227,10 +227,10 @@ final class Config
         return $this->get(['_local', 'pull_request'], ['split' => 'all']);
     }
 
-    /** @return array{split: string} */
+    /** @return array{split: string, signed: bool|null} */
     public function getReleaseConfig(): array
     {
-        return $this->get(['_local', 'release'], ['split' => 'all']);
+        return $this->get(['_local', 'release'], ['split' => 'all', 'signed' => true]);
     }
 
     /**

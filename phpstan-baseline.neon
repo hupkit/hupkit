@@ -652,7 +652,7 @@ parameters:
 
 		-
 			message: "#^Parameter \\#3 \\$targets of method HubKit\\\\Service\\\\SplitshGit\\:\\:syncTags\\(\\) expects array\\<int\\|string, array\\{string, string, string\\}\\>, non\\-empty\\-array\\<int, array\\{string, string, string\\}\\|null\\> given\\.$#"
-			count: 1
+			count: 3
 			path: tests/Functional/Service/Git/SplitshGitTest.php
 
 		-
@@ -2067,7 +2067,7 @@ parameters:
 
 		-
 			message: "#^Parameter \\#3 \\$targets of method HubKit\\\\Service\\\\SplitshGit\\:\\:syncTags\\(\\) expects array\\<int\\|string, array\\{string, string, string\\}\\>, array\\{/tmp/hubkit/stor/_core\\: array\\{'2c00338aef823d0c091…', 'git@github\\.com\\:park…', 5\\}, /tmp/hubkit/stor/_user\\: array\\{'3eed8083737422fe9ac…', 'git@github\\.com\\:park…', 3\\}\\} given\\.$#"
-			count: 1
+			count: 3
 			path: tests/Service/SplitshGitTest.php
 
 		-

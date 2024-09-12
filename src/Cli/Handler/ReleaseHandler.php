@@ -60,6 +60,13 @@ final class ReleaseHandler extends GitBaseHandler
         $this->validateBranchCompatibility($branch, $version);
         $this->git->ensureBranchInSync(REMOTE_MAIN, $branch);
 
+        /** @var bool|null $signed */
+        $signed = $this->config->getReleaseConfig()['signed'];
+
+        if ($signed === false) {
+            $this->style->warning('Signing of Git tags is disabled.');
+        }
+
         $this->style->writeln(
             [
                 \sprintf(
@@ -85,9 +92,19 @@ final class ReleaseHandler extends GitBaseHandler
 
         // Perform the sub-split and tagging first as it's easier to recover from split error
         // then being able to re-run the release command on the source repository.
-        $this->handleSplitReleases($branch, $versionStr, $args->getOption('force-split-all'));
+        $this->handleSplitReleases($branch, $versionStr, $args->getOption('force-split-all'), $signed);
 
-        $this->process->mustRun(['git', 'tag', '-s', 'v' . $versionStr, '-m', 'Release ' . $versionStr]);
+        $cmd = ['git', 'tag', 'v' . $versionStr, '-m', 'Release ' . $versionStr];
+
+        // When null: don't explicitly sign the tag;
+        // When the `tag.gpgSign` Git config is set, signing will happen automatically.
+        if ($signed === true) {
+            $cmd[] = '--sign';
+        } elseif ($signed === false) {
+            $cmd[] = '--no-sign';
+        }
+
+        $this->process->mustRun($cmd);
         $this->process->mustRun(['git', 'push', REMOTE_MAIN, 'v' . $versionStr]);
 
         $release = $this->github->createRelease('v' . $versionStr, $changelog, $args->getOption('pre-release'), $args->getOption('title'));
@@ -208,10 +225,10 @@ final class ReleaseHandler extends GitBaseHandler
         );
     }
 
-    private function handleSplitReleases(string $branch, string $versionStr, bool $forceAll): void
+    private function handleSplitReleases(string $branch, string $versionStr, bool $forceAll, ?bool $signed): void
     {
         if ($this->config->getReleaseConfig()['split'] === 'all' || $forceAll) {
-            $this->branchSplitsh->syncTags($branch, $versionStr);
+            $this->branchSplitsh->syncTags($branch, $versionStr, null, $signed);
 
             return;
         }
@@ -222,6 +239,6 @@ final class ReleaseHandler extends GitBaseHandler
             $this->style->block(\sprintf('Creating split-releases <options=underscore>only for changes</> since "%s".', $previousRelease), 'INFO', 'fg=green', ' ', false, false);
         }
 
-        $this->branchSplitsh->syncTags($branch, $versionStr, $previousRelease);
+        $this->branchSplitsh->syncTags($branch, $versionStr, $previousRelease, $signed);
     }
 }

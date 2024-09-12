@@ -79,10 +79,10 @@ class SplitshGit
      * @param array<string|int, array{0: string, 1: string, 2: string}> $targets    Targets to tag and push as
      *                                                                              [['commit-hash', 'url', 'tempo-repository-location']]
      */
-    public function syncTags(string $versionStr, string $branch, array $targets): void
+    public function syncTags(string $versionStr, string $branch, array $targets, ?bool $signed = true): void
     {
         foreach ($targets as [$targetCommit, $url]) {
-            $this->syncTag($versionStr, $url, $branch, $targetCommit);
+            $this->syncTag($versionStr, $url, $branch, $targetCommit, $signed);
         }
     }
 
@@ -94,11 +94,21 @@ class SplitshGit
      *
      * @param string $versionStr Version (without prefix) for the tag name
      */
-    public function syncTag(string $versionStr, string $url, string $branch, string $targetCommit): void
+    public function syncTag(string $versionStr, string $url, string $branch, string $targetCommit, ?bool $signed = true): void
     {
         $tempGitDir = $this->gitTempRepository->getRemote($url, $branch);
 
-        $this->process->run(new Process(['git', 'tag', 'v' . $versionStr, $targetCommit, '-s', '-m', 'Release ' . $versionStr], $tempGitDir));
+        $cmd = ['git', 'tag', 'v' . $versionStr, $targetCommit, '-m', 'Release ' . $versionStr];
+
+        // When null: don't explicitly sign the tag;
+        // When the `tag.gpgSign` Git config is set, signing will happen automatically.
+        if ($signed === true) {
+            $cmd[] = '--sign';
+        } elseif ($signed === false) {
+            $cmd[] = '--no-sign';
+        }
+
+        $this->process->run(new Process($cmd, $tempGitDir));
         $this->process->run(new Process(['git', 'push', 'origin', 'v' . $versionStr], $tempGitDir));
     }
 
