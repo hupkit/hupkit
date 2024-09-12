@@ -1,0 +1,21 @@
+---------------------------------------------------------------------------
+
+by sstok at 2024-09-11T19:21:14Z
+
+In the first real life tests this is looking rather promising!
+
+```
+ Splitting lib/Symfony/Validator to git@github.com:hubkit-sandbox/search-symfony-validator.git
+
+ ! [NOTE] No changed files where matched for the following listed prefixes. And the splits have been ignored.
+
+ * lib/ApiPlatform
+ * lib/Core
+ * lib/Doctrine/Dbal
+ * lib/Doctrine/Orm
+ * lib/Elasticsearch
+ * lib/Symfony/SearchBundle
+```
+
+But I have to be absolute certain.
+
