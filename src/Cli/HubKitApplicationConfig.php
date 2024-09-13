@@ -312,18 +312,6 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
             })
             ->end()
 
-            ->beginCommand('branch-alias')
-            ->setDescription('[DEPRECATED] Set/get the "primary" branch-alias. Omit alias argument to get the current alias.')
-            ->addArgument('alias', Argument::OPTIONAL | Argument::STRING, 'New alias to assign (omit to get the current alias)')
-            ->addOption('no-warning', null, Option::BOOLEAN, 'Hide the the deprecation warning if you need the pure value')
-            ->setHandler(function () {
-                return new Handler\BranchAliasHandler(
-                    $this->container['git'],
-                    $this->container['style'],
-                );
-            })
-            ->end()
-
             ->beginCommand('changelog')
             ->setDescription('Generate a changelog with all changes between commits')
             ->addArgument('ref', Argument::OPTIONAL | Argument::STRING, 'Range reference as `base..head`')

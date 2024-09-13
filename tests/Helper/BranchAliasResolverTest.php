@@ -16,7 +16,6 @@ namespace HubKit\Tests\Helper;
 use HubKit\Config;
 use HubKit\Helper\BranchAliasResolver;
 use HubKit\Service\Filesystem;
-use HubKit\Service\Git;
 use HubKit\Tests\Functional\GitTesterTrait;
 use HubKit\Tests\Handler\SymfonyStyleTrait;
 use PHPUnit\Framework\TestCase;
@@ -35,8 +34,6 @@ final class BranchAliasResolverTest extends TestCase
     public function it_resolves_from_composer_file(): void
     {
         $style = $this->createStyle(['3.0']);
-        $git = $this->prophesize(Git::class);
-
         $filesystem = $this->prophesize(Filesystem::class);
         $filesystem->fileExists('./composer.json')->willReturn(true);
         $filesystem->getFileContents('./composer.json')->willReturn(
@@ -52,7 +49,7 @@ final class BranchAliasResolverTest extends TestCase
         $config = new Config([]);
         $config->setActiveRepository('github.com', 'hupkit/hupkit');
 
-        $resolver = new BranchAliasResolver($filesystem->reveal(), $style, $git->reveal(), $config);
+        $resolver = new BranchAliasResolver($filesystem->reveal(), $style, $config);
 
         self::assertEquals('1.3-dev', $resolver->getAlias('master'));
         self::assertEquals('composer.json "extra.branch-alias.dev-master"', $resolver->getDetectedBy());
@@ -62,22 +59,20 @@ final class BranchAliasResolverTest extends TestCase
     public function it_resolves_by_local_config(): void
     {
         $style = $this->createStyle(['3.0']);
-        $git = $this->prophesize(Git::class);
-
         $filesystem = $this->prophesize(Filesystem::class);
         $filesystem->fileExists('./composer.json')->willReturn(false);
 
         $config = new Config(['_local' => ['branches_alias' => ['master' => '1.3-dev']]]);
         $config->setActiveRepository('github.com', 'hupkit/hupkit');
 
-        $resolver = new BranchAliasResolver($filesystem->reveal(), $style, $git->reveal(), $config);
+        $resolver = new BranchAliasResolver($filesystem->reveal(), $style, $config);
 
         self::assertEquals('1.3-dev', $resolver->getAlias('master'));
         self::assertEquals('configuration [branches_alias][master]', $resolver->getDetectedBy());
     }
 
     /** @test */
-    public function it_resolves_by_git_config(): void
+    public function it_resolves_by_asking(): void
     {
         $this->cwd = $this->createGitDirectory($this->getTempDir() . '/git-alias-resolve');
         $style = $this->createStyle(['3.0']);
@@ -86,47 +81,17 @@ final class BranchAliasResolverTest extends TestCase
         $filesystemProphecy->fileExists('./composer.json')->willReturn(false);
         $filesystem = $filesystemProphecy->reveal();
 
-        $git = new Git($this->getProcessService(), $filesystem, $style);
-        $git->setGitConfig('branch.master.alias', '1.3-dev', true);
-
         $config = new Config([]);
         $config->setActiveRepository('github.com', 'hupkit/hupkit');
 
-        $resolver = new BranchAliasResolver($filesystem, $style, $git, $config);
-
-        self::assertEquals('1.3-dev', $resolver->getAlias('master'));
-        self::assertEquals('Git config "branch.master.alias"', $resolver->getDetectedBy());
-
-        $this->assertOutputMatches([
-            'Usage of Git config "branch.master.alias" is deprecated and will be removed in v2.0. Add either an "extra.branch-alias.dev-master" in composer.json or add branches_alias.master to the repository local configuration.',
-        ]);
-    }
-
-    /** @test */
-    public function it_resolves_by_asking_and_storing(): void
-    {
-        $this->cwd = $this->createGitDirectory($this->getTempDir() . '/git-alias-resolve');
-        $style = $this->createStyle(['3.0']);
-
-        $filesystemProphecy = $this->prophesize(Filesystem::class);
-        $filesystemProphecy->fileExists('./composer.json')->willReturn(false);
-        $filesystem = $filesystemProphecy->reveal();
-
-        $git = new Git($this->getProcessService(), $filesystem, $style);
-
-        $config = new Config([]);
-        $config->setActiveRepository('github.com', 'hupkit/hupkit');
-
-        $resolver = new BranchAliasResolver($filesystem, $style, $git, $config);
+        $resolver = new BranchAliasResolver($filesystem, $style, $config);
 
         self::assertEquals('3.0-dev', $resolver->getAlias('master'));
-        self::assertEquals('Git config "branch.master.alias"', $resolver->getDetectedBy());
+        self::assertEquals('user input', $resolver->getDetectedBy());
 
         $this->assertOutputMatches([
-            'Usage of Git config "branch.master.alias" is deprecated and will be removed in v2.0. Add either an "extra.branch-alias.dev-master" in composer.json or add branches_alias.master to the repository local configuration.',
-
             'No branch-alias found for "master", please provide an alias.',
-            'Branch-alias is stored for feature reference.',
+            'Set a value for config [branches_alias][master] to prevent asking this question in the future.',
         ]);
     }
 }

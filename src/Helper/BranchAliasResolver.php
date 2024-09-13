@@ -15,7 +15,6 @@ namespace HubKit\Helper;
 
 use HubKit\Config;
 use HubKit\Service\Filesystem;
-use HubKit\Service\Git;
 use Symfony\Component\Console\Style\StyleInterface;
 
 class BranchAliasResolver
@@ -25,13 +24,11 @@ class BranchAliasResolver
     public function __construct(
         private readonly Filesystem $filesystem,
         private readonly StyleInterface $style,
-        private readonly Git $git,
         private readonly Config $config,
     ) {}
 
-    public function getAlias(?string $branch = null): string
+    public function getAlias(string $branch): string
     {
-        $branch ??= $this->git->getActiveBranchName();
         $alias = $this->getAliasByComposer($branch);
 
         if ($alias !== '') {
@@ -48,20 +45,11 @@ class BranchAliasResolver
             return $alias;
         }
 
-        $this->detectedBy = 'Git config "branch.' . $branch . '.alias"';
-        $alias = $this->git->getGitConfig('branch.' . $branch . '.alias');
-
-        $this->style->caution(
-            \sprintf(
-                'Usage of %s is deprecated and will be removed in v2.0. Add either an "extra.branch-alias.dev-%s" in composer.json or add branches_alias.%2$s to the repository local configuration.',
-                $this->detectedBy,
-                $branch
-            )
-        );
-
         if ($alias !== '') {
             return $alias;
         }
+
+        $this->detectedBy = 'user input';
 
         return $this->askNewAlias($branch);
     }
@@ -117,13 +105,7 @@ class BranchAliasResolver
             }
         );
 
-        $this->git->setGitConfig('branch.' . $branch . '.alias', $label, true);
-        $this->style->note(
-            [
-                'Branch-alias is stored for feature reference.',
-                'You can change this any time using the `branch-alias` command.',
-            ]
-        );
+        $this->style->note(\sprintf('Set a value for config [branches_alias][%s] to prevent asking this question in the future.', $branch));
 
         return $label;
     }
