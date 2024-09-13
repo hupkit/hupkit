@@ -199,7 +199,7 @@ final class GitBranchTest extends TestCase
         $this->runCliCommand(['git', 'checkout', 'master']);
 
         $this->expectException(ProcessFailedException::class);
-        $this->expectExceptionMessageMatches("/error: The branch '2\\.0' is not fully merged\\./i");
+        $this->expectExceptionMessageMatches("/error: The branch '2\\.0' is not fully merged(\\.|\n\r?)/i");
 
         $this->git->deleteBranch('2.0');
     }
