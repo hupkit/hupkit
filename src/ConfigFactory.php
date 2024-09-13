@@ -368,6 +368,10 @@ final class ConfigFactory
 
     private function findMainBranch(): string
     {
+        if (! $this->git->isGitDir()) {
+            return 'main';
+        }
+
         if ($this->git->branchExists('main')) {
             $branch = 'main';
         } elseif ($this->git->branchExists('master')) {

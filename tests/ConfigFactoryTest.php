@@ -528,6 +528,96 @@ final class ConfigFactoryTest extends TestCase
     }
 
     /** @test */
+    public function it_creates_for_v2_schema_without_active_git_dir(): void
+    {
+        $config = new Config([
+            'schema_version' => 2,
+            'github' => [
+                'github.com' => [
+                    'username' => 'test',
+                    'api_token' => 'test-token',
+                ],
+            ],
+            'repositories' => [
+                'github.com' => [
+                    'repos' => [
+                        'park-manager/park-manager' => [
+                            'branches_alias' => [],
+                            'branches' => [
+                                ':default' => [
+                                    'sync-tags' => true,
+                                    'split' => [
+                                        'src/Bundle/CoreBundle' => ['url' => 'git@github.com:park-manager/core-bundle.git', 'sync-tags' => null],
+                                        'src/Bundle/UserBundle' => ['url' => 'git@github.com:park-manager/user-bundle.git', 'sync-tags' => null],
+                                        'doc' => [
+                                            'url' => 'git@github.com:park-manager/doc.git',
+                                            'sync-tags' => false,
+                                        ],
+                                    ],
+                                    'upmerge' => true,
+                                    'ignore-default' => false,
+                                    'maintained' => true,
+                                ],
+
+                                // Additional branch names for testing
+                                'main' => ['split' => ['doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => null]], 'upmerge' => true, 'sync-tags' => true, 'ignore-default' => false, 'maintained' => true],
+                                'master' => ['split' => ['doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => null]], 'upmerge' => true, 'sync-tags' => true, 'ignore-default' => false, 'maintained' => true],
+
+                                '0.1' => ['split' => ['doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => null]], 'upmerge' => true, 'sync-tags' => true, 'ignore-default' => false, 'maintained' => true],
+                                '1.0' => ['split' => ['doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => null]], 'upmerge' => true, 'sync-tags' => true, 'ignore-default' => false, 'maintained' => true],
+                                '2.0' => ['split' => ['doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => null]], 'upmerge' => true, 'sync-tags' => true, 'ignore-default' => false, 'maintained' => true],
+
+                                // Pattern
+                                '3.x' => ['split' => ['doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => null]], 'upmerge' => true, 'sync-tags' => true, 'ignore-default' => false, 'maintained' => true],
+                                '4.*' => ['split' => ['doc' => ['url' => 'git@github.com:park-manager/doc.git', 'sync-tags' => null]], 'upmerge' => true, 'sync-tags' => true, 'ignore-default' => false, 'maintained' => true],
+
+                                // Regexp (without anchors and options)
+                                '/[1-5]\.[0-9]/' => ['split' => ['doc' => ['url' => 'git@github.com:park-manager/brown.git', 'sync-tags' => null]], 'upmerge' => true, 'sync-tags' => true, 'ignore-default' => false, 'maintained' => true],
+
+                                '10.0' => [
+                                    'sync-tags' => false,
+                                    'split' => [],
+                                    'upmerge' => false,
+                                    'ignore-default' => true,
+                                    'maintained' => false,
+                                ],
+
+                                // Literal branch name, no pattern
+                                '#11.x' => [
+                                    'sync-tags' => false,
+                                    'split' => [
+                                        'doc' => [
+                                            'url' => 'git@github.com:park-manager/doc2.git',
+                                            'sync-tags' => false,
+                                        ],
+                                    ],
+                                    'upmerge' => false,
+                                    'ignore-default' => true,
+                                    'maintained' => true,
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'current_dir' => __DIR__ . '/Fixtures/config/schema_v2_global',
+            '_main_branch' => 'main',
+        ]);
+
+        self::assertEquals(
+            $config,
+            $resolved = (new ConfigFactory(
+                __DIR__ . '/Fixtures/config/schema_v2_global',
+                __DIR__ . '/Fixtures/config/schema_v2_global/config2.php',
+                $this->createStyle(),
+                $this->getGitFileReaderWithNotExistentFile(),
+                $this->getGitWithoutGitDir(),
+            ))->create()
+        );
+        self::assertEquals('main', $resolved->getMainBranch());
+    }
+
+    /** @test */
     public function it_creates_with_local_config_file(): void
     {
         $config = new Config([
@@ -820,6 +910,8 @@ final class ConfigFactoryTest extends TestCase
     private function getGit(?string $expectedBranch = 'main', ?array $versionedBranches = []): Git
     {
         $gitProphecy = $this->prophesize(Git::class);
+        $gitProphecy->isGitDir()->willReturn(true);
+
         $gitProphecy->branchExists(Argument::any())->willReturn(false);
 
         if ($expectedBranch) {
@@ -833,9 +925,18 @@ final class ConfigFactoryTest extends TestCase
         return $gitProphecy->reveal();
     }
 
+    private function getGitWithoutGitDir(): Git
+    {
+        $gitProphecy = $this->prophesize(Git::class);
+        $gitProphecy->isGitDir()->willReturn(false);
+
+        return $gitProphecy->reveal();
+    }
+
     private function getGitWithActiveExpected(string $branch = 'main'): Git
     {
         $gitProphecy = $this->prophesize(Git::class);
+        $gitProphecy->isGitDir()->willReturn(true);
         $gitProphecy->branchExists(Argument::any())->willReturn(false);
         $gitProphecy->getVersionBranches()->willReturn([]);
         $gitProphecy->getActiveBranchName()->willReturn($branch);
