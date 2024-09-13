@@ -32,7 +32,7 @@ final class SplitRepoHandler extends GitBaseHandler
         parent::__construct($style, $git, $github, $config);
     }
 
-    public function handle(Args $args): void
+    public function handle(Args $args): ?int
     {
         $this->git->guardWorkingTreeReady();
         $this->git->remoteUpdate(REMOTE_MAIN);
@@ -46,9 +46,7 @@ final class SplitRepoHandler extends GitBaseHandler
         $this->guardMaintained($branch);
 
         if ($prefix !== null) {
-            $this->splitPrefixOnly($branch, $prefix, $args->getOption('dry-run'));
-
-            return;
+            return $this->splitPrefixOnly($branch, $prefix, $args->getOption('dry-run'));
         }
 
         if ($args->getOption('dry-run')) {
@@ -56,12 +54,14 @@ final class SplitRepoHandler extends GitBaseHandler
                 $this->style->success('[DRY-RUN] Repository directories were split into there destination.');
             }
 
-            return;
+            return null;
         }
 
         if (\count($this->branchSplitsh->splitBranch($branch)) > 0) {
             $this->style->success('Repository directories were split into there destination.');
         }
+
+        return null;
     }
 
     private function getBranchName(Args $args): string
@@ -77,17 +77,52 @@ final class SplitRepoHandler extends GitBaseHandler
         return $branch;
     }
 
-    private function splitPrefixOnly(string $branch, string $prefix, bool $dryRun): void
+    private function splitPrefixOnly(string $branch, string $prefix, bool $dryRun): ?int
     {
-        if ($dryRun) {
-            $this->branchSplitsh->drySplitAtPrefix($branch, $prefix);
-            $this->style->success(\sprintf('[DRY-RUN] Repository directory "%s" were split into there destination.', $prefix));
+        try {
+            if ($dryRun) {
+                $this->branchSplitsh->drySplitAtPrefix($branch, $prefix);
+                $this->style->success(\sprintf('[DRY-RUN] Repository directory "%s" was split into it\'s destination.', $prefix));
 
-            return;
-        }
+                return null;
+            }
 
-        if ($this->branchSplitsh->splitAtPrefix($branch, $prefix) !== null) {
-            $this->style->success(\sprintf('Repository directory "%s" were split into there destination.', $prefix));
+            if ($this->branchSplitsh->splitAtPrefix($branch, $prefix) !== null) {
+                $this->style->success(\sprintf('Repository directory "%s" was split into it\'s destination.', $prefix));
+            }
+
+            return null;
+        } catch (\InvalidArgumentException $e) {
+            if ($e->getCode() !== 50) {
+                throw $e;
+            }
+
+            $branchConfig = $this->config->getBranchConfig($branch);
+            $found = null;
+
+            /** @var string $p */
+            foreach ($branchConfig->config['split'] ?? [] as $p => $d) {
+                // See if we can find one with a different case matching.
+                if (strcasecmp($p, $prefix) === 0) {
+                    $found = $p;
+
+                    break;
+                }
+            }
+
+            $this->style->error($e->getMessage());
+            $this->style->writeln(' The following prefixes are available for this branch:');
+            $this->style->listing(array_keys($branchConfig->config['split']));
+
+            if ($found !== null) {
+                $this->style->info('A prefixes with a different casing was found.');
+
+                if ($this->style->confirm(\sprintf('Did you mean "%s"?', $found))) {
+                    return $this->splitPrefixOnly($branch, $found, $dryRun);
+                }
+            }
+
+            return 1;
         }
     }
 }

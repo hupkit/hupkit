@@ -73,7 +73,8 @@ class BranchSplitsh
                     'Unable to split repository at prefix: No entry found for "[%s][split][%s]".',
                     implode('][', $branchConfig->configPath),
                     $prefix
-                )
+                ),
+                50
             );
         }
 
@@ -85,7 +86,8 @@ class BranchSplitsh
                     'Unable to split repository at prefix: Entry is disabled for "[%s][split][%s]".',
                     implode('][', $branchConfig->configPath),
                     $prefix
-                )
+                ),
+                5
             );
         }
 

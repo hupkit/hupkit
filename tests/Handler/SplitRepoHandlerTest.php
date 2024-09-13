@@ -181,7 +181,7 @@ final class SplitRepoHandlerTest extends TestCase
         $this->assertOutputMatches(
             [
                 'Working on hubkit-sandbox/empire (branch master)',
-                'Repository directory "src/Module/CoreModule" were split into there destination.',
+                'Repository directory "src/Module/CoreModule" was split into it\'s destination.',
             ]
         );
     }
@@ -201,7 +201,66 @@ final class SplitRepoHandlerTest extends TestCase
         $this->assertOutputMatches(
             [
                 'Working on hubkit-sandbox/empire (branch master)',
-                '[DRY-RUN] Repository directory "src/Module/CoreModule" were split into there destination.',
+                '[DRY-RUN] Repository directory "src/Module/CoreModule" was split into it\'s destination.',
+            ]
+        );
+    }
+
+    /** @test */
+    public function it_lists_available_when_prefix_is_not_found(): void
+    {
+        $this->git->checkoutRemoteBranch(REMOTE_MAIN, '1.1')->shouldBeCalled();
+        $this->splitshGit->splitAtPrefix('1.1', 'CoreModule')->willThrow(
+            new \InvalidArgumentException('Unable to split repository at prefix: No entry found for "[CoreModule]".', 50)
+        );
+
+        $args = $this->getArgs();
+        $args->setArgument('branch', '1.1');
+        $args->setOption('prefix', 'CoreModule');
+
+        $this->assertSame(1, $this->executeHandler($args));
+
+        $this->assertOutputMatches(
+            [
+                'Working on hubkit-sandbox/empire (branch 1.1)',
+                'Unable to split repository at prefix: No entry found for "[CoreModule]".',
+                'The following prefixes are available for this branch:',
+                ' * src/Module/CoreModule',
+                ' * src/Module/CoreModule',
+                ' * src/Module/WebhostingModule',
+                ' * docs',
+                ' * noop',
+            ]
+        );
+    }
+
+    /** @test */
+    public function it_gives_suggestions_when_prefix_case_mismatches(): void
+    {
+        $this->git->checkoutRemoteBranch(REMOTE_MAIN, '1.1')->shouldBeCalled();
+        $this->splitshGit->splitAtPrefix('1.1', 'Docs')->willThrow(
+            new \InvalidArgumentException('Unable to split repository at prefix: No entry found for "[Docs]".', 50)
+        );
+        $this->splitshGit->splitAtPrefix('1.1', 'docs')->shouldBeCalled();
+
+        $args = $this->getArgs();
+        $args->setArgument('branch', '1.1');
+        $args->setOption('prefix', 'Docs');
+
+        $this->assertNull($this->executeHandler($args, ['yes']));
+
+        $this->assertOutputMatches(
+            [
+                'Working on hubkit-sandbox/empire (branch 1.1)',
+                'Unable to split repository at prefix: No entry found for "[Docs]".',
+                'The following prefixes are available for this branch:',
+                ' * src/Module/CoreModule',
+                ' * src/Module/CoreModule',
+                ' * src/Module/WebhostingModule',
+                ' * docs',
+                ' * noop',
+                'A prefixes with a different casing was found.',
+                'Did you mean "docs"?',
             ]
         );
     }
@@ -218,7 +277,7 @@ final class SplitRepoHandlerTest extends TestCase
         return new Args($format, new StringArgs(''));
     }
 
-    private function executeHandler(?Args $args, array $input = []): void
+    private function executeHandler(?Args $args, array $input = []): ?int
     {
         $style = $this->createStyle($input);
         $handler = new SplitRepoHandler(
@@ -229,6 +288,6 @@ final class SplitRepoHandlerTest extends TestCase
             $this->splitshGit->reveal(),
         );
 
-        $handler->handle($args ?? $this->getArgs());
+        return $handler->handle($args ?? $this->getArgs());
     }
 }
