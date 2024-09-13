@@ -385,7 +385,6 @@ final class ConfigFactory
     {
         $treeBuilder = new TreeBuilder('hubkit');
         $treeBuilder->getRootNode()
-            ->ignoreExtraKeys(false)
             ->children()
                 ->integerNode('schema_version')
                     ->isRequired()
