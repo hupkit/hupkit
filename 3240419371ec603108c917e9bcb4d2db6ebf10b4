@@ -1,0 +1,1 @@
+{"schema":1,"id":154,"category":"refactor","title":"Disallow extra keys for local configuration","flags":["bc-break"],"authors":["sstok"]}
