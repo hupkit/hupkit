@@ -198,7 +198,7 @@ final class BranchSplitshTest extends TestCase
         $this->git->ensureBranchInSync(REMOTE_MAIN, '4.1')->shouldBeCalled();
 
         $this->expectExceptionObject(new \InvalidArgumentException(
-            'Unable to split repository at prefix: No entry found for "[repositories][github.com][repos][hubkit-sandbox/empire][branches][:default][split][pinchy]".'
+            'Unable to split repository at prefix: No entry found for "[repositories][github.com][repos][hubkit-sandbox/empire][branches][:default][split][pinchy]".', 50
         ));
 
         $this->getBranchSplitsh()->splitAtPrefix('4.1', 'pinchy');
@@ -367,7 +367,7 @@ final class BranchSplitshTest extends TestCase
         $this->git->ensureBranchInSync(REMOTE_MAIN, '2.1')->shouldBeCalled();
 
         $this->expectExceptionObject(new \InvalidArgumentException(
-            'Unable to split repository at prefix: No entry found for "[repositories][github.com][repos][hubkit-sandbox/empire][branches][2.x][split][pinchy]".'
+            'Unable to split repository at prefix: No entry found for "[repositories][github.com][repos][hubkit-sandbox/empire][branches][2.x][split][pinchy]".', 50
         ));
 
         $this->getBranchSplitsh()->drySplitAtPrefix('2.1', 'pinchy');
@@ -379,7 +379,7 @@ final class BranchSplitshTest extends TestCase
         $this->git->ensureBranchInSync(REMOTE_MAIN, '6.1')->shouldBeCalled();
 
         $this->expectExceptionObject(new \InvalidArgumentException(
-            'Unable to split repository at prefix: Entry is disabled for "[repositories][github.com][repos][hubkit-sandbox/empire][branches][6.x][split][src/Module/WebhostingModule]".'
+            'Unable to split repository at prefix: Entry is disabled for "[repositories][github.com][repos][hubkit-sandbox/empire][branches][6.x][split][src/Module/WebhostingModule]".', 5
         ));
 
         $this->getBranchSplitsh()->drySplitAtPrefix('6.1', 'src/Module/WebhostingModule');
