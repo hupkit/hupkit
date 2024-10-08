@@ -45,7 +45,7 @@ Once the repository splitting is configured, you want to make sure the
 split repositories are up-to-date.
 
 You can either run the ``split-repo`` command at any time, or split
-the repository after you :doc:`merge a pull request <commands/merge>`_,
+the repository after you :doc:`merge a pull request <commands/merge>`,
 this process may take some time depending of number of commits and targets.
 
 .. tip::

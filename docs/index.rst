@@ -145,6 +145,6 @@ If something doesn't work as expected you can find useful tips
 in the :doc:`trouble-shooting`.
 
 And finally for the hook-scripts you can find all the available public
-services in the :doc:container-services.md reference guide.
+services in the :doc:`container-services` reference guide.
 
 .. _`composer`: https://getcomposer.org/doc/00-intro.md
