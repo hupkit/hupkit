@@ -101,11 +101,6 @@ parameters:
 			path: src/Cli/Handler/MergeHandler.php
 
 		-
-			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\SplitCreatedHandler\\:\\:getSplits\\(\\) should return array\\<string, string\\> but returns array\\<int\\|string, mixed\\>\\.$#"
-			count: 1
-			path: src/Cli/Handler/SplitCreatedHandler.php
-
-		-
 			message: "#^PHPDoc tag @var for variable \\$config has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: src/Cli/Handler/SplitCreatedHandler.php
