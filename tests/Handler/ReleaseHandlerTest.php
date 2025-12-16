@@ -115,6 +115,7 @@ labels: removed-deprecation
         $this->git = $this->prophesize(Git::class);
         $this->git->getActiveBranchName()->willReturn('master');
         $this->git->ensureBranchInSync(REMOTE_MAIN, 'master')->will(static function (): void {});
+        $this->git->guardWorkingTreeReady()->shouldBeCalled();
 
         $this->github = $this->prophesize(GitHub::class);
         $this->github->getHostname()->willReturn('github.com');
