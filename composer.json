@@ -63,7 +63,7 @@
             "symfony/flex": true
         },
         "platform": {
-            "php": "8.1"
+            "php": "8.3"
         },
         "sort-packages": true
     },
