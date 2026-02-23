@@ -46,6 +46,11 @@ final class SynchronizeConfigHandler extends GitBaseHandler
 
                 return 0;
 
+            case Git::STATUS_NEED_BRANCH:
+                $this->style->info('Remote "_hubkit" branch exists, missing locally.');
+                $this->setupRemoteBranch();
+                $this->style->success('Successfully created local branch "_hubkit".');
+
             case Git::STATUS_NEED_PULL:
                 $this->style->note('Pulling changes.');
                 $this->git->fetchRemote(REMOTE_MAIN, '_hubkit:_hubkit');
@@ -62,5 +67,17 @@ final class SynchronizeConfigHandler extends GitBaseHandler
         }
 
         throw new \RuntimeException('The remote "_hubkit" branch and local branch have diverged. Cannot safely continue, resolve this problem manually.');
+    }
+
+    private function setupRemoteBranch(): void
+    {
+        $currentBranch = $this->git->getActiveBranchName();
+
+        try {
+            $this->git->checkoutRemoteBranch(REMOTE_MAIN, '_hubkit');
+            $this->git->trackRemoteBranch(REMOTE_MAIN, '_hubkit');
+        } finally {
+            $this->git->checkout($currentBranch);
+        }
     }
 }
