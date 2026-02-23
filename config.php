@@ -1,9 +1,11 @@
 <?php
 
-// See https://hupkit.github.io/hupkit/config.html#local-configuration
+// See https://hupkit.dev/config.html#repository-configuration
 
 return [
     'schema_version' => 2,
-    'branches' => [],
+    'branches' => [
+        '1.3' => false,
+    ],
     'main_branch' => '1.x',
 ];
