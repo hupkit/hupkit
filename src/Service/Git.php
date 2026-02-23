@@ -24,6 +24,7 @@ class Git
 {
     final public const STATUS_UP_TO_DATE = 'up-to-date';
     final public const STATUS_NEED_PULL = 'need_pull';
+    final public const STATUS_NEED_BRANCH = 'need_branch';
     final public const STATUS_NEED_PUSH = 'need_push';
     final public const STATUS_DIVERGED = 'diverged';
 
@@ -55,9 +56,7 @@ class Git
     /**
      * Gets the diff status of the remote and local.
      *
-     * @return string Returns the value of one of the following constants:
-     *                GitHelper::STATUS_UP_TO_DATE, GitHelper::STATUS_NEED_PULL
-     *                GitHelper::STATUS_NEED_PUSH, GitHelper::STATUS_DIVERGED
+     * @return self::STATUS_*
      *
      * @see https://gist.github.com/WebPlatformDocs/437f763b948c926ca7ba
      * @see https://stackoverflow.com/questions/3258243/git-check-if-pull-needed
@@ -70,6 +69,10 @@ class Git
 
         if (! $this->remoteBranchExists($remoteName, $remoteBranch)) {
             return self::STATUS_NEED_PUSH;
+        }
+
+        if (! $this->branchExists($localBranch)) {
+            return self::STATUS_NEED_BRANCH;
         }
 
         $localRef = $this->process->mustRun(['git', 'rev-parse', $localBranch])->getOutput();
@@ -456,6 +459,11 @@ class Git
         }
 
         $this->process->mustRun($cmd);
+    }
+
+    public function trackRemoteBranch(string $remote, string $branchName): void
+    {
+        $this->process->mustRun(['git', 'branch', '--set-upstream-to', $remote . '/' . $branchName, $branchName]);
     }
 
     public function guardWorkingTreeReady(): void
