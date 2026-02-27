@@ -2131,6 +2131,11 @@ parameters:
 			path: tests/Unit/Service/Git/GitBranchTest.php
 
 		-
+			message: "#^Method class@anonymous/tests/Unit/Service/Git/GitBranchTest\\.php\\:140\\:\\:getRemoteDiffStatus\\(\\) should return 'diverged'\\|'need_branch'\\|'need_pull'\\|'need_push'\\|'up\\-to\\-date' but returns string\\.$#"
+			count: 1
+			path: tests/Unit/Service/Git/GitBranchTest.php
+
+		-
 			message: "#^Property class@anonymous/tests/Unit/Service/Git/GitBranchTest\\.php\\:140\\:\\:\\$diffStatusCall type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Unit/Service/Git/GitBranchTest.php
