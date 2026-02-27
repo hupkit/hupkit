@@ -7,7 +7,7 @@ assignees: ''
 
 ---
 
-**HubKit version(s) affected**: 1.0 (note that older beta versions are not supported)
+**HubKit version(s) affected**: 1.5 (note that older beta versions are not supported)
 
 **Description**
 <!-- A clear and concise description of the problem. -->

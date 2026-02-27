@@ -1,0 +1,55 @@
+name: CI
+on:
+    push:
+        branches:
+            - 1.x
+    pull_request:
+        branches:
+            - 1.x
+
+jobs:
+
+    test:
+
+        name: 'PHPUnit with PHP ${{ matrix.php-version }}'
+        runs-on: ubuntu-latest
+
+        strategy:
+            fail-fast: false
+            matrix:
+                include:
+                    - php-version: '8.3'
+                    - php-version: '8.4'
+                    - php-version: '8.5'
+        steps:
+            -
+                name: Checkout
+                uses: actions/checkout@v6
+
+            -
+                name: 'Set up PHP'
+                uses: 'shivammathur/setup-php@v2'
+                with:
+                    php-version: '${{ matrix.php-version }}'
+                    coverage: none
+                env:
+                    update: true
+
+            -
+                name: 'Install dependencies'
+                env:
+                    COMPOSER_OPTIONS: '${{ matrix.composer-options }}'
+                run: |
+                    composer update --no-progress $COMPOSER_OPTIONS
+                    git config --global author.name Sebastiaan Stok
+                    git config --global author.email s.stok@rollerscapes.net
+                    git config --global user.name Sebastiaan Stok
+                    git config --global user.email s.stok@rollerscapes.net
+
+            -
+                name: Run Tests
+                run: |
+                    make phpunit
+                    cp .github/config.php.dist config.php
+                    git remote add upstream https://github.com/hupkit/hupkit.git
+                    bin/hubkit.php self-diagnose || exit 0
