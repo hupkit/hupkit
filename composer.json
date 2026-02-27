@@ -30,14 +30,10 @@
         "webmozart/console": "^2.0"
     },
     "require-dev": {
-        "jangregor/phpstan-prophecy": "^1.0.0",
         "phpspec/prophecy-phpunit": "^2.0.1",
-        "phpstan/phpstan": "^1.8.1",
-        "phpstan/phpstan-phpunit": "^1.1.1",
-        "phpstan/phpstan-symfony": "^1.2",
         "phpunit/phpunit": "^9.5.21",
-        "rollerscapes/standards": "^0.2",
-        "symfony/phpunit-bridge": "^6.0"
+        "rollerscapes/standards": "^0.3",
+        "symfony/phpunit-bridge": "^6.0 || ^7.4"
     },
     "repositories": [
         {
