@@ -1,14 +1,10 @@
 includes:
-    - vendor/phpstan/phpstan-phpunit/extension.neon
-    - vendor/phpstan/phpstan-symfony/extension.neon
-    - vendor/jangregor/phpstan-prophecy/extension.neon
-    - vendor/phpstan/phpstan-phpunit/rules.neon
+    - vendor/rollerscapes/standards/phpstan.neon
     - phpstan-baseline.neon
 
 parameters:
     #reportUnmatchedIgnoredErrors: false
 
-    level: 8
     paths:
         - ./src
         - ./tests

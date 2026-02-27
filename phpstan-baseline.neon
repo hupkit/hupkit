@@ -1,2151 +1,2509 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\ChangelogHandler\\:\\:getRefRange\\(\\) return type has no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Cli\\Handler\\ChangelogHandler\:\:getRefRange\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: src/Cli/Handler/ChangelogHandler.php
 
 		-
-			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\ChangelogHandler\\:\\:resolveCommitRange\\(\\) return type has no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Cli\\Handler\\ChangelogHandler\:\:resolveCommitRange\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: src/Cli/Handler/ChangelogHandler.php
 
 		-
-			message: "#^Cannot access offset 'id' on array\\<int\\|string, mixed\\>\\|int\\|null\\.$#"
+			message: '#^Argument of an invalid type array\<mixed\>\|Countable supplied for foreach, only iterables are supported\.$#'
+			identifier: foreach.nonIterable
 			count: 1
 			path: src/Cli/Handler/MergeHandler.php
 
 		-
-			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\MergeHandler\\:\\:addCommentsToMergeCommit\\(\\) has parameter \\$pr with no value type specified in iterable type array\\.$#"
+			message: '#^Cannot access offset ''id'' on array\<int\|string, mixed\>\|int\|null\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
 			count: 1
 			path: src/Cli/Handler/MergeHandler.php
 
 		-
-			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\MergeHandler\\:\\:addMetadata\\(\\) has parameter \\$authors with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Cli\\Handler\\MergeHandler\:\:addCommentsToMergeCommit\(\) has parameter \$pr with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: src/Cli/Handler/MergeHandler.php
 
 		-
-			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\MergeHandler\\:\\:addMetadata\\(\\) has parameter \\$pr with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Cli\\Handler\\MergeHandler\:\:addMetadata\(\) has parameter \$authors with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: src/Cli/Handler/MergeHandler.php
 
 		-
-			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\MergeHandler\\:\\:determineReviewStatus\\(\\) has parameter \\$pr with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Cli\\Handler\\MergeHandler\:\:addMetadata\(\) has parameter \$pr with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: src/Cli/Handler/MergeHandler.php
 
 		-
-			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\MergeHandler\\:\\:determineReviewStatusByLabels\\(\\) has parameter \\$pr with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Cli\\Handler\\MergeHandler\:\:determineReviewStatus\(\) has parameter \$pr with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: src/Cli/Handler/MergeHandler.php
 
 		-
-			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\MergeHandler\\:\\:getCategory\\(\\) has parameter \\$pr with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Cli\\Handler\\MergeHandler\:\:determineReviewStatusByLabels\(\) has parameter \$pr with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: src/Cli/Handler/MergeHandler.php
 
 		-
-			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\MergeHandler\\:\\:getCommitMessage\\(\\) has parameter \\$authors with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Cli\\Handler\\MergeHandler\:\:getCategory\(\) has parameter \$pr with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: src/Cli/Handler/MergeHandler.php
 
 		-
-			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\MergeHandler\\:\\:getCommitMessage\\(\\) has parameter \\$pr with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Cli\\Handler\\MergeHandler\:\:getCommitMessage\(\) has parameter \$authors with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: src/Cli/Handler/MergeHandler.php
 
 		-
-			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\MergeHandler\\:\\:getCommitTitle\\(\\) has parameter \\$authors with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Cli\\Handler\\MergeHandler\:\:getCommitMessage\(\) has parameter \$pr with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: src/Cli/Handler/MergeHandler.php
 
 		-
-			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\MergeHandler\\:\\:getCommitTitle\\(\\) has parameter \\$pr with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Cli\\Handler\\MergeHandler\:\:getCommitTitle\(\) has parameter \$authors with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: src/Cli/Handler/MergeHandler.php
 
 		-
-			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\MergeHandler\\:\\:guardMergeStatus\\(\\) has parameter \\$pr with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Cli\\Handler\\MergeHandler\:\:getCommitTitle\(\) has parameter \$pr with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: src/Cli/Handler/MergeHandler.php
 
 		-
-			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\MergeHandler\\:\\:patAuthor\\(\\) has parameter \\$pr with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Cli\\Handler\\MergeHandler\:\:guardMergeStatus\(\) has parameter \$pr with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: src/Cli/Handler/MergeHandler.php
 
 		-
-			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\MergeHandler\\:\\:prLabelsToMergeMessage\\(\\) has parameter \\$prLabels with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Cli\\Handler\\MergeHandler\:\:patAuthor\(\) has parameter \$pr with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: src/Cli/Handler/MergeHandler.php
 
 		-
-			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\MergeHandler\\:\\:removeSourceBranch\\(\\) has parameter \\$pr with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Cli\\Handler\\MergeHandler\:\:prLabelsToMergeMessage\(\) has parameter \$prLabels with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: src/Cli/Handler/MergeHandler.php
 
 		-
-			message: "#^Method HubKit\\\\Cli\\\\Handler\\\\MergeHandler\\:\\:renderStatus\\(\\) has parameter \\$pr with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Cli\\Handler\\MergeHandler\:\:removeSourceBranch\(\) has parameter \$pr with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: src/Cli/Handler/MergeHandler.php
 
 		-
-			message: "#^Parameter \\#1 \\$checkSuites of method HubKit\\\\Cli\\\\Handler\\\\MergeHandler\\:\\:hasPendingCheckSuites\\(\\) expects array\\<int, array\\{status\\: string\\}\\>, array\\{\\}\\|array\\{id\\: int, check_suites\\: array\\<int, array\\{status\\: string\\}\\>\\|null, check_runs\\: array\\<string, mixed\\>\\|null\\} given\\.$#"
+			message: '#^Method HubKit\\Cli\\Handler\\MergeHandler\:\:renderStatus\(\) has parameter \$pr with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: src/Cli/Handler/MergeHandler.php
 
 		-
-			message: "#^Strict comparison using \\=\\=\\= between 0\\|string and 5 will always evaluate to false\\.$#"
+			message: '#^Parameter \#1 \$checkSuites of method HubKit\\Cli\\Handler\\MergeHandler\:\:hasPendingCheckSuites\(\) expects array\<int, array\{status\: string\}\>, array\{\}\|array\{id\: int, check_suites\: array\<int, array\{status\: string\}\>\|null, check_runs\: array\<string, mixed\>\|null\} given\.$#'
+			identifier: argument.type
 			count: 1
 			path: src/Cli/Handler/MergeHandler.php
 
 		-
-			message: "#^PHPDoc tag @var for variable \\$config has no value type specified in iterable type array\\.$#"
+			message: '#^Strict comparison using \=\=\= between 0\|string and 5 will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 1
+			path: src/Cli/Handler/MergeHandler.php
+
+		-
+			message: '#^PHPDoc tag @var for variable \$config has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: src/Cli/Handler/SplitCreatedHandler.php
 
 		-
-			message: "#^Parameter \\#2 \\$branches of method HubKit\\\\Cli\\\\Handler\\\\UpMergeHandler\\:\\:dryMergeBranches\\(\\) expects array\\<string\\>, array\\<string\\|false\\> given\\.$#"
+			message: '#^Parameter \#2 \$branches of method HubKit\\Cli\\Handler\\UpMergeHandler\:\:dryMergeBranches\(\) expects array\<string\>, array\<string\|false\> given\.$#'
+			identifier: argument.type
 			count: 1
 			path: src/Cli/Handler/UpMergeHandler.php
 
 		-
-			message: "#^Parameter \\#2 \\$branches of method HubKit\\\\Cli\\\\Handler\\\\UpMergeHandler\\:\\:mergeBranches\\(\\) expects array\\<string\\>, array\\<string\\|false\\> given\\.$#"
+			message: '#^Parameter \#2 \$branches of method HubKit\\Cli\\Handler\\UpMergeHandler\:\:mergeBranches\(\) expects array\<string\>, array\<string\|false\> given\.$#'
+			identifier: argument.type
 			count: 1
 			path: src/Cli/Handler/UpMergeHandler.php
 
 		-
-			message: "#^Call to an undefined method Webmozart\\\\Console\\\\Api\\\\Config\\\\ApplicationConfig\\|Webmozart\\\\Console\\\\Api\\\\Config\\\\CommandConfig\\:\\:end\\(\\)\\.$#"
+			message: '#^Call to an undefined method Webmozart\\Console\\Api\\Config\\ApplicationConfig\|Webmozart\\Console\\Api\\Config\\CommandConfig\:\:end\(\)\.$#'
+			identifier: method.notFound
 			count: 16
 			path: src/Cli/HubKitApplicationConfig.php
 
 		-
-			message: "#^Right side of && is always true\\.$#"
+			message: '#^Right side of && is always true\.$#'
+			identifier: booleanAnd.rightAlwaysTrue
 			count: 1
 			path: src/Cli/HubKitApplicationConfig.php
 
 		-
-			message: "#^Method HubKit\\\\Config\\:\\:__construct\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Config\:\:__construct\(\) has parameter \$config with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: src/Config.php
 
 		-
-			message: "#^Method HubKit\\\\Config\\:\\:get\\(\\) has no return type specified\\.$#"
+			message: '#^Method HubKit\\Config\:\:get\(\) has no return type specified\.$#'
+			identifier: missingType.return
 			count: 1
 			path: src/Config.php
 
 		-
-			message: "#^Method HubKit\\\\Config\\:\\:getFirstNotNull\\(\\) has no return type specified\\.$#"
+			message: '#^Method HubKit\\Config\:\:getFirstNotNull\(\) has no return type specified\.$#'
+			identifier: missingType.return
 			count: 1
 			path: src/Config.php
 
 		-
-			message: "#^Method HubKit\\\\Config\\:\\:getOrFail\\(\\) has no return type specified\\.$#"
+			message: '#^Method HubKit\\Config\:\:getOrFail\(\) has no return type specified\.$#'
+			identifier: missingType.return
 			count: 1
 			path: src/Config.php
 
 		-
-			message: "#^Call to an undefined method Symfony\\\\Component\\\\Console\\\\Style\\\\StyleInterface\\:\\:block\\(\\)\\.$#"
+			message: '#^Call to an undefined method Symfony\\Component\\Console\\Style\\StyleInterface\:\:block\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: src/ConfigFactory.php
 
 		-
-			message: "#^Method HubKit\\\\ConfigFactory\\:\\:normalizePath\\(\\) has no return type specified\\.$#"
+			message: '#^Method HubKit\\ConfigFactory\:\:normalizePath\(\) has no return type specified\.$#'
+			identifier: missingType.return
 			count: 1
 			path: src/ConfigFactory.php
 
 		-
-			message: "#^Method HubKit\\\\Container\\:\\:__construct\\(\\) has parameter \\$values with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Container\:\:__construct\(\) has parameter \$values with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: src/Container.php
 
 		-
-			message: "#^Method HubKit\\\\Helper\\\\ChangelogRenderer\\:\\:extractInfoFromSubject\\(\\) has parameter \\$matches with no type specified\\.$#"
+			message: '#^Method HubKit\\Helper\\ChangelogRenderer\:\:extractInfoFromSubject\(\) has parameter \$matches with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: src/Helper/ChangelogRenderer.php
 
 		-
-			message: "#^Method HubKit\\\\Helper\\\\ChangelogRenderer\\:\\:formatLine\\(\\) has parameter \\$item with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Helper\\ChangelogRenderer\:\:formatLine\(\) has parameter \$item with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: src/Helper/ChangelogRenderer.php
 
 		-
-			message: "#^Method HubKit\\\\Helper\\\\ChangelogRenderer\\:\\:getCategoryForCommit\\(\\) has parameter \\$commit with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Helper\\ChangelogRenderer\:\:getCategoryForCommit\(\) has parameter \$commit with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: src/Helper/ChangelogRenderer.php
 
 		-
-			message: "#^Method HubKit\\\\Helper\\\\ChangelogRenderer\\:\\:getCategoryForCommit\\(\\) has parameter \\$labels with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Helper\\ChangelogRenderer\:\:getCategoryForCommit\(\) has parameter \$labels with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: src/Helper/ChangelogRenderer.php
 
 		-
-			message: "#^Method HubKit\\\\Helper\\\\ChangelogRenderer\\:\\:getItemsPerCategories\\(\\) return type has no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Helper\\ChangelogRenderer\:\:getItemsPerCategories\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: src/Helper/ChangelogRenderer.php
 
 		-
-			message: "#^Method HubKit\\\\Helper\\\\ChangelogRenderer\\:\\:getLabels\\(\\) return type has no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Helper\\ChangelogRenderer\:\:getLabels\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: src/Helper/ChangelogRenderer.php
 
 		-
-			message: "#^Method HubKit\\\\Helper\\\\ChangelogRenderer\\:\\:getLabels\\(\\) should return array but returns array\\<int, string\\>\\|false\\.$#"
+			message: '#^Method HubKit\\Helper\\ChangelogRenderer\:\:getLabels\(\) should return array but returns list\<string\>\|false\.$#'
+			identifier: return.type
 			count: 1
 			path: src/Helper/ChangelogRenderer.php
 
 		-
-			message: "#^Property HubKit\\\\Helper\\\\StatusTable\\:\\:\\$rows type has no value type specified in iterable type array\\.$#"
+			message: '#^Property HubKit\\Helper\\StatusTable\:\:\$rows type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: src/Helper/StatusTable.php
 
 		-
-			message: "#^Property HubKit\\\\Helper\\\\StatusTable\\:\\:\\$statuses type has no value type specified in iterable type array\\.$#"
+			message: '#^Property HubKit\\Helper\\StatusTable\:\:\$statuses type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: src/Helper/StatusTable.php
 
 		-
-			message: "#^Property HubKit\\\\Service\\\\CliProcess\\:\\:\\$processHelper \\(Symfony\\\\Component\\\\Console\\\\Helper\\\\ProcessHelper\\) does not accept Symfony\\\\Component\\\\Console\\\\Helper\\\\HelperInterface\\.$#"
+			message: '#^Property HubKit\\Service\\CliProcess\:\:\$processHelper \(Symfony\\Component\\Console\\Helper\\ProcessHelper\) does not accept Symfony\\Component\\Console\\Helper\\HelperInterface\.$#'
+			identifier: assign.propertyType
 			count: 1
 			path: src/Service/CliProcess.php
 
 		-
-			message: "#^Property HubKit\\\\Service\\\\Filesystem\\:\\:\\$tempFilenames type has no value type specified in iterable type array\\.$#"
+			message: '#^Property HubKit\\Service\\Filesystem\:\:\$tempFilenames type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: src/Service/Filesystem.php
 
 		-
-			message: "#^Method HubKit\\\\Service\\\\Git\\:\\:getCwd\\(\\) should return string but returns string\\|false\\.$#"
+			message: '#^Method HubKit\\Service\\Git\:\:getCwd\(\) should return string but returns string\|false\.$#'
+			identifier: return.type
 			count: 1
 			path: src/Service/Git.php
 
 		-
-			message: "#^Method HubKit\\\\Service\\\\Git\\:\\:isWorkingTreeReady\\(\\) has no return type specified\\.$#"
+			message: '#^Method HubKit\\Service\\Git\:\:isWorkingTreeReady\(\) has no return type specified\.$#'
+			identifier: missingType.return
 			count: 1
 			path: src/Service/Git.php
 
 		-
-			message: "#^Offset 'host' does not exist on array\\{scheme\\?\\: string, host\\?\\: string, port\\?\\: int\\<0, 65535\\>, user\\?\\: string, pass\\?\\: string, path\\?\\: string, query\\?\\: string, fragment\\?\\: string\\}\\.$#"
+			message: '#^Offset ''host'' might not exist on array\{scheme\?\: string, host\?\: string, port\?\: int\<0, 65535\>, user\?\: string, pass\?\: string, path\?\: string, query\?\: string, fragment\?\: string\}\.$#'
+			identifier: offsetAccess.notFound
 			count: 1
 			path: src/Service/Git.php
 
 		-
-			message: "#^Property HubKit\\\\Service\\\\Git\\\\GitBase\\:\\:\\$cwd \\(string\\) does not accept string\\|false\\.$#"
+			message: '#^Property HubKit\\Service\\Git\\GitBase\:\:\$cwd \(string\) does not accept string\|false\.$#'
+			identifier: assign.propertyType
 			count: 1
 			path: src/Service/Git/GitBase.php
 
 		-
-			message: "#^Cannot assign offset 'labels' to array\\|string\\.$#"
+			message: '#^Cannot assign offset ''labels'' to array\|string\.$#'
+			identifier: offsetAssign.dimType
 			count: 1
 			path: src/Service/GitHub.php
 
 		-
-			message: "#^Method HubKit\\\\Service\\\\GitHub\\:\\:createComment\\(\\) has no return type specified\\.$#"
+			message: '#^Method HubKit\\Service\\GitHub\:\:createComment\(\) has no return type specified\.$#'
+			identifier: missingType.return
 			count: 1
 			path: src/Service/GitHub.php
 
 		-
-			message: "#^Method HubKit\\\\Service\\\\GitHub\\:\\:createRelease\\(\\) has no return type specified\\.$#"
+			message: '#^Method HubKit\\Service\\GitHub\:\:createRelease\(\) has no return type specified\.$#'
+			identifier: missingType.return
 			count: 1
 			path: src/Service/GitHub.php
 
 		-
-			message: "#^Method HubKit\\\\Service\\\\GitHub\\:\\:createRepo\\(\\) has no return type specified\\.$#"
+			message: '#^Method HubKit\\Service\\GitHub\:\:createRepo\(\) has no return type specified\.$#'
+			identifier: missingType.return
 			count: 1
 			path: src/Service/GitHub.php
 
 		-
-			message: "#^Method HubKit\\\\Service\\\\GitHub\\:\\:getCheckRunsForCheckSuite\\(\\) return type has no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Service\\GitHub\:\:getCheckRunsForCheckSuite\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: src/Service/GitHub.php
 
 		-
-			message: "#^Method HubKit\\\\Service\\\\GitHub\\:\\:getCheckSuitesForReference\\(\\) return type has no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Service\\GitHub\:\:getCheckSuitesForReference\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: src/Service/GitHub.php
 
 		-
-			message: "#^Method HubKit\\\\Service\\\\GitHub\\:\\:getComments\\(\\) has no return type specified\\.$#"
+			message: '#^Method HubKit\\Service\\GitHub\:\:getComments\(\) has no return type specified\.$#'
+			identifier: missingType.return
 			count: 1
 			path: src/Service/GitHub.php
 
 		-
-			message: "#^Method HubKit\\\\Service\\\\GitHub\\:\\:getCommitStatuses\\(\\) return type has no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Service\\GitHub\:\:getCommitStatuses\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: src/Service/GitHub.php
 
 		-
-			message: "#^Method HubKit\\\\Service\\\\GitHub\\:\\:getCommits\\(\\) return type has no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Service\\GitHub\:\:getCommits\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: src/Service/GitHub.php
 
 		-
-			message: "#^Method HubKit\\\\Service\\\\GitHub\\:\\:getIssue\\(\\) has no return type specified\\.$#"
+			message: '#^Method HubKit\\Service\\GitHub\:\:getIssue\(\) has no return type specified\.$#'
+			identifier: missingType.return
 			count: 1
 			path: src/Service/GitHub.php
 
 		-
-			message: "#^Method HubKit\\\\Service\\\\GitHub\\:\\:getLabels\\(\\) return type has no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Service\\GitHub\:\:getLabels\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: src/Service/GitHub.php
 
 		-
-			message: "#^Method HubKit\\\\Service\\\\GitHub\\:\\:getPullRequest\\(\\) has no return type specified\\.$#"
+			message: '#^Method HubKit\\Service\\GitHub\:\:getPullRequest\(\) has no return type specified\.$#'
+			identifier: missingType.return
 			count: 1
 			path: src/Service/GitHub.php
 
 		-
-			message: "#^Method HubKit\\\\Service\\\\GitHub\\:\\:getPullRequestCommitCount\\(\\) has parameter \\$id with no type specified\\.$#"
+			message: '#^Method HubKit\\Service\\GitHub\:\:getPullRequestCommitCount\(\) has parameter \$id with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: src/Service/GitHub.php
 
 		-
-			message: "#^Method HubKit\\\\Service\\\\GitHub\\:\\:getPullRequestFiles\\(\\) return type has no value type specified in iterable type iterable\\.$#"
+			message: '#^Method HubKit\\Service\\GitHub\:\:getPullRequestFiles\(\) return type has no value type specified in iterable type iterable\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: src/Service/GitHub.php
 
 		-
-			message: "#^Method HubKit\\\\Service\\\\GitHub\\:\\:getPullRequestReviews\\(\\) return type has no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Service\\GitHub\:\:getPullRequestReviews\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: src/Service/GitHub.php
 
 		-
-			message: "#^Method HubKit\\\\Service\\\\GitHub\\:\\:getValuesFromNestedArray\\(\\) has no return type specified\\.$#"
+			message: '#^Method HubKit\\Service\\GitHub\:\:getValuesFromNestedArray\(\) has no return type specified\.$#'
+			identifier: missingType.return
 			count: 1
 			path: src/Service/GitHub.php
 
 		-
-			message: "#^Method HubKit\\\\Service\\\\GitHub\\:\\:getValuesFromNestedArray\\(\\) has parameter \\$array with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Service\\GitHub\:\:getValuesFromNestedArray\(\) has parameter \$array with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: src/Service/GitHub.php
 
 		-
-			message: "#^Method HubKit\\\\Service\\\\GitHub\\:\\:mergePullRequest\\(\\) has no return type specified\\.$#"
+			message: '#^Method HubKit\\Service\\GitHub\:\:mergePullRequest\(\) has no return type specified\.$#'
+			identifier: missingType.return
 			count: 1
 			path: src/Service/GitHub.php
 
 		-
-			message: "#^Method HubKit\\\\Service\\\\GitHub\\:\\:openPullRequest\\(\\) has no return type specified\\.$#"
+			message: '#^Method HubKit\\Service\\GitHub\:\:openPullRequest\(\) has no return type specified\.$#'
+			identifier: missingType.return
 			count: 1
 			path: src/Service/GitHub.php
 
 		-
-			message: "#^Method HubKit\\\\Service\\\\GitHub\\:\\:updatePullRequest\\(\\) has parameter \\$id with no type specified\\.$#"
+			message: '#^Method HubKit\\Service\\GitHub\:\:updatePullRequest\(\) has parameter \$id with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: src/Service/GitHub.php
 
 		-
-			message: "#^Method HubKit\\\\Service\\\\GitHub\\:\\:updatePullRequest\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Service\\GitHub\:\:updatePullRequest\(\) has parameter \$parameters with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: src/Service/GitHub.php
 
 		-
-			message: "#^Property HubKit\\\\Service\\\\HookScript\\:\\:\\$cwd \\(string\\|null\\) does not accept string\\|false\\.$#"
+			message: '#^Property HubKit\\Service\\HookScript\:\:\$cwd \(string\|null\) does not accept string\|false\.$#'
+			identifier: assign.propertyType
 			count: 1
 			path: src/Service/HookScript.php
 
 		-
-			message: "#^Method HubKit\\\\Service\\\\MessageValidator\\:\\:validateMessage\\(\\) should return array\\{string, string, string\\}\\|null but returns array\\{3, 'Unrelated commits…', string\\}\\.$#"
+			message: '#^Method HubKit\\Service\\MessageValidator\:\:validateMessage\(\) should return array\{string, string, string\}\|null but returns array\{3, ''Unrelated commits…'', string\}\.$#'
+			identifier: return.type
 			count: 1
 			path: src/Service/MessageValidator.php
 
 		-
-			message: "#^Method HubKit\\\\Service\\\\MessageValidator\\:\\:validateMessage\\(\\) should return array\\{string, string, string\\}\\|null but returns array\\{5, 'Description…', string\\}\\.$#"
+			message: '#^Method HubKit\\Service\\MessageValidator\:\:validateMessage\(\) should return array\{string, string, string\}\|null but returns array\{5, ''Description…'', string\}\.$#'
+			identifier: return.type
 			count: 1
 			path: src/Service/MessageValidator.php
 
 		-
-			message: "#^Strict comparison using \\=\\=\\= between string and null will always evaluate to false\\.$#"
+			message: '#^Strict comparison using \=\=\= between string and null will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
 			count: 1
 			path: src/Service/SplitshGit.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\ConfigFactoryTest\\:\\:assertOutputMatches\\(\\) has parameter \\$expectedLines with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\ConfigFactoryTest\:\:assertOutputMatches\(\) has parameter \$expectedLines with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/ConfigFactoryTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\ConfigFactoryTest\\:\\:assertOutputMatches\\(\\) has parameter \\$regex with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\ConfigFactoryTest\:\:assertOutputMatches\(\) has parameter \$regex with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/ConfigFactoryTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\ConfigFactoryTest\\:\\:assertOutputNotMatches\\(\\) has parameter \\$lines with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\ConfigFactoryTest\:\:assertOutputNotMatches\(\) has parameter \$lines with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/ConfigFactoryTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\ConfigFactoryTest\\:\\:assertOutputNotMatches\\(\\) has parameter \\$regex with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\ConfigFactoryTest\:\:assertOutputNotMatches\(\) has parameter \$regex with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/ConfigFactoryTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\ConfigFactoryTest\\:\\:createStyle\\(\\) has parameter \\$input with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Tests\\ConfigFactoryTest\:\:createStyle\(\) has parameter \$input with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/ConfigFactoryTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\ConfigFactoryTest\\:\\:getDisplay\\(\\) has no return type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\ConfigFactoryTest\:\:getDisplay\(\) has no return type specified\.$#'
+			identifier: missingType.return
 			count: 1
 			path: tests/ConfigFactoryTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\ConfigFactoryTest\\:\\:getInputStream\\(\\) has no return type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\ConfigFactoryTest\:\:getInputStream\(\) has no return type specified\.$#'
+			identifier: missingType.return
 			count: 1
 			path: tests/ConfigFactoryTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\ConfigFactoryTest\\:\\:getInputStream\\(\\) has parameter \\$input with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Tests\\ConfigFactoryTest\:\:getInputStream\(\) has parameter \$input with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/ConfigFactoryTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
+			message: '#^Parameter \#1 \$stream of class Symfony\\Component\\Console\\Output\\StreamOutput constructor expects resource, resource\|false given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/ConfigFactoryTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$stream of function fwrite expects resource, resource\\|false given\\.$#"
+			message: '#^Parameter \#1 \$stream of function fwrite expects resource, resource\|false given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/ConfigFactoryTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$stream of function rewind expects resource, resource\\|false given\\.$#"
+			message: '#^Parameter \#1 \$stream of function rewind expects resource, resource\|false given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/ConfigFactoryTest.php
 
 		-
-			message: "#^Parameter \\#2 \\$string of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertDoesNotMatchRegularExpression\\(\\) expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#2 \$string of static method PHPUnit\\Framework\\Assert\:\:assertDoesNotMatchRegularExpression\(\) expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/ConfigFactoryTest.php
 
 		-
-			message: "#^Parameter \\#2 \\$string of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertMatchesRegularExpression\\(\\) expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#2 \$string of static method PHPUnit\\Framework\\Assert\:\:assertMatchesRegularExpression\(\) expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/ConfigFactoryTest.php
 
 		-
-			message: "#^Parameter \\#3 \\$subject of function str_replace expects array\\|string, string\\|false given\\.$#"
+			message: '#^Property HubKit\\Tests\\ConfigFactoryTest\:\:\$output \(Symfony\\Component\\Console\\Output\\StreamOutput\) does not accept Symfony\\Component\\Console\\Output\\OutputInterface\.$#'
+			identifier: assign.propertyType
 			count: 1
 			path: tests/ConfigFactoryTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\ConfigFactoryTest\\:\\:\\$output \\(Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput\\) does not accept Symfony\\\\Component\\\\Console\\\\Output\\\\OutputInterface\\.$#"
-			count: 1
-			path: tests/ConfigFactoryTest.php
-
-		-
-			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitBaseTest\\:\\:getTempDir\\(\\) should return string but returns string\\|null\\.$#"
+			message: '#^Method HubKit\\Tests\\Functional\\Service\\Git\\GitBaseTest\:\:getTempDir\(\) should return string but returns string\|null\.$#'
+			identifier: return.type
 			count: 1
 			path: tests/Functional/Service/Git/GitBaseTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitBaseTest\\:\\:givenLocalBranchesExist\\(\\) has parameter \\$branches with no value type specified in iterable type iterable\\.$#"
+			message: '#^Method HubKit\\Tests\\Functional\\Service\\Git\\GitBaseTest\:\:givenLocalBranchesExist\(\) has parameter \$branches with no value type specified in iterable type iterable\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Functional/Service/Git/GitBaseTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
+			message: '#^Parameter \#1 \$stream of class Symfony\\Component\\Console\\Output\\StreamOutput constructor expects resource, resource\|false given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Functional/Service/Git/GitBaseTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitBranchTest\\:\\:getTempDir\\(\\) should return string but returns string\\|null\\.$#"
+			message: '#^Method HubKit\\Tests\\Functional\\Service\\Git\\GitBranchTest\:\:getTempDir\(\) should return string but returns string\|null\.$#'
+			identifier: return.type
 			count: 1
 			path: tests/Functional/Service/Git/GitBranchTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitBranchTest\\:\\:givenLocalBranchesExist\\(\\) has parameter \\$branches with no value type specified in iterable type iterable\\.$#"
+			message: '#^Method HubKit\\Tests\\Functional\\Service\\Git\\GitBranchTest\:\:givenLocalBranchesExist\(\) has parameter \$branches with no value type specified in iterable type iterable\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Functional/Service/Git/GitBranchTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
+			message: '#^Parameter \#1 \$stream of class Symfony\\Component\\Console\\Output\\StreamOutput constructor expects resource, resource\|false given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Functional/Service/Git/GitBranchTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitConfigTest\\:\\:getTempDir\\(\\) should return string but returns string\\|null\\.$#"
+			message: '#^Method HubKit\\Tests\\Functional\\Service\\Git\\GitConfigTest\:\:getTempDir\(\) should return string but returns string\|null\.$#'
+			identifier: return.type
 			count: 1
 			path: tests/Functional/Service/Git/GitConfigTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitConfigTest\\:\\:givenLocalBranchesExist\\(\\) has parameter \\$branches with no value type specified in iterable type iterable\\.$#"
+			message: '#^Method HubKit\\Tests\\Functional\\Service\\Git\\GitConfigTest\:\:givenLocalBranchesExist\(\) has parameter \$branches with no value type specified in iterable type iterable\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Functional/Service/Git/GitConfigTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitConfigTest\\:\\:it_gets_git_url_info\\(\\) has parameter \\$info with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Tests\\Functional\\Service\\Git\\GitConfigTest\:\:it_gets_git_url_info\(\) has parameter \$info with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Functional/Service/Git/GitConfigTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitConfigTest\\:\\:provideGitUrls\\(\\) return type has no value type specified in iterable type iterable\\.$#"
+			message: '#^Method HubKit\\Tests\\Functional\\Service\\Git\\GitConfigTest\:\:provideGitUrls\(\) return type has no value type specified in iterable type iterable\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Functional/Service/Git/GitConfigTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
+			message: '#^Parameter \#1 \$stream of class Symfony\\Component\\Console\\Output\\StreamOutput constructor expects resource, resource\|false given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Functional/Service/Git/GitConfigTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitConfigTest\\:\\:\\$style with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
+			message: '#^Property HubKit\\Tests\\Functional\\Service\\Git\\GitConfigTest\:\:\$style with generic class Prophecy\\Prophecy\\ObjectProphecy does not specify its types\: T$#'
+			identifier: missingType.generics
 			count: 1
 			path: tests/Functional/Service/Git/GitConfigTest.php
 
 		-
-			message: "#^Class HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitFileReaderTest has an uninitialized readonly property \\$style\\. Assign it in the constructor\\.$#"
+			message: '#^Class HubKit\\Tests\\Functional\\Service\\Git\\GitFileReaderTest has an uninitialized readonly property \$style\. Assign it in the constructor\.$#'
+			identifier: property.uninitializedReadonly
 			count: 1
 			path: tests/Functional/Service/Git/GitFileReaderTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitFileReaderTest\\:\\:assertOutputMatches\\(\\) has parameter \\$expectedLines with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Functional\\Service\\Git\\GitFileReaderTest\:\:assertOutputMatches\(\) has parameter \$expectedLines with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Functional/Service/Git/GitFileReaderTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitFileReaderTest\\:\\:assertOutputMatches\\(\\) has parameter \\$regex with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Functional\\Service\\Git\\GitFileReaderTest\:\:assertOutputMatches\(\) has parameter \$regex with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Functional/Service/Git/GitFileReaderTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitFileReaderTest\\:\\:assertOutputNotMatches\\(\\) has parameter \\$lines with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Functional\\Service\\Git\\GitFileReaderTest\:\:assertOutputNotMatches\(\) has parameter \$lines with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Functional/Service/Git/GitFileReaderTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitFileReaderTest\\:\\:assertOutputNotMatches\\(\\) has parameter \\$regex with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Functional\\Service\\Git\\GitFileReaderTest\:\:assertOutputNotMatches\(\) has parameter \$regex with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Functional/Service/Git/GitFileReaderTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitFileReaderTest\\:\\:createStyle\\(\\) has parameter \\$input with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Tests\\Functional\\Service\\Git\\GitFileReaderTest\:\:createStyle\(\) has parameter \$input with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Functional/Service/Git/GitFileReaderTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitFileReaderTest\\:\\:getDisplay\\(\\) has no return type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Functional\\Service\\Git\\GitFileReaderTest\:\:getDisplay\(\) has no return type specified\.$#'
+			identifier: missingType.return
 			count: 1
 			path: tests/Functional/Service/Git/GitFileReaderTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitFileReaderTest\\:\\:getInputStream\\(\\) has no return type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Functional\\Service\\Git\\GitFileReaderTest\:\:getInputStream\(\) has no return type specified\.$#'
+			identifier: missingType.return
 			count: 1
 			path: tests/Functional/Service/Git/GitFileReaderTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitFileReaderTest\\:\\:getInputStream\\(\\) has parameter \\$input with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Tests\\Functional\\Service\\Git\\GitFileReaderTest\:\:getInputStream\(\) has parameter \$input with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Functional/Service/Git/GitFileReaderTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitFileReaderTest\\:\\:getTempDir\\(\\) should return string but returns string\\|null\\.$#"
+			message: '#^Method HubKit\\Tests\\Functional\\Service\\Git\\GitFileReaderTest\:\:getTempDir\(\) should return string but returns string\|null\.$#'
+			identifier: return.type
 			count: 1
 			path: tests/Functional/Service/Git/GitFileReaderTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitFileReaderTest\\:\\:givenLocalBranchesExist\\(\\) has parameter \\$branches with no value type specified in iterable type iterable\\.$#"
+			message: '#^Method HubKit\\Tests\\Functional\\Service\\Git\\GitFileReaderTest\:\:givenLocalBranchesExist\(\) has parameter \$branches with no value type specified in iterable type iterable\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Functional/Service/Git/GitFileReaderTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$directory of function chdir expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#1 \$directory of function chdir expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Functional/Service/Git/GitFileReaderTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
+			message: '#^Parameter \#1 \$stream of class Symfony\\Component\\Console\\Output\\StreamOutput constructor expects resource, resource\|false given\.$#'
+			identifier: argument.type
 			count: 2
 			path: tests/Functional/Service/Git/GitFileReaderTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$stream of function fwrite expects resource, resource\\|false given\\.$#"
+			message: '#^Parameter \#1 \$stream of function fwrite expects resource, resource\|false given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Functional/Service/Git/GitFileReaderTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$stream of function rewind expects resource, resource\\|false given\\.$#"
+			message: '#^Parameter \#1 \$stream of function rewind expects resource, resource\|false given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Functional/Service/Git/GitFileReaderTest.php
 
 		-
-			message: "#^Parameter \\#2 \\$string of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertDoesNotMatchRegularExpression\\(\\) expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#2 \$string of static method PHPUnit\\Framework\\Assert\:\:assertDoesNotMatchRegularExpression\(\) expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Functional/Service/Git/GitFileReaderTest.php
 
 		-
-			message: "#^Parameter \\#2 \\$string of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertMatchesRegularExpression\\(\\) expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#2 \$string of static method PHPUnit\\Framework\\Assert\:\:assertMatchesRegularExpression\(\) expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Functional/Service/Git/GitFileReaderTest.php
 
 		-
-			message: "#^Parameter \\#3 \\$subject of function str_replace expects array\\|string, string\\|false given\\.$#"
+			message: '#^Property HubKit\\Tests\\Functional\\Service\\Git\\GitFileReaderTest\:\:\$origCwd \(string\|null\) does not accept string\|false\.$#'
+			identifier: assign.propertyType
 			count: 1
 			path: tests/Functional/Service/Git/GitFileReaderTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitFileReaderTest\\:\\:\\$origCwd \\(string\\|null\\) does not accept string\\|false\\.$#"
+			message: '#^Property HubKit\\Tests\\Functional\\Service\\Git\\GitFileReaderTest\:\:\$output \(Symfony\\Component\\Console\\Output\\StreamOutput\) does not accept Symfony\\Component\\Console\\Output\\OutputInterface\.$#'
+			identifier: assign.propertyType
 			count: 1
 			path: tests/Functional/Service/Git/GitFileReaderTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitFileReaderTest\\:\\:\\$output \\(Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput\\) does not accept Symfony\\\\Component\\\\Console\\\\Output\\\\OutputInterface\\.$#"
+			message: '#^Property HubKit\\Tests\\Functional\\Service\\Git\\GitFileReaderTest\:\:\$style is unused\.$#'
+			identifier: property.unused
 			count: 1
 			path: tests/Functional/Service/Git/GitFileReaderTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitFileReaderTest\\:\\:\\$style is unused\\.$#"
-			count: 1
-			path: tests/Functional/Service/Git/GitFileReaderTest.php
-
-		-
-			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitTempRepositoryTest\\:\\:getTempDir\\(\\) should return string but returns string\\|null\\.$#"
+			message: '#^Method HubKit\\Tests\\Functional\\Service\\Git\\GitTempRepositoryTest\:\:getTempDir\(\) should return string but returns string\|null\.$#'
+			identifier: return.type
 			count: 1
 			path: tests/Functional/Service/Git/GitTempRepositoryTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitTempRepositoryTest\\:\\:givenLocalBranchesExist\\(\\) has parameter \\$branches with no value type specified in iterable type iterable\\.$#"
+			message: '#^Method HubKit\\Tests\\Functional\\Service\\Git\\GitTempRepositoryTest\:\:givenLocalBranchesExist\(\) has parameter \$branches with no value type specified in iterable type iterable\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Functional/Service/Git/GitTempRepositoryTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$directory of function chdir expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#1 \$directory of function chdir expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Functional/Service/Git/GitTempRepositoryTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
+			message: '#^Parameter \#1 \$stream of class Symfony\\Component\\Console\\Output\\StreamOutput constructor expects resource, resource\|false given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Functional/Service/Git/GitTempRepositoryTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\GitTempRepositoryTest\\:\\:\\$origCwd \\(string\\|null\\) does not accept string\\|false\\.$#"
+			message: '#^Property HubKit\\Tests\\Functional\\Service\\Git\\GitTempRepositoryTest\:\:\$origCwd \(string\|null\) does not accept string\|false\.$#'
+			identifier: assign.propertyType
 			count: 1
 			path: tests/Functional/Service/Git/GitTempRepositoryTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\SplitshGitTest\\:\\:getTempDir\\(\\) should return string but returns string\\|null\\.$#"
+			message: '#^Method HubKit\\Tests\\Functional\\Service\\Git\\SplitshGitTest\:\:getTempDir\(\) should return string but returns string\|null\.$#'
+			identifier: return.type
 			count: 1
 			path: tests/Functional/Service/Git/SplitshGitTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\SplitshGitTest\\:\\:givenLocalBranchesExist\\(\\) has parameter \\$branches with no value type specified in iterable type iterable\\.$#"
+			message: '#^Method HubKit\\Tests\\Functional\\Service\\Git\\SplitshGitTest\:\:givenLocalBranchesExist\(\) has parameter \$branches with no value type specified in iterable type iterable\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Functional/Service/Git/SplitshGitTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$directory of function chdir expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#1 \$directory of function chdir expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Functional/Service/Git/SplitshGitTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
+			message: '#^Parameter \#1 \$stream of class Symfony\\Component\\Console\\Output\\StreamOutput constructor expects resource, resource\|false given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Functional/Service/Git/SplitshGitTest.php
 
 		-
-			message: "#^Parameter \\#3 \\$targets of method HubKit\\\\Service\\\\SplitshGit\\:\\:syncTags\\(\\) expects array\\<int\\|string, array\\{string, string, string\\}\\>, non\\-empty\\-array\\<int, array\\{string, string, string\\}\\|null\\> given\\.$#"
+			message: '#^Parameter \#3 \$targets of method HubKit\\Service\\SplitshGit\:\:syncTags\(\) expects array\<int\|string, array\{string, string, string\}\>, non\-empty\-array\<int, array\{string, string, string\}\|null\> given\.$#'
+			identifier: argument.type
 			count: 3
 			path: tests/Functional/Service/Git/SplitshGitTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Functional\\\\Service\\\\Git\\\\SplitshGitTest\\:\\:\\$origCwd \\(string\\|null\\) does not accept string\\|false\\.$#"
+			message: '#^Property HubKit\\Tests\\Functional\\Service\\Git\\SplitshGitTest\:\:\$origCwd \(string\|null\) does not accept string\|false\.$#'
+			identifier: assign.propertyType
 			count: 1
 			path: tests/Functional/Service/Git/SplitshGitTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\BranchAliasHandlerTest\\:\\:assertOutputMatches\\(\\) has parameter \\$expectedLines with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\BranchAliasHandlerTest\:\:assertOutputMatches\(\) has parameter \$expectedLines with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Handler/BranchAliasHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\BranchAliasHandlerTest\\:\\:assertOutputMatches\\(\\) has parameter \\$regex with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\BranchAliasHandlerTest\:\:assertOutputMatches\(\) has parameter \$regex with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Handler/BranchAliasHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\BranchAliasHandlerTest\\:\\:assertOutputNotMatches\\(\\) has parameter \\$lines with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\BranchAliasHandlerTest\:\:assertOutputNotMatches\(\) has parameter \$lines with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Handler/BranchAliasHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\BranchAliasHandlerTest\\:\\:assertOutputNotMatches\\(\\) has parameter \\$regex with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\BranchAliasHandlerTest\:\:assertOutputNotMatches\(\) has parameter \$regex with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Handler/BranchAliasHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\BranchAliasHandlerTest\\:\\:createStyle\\(\\) has parameter \\$input with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\BranchAliasHandlerTest\:\:createStyle\(\) has parameter \$input with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Handler/BranchAliasHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\BranchAliasHandlerTest\\:\\:getDisplay\\(\\) has no return type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\BranchAliasHandlerTest\:\:getDisplay\(\) has no return type specified\.$#'
+			identifier: missingType.return
 			count: 1
 			path: tests/Handler/BranchAliasHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\BranchAliasHandlerTest\\:\\:getInputStream\\(\\) has no return type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\BranchAliasHandlerTest\:\:getInputStream\(\) has no return type specified\.$#'
+			identifier: missingType.return
 			count: 1
 			path: tests/Handler/BranchAliasHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\BranchAliasHandlerTest\\:\\:getInputStream\\(\\) has parameter \\$input with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\BranchAliasHandlerTest\:\:getInputStream\(\) has parameter \$input with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Handler/BranchAliasHandlerTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$git of class HubKit\\\\Cli\\\\Handler\\\\BranchAliasHandler constructor expects HubKit\\\\Service\\\\Git, object given\\.$#"
+			message: '#^Parameter \#1 \$git of class HubKit\\Cli\\Handler\\BranchAliasHandler constructor expects HubKit\\Service\\Git, object given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/BranchAliasHandlerTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
+			message: '#^Parameter \#1 \$stream of class Symfony\\Component\\Console\\Output\\StreamOutput constructor expects resource, resource\|false given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/BranchAliasHandlerTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$stream of function fwrite expects resource, resource\\|false given\\.$#"
+			message: '#^Parameter \#1 \$stream of function fwrite expects resource, resource\|false given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/BranchAliasHandlerTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$stream of function rewind expects resource, resource\\|false given\\.$#"
+			message: '#^Parameter \#1 \$stream of function rewind expects resource, resource\|false given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/BranchAliasHandlerTest.php
 
 		-
-			message: "#^Parameter \\#2 \\$string of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertDoesNotMatchRegularExpression\\(\\) expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#2 \$string of static method PHPUnit\\Framework\\Assert\:\:assertDoesNotMatchRegularExpression\(\) expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/BranchAliasHandlerTest.php
 
 		-
-			message: "#^Parameter \\#2 \\$string of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertMatchesRegularExpression\\(\\) expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#2 \$string of static method PHPUnit\\Framework\\Assert\:\:assertMatchesRegularExpression\(\) expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/BranchAliasHandlerTest.php
 
 		-
-			message: "#^Parameter \\#3 \\$subject of function str_replace expects array\\|string, string\\|false given\\.$#"
+			message: '#^Property HubKit\\Tests\\Handler\\BranchAliasHandlerTest\:\:\$git with generic class Prophecy\\Prophecy\\ObjectProphecy does not specify its types\: T$#'
+			identifier: missingType.generics
 			count: 1
 			path: tests/Handler/BranchAliasHandlerTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\BranchAliasHandlerTest\\:\\:\\$git with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
+			message: '#^Property HubKit\\Tests\\Handler\\BranchAliasHandlerTest\:\:\$output \(Symfony\\Component\\Console\\Output\\StreamOutput\) does not accept Symfony\\Component\\Console\\Output\\OutputInterface\.$#'
+			identifier: assign.propertyType
 			count: 1
 			path: tests/Handler/BranchAliasHandlerTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\BranchAliasHandlerTest\\:\\:\\$output \\(Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput\\) does not accept Symfony\\\\Component\\\\Console\\\\Output\\\\OutputInterface\\.$#"
-			count: 1
-			path: tests/Handler/BranchAliasHandlerTest.php
-
-		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\CheckoutHandlerTest\\:\\:assertOutputMatches\\(\\) has parameter \\$expectedLines with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\CheckoutHandlerTest\:\:assertOutputMatches\(\) has parameter \$expectedLines with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Handler/CheckoutHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\CheckoutHandlerTest\\:\\:assertOutputMatches\\(\\) has parameter \\$regex with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\CheckoutHandlerTest\:\:assertOutputMatches\(\) has parameter \$regex with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Handler/CheckoutHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\CheckoutHandlerTest\\:\\:assertOutputNotMatches\\(\\) has parameter \\$lines with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\CheckoutHandlerTest\:\:assertOutputNotMatches\(\) has parameter \$lines with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Handler/CheckoutHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\CheckoutHandlerTest\\:\\:assertOutputNotMatches\\(\\) has parameter \\$regex with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\CheckoutHandlerTest\:\:assertOutputNotMatches\(\) has parameter \$regex with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Handler/CheckoutHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\CheckoutHandlerTest\\:\\:createStyle\\(\\) has parameter \\$input with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\CheckoutHandlerTest\:\:createStyle\(\) has parameter \$input with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Handler/CheckoutHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\CheckoutHandlerTest\\:\\:getDisplay\\(\\) has no return type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\CheckoutHandlerTest\:\:getDisplay\(\) has no return type specified\.$#'
+			identifier: missingType.return
 			count: 1
 			path: tests/Handler/CheckoutHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\CheckoutHandlerTest\\:\\:getInputStream\\(\\) has no return type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\CheckoutHandlerTest\:\:getInputStream\(\) has no return type specified\.$#'
+			identifier: missingType.return
 			count: 1
 			path: tests/Handler/CheckoutHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\CheckoutHandlerTest\\:\\:getInputStream\\(\\) has parameter \\$input with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\CheckoutHandlerTest\:\:getInputStream\(\) has parameter \$input with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Handler/CheckoutHandlerTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
+			message: '#^Parameter \#1 \$stream of class Symfony\\Component\\Console\\Output\\StreamOutput constructor expects resource, resource\|false given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/CheckoutHandlerTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$stream of function fwrite expects resource, resource\\|false given\\.$#"
+			message: '#^Parameter \#1 \$stream of function fwrite expects resource, resource\|false given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/CheckoutHandlerTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$stream of function rewind expects resource, resource\\|false given\\.$#"
+			message: '#^Parameter \#1 \$stream of function rewind expects resource, resource\|false given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/CheckoutHandlerTest.php
 
 		-
-			message: "#^Parameter \\#2 \\$git of class HubKit\\\\Cli\\\\Handler\\\\CheckoutHandler constructor expects HubKit\\\\Service\\\\Git, object given\\.$#"
+			message: '#^Parameter \#2 \$git of class HubKit\\Cli\\Handler\\CheckoutHandler constructor expects HubKit\\Service\\Git, object given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/CheckoutHandlerTest.php
 
 		-
-			message: "#^Parameter \\#2 \\$string of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertDoesNotMatchRegularExpression\\(\\) expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#2 \$string of static method PHPUnit\\Framework\\Assert\:\:assertDoesNotMatchRegularExpression\(\) expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/CheckoutHandlerTest.php
 
 		-
-			message: "#^Parameter \\#2 \\$string of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertMatchesRegularExpression\\(\\) expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#2 \$string of static method PHPUnit\\Framework\\Assert\:\:assertMatchesRegularExpression\(\) expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/CheckoutHandlerTest.php
 
 		-
-			message: "#^Parameter \\#3 \\$github of class HubKit\\\\Cli\\\\Handler\\\\CheckoutHandler constructor expects HubKit\\\\Service\\\\GitHub, object given\\.$#"
+			message: '#^Parameter \#3 \$github of class HubKit\\Cli\\Handler\\CheckoutHandler constructor expects HubKit\\Service\\GitHub, object given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/CheckoutHandlerTest.php
 
 		-
-			message: "#^Parameter \\#3 \\$subject of function str_replace expects array\\|string, string\\|false given\\.$#"
+			message: '#^Parameter \#5 \$process of class HubKit\\Cli\\Handler\\CheckoutHandler constructor expects HubKit\\Service\\CliProcess, object given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/CheckoutHandlerTest.php
 
 		-
-			message: "#^Parameter \\#5 \\$process of class HubKit\\\\Cli\\\\Handler\\\\CheckoutHandler constructor expects HubKit\\\\Service\\\\CliProcess, object given\\.$#"
+			message: '#^Property HubKit\\Tests\\Handler\\CheckoutHandlerTest\:\:\$git with generic class Prophecy\\Prophecy\\ObjectProphecy does not specify its types\: T$#'
+			identifier: missingType.generics
 			count: 1
 			path: tests/Handler/CheckoutHandlerTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\CheckoutHandlerTest\\:\\:\\$git with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
+			message: '#^Property HubKit\\Tests\\Handler\\CheckoutHandlerTest\:\:\$github with generic class Prophecy\\Prophecy\\ObjectProphecy does not specify its types\: T$#'
+			identifier: missingType.generics
 			count: 1
 			path: tests/Handler/CheckoutHandlerTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\CheckoutHandlerTest\\:\\:\\$github with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
+			message: '#^Property HubKit\\Tests\\Handler\\CheckoutHandlerTest\:\:\$output \(Symfony\\Component\\Console\\Output\\StreamOutput\) does not accept Symfony\\Component\\Console\\Output\\OutputInterface\.$#'
+			identifier: assign.propertyType
 			count: 1
 			path: tests/Handler/CheckoutHandlerTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\CheckoutHandlerTest\\:\\:\\$output \\(Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput\\) does not accept Symfony\\\\Component\\\\Console\\\\Output\\\\OutputInterface\\.$#"
+			message: '#^Property HubKit\\Tests\\Handler\\CheckoutHandlerTest\:\:\$process with generic class Prophecy\\Prophecy\\ObjectProphecy does not specify its types\: T$#'
+			identifier: missingType.generics
 			count: 1
 			path: tests/Handler/CheckoutHandlerTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\CheckoutHandlerTest\\:\\:\\$process with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
-			count: 1
-			path: tests/Handler/CheckoutHandlerTest.php
-
-		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\ConfigHandlerTestCase\\:\\:assertOutputMatches\\(\\) has parameter \\$expectedLines with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\ConfigHandlerTestCase\:\:assertOutputMatches\(\) has parameter \$expectedLines with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Handler/ConfigHandlerTestCase.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\ConfigHandlerTestCase\\:\\:assertOutputMatches\\(\\) has parameter \\$regex with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\ConfigHandlerTestCase\:\:assertOutputMatches\(\) has parameter \$regex with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Handler/ConfigHandlerTestCase.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\ConfigHandlerTestCase\\:\\:assertOutputNotMatches\\(\\) has parameter \\$lines with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\ConfigHandlerTestCase\:\:assertOutputNotMatches\(\) has parameter \$lines with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Handler/ConfigHandlerTestCase.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\ConfigHandlerTestCase\\:\\:assertOutputNotMatches\\(\\) has parameter \\$regex with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\ConfigHandlerTestCase\:\:assertOutputNotMatches\(\) has parameter \$regex with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Handler/ConfigHandlerTestCase.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\ConfigHandlerTestCase\\:\\:createStyle\\(\\) has parameter \\$input with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\ConfigHandlerTestCase\:\:createStyle\(\) has parameter \$input with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Handler/ConfigHandlerTestCase.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\ConfigHandlerTestCase\\:\\:getDisplay\\(\\) has no return type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\ConfigHandlerTestCase\:\:getDisplay\(\) has no return type specified\.$#'
+			identifier: missingType.return
 			count: 1
 			path: tests/Handler/ConfigHandlerTestCase.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\ConfigHandlerTestCase\\:\\:getInputStream\\(\\) has no return type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\ConfigHandlerTestCase\:\:getInputStream\(\) has no return type specified\.$#'
+			identifier: missingType.return
 			count: 1
 			path: tests/Handler/ConfigHandlerTestCase.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\ConfigHandlerTestCase\\:\\:getInputStream\\(\\) has parameter \\$input with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\ConfigHandlerTestCase\:\:getInputStream\(\) has parameter \$input with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Handler/ConfigHandlerTestCase.php
 
 		-
-			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
+			message: '#^Parameter \#1 \$stream of class Symfony\\Component\\Console\\Output\\StreamOutput constructor expects resource, resource\|false given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/ConfigHandlerTestCase.php
 
 		-
-			message: "#^Parameter \\#1 \\$stream of function fwrite expects resource, resource\\|false given\\.$#"
+			message: '#^Parameter \#1 \$stream of function fwrite expects resource, resource\|false given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/ConfigHandlerTestCase.php
 
 		-
-			message: "#^Parameter \\#1 \\$stream of function rewind expects resource, resource\\|false given\\.$#"
+			message: '#^Parameter \#1 \$stream of function rewind expects resource, resource\|false given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/ConfigHandlerTestCase.php
 
 		-
-			message: "#^Parameter \\#2 \\$string of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertDoesNotMatchRegularExpression\\(\\) expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#2 \$string of static method PHPUnit\\Framework\\Assert\:\:assertDoesNotMatchRegularExpression\(\) expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/ConfigHandlerTestCase.php
 
 		-
-			message: "#^Parameter \\#2 \\$string of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertMatchesRegularExpression\\(\\) expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#2 \$string of static method PHPUnit\\Framework\\Assert\:\:assertMatchesRegularExpression\(\) expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/ConfigHandlerTestCase.php
 
 		-
-			message: "#^Parameter \\#3 \\$subject of function str_replace expects array\\|string, string\\|false given\\.$#"
+			message: '#^Property HubKit\\Tests\\Handler\\ConfigHandlerTestCase\:\:\$filesystem with generic class Prophecy\\Prophecy\\ObjectProphecy does not specify its types\: T$#'
+			identifier: missingType.generics
 			count: 1
 			path: tests/Handler/ConfigHandlerTestCase.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\ConfigHandlerTestCase\\:\\:\\$filesystem with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
+			message: '#^Property HubKit\\Tests\\Handler\\ConfigHandlerTestCase\:\:\$git with generic class Prophecy\\Prophecy\\ObjectProphecy does not specify its types\: T$#'
+			identifier: missingType.generics
 			count: 1
 			path: tests/Handler/ConfigHandlerTestCase.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\ConfigHandlerTestCase\\:\\:\\$git with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
+			message: '#^Property HubKit\\Tests\\Handler\\ConfigHandlerTestCase\:\:\$github with generic class Prophecy\\Prophecy\\ObjectProphecy does not specify its types\: T$#'
+			identifier: missingType.generics
 			count: 1
 			path: tests/Handler/ConfigHandlerTestCase.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\ConfigHandlerTestCase\\:\\:\\$github with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
+			message: '#^Property HubKit\\Tests\\Handler\\ConfigHandlerTestCase\:\:\$output \(Symfony\\Component\\Console\\Output\\StreamOutput\) does not accept Symfony\\Component\\Console\\Output\\OutputInterface\.$#'
+			identifier: assign.propertyType
 			count: 1
 			path: tests/Handler/ConfigHandlerTestCase.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\ConfigHandlerTestCase\\:\\:\\$output \\(Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput\\) does not accept Symfony\\\\Component\\\\Console\\\\Output\\\\OutputInterface\\.$#"
+			message: '#^Property HubKit\\Tests\\Handler\\ConfigHandlerTestCase\:\:\$process with generic class Prophecy\\Prophecy\\ObjectProphecy does not specify its types\: T$#'
+			identifier: missingType.generics
 			count: 1
 			path: tests/Handler/ConfigHandlerTestCase.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\ConfigHandlerTestCase\\:\\:\\$process with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
+			message: '#^Property HubKit\\Tests\\Handler\\ConfigHandlerTestCase\:\:\$tempRepository with generic class Prophecy\\Prophecy\\ObjectProphecy does not specify its types\: T$#'
+			identifier: missingType.generics
 			count: 1
 			path: tests/Handler/ConfigHandlerTestCase.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\ConfigHandlerTestCase\\:\\:\\$tempRepository with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
-			count: 1
-			path: tests/Handler/ConfigHandlerTestCase.php
-
-		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\EditConfigHandlerTest\\:\\:it_fails_overwritten_ignored_files\\(\\) has parameter \\$existingFiles with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\EditConfigHandlerTest\:\:it_fails_overwritten_ignored_files\(\) has parameter \$existingFiles with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Handler/EditConfigHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\EditConfigHandlerTest\\:\\:it_fails_overwritten_ignored_files\\(\\) has parameter \\$foundFiles with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\EditConfigHandlerTest\:\:it_fails_overwritten_ignored_files\(\) has parameter \$foundFiles with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Handler/EditConfigHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\EditConfigHandlerTest\\:\\:provide_it_fails_overwritten_ignored_files\\(\\) return type has no value type specified in iterable type iterable\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\EditConfigHandlerTest\:\:provide_it_fails_overwritten_ignored_files\(\) return type has no value type specified in iterable type iterable\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Handler/EditConfigHandlerTest.php
 
 		-
-			message: "#^Parameter \\#2 \\$git of class class@anonymous/tests/Handler/EditConfigHandlerTest\\.php\\:223 constructor expects HubKit\\\\Service\\\\Git, object given\\.$#"
+			message: '#^Parameter \#2 \$git of class HubKit\\Cli\\Handler\\EditConfigHandler@anonymous/tests/Handler/EditConfigHandlerTest\.php\:223 constructor expects HubKit\\Service\\Git, object given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/EditConfigHandlerTest.php
 
 		-
-			message: "#^Parameter \\#3 \\$github of class class@anonymous/tests/Handler/EditConfigHandlerTest\\.php\\:223 constructor expects HubKit\\\\Service\\\\GitHub, object given\\.$#"
+			message: '#^Parameter \#3 \$github of class HubKit\\Cli\\Handler\\EditConfigHandler@anonymous/tests/Handler/EditConfigHandlerTest\.php\:223 constructor expects HubKit\\Service\\GitHub, object given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/EditConfigHandlerTest.php
 
 		-
-			message: "#^Parameter \\#5 \\$filesystem of class class@anonymous/tests/Handler/EditConfigHandlerTest\\.php\\:223 constructor expects HubKit\\\\Service\\\\Filesystem, object given\\.$#"
+			message: '#^Parameter \#5 \$filesystem of class HubKit\\Cli\\Handler\\EditConfigHandler@anonymous/tests/Handler/EditConfigHandlerTest\.php\:223 constructor expects HubKit\\Service\\Filesystem, object given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/EditConfigHandlerTest.php
 
 		-
-			message: "#^Parameter \\#6 \\$tempRepository of class class@anonymous/tests/Handler/EditConfigHandlerTest\\.php\\:223 constructor expects HubKit\\\\Service\\\\Git\\\\GitTempRepository, object given\\.$#"
+			message: '#^Parameter \#6 \$tempRepository of class HubKit\\Cli\\Handler\\EditConfigHandler@anonymous/tests/Handler/EditConfigHandlerTest\.php\:223 constructor expects HubKit\\Service\\Git\\GitTempRepository, object given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/EditConfigHandlerTest.php
 
 		-
-			message: "#^Parameter \\#7 \\$finder of class class@anonymous/tests/Handler/EditConfigHandlerTest\\.php\\:223 constructor expects Symfony\\\\Component\\\\Finder\\\\Finder, object given\\.$#"
+			message: '#^Parameter \#7 \$finder of class HubKit\\Cli\\Handler\\EditConfigHandler@anonymous/tests/Handler/EditConfigHandlerTest\.php\:223 constructor expects Symfony\\Component\\Finder\\Finder, object given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/EditConfigHandlerTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\EditConfigHandlerTest\\:\\:\\$finder with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
+			message: '#^Property HubKit\\Tests\\Handler\\EditConfigHandlerTest\:\:\$finder with generic class Prophecy\\Prophecy\\ObjectProphecy does not specify its types\: T$#'
+			identifier: missingType.generics
 			count: 1
 			path: tests/Handler/EditConfigHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\InitConfigHandlerTest\\:\\:assertConfigFileEquals\\(\\) has parameter \\$expected with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\InitConfigHandlerTest\:\:assertConfigFileEquals\(\) has parameter \$expected with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Handler/InitConfigHandlerTest.php
 
 		-
-			message: "#^Parameter \\#2 \\$git of class HubKit\\\\Cli\\\\Handler\\\\InitConfigHandler constructor expects HubKit\\\\Service\\\\Git, object given\\.$#"
+			message: '#^Parameter \#2 \$git of class HubKit\\Cli\\Handler\\InitConfigHandler constructor expects HubKit\\Service\\Git, object given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/InitConfigHandlerTest.php
 
 		-
-			message: "#^Parameter \\#3 \\$github of class HubKit\\\\Cli\\\\Handler\\\\InitConfigHandler constructor expects HubKit\\\\Service\\\\GitHub, object given\\.$#"
+			message: '#^Parameter \#3 \$github of class HubKit\\Cli\\Handler\\InitConfigHandler constructor expects HubKit\\Service\\GitHub, object given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/InitConfigHandlerTest.php
 
 		-
-			message: "#^Parameter \\#5 \\$filesystem of class HubKit\\\\Cli\\\\Handler\\\\InitConfigHandler constructor expects HubKit\\\\Service\\\\Filesystem, object given\\.$#"
+			message: '#^Parameter \#5 \$filesystem of class HubKit\\Cli\\Handler\\InitConfigHandler constructor expects HubKit\\Service\\Filesystem, object given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/InitConfigHandlerTest.php
 
 		-
-			message: "#^Parameter \\#6 \\$tempRepository of class HubKit\\\\Cli\\\\Handler\\\\InitConfigHandler constructor expects HubKit\\\\Service\\\\Git\\\\GitTempRepository, object given\\.$#"
+			message: '#^Parameter \#6 \$tempRepository of class HubKit\\Cli\\Handler\\InitConfigHandler constructor expects HubKit\\Service\\Git\\GitTempRepository, object given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/InitConfigHandlerTest.php
 
 		-
-			message: "#^Parameter \\#7 \\$process of class HubKit\\\\Cli\\\\Handler\\\\InitConfigHandler constructor expects HubKit\\\\Service\\\\CliProcess, object given\\.$#"
+			message: '#^Parameter \#7 \$process of class HubKit\\Cli\\Handler\\InitConfigHandler constructor expects HubKit\\Service\\CliProcess, object given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/InitConfigHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\MergeHandlerTest\\:\\:assertOutputMatches\\(\\) has parameter \\$expectedLines with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\MergeHandlerTest\:\:assertOutputMatches\(\) has parameter \$expectedLines with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Handler/MergeHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\MergeHandlerTest\\:\\:assertOutputMatches\\(\\) has parameter \\$regex with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\MergeHandlerTest\:\:assertOutputMatches\(\) has parameter \$regex with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Handler/MergeHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\MergeHandlerTest\\:\\:assertOutputNotMatches\\(\\) has parameter \\$lines with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\MergeHandlerTest\:\:assertOutputNotMatches\(\) has parameter \$lines with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Handler/MergeHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\MergeHandlerTest\\:\\:assertOutputNotMatches\\(\\) has parameter \\$regex with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\MergeHandlerTest\:\:assertOutputNotMatches\(\) has parameter \$regex with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Handler/MergeHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\MergeHandlerTest\\:\\:createStyle\\(\\) has parameter \\$input with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\MergeHandlerTest\:\:createStyle\(\) has parameter \$input with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Handler/MergeHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\MergeHandlerTest\\:\\:executeHandler\\(\\) has parameter \\$input with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\MergeHandlerTest\:\:executeHandler\(\) has parameter \$input with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Handler/MergeHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\MergeHandlerTest\\:\\:expectCommitStatus\\(\\) has parameter \\$statuses with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\MergeHandlerTest\:\:expectCommitStatus\(\) has parameter \$statuses with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Handler/MergeHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\MergeHandlerTest\\:\\:expectCommits\\(\\) has parameter \\$pr with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\MergeHandlerTest\:\:expectCommits\(\) has parameter \$pr with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Handler/MergeHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\MergeHandlerTest\\:\\:expectCommitsWithoutAuthor\\(\\) has parameter \\$pr with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\MergeHandlerTest\:\:expectCommitsWithoutAuthor\(\) has parameter \$pr with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Handler/MergeHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\MergeHandlerTest\\:\\:expectLessAcceptableCommits\\(\\) has parameter \\$pr with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\MergeHandlerTest\:\:expectLessAcceptableCommits\(\) has parameter \$pr with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Handler/MergeHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\MergeHandlerTest\\:\\:expectLocalBranchExists\\(\\) has parameter \\$removeRemote with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\MergeHandlerTest\:\:expectLocalBranchExists\(\) has parameter \$removeRemote with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Handler/MergeHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\MergeHandlerTest\\:\\:expectMetadata\\(\\) has parameter \\$authors with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\MergeHandlerTest\:\:expectMetadata\(\) has parameter \$authors with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Handler/MergeHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\MergeHandlerTest\\:\\:expectMetadata\\(\\) has parameter \\$labels with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\MergeHandlerTest\:\:expectMetadata\(\) has parameter \$labels with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Handler/MergeHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\MergeHandlerTest\\:\\:expectNotes\\(\\) has parameter \\$notes with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\MergeHandlerTest\:\:expectNotes\(\) has parameter \$notes with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Handler/MergeHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\MergeHandlerTest\\:\\:expectPrInfo\\(\\) has parameter \\$fileNames with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\MergeHandlerTest\:\:expectPrInfo\(\) has parameter \$fileNames with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Handler/MergeHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\MergeHandlerTest\\:\\:expectPrInfo\\(\\) has parameter \\$labels with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\MergeHandlerTest\:\:expectPrInfo\(\) has parameter \$labels with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Handler/MergeHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\MergeHandlerTest\\:\\:expectPrInfo\\(\\) has parameter \\$mergeable with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\MergeHandlerTest\:\:expectPrInfo\(\) has parameter \$mergeable with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Handler/MergeHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\MergeHandlerTest\\:\\:expectPrInfo\\(\\) has parameter \\$reviews with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\MergeHandlerTest\:\:expectPrInfo\(\) has parameter \$reviews with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Handler/MergeHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\MergeHandlerTest\\:\\:expectPrInfo\\(\\) return type has no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\MergeHandlerTest\:\:expectPrInfo\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Handler/MergeHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\MergeHandlerTest\\:\\:expectUnacceptableCommits\\(\\) has parameter \\$pr with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\MergeHandlerTest\:\:expectUnacceptableCommits\(\) has parameter \$pr with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Handler/MergeHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\MergeHandlerTest\\:\\:getDisplay\\(\\) has no return type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\MergeHandlerTest\:\:getDisplay\(\) has no return type specified\.$#'
+			identifier: missingType.return
 			count: 1
 			path: tests/Handler/MergeHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\MergeHandlerTest\\:\\:getInputStream\\(\\) has no return type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\MergeHandlerTest\:\:getInputStream\(\) has no return type specified\.$#'
+			identifier: missingType.return
 			count: 1
 			path: tests/Handler/MergeHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\MergeHandlerTest\\:\\:getInputStream\\(\\) has parameter \\$input with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\MergeHandlerTest\:\:getInputStream\(\) has parameter \$input with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Handler/MergeHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\MergeHandlerTest\\:\\:it_shows_status_table_with_review_status\\(\\) has parameter \\$labels with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\MergeHandlerTest\:\:it_shows_status_table_with_review_status\(\) has parameter \$labels with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Handler/MergeHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\MergeHandlerTest\\:\\:it_shows_status_table_with_review_status_by_reviews\\(\\) has parameter \\$reviews with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\MergeHandlerTest\:\:it_shows_status_table_with_review_status_by_reviews\(\) has parameter \$reviews with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Handler/MergeHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\MergeHandlerTest\\:\\:provideReviews\\(\\) return type has no value type specified in iterable type iterable\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\MergeHandlerTest\:\:provideReviews\(\) return type has no value type specified in iterable type iterable\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Handler/MergeHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\MergeHandlerTest\\:\\:provideStatusLabels\\(\\) return type has no value type specified in iterable type iterable\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\MergeHandlerTest\:\:provideStatusLabels\(\) return type has no value type specified in iterable type iterable\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Handler/MergeHandlerTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
+			message: '#^Parameter \#1 \$stream of class Symfony\\Component\\Console\\Output\\StreamOutput constructor expects resource, resource\|false given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/MergeHandlerTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$stream of function fwrite expects resource, resource\\|false given\\.$#"
+			message: '#^Parameter \#1 \$stream of function fwrite expects resource, resource\|false given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/MergeHandlerTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$stream of function rewind expects resource, resource\\|false given\\.$#"
+			message: '#^Parameter \#1 \$stream of function rewind expects resource, resource\|false given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/MergeHandlerTest.php
 
 		-
-			message: "#^Parameter \\#2 \\$git of class HubKit\\\\Cli\\\\Handler\\\\MergeHandler constructor expects HubKit\\\\Service\\\\Git, object given\\.$#"
+			message: '#^Parameter \#2 \$git of class HubKit\\Cli\\Handler\\MergeHandler constructor expects HubKit\\Service\\Git, object given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/MergeHandlerTest.php
 
 		-
-			message: "#^Parameter \\#2 \\$string of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertDoesNotMatchRegularExpression\\(\\) expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#2 \$string of static method PHPUnit\\Framework\\Assert\:\:assertDoesNotMatchRegularExpression\(\) expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/MergeHandlerTest.php
 
 		-
-			message: "#^Parameter \\#2 \\$string of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertMatchesRegularExpression\\(\\) expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#2 \$string of static method PHPUnit\\Framework\\Assert\:\:assertMatchesRegularExpression\(\) expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/MergeHandlerTest.php
 
 		-
-			message: "#^Parameter \\#3 \\$github of class HubKit\\\\Cli\\\\Handler\\\\MergeHandler constructor expects HubKit\\\\Service\\\\GitHub, object given\\.$#"
+			message: '#^Parameter \#3 \$github of class HubKit\\Cli\\Handler\\MergeHandler constructor expects HubKit\\Service\\GitHub, object given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/MergeHandlerTest.php
 
 		-
-			message: "#^Parameter \\#3 \\$subject of function str_replace expects array\\|string, string\\|false given\\.$#"
+			message: '#^Parameter \#5 \$aliasResolver of class HubKit\\Cli\\Handler\\MergeHandler constructor expects HubKit\\Helper\\BranchAliasResolver, object given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/MergeHandlerTest.php
 
 		-
-			message: "#^Parameter \\#5 \\$aliasResolver of class HubKit\\\\Cli\\\\Handler\\\\MergeHandler constructor expects HubKit\\\\Helper\\\\BranchAliasResolver, object given\\.$#"
+			message: '#^Parameter \#7 \$branchSplitsh of class HubKit\\Cli\\Handler\\MergeHandler constructor expects HubKit\\Service\\BranchSplitsh, object given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/MergeHandlerTest.php
 
 		-
-			message: "#^Parameter \\#7 \\$branchSplitsh of class HubKit\\\\Cli\\\\Handler\\\\MergeHandler constructor expects HubKit\\\\Service\\\\BranchSplitsh, object given\\.$#"
+			message: '#^Property HubKit\\Tests\\Handler\\MergeHandlerTest\:\:\$aliasResolver with generic class Prophecy\\Prophecy\\ObjectProphecy does not specify its types\: T$#'
+			identifier: missingType.generics
 			count: 1
 			path: tests/Handler/MergeHandlerTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\MergeHandlerTest\\:\\:\\$aliasResolver with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
+			message: '#^Property HubKit\\Tests\\Handler\\MergeHandlerTest\:\:\$branchSplitsh with generic class Prophecy\\Prophecy\\ObjectProphecy does not specify its types\: T$#'
+			identifier: missingType.generics
 			count: 1
 			path: tests/Handler/MergeHandlerTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\MergeHandlerTest\\:\\:\\$branchSplitsh with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
+			message: '#^Property HubKit\\Tests\\Handler\\MergeHandlerTest\:\:\$git with generic class Prophecy\\Prophecy\\ObjectProphecy does not specify its types\: T$#'
+			identifier: missingType.generics
 			count: 1
 			path: tests/Handler/MergeHandlerTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\MergeHandlerTest\\:\\:\\$git with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
+			message: '#^Property HubKit\\Tests\\Handler\\MergeHandlerTest\:\:\$github with generic class Prophecy\\Prophecy\\ObjectProphecy does not specify its types\: T$#'
+			identifier: missingType.generics
 			count: 1
 			path: tests/Handler/MergeHandlerTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\MergeHandlerTest\\:\\:\\$github with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
+			message: '#^Property HubKit\\Tests\\Handler\\MergeHandlerTest\:\:\$output \(Symfony\\Component\\Console\\Output\\StreamOutput\) does not accept Symfony\\Component\\Console\\Output\\OutputInterface\.$#'
+			identifier: assign.propertyType
 			count: 1
 			path: tests/Handler/MergeHandlerTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\MergeHandlerTest\\:\\:\\$output \\(Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput\\) does not accept Symfony\\\\Component\\\\Console\\\\Output\\\\OutputInterface\\.$#"
-			count: 1
-			path: tests/Handler/MergeHandlerTest.php
-
-		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\ReleaseHandlerTest\\:\\:assertOutputMatches\\(\\) has parameter \\$expectedLines with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\ReleaseHandlerTest\:\:assertOutputMatches\(\) has parameter \$expectedLines with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Handler/ReleaseHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\ReleaseHandlerTest\\:\\:assertOutputMatches\\(\\) has parameter \\$regex with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\ReleaseHandlerTest\:\:assertOutputMatches\(\) has parameter \$regex with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Handler/ReleaseHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\ReleaseHandlerTest\\:\\:assertOutputNotMatches\\(\\) has parameter \\$lines with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\ReleaseHandlerTest\:\:assertOutputNotMatches\(\) has parameter \$lines with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Handler/ReleaseHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\ReleaseHandlerTest\\:\\:assertOutputNotMatches\\(\\) has parameter \\$regex with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\ReleaseHandlerTest\:\:assertOutputNotMatches\(\) has parameter \$regex with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Handler/ReleaseHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\ReleaseHandlerTest\\:\\:createStyle\\(\\) has parameter \\$input with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\ReleaseHandlerTest\:\:createStyle\(\) has parameter \$input with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Handler/ReleaseHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\ReleaseHandlerTest\\:\\:executeHandler\\(\\) has parameter \\$input with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\ReleaseHandlerTest\:\:executeHandler\(\) has parameter \$input with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Handler/ReleaseHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\ReleaseHandlerTest\\:\\:expectTags\\(\\) has parameter \\$tags with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\ReleaseHandlerTest\:\:expectTags\(\) has parameter \$tags with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Handler/ReleaseHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\ReleaseHandlerTest\\:\\:getDisplay\\(\\) has no return type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\ReleaseHandlerTest\:\:getDisplay\(\) has no return type specified\.$#'
+			identifier: missingType.return
 			count: 1
 			path: tests/Handler/ReleaseHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\ReleaseHandlerTest\\:\\:getInputStream\\(\\) has no return type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\ReleaseHandlerTest\:\:getInputStream\(\) has no return type specified\.$#'
+			identifier: missingType.return
 			count: 1
 			path: tests/Handler/ReleaseHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\ReleaseHandlerTest\\:\\:getInputStream\\(\\) has parameter \\$input with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\ReleaseHandlerTest\:\:getInputStream\(\) has parameter \$input with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Handler/ReleaseHandlerTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
+			message: '#^Parameter \#1 \$stream of class Symfony\\Component\\Console\\Output\\StreamOutput constructor expects resource, resource\|false given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/ReleaseHandlerTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$stream of function fwrite expects resource, resource\\|false given\\.$#"
+			message: '#^Parameter \#1 \$stream of function fwrite expects resource, resource\|false given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/ReleaseHandlerTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$stream of function rewind expects resource, resource\\|false given\\.$#"
+			message: '#^Parameter \#1 \$stream of function rewind expects resource, resource\|false given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/ReleaseHandlerTest.php
 
 		-
-			message: "#^Parameter \\#2 \\$git of class HubKit\\\\Cli\\\\Handler\\\\ReleaseHandler constructor expects HubKit\\\\Service\\\\Git, object given\\.$#"
+			message: '#^Parameter \#2 \$git of class HubKit\\Cli\\Handler\\ReleaseHandler constructor expects HubKit\\Service\\Git, object given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/ReleaseHandlerTest.php
 
 		-
-			message: "#^Parameter \\#2 \\$string of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertDoesNotMatchRegularExpression\\(\\) expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#2 \$string of static method PHPUnit\\Framework\\Assert\:\:assertDoesNotMatchRegularExpression\(\) expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/ReleaseHandlerTest.php
 
 		-
-			message: "#^Parameter \\#2 \\$string of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertMatchesRegularExpression\\(\\) expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#2 \$string of static method PHPUnit\\Framework\\Assert\:\:assertMatchesRegularExpression\(\) expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/ReleaseHandlerTest.php
 
 		-
-			message: "#^Parameter \\#3 \\$github of class HubKit\\\\Cli\\\\Handler\\\\ReleaseHandler constructor expects HubKit\\\\Service\\\\GitHub, object given\\.$#"
+			message: '#^Parameter \#3 \$github of class HubKit\\Cli\\Handler\\ReleaseHandler constructor expects HubKit\\Service\\GitHub, object given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/ReleaseHandlerTest.php
 
 		-
-			message: "#^Parameter \\#3 \\$subject of function str_replace expects array\\|string, string\\|false given\\.$#"
+			message: '#^Parameter \#5 \$process of class HubKit\\Cli\\Handler\\ReleaseHandler constructor expects HubKit\\Service\\CliProcess, object given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/ReleaseHandlerTest.php
 
 		-
-			message: "#^Parameter \\#5 \\$process of class HubKit\\\\Cli\\\\Handler\\\\ReleaseHandler constructor expects HubKit\\\\Service\\\\CliProcess, object given\\.$#"
+			message: '#^Parameter \#6 \$editor of class HubKit\\Cli\\Handler\\ReleaseHandler constructor expects HubKit\\Service\\Editor, object given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/ReleaseHandlerTest.php
 
 		-
-			message: "#^Parameter \\#6 \\$editor of class HubKit\\\\Cli\\\\Handler\\\\ReleaseHandler constructor expects HubKit\\\\Service\\\\Editor, object given\\.$#"
+			message: '#^Parameter \#7 \$branchSplitsh of class HubKit\\Cli\\Handler\\ReleaseHandler constructor expects HubKit\\Service\\BranchSplitsh, object given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/ReleaseHandlerTest.php
 
 		-
-			message: "#^Parameter \\#7 \\$branchSplitsh of class HubKit\\\\Cli\\\\Handler\\\\ReleaseHandler constructor expects HubKit\\\\Service\\\\BranchSplitsh, object given\\.$#"
+			message: '#^Parameter \#8 \$releaseHooks of class HubKit\\Cli\\Handler\\ReleaseHandler constructor expects HubKit\\Service\\ReleaseHooks, object given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/ReleaseHandlerTest.php
 
 		-
-			message: "#^Parameter \\#8 \\$releaseHooks of class HubKit\\\\Cli\\\\Handler\\\\ReleaseHandler constructor expects HubKit\\\\Service\\\\ReleaseHooks, object given\\.$#"
+			message: '#^Property HubKit\\Tests\\Handler\\ReleaseHandlerTest\:\:\$branchSplitsh with generic class Prophecy\\Prophecy\\ObjectProphecy does not specify its types\: T$#'
+			identifier: missingType.generics
 			count: 1
 			path: tests/Handler/ReleaseHandlerTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\ReleaseHandlerTest\\:\\:\\$branchSplitsh with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
+			message: '#^Property HubKit\\Tests\\Handler\\ReleaseHandlerTest\:\:\$editor with generic class Prophecy\\Prophecy\\ObjectProphecy does not specify its types\: T$#'
+			identifier: missingType.generics
 			count: 1
 			path: tests/Handler/ReleaseHandlerTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\ReleaseHandlerTest\\:\\:\\$editor with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
+			message: '#^Property HubKit\\Tests\\Handler\\ReleaseHandlerTest\:\:\$git with generic class Prophecy\\Prophecy\\ObjectProphecy does not specify its types\: T$#'
+			identifier: missingType.generics
 			count: 1
 			path: tests/Handler/ReleaseHandlerTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\ReleaseHandlerTest\\:\\:\\$git with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
+			message: '#^Property HubKit\\Tests\\Handler\\ReleaseHandlerTest\:\:\$github with generic class Prophecy\\Prophecy\\ObjectProphecy does not specify its types\: T$#'
+			identifier: missingType.generics
 			count: 1
 			path: tests/Handler/ReleaseHandlerTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\ReleaseHandlerTest\\:\\:\\$github with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
+			message: '#^Property HubKit\\Tests\\Handler\\ReleaseHandlerTest\:\:\$output \(Symfony\\Component\\Console\\Output\\StreamOutput\) does not accept Symfony\\Component\\Console\\Output\\OutputInterface\.$#'
+			identifier: assign.propertyType
 			count: 1
 			path: tests/Handler/ReleaseHandlerTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\ReleaseHandlerTest\\:\\:\\$output \\(Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput\\) does not accept Symfony\\\\Component\\\\Console\\\\Output\\\\OutputInterface\\.$#"
+			message: '#^Property HubKit\\Tests\\Handler\\ReleaseHandlerTest\:\:\$process with generic class Prophecy\\Prophecy\\ObjectProphecy does not specify its types\: T$#'
+			identifier: missingType.generics
 			count: 1
 			path: tests/Handler/ReleaseHandlerTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\ReleaseHandlerTest\\:\\:\\$process with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
+			message: '#^Property HubKit\\Tests\\Handler\\ReleaseHandlerTest\:\:\$releaseHooks with generic class Prophecy\\Prophecy\\ObjectProphecy does not specify its types\: T$#'
+			identifier: missingType.generics
 			count: 1
 			path: tests/Handler/ReleaseHandlerTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\ReleaseHandlerTest\\:\\:\\$releaseHooks with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
-			count: 1
-			path: tests/Handler/ReleaseHandlerTest.php
-
-		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\SplitCreatedHandlerTest\\:\\:assertOutputMatches\\(\\) has parameter \\$expectedLines with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\SplitCreatedHandlerTest\:\:assertOutputMatches\(\) has parameter \$expectedLines with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Handler/SplitCreatedHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\SplitCreatedHandlerTest\\:\\:assertOutputMatches\\(\\) has parameter \\$regex with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\SplitCreatedHandlerTest\:\:assertOutputMatches\(\) has parameter \$regex with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Handler/SplitCreatedHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\SplitCreatedHandlerTest\\:\\:assertOutputNotMatches\\(\\) has parameter \\$lines with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\SplitCreatedHandlerTest\:\:assertOutputNotMatches\(\) has parameter \$lines with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Handler/SplitCreatedHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\SplitCreatedHandlerTest\\:\\:assertOutputNotMatches\\(\\) has parameter \\$regex with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\SplitCreatedHandlerTest\:\:assertOutputNotMatches\(\) has parameter \$regex with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Handler/SplitCreatedHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\SplitCreatedHandlerTest\\:\\:createStyle\\(\\) has parameter \\$input with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\SplitCreatedHandlerTest\:\:createStyle\(\) has parameter \$input with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Handler/SplitCreatedHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\SplitCreatedHandlerTest\\:\\:getDisplay\\(\\) has no return type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\SplitCreatedHandlerTest\:\:getDisplay\(\) has no return type specified\.$#'
+			identifier: missingType.return
 			count: 1
 			path: tests/Handler/SplitCreatedHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\SplitCreatedHandlerTest\\:\\:getInputStream\\(\\) has no return type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\SplitCreatedHandlerTest\:\:getInputStream\(\) has no return type specified\.$#'
+			identifier: missingType.return
 			count: 1
 			path: tests/Handler/SplitCreatedHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\SplitCreatedHandlerTest\\:\\:getInputStream\\(\\) has parameter \\$input with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\SplitCreatedHandlerTest\:\:getInputStream\(\) has parameter \$input with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Handler/SplitCreatedHandlerTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
+			message: '#^Parameter \#1 \$stream of class Symfony\\Component\\Console\\Output\\StreamOutput constructor expects resource, resource\|false given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/SplitCreatedHandlerTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$stream of function fwrite expects resource, resource\\|false given\\.$#"
+			message: '#^Parameter \#1 \$stream of function fwrite expects resource, resource\|false given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/SplitCreatedHandlerTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$stream of function rewind expects resource, resource\\|false given\\.$#"
+			message: '#^Parameter \#1 \$stream of function rewind expects resource, resource\|false given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/SplitCreatedHandlerTest.php
 
 		-
-			message: "#^Parameter \\#2 \\$git of class HubKit\\\\Cli\\\\Handler\\\\SplitCreatedHandler constructor expects HubKit\\\\Service\\\\Git, object given\\.$#"
+			message: '#^Parameter \#2 \$git of class HubKit\\Cli\\Handler\\SplitCreatedHandler constructor expects HubKit\\Service\\Git, object given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/SplitCreatedHandlerTest.php
 
 		-
-			message: "#^Parameter \\#2 \\$string of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertDoesNotMatchRegularExpression\\(\\) expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#2 \$string of static method PHPUnit\\Framework\\Assert\:\:assertDoesNotMatchRegularExpression\(\) expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/SplitCreatedHandlerTest.php
 
 		-
-			message: "#^Parameter \\#2 \\$string of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertMatchesRegularExpression\\(\\) expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#2 \$string of static method PHPUnit\\Framework\\Assert\:\:assertMatchesRegularExpression\(\) expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/SplitCreatedHandlerTest.php
 
 		-
-			message: "#^Parameter \\#3 \\$github of class HubKit\\\\Cli\\\\Handler\\\\SplitCreatedHandler constructor expects HubKit\\\\Service\\\\GitHub, object given\\.$#"
+			message: '#^Parameter \#3 \$github of class HubKit\\Cli\\Handler\\SplitCreatedHandler constructor expects HubKit\\Service\\GitHub, object given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/SplitCreatedHandlerTest.php
 
 		-
-			message: "#^Parameter \\#3 \\$subject of function str_replace expects array\\|string, string\\|false given\\.$#"
+			message: '#^Property HubKit\\Tests\\Handler\\SplitCreatedHandlerTest\:\:\$git with generic class Prophecy\\Prophecy\\ObjectProphecy does not specify its types\: T$#'
+			identifier: missingType.generics
 			count: 1
 			path: tests/Handler/SplitCreatedHandlerTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\SplitCreatedHandlerTest\\:\\:\\$git with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
+			message: '#^Property HubKit\\Tests\\Handler\\SplitCreatedHandlerTest\:\:\$github with generic class Prophecy\\Prophecy\\ObjectProphecy does not specify its types\: T$#'
+			identifier: missingType.generics
 			count: 1
 			path: tests/Handler/SplitCreatedHandlerTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\SplitCreatedHandlerTest\\:\\:\\$github with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
+			message: '#^Property HubKit\\Tests\\Handler\\SplitCreatedHandlerTest\:\:\$output \(Symfony\\Component\\Console\\Output\\StreamOutput\) does not accept Symfony\\Component\\Console\\Output\\OutputInterface\.$#'
+			identifier: assign.propertyType
 			count: 1
 			path: tests/Handler/SplitCreatedHandlerTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\SplitCreatedHandlerTest\\:\\:\\$output \\(Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput\\) does not accept Symfony\\\\Component\\\\Console\\\\Output\\\\OutputInterface\\.$#"
-			count: 1
-			path: tests/Handler/SplitCreatedHandlerTest.php
-
-		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\SplitRepoHandlerTest\\:\\:assertOutputMatches\\(\\) has parameter \\$expectedLines with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\SplitRepoHandlerTest\:\:assertOutputMatches\(\) has parameter \$expectedLines with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Handler/SplitRepoHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\SplitRepoHandlerTest\\:\\:assertOutputMatches\\(\\) has parameter \\$regex with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\SplitRepoHandlerTest\:\:assertOutputMatches\(\) has parameter \$regex with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Handler/SplitRepoHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\SplitRepoHandlerTest\\:\\:assertOutputNotMatches\\(\\) has parameter \\$lines with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\SplitRepoHandlerTest\:\:assertOutputNotMatches\(\) has parameter \$lines with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Handler/SplitRepoHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\SplitRepoHandlerTest\\:\\:assertOutputNotMatches\\(\\) has parameter \\$regex with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\SplitRepoHandlerTest\:\:assertOutputNotMatches\(\) has parameter \$regex with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Handler/SplitRepoHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\SplitRepoHandlerTest\\:\\:createStyle\\(\\) has parameter \\$input with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\SplitRepoHandlerTest\:\:createStyle\(\) has parameter \$input with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Handler/SplitRepoHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\SplitRepoHandlerTest\\:\\:executeHandler\\(\\) has parameter \\$input with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\SplitRepoHandlerTest\:\:executeHandler\(\) has parameter \$input with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Handler/SplitRepoHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\SplitRepoHandlerTest\\:\\:getDisplay\\(\\) has no return type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\SplitRepoHandlerTest\:\:getDisplay\(\) has no return type specified\.$#'
+			identifier: missingType.return
 			count: 1
 			path: tests/Handler/SplitRepoHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\SplitRepoHandlerTest\\:\\:getInputStream\\(\\) has no return type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\SplitRepoHandlerTest\:\:getInputStream\(\) has no return type specified\.$#'
+			identifier: missingType.return
 			count: 1
 			path: tests/Handler/SplitRepoHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\SplitRepoHandlerTest\\:\\:getInputStream\\(\\) has parameter \\$input with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\SplitRepoHandlerTest\:\:getInputStream\(\) has parameter \$input with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Handler/SplitRepoHandlerTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
+			message: '#^Parameter \#1 \$stream of class Symfony\\Component\\Console\\Output\\StreamOutput constructor expects resource, resource\|false given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/SplitRepoHandlerTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$stream of function fwrite expects resource, resource\\|false given\\.$#"
+			message: '#^Parameter \#1 \$stream of function fwrite expects resource, resource\|false given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/SplitRepoHandlerTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$stream of function rewind expects resource, resource\\|false given\\.$#"
+			message: '#^Parameter \#1 \$stream of function rewind expects resource, resource\|false given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/SplitRepoHandlerTest.php
 
 		-
-			message: "#^Parameter \\#2 \\$git of class HubKit\\\\Cli\\\\Handler\\\\SplitRepoHandler constructor expects HubKit\\\\Service\\\\Git, object given\\.$#"
+			message: '#^Parameter \#2 \$git of class HubKit\\Cli\\Handler\\SplitRepoHandler constructor expects HubKit\\Service\\Git, object given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/SplitRepoHandlerTest.php
 
 		-
-			message: "#^Parameter \\#2 \\$string of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertDoesNotMatchRegularExpression\\(\\) expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#2 \$string of static method PHPUnit\\Framework\\Assert\:\:assertDoesNotMatchRegularExpression\(\) expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/SplitRepoHandlerTest.php
 
 		-
-			message: "#^Parameter \\#2 \\$string of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertMatchesRegularExpression\\(\\) expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#2 \$string of static method PHPUnit\\Framework\\Assert\:\:assertMatchesRegularExpression\(\) expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/SplitRepoHandlerTest.php
 
 		-
-			message: "#^Parameter \\#3 \\$github of class HubKit\\\\Cli\\\\Handler\\\\SplitRepoHandler constructor expects HubKit\\\\Service\\\\GitHub, object given\\.$#"
+			message: '#^Parameter \#3 \$github of class HubKit\\Cli\\Handler\\SplitRepoHandler constructor expects HubKit\\Service\\GitHub, object given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/SplitRepoHandlerTest.php
 
 		-
-			message: "#^Parameter \\#3 \\$subject of function str_replace expects array\\|string, string\\|false given\\.$#"
+			message: '#^Parameter \#5 \$branchSplitsh of class HubKit\\Cli\\Handler\\SplitRepoHandler constructor expects HubKit\\Service\\BranchSplitsh, object given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/SplitRepoHandlerTest.php
 
 		-
-			message: "#^Parameter \\#5 \\$branchSplitsh of class HubKit\\\\Cli\\\\Handler\\\\SplitRepoHandler constructor expects HubKit\\\\Service\\\\BranchSplitsh, object given\\.$#"
+			message: '#^Property HubKit\\Tests\\Handler\\SplitRepoHandlerTest\:\:\$git with generic class Prophecy\\Prophecy\\ObjectProphecy does not specify its types\: T$#'
+			identifier: missingType.generics
 			count: 1
 			path: tests/Handler/SplitRepoHandlerTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\SplitRepoHandlerTest\\:\\:\\$git with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
+			message: '#^Property HubKit\\Tests\\Handler\\SplitRepoHandlerTest\:\:\$github with generic class Prophecy\\Prophecy\\ObjectProphecy does not specify its types\: T$#'
+			identifier: missingType.generics
 			count: 1
 			path: tests/Handler/SplitRepoHandlerTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\SplitRepoHandlerTest\\:\\:\\$github with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
+			message: '#^Property HubKit\\Tests\\Handler\\SplitRepoHandlerTest\:\:\$output \(Symfony\\Component\\Console\\Output\\StreamOutput\) does not accept Symfony\\Component\\Console\\Output\\OutputInterface\.$#'
+			identifier: assign.propertyType
 			count: 1
 			path: tests/Handler/SplitRepoHandlerTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\SplitRepoHandlerTest\\:\\:\\$output \\(Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput\\) does not accept Symfony\\\\Component\\\\Console\\\\Output\\\\OutputInterface\\.$#"
+			message: '#^Property HubKit\\Tests\\Handler\\SplitRepoHandlerTest\:\:\$splitshGit with generic class Prophecy\\Prophecy\\ObjectProphecy does not specify its types\: T$#'
+			identifier: missingType.generics
 			count: 1
 			path: tests/Handler/SplitRepoHandlerTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\SplitRepoHandlerTest\\:\\:\\$splitshGit with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
-			count: 1
-			path: tests/Handler/SplitRepoHandlerTest.php
-
-		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\SwitchBaseHandlerTest\\:\\:assertOutputMatches\\(\\) has parameter \\$expectedLines with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\SwitchBaseHandlerTest\:\:assertOutputMatches\(\) has parameter \$expectedLines with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Handler/SwitchBaseHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\SwitchBaseHandlerTest\\:\\:assertOutputMatches\\(\\) has parameter \\$regex with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\SwitchBaseHandlerTest\:\:assertOutputMatches\(\) has parameter \$regex with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Handler/SwitchBaseHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\SwitchBaseHandlerTest\\:\\:assertOutputNotMatches\\(\\) has parameter \\$lines with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\SwitchBaseHandlerTest\:\:assertOutputNotMatches\(\) has parameter \$lines with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Handler/SwitchBaseHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\SwitchBaseHandlerTest\\:\\:assertOutputNotMatches\\(\\) has parameter \\$regex with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\SwitchBaseHandlerTest\:\:assertOutputNotMatches\(\) has parameter \$regex with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Handler/SwitchBaseHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\SwitchBaseHandlerTest\\:\\:createStyle\\(\\) has parameter \\$input with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\SwitchBaseHandlerTest\:\:createStyle\(\) has parameter \$input with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Handler/SwitchBaseHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\SwitchBaseHandlerTest\\:\\:executeHandler\\(\\) has parameter \\$input with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\SwitchBaseHandlerTest\:\:executeHandler\(\) has parameter \$input with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Handler/SwitchBaseHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\SwitchBaseHandlerTest\\:\\:getDisplay\\(\\) has no return type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\SwitchBaseHandlerTest\:\:getDisplay\(\) has no return type specified\.$#'
+			identifier: missingType.return
 			count: 1
 			path: tests/Handler/SwitchBaseHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\SwitchBaseHandlerTest\\:\\:getInputStream\\(\\) has no return type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\SwitchBaseHandlerTest\:\:getInputStream\(\) has no return type specified\.$#'
+			identifier: missingType.return
 			count: 1
 			path: tests/Handler/SwitchBaseHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\SwitchBaseHandlerTest\\:\\:getInputStream\\(\\) has parameter \\$input with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\SwitchBaseHandlerTest\:\:getInputStream\(\) has parameter \$input with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Handler/SwitchBaseHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\SwitchBaseHandlerTest\\:\\:getTempDir\\(\\) should return string but returns string\\|null\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\SwitchBaseHandlerTest\:\:getTempDir\(\) should return string but returns string\|null\.$#'
+			identifier: return.type
 			count: 1
 			path: tests/Handler/SwitchBaseHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\SwitchBaseHandlerTest\\:\\:givenLocalBranchesExist\\(\\) has parameter \\$branches with no value type specified in iterable type iterable\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\SwitchBaseHandlerTest\:\:givenLocalBranchesExist\(\) has parameter \$branches with no value type specified in iterable type iterable\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Handler/SwitchBaseHandlerTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
+			message: '#^Parameter \#1 \$stream of class Symfony\\Component\\Console\\Output\\StreamOutput constructor expects resource, resource\|false given\.$#'
+			identifier: argument.type
 			count: 2
 			path: tests/Handler/SwitchBaseHandlerTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$stream of function fwrite expects resource, resource\\|false given\\.$#"
+			message: '#^Parameter \#1 \$stream of function fwrite expects resource, resource\|false given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/SwitchBaseHandlerTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$stream of function rewind expects resource, resource\\|false given\\.$#"
+			message: '#^Parameter \#1 \$stream of function rewind expects resource, resource\|false given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/SwitchBaseHandlerTest.php
 
 		-
-			message: "#^Parameter \\#2 \\$git of class HubKit\\\\Cli\\\\Handler\\\\SwitchBaseHandler constructor expects HubKit\\\\Service\\\\Git, object given\\.$#"
+			message: '#^Parameter \#2 \$git of class HubKit\\Cli\\Handler\\SwitchBaseHandler constructor expects HubKit\\Service\\Git, object given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/SwitchBaseHandlerTest.php
 
 		-
-			message: "#^Parameter \\#2 \\$string of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertDoesNotMatchRegularExpression\\(\\) expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#2 \$string of static method PHPUnit\\Framework\\Assert\:\:assertDoesNotMatchRegularExpression\(\) expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/SwitchBaseHandlerTest.php
 
 		-
-			message: "#^Parameter \\#2 \\$string of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertMatchesRegularExpression\\(\\) expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#2 \$string of static method PHPUnit\\Framework\\Assert\:\:assertMatchesRegularExpression\(\) expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/SwitchBaseHandlerTest.php
 
 		-
-			message: "#^Parameter \\#3 \\$github of class HubKit\\\\Cli\\\\Handler\\\\SwitchBaseHandler constructor expects HubKit\\\\Service\\\\GitHub, object given\\.$#"
+			message: '#^Parameter \#3 \$github of class HubKit\\Cli\\Handler\\SwitchBaseHandler constructor expects HubKit\\Service\\GitHub, object given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/SwitchBaseHandlerTest.php
 
 		-
-			message: "#^Parameter \\#3 \\$subject of function str_replace expects array\\|string, string\\|false given\\.$#"
+			message: '#^Parameter \#5 \$process of class HubKit\\Cli\\Handler\\SwitchBaseHandler constructor expects HubKit\\Service\\CliProcess, object given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/SwitchBaseHandlerTest.php
 
 		-
-			message: "#^Parameter \\#5 \\$process of class HubKit\\\\Cli\\\\Handler\\\\SwitchBaseHandler constructor expects HubKit\\\\Service\\\\CliProcess, object given\\.$#"
+			message: '#^Parameter \#6 \$filesystem of class HubKit\\Cli\\Handler\\SwitchBaseHandler constructor expects HubKit\\Service\\Filesystem, object given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/SwitchBaseHandlerTest.php
 
 		-
-			message: "#^Parameter \\#6 \\$filesystem of class HubKit\\\\Cli\\\\Handler\\\\SwitchBaseHandler constructor expects HubKit\\\\Service\\\\Filesystem, object given\\.$#"
+			message: '#^Property HubKit\\Tests\\Handler\\SwitchBaseHandlerTest\:\:\$filesystem with generic class Prophecy\\Prophecy\\ObjectProphecy does not specify its types\: T$#'
+			identifier: missingType.generics
 			count: 1
 			path: tests/Handler/SwitchBaseHandlerTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\SwitchBaseHandlerTest\\:\\:\\$filesystem with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
+			message: '#^Property HubKit\\Tests\\Handler\\SwitchBaseHandlerTest\:\:\$git with generic class Prophecy\\Prophecy\\ObjectProphecy does not specify its types\: T$#'
+			identifier: missingType.generics
 			count: 1
 			path: tests/Handler/SwitchBaseHandlerTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\SwitchBaseHandlerTest\\:\\:\\$git with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
+			message: '#^Property HubKit\\Tests\\Handler\\SwitchBaseHandlerTest\:\:\$github with generic class Prophecy\\Prophecy\\ObjectProphecy does not specify its types\: T$#'
+			identifier: missingType.generics
 			count: 1
 			path: tests/Handler/SwitchBaseHandlerTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\SwitchBaseHandlerTest\\:\\:\\$github with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
+			message: '#^Property HubKit\\Tests\\Handler\\SwitchBaseHandlerTest\:\:\$output \(Symfony\\Component\\Console\\Output\\StreamOutput\) does not accept Symfony\\Component\\Console\\Output\\OutputInterface\.$#'
+			identifier: assign.propertyType
 			count: 1
 			path: tests/Handler/SwitchBaseHandlerTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\SwitchBaseHandlerTest\\:\\:\\$output \\(Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput\\) does not accept Symfony\\\\Component\\\\Console\\\\Output\\\\OutputInterface\\.$#"
+			message: '#^Property HubKit\\Tests\\Handler\\SwitchBaseHandlerTest\:\:\$process with generic class Prophecy\\Prophecy\\ObjectProphecy does not specify its types\: T$#'
+			identifier: missingType.generics
 			count: 1
 			path: tests/Handler/SwitchBaseHandlerTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\SwitchBaseHandlerTest\\:\\:\\$process with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
+			message: '#^Property HubKit\\Tests\\Handler\\SwitchBaseHandlerTest\:\:\$sfFilesystem with generic class Prophecy\\Prophecy\\ObjectProphecy does not specify its types\: T$#'
+			identifier: missingType.generics
 			count: 1
 			path: tests/Handler/SwitchBaseHandlerTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\SwitchBaseHandlerTest\\:\\:\\$sfFilesystem with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
+			message: '#^Property HubKit\\Tests\\Handler\\TrackedPromise\:\:\$calls has no type specified\.$#'
+			identifier: missingType.property
 			count: 1
 			path: tests/Handler/SwitchBaseHandlerTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\TrackedPromise\\:\\:\\$calls has no type specified\\.$#"
-			count: 1
-			path: tests/Handler/SwitchBaseHandlerTest.php
-
-		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\UpMergeHandlerTest\\:\\:assertOutputMatches\\(\\) has parameter \\$expectedLines with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\UpMergeHandlerTest\:\:assertOutputMatches\(\) has parameter \$expectedLines with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Handler/UpMergeHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\UpMergeHandlerTest\\:\\:assertOutputMatches\\(\\) has parameter \\$regex with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\UpMergeHandlerTest\:\:assertOutputMatches\(\) has parameter \$regex with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Handler/UpMergeHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\UpMergeHandlerTest\\:\\:assertOutputNotMatches\\(\\) has parameter \\$lines with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\UpMergeHandlerTest\:\:assertOutputNotMatches\(\) has parameter \$lines with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Handler/UpMergeHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\UpMergeHandlerTest\\:\\:assertOutputNotMatches\\(\\) has parameter \\$regex with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\UpMergeHandlerTest\:\:assertOutputNotMatches\(\) has parameter \$regex with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Handler/UpMergeHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\UpMergeHandlerTest\\:\\:createStyle\\(\\) has parameter \\$input with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\UpMergeHandlerTest\:\:createStyle\(\) has parameter \$input with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Handler/UpMergeHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\UpMergeHandlerTest\\:\\:getDisplay\\(\\) has no return type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\UpMergeHandlerTest\:\:getDisplay\(\) has no return type specified\.$#'
+			identifier: missingType.return
 			count: 1
 			path: tests/Handler/UpMergeHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\UpMergeHandlerTest\\:\\:getInputStream\\(\\) has no return type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\UpMergeHandlerTest\:\:getInputStream\(\) has no return type specified\.$#'
+			identifier: missingType.return
 			count: 1
 			path: tests/Handler/UpMergeHandlerTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Handler\\\\UpMergeHandlerTest\\:\\:getInputStream\\(\\) has parameter \\$input with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Tests\\Handler\\UpMergeHandlerTest\:\:getInputStream\(\) has parameter \$input with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Handler/UpMergeHandlerTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
+			message: '#^Parameter \#1 \$stream of class Symfony\\Component\\Console\\Output\\StreamOutput constructor expects resource, resource\|false given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/UpMergeHandlerTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$stream of function fwrite expects resource, resource\\|false given\\.$#"
+			message: '#^Parameter \#1 \$stream of function fwrite expects resource, resource\|false given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/UpMergeHandlerTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$stream of function rewind expects resource, resource\\|false given\\.$#"
+			message: '#^Parameter \#1 \$stream of function rewind expects resource, resource\|false given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/UpMergeHandlerTest.php
 
 		-
-			message: "#^Parameter \\#2 \\$git of class HubKit\\\\Cli\\\\Handler\\\\UpMergeHandler constructor expects HubKit\\\\Service\\\\Git, object given\\.$#"
+			message: '#^Parameter \#2 \$git of class HubKit\\Cli\\Handler\\UpMergeHandler constructor expects HubKit\\Service\\Git, object given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/UpMergeHandlerTest.php
 
 		-
-			message: "#^Parameter \\#2 \\$string of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertDoesNotMatchRegularExpression\\(\\) expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#2 \$string of static method PHPUnit\\Framework\\Assert\:\:assertDoesNotMatchRegularExpression\(\) expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/UpMergeHandlerTest.php
 
 		-
-			message: "#^Parameter \\#2 \\$string of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertMatchesRegularExpression\\(\\) expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#2 \$string of static method PHPUnit\\Framework\\Assert\:\:assertMatchesRegularExpression\(\) expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/UpMergeHandlerTest.php
 
 		-
-			message: "#^Parameter \\#3 \\$github of class HubKit\\\\Cli\\\\Handler\\\\UpMergeHandler constructor expects HubKit\\\\Service\\\\GitHub, object given\\.$#"
+			message: '#^Parameter \#3 \$github of class HubKit\\Cli\\Handler\\UpMergeHandler constructor expects HubKit\\Service\\GitHub, object given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/UpMergeHandlerTest.php
 
 		-
-			message: "#^Parameter \\#3 \\$subject of function str_replace expects array\\|string, string\\|false given\\.$#"
+			message: '#^Parameter \#5 \$process of class HubKit\\Cli\\Handler\\UpMergeHandler constructor expects HubKit\\Service\\CliProcess, object given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/UpMergeHandlerTest.php
 
 		-
-			message: "#^Parameter \\#5 \\$process of class HubKit\\\\Cli\\\\Handler\\\\UpMergeHandler constructor expects HubKit\\\\Service\\\\CliProcess, object given\\.$#"
+			message: '#^Parameter \#6 \$branchSplitsh of class HubKit\\Cli\\Handler\\UpMergeHandler constructor expects HubKit\\Service\\BranchSplitsh, object given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Handler/UpMergeHandlerTest.php
 
 		-
-			message: "#^Parameter \\#6 \\$branchSplitsh of class HubKit\\\\Cli\\\\Handler\\\\UpMergeHandler constructor expects HubKit\\\\Service\\\\BranchSplitsh, object given\\.$#"
+			message: '#^Property HubKit\\Tests\\Handler\\UpMergeHandlerTest\:\:\$branchSplitsh with generic class Prophecy\\Prophecy\\ObjectProphecy does not specify its types\: T$#'
+			identifier: missingType.generics
 			count: 1
 			path: tests/Handler/UpMergeHandlerTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\UpMergeHandlerTest\\:\\:\\$branchSplitsh with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
+			message: '#^Property HubKit\\Tests\\Handler\\UpMergeHandlerTest\:\:\$git with generic class Prophecy\\Prophecy\\ObjectProphecy does not specify its types\: T$#'
+			identifier: missingType.generics
 			count: 1
 			path: tests/Handler/UpMergeHandlerTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\UpMergeHandlerTest\\:\\:\\$git with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
+			message: '#^Property HubKit\\Tests\\Handler\\UpMergeHandlerTest\:\:\$github with generic class Prophecy\\Prophecy\\ObjectProphecy does not specify its types\: T$#'
+			identifier: missingType.generics
 			count: 1
 			path: tests/Handler/UpMergeHandlerTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\UpMergeHandlerTest\\:\\:\\$github with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
+			message: '#^Property HubKit\\Tests\\Handler\\UpMergeHandlerTest\:\:\$output \(Symfony\\Component\\Console\\Output\\StreamOutput\) does not accept Symfony\\Component\\Console\\Output\\OutputInterface\.$#'
+			identifier: assign.propertyType
 			count: 1
 			path: tests/Handler/UpMergeHandlerTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\UpMergeHandlerTest\\:\\:\\$output \\(Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput\\) does not accept Symfony\\\\Component\\\\Console\\\\Output\\\\OutputInterface\\.$#"
+			message: '#^Property HubKit\\Tests\\Handler\\UpMergeHandlerTest\:\:\$process with generic class Prophecy\\Prophecy\\ObjectProphecy does not specify its types\: T$#'
+			identifier: missingType.generics
 			count: 1
 			path: tests/Handler/UpMergeHandlerTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Handler\\\\UpMergeHandlerTest\\:\\:\\$process with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
-			count: 1
-			path: tests/Handler/UpMergeHandlerTest.php
-
-		-
-			message: "#^Method HubKit\\\\Tests\\\\Helper\\\\BranchAliasResolverTest\\:\\:assertOutputMatches\\(\\) has parameter \\$expectedLines with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Helper\\BranchAliasResolverTest\:\:assertOutputMatches\(\) has parameter \$expectedLines with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Helper/BranchAliasResolverTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Helper\\\\BranchAliasResolverTest\\:\\:assertOutputMatches\\(\\) has parameter \\$regex with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Helper\\BranchAliasResolverTest\:\:assertOutputMatches\(\) has parameter \$regex with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Helper/BranchAliasResolverTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Helper\\\\BranchAliasResolverTest\\:\\:assertOutputNotMatches\\(\\) has parameter \\$lines with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Helper\\BranchAliasResolverTest\:\:assertOutputNotMatches\(\) has parameter \$lines with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Helper/BranchAliasResolverTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Helper\\\\BranchAliasResolverTest\\:\\:assertOutputNotMatches\\(\\) has parameter \\$regex with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Helper\\BranchAliasResolverTest\:\:assertOutputNotMatches\(\) has parameter \$regex with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Helper/BranchAliasResolverTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Helper\\\\BranchAliasResolverTest\\:\\:createStyle\\(\\) has parameter \\$input with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Tests\\Helper\\BranchAliasResolverTest\:\:createStyle\(\) has parameter \$input with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Helper/BranchAliasResolverTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Helper\\\\BranchAliasResolverTest\\:\\:getDisplay\\(\\) has no return type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Helper\\BranchAliasResolverTest\:\:getDisplay\(\) has no return type specified\.$#'
+			identifier: missingType.return
 			count: 1
 			path: tests/Helper/BranchAliasResolverTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Helper\\\\BranchAliasResolverTest\\:\\:getInputStream\\(\\) has no return type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Helper\\BranchAliasResolverTest\:\:getInputStream\(\) has no return type specified\.$#'
+			identifier: missingType.return
 			count: 1
 			path: tests/Helper/BranchAliasResolverTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Helper\\\\BranchAliasResolverTest\\:\\:getInputStream\\(\\) has parameter \\$input with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Tests\\Helper\\BranchAliasResolverTest\:\:getInputStream\(\) has parameter \$input with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Helper/BranchAliasResolverTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Helper\\\\BranchAliasResolverTest\\:\\:getTempDir\\(\\) should return string but returns string\\|null\\.$#"
+			message: '#^Method HubKit\\Tests\\Helper\\BranchAliasResolverTest\:\:getTempDir\(\) should return string but returns string\|null\.$#'
+			identifier: return.type
 			count: 1
 			path: tests/Helper/BranchAliasResolverTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Helper\\\\BranchAliasResolverTest\\:\\:givenLocalBranchesExist\\(\\) has parameter \\$branches with no value type specified in iterable type iterable\\.$#"
+			message: '#^Method HubKit\\Tests\\Helper\\BranchAliasResolverTest\:\:givenLocalBranchesExist\(\) has parameter \$branches with no value type specified in iterable type iterable\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Helper/BranchAliasResolverTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
+			message: '#^Parameter \#1 \$stream of class Symfony\\Component\\Console\\Output\\StreamOutput constructor expects resource, resource\|false given\.$#'
+			identifier: argument.type
 			count: 2
 			path: tests/Helper/BranchAliasResolverTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$stream of function fwrite expects resource, resource\\|false given\\.$#"
+			message: '#^Parameter \#1 \$stream of function fwrite expects resource, resource\|false given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Helper/BranchAliasResolverTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$stream of function rewind expects resource, resource\\|false given\\.$#"
+			message: '#^Parameter \#1 \$stream of function rewind expects resource, resource\|false given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Helper/BranchAliasResolverTest.php
 
 		-
-			message: "#^Parameter \\#2 \\$string of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertDoesNotMatchRegularExpression\\(\\) expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#2 \$string of static method PHPUnit\\Framework\\Assert\:\:assertDoesNotMatchRegularExpression\(\) expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Helper/BranchAliasResolverTest.php
 
 		-
-			message: "#^Parameter \\#2 \\$string of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertMatchesRegularExpression\\(\\) expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#2 \$string of static method PHPUnit\\Framework\\Assert\:\:assertMatchesRegularExpression\(\) expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Helper/BranchAliasResolverTest.php
 
 		-
-			message: "#^Parameter \\#3 \\$subject of function str_replace expects array\\|string, string\\|false given\\.$#"
+			message: '#^Property HubKit\\Tests\\Helper\\BranchAliasResolverTest\:\:\$output \(Symfony\\Component\\Console\\Output\\StreamOutput\) does not accept Symfony\\Component\\Console\\Output\\OutputInterface\.$#'
+			identifier: assign.propertyType
 			count: 1
 			path: tests/Helper/BranchAliasResolverTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Helper\\\\BranchAliasResolverTest\\:\\:\\$output \\(Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput\\) does not accept Symfony\\\\Component\\\\Console\\\\Output\\\\OutputInterface\\.$#"
-			count: 1
-			path: tests/Helper/BranchAliasResolverTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$git of class HubKit\\\\Helper\\\\ChangelogRenderer constructor expects HubKit\\\\Service\\\\Git, object given\\.$#"
+			message: '#^Parameter \#1 \$git of class HubKit\\Helper\\ChangelogRenderer constructor expects HubKit\\Service\\Git, object given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Helper/ChangelogRendererTest.php
 
 		-
-			message: "#^Parameter \\#2 \\$github of class HubKit\\\\Helper\\\\ChangelogRenderer constructor expects HubKit\\\\Service\\\\GitHub, object given\\.$#"
+			message: '#^Parameter \#2 \$github of class HubKit\\Helper\\ChangelogRenderer constructor expects HubKit\\Service\\GitHub, object given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Helper/ChangelogRendererTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Helper\\\\ChangelogRendererTest\\:\\:\\$git with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
+			message: '#^Property HubKit\\Tests\\Helper\\ChangelogRendererTest\:\:\$git with generic class Prophecy\\Prophecy\\ObjectProphecy does not specify its types\: T$#'
+			identifier: missingType.generics
 			count: 1
 			path: tests/Helper/ChangelogRendererTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Helper\\\\ChangelogRendererTest\\:\\:\\$github with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
+			message: '#^Property HubKit\\Tests\\Helper\\ChangelogRendererTest\:\:\$github with generic class Prophecy\\Prophecy\\ObjectProphecy does not specify its types\: T$#'
+			identifier: missingType.generics
 			count: 1
 			path: tests/Helper/ChangelogRendererTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Service\\\\BranchSplitshTest\\:\\:assertOutputMatches\\(\\) has parameter \\$expectedLines with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Service\\BranchSplitshTest\:\:assertOutputMatches\(\) has parameter \$expectedLines with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Service/BranchSplitshTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Service\\\\BranchSplitshTest\\:\\:assertOutputMatches\\(\\) has parameter \\$regex with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Service\\BranchSplitshTest\:\:assertOutputMatches\(\) has parameter \$regex with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Service/BranchSplitshTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Service\\\\BranchSplitshTest\\:\\:assertOutputNotMatches\\(\\) has parameter \\$lines with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Service\\BranchSplitshTest\:\:assertOutputNotMatches\(\) has parameter \$lines with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Service/BranchSplitshTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Service\\\\BranchSplitshTest\\:\\:assertOutputNotMatches\\(\\) has parameter \\$regex with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Service\\BranchSplitshTest\:\:assertOutputNotMatches\(\) has parameter \$regex with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Service/BranchSplitshTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Service\\\\BranchSplitshTest\\:\\:createStyle\\(\\) has parameter \\$input with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Tests\\Service\\BranchSplitshTest\:\:createStyle\(\) has parameter \$input with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Service/BranchSplitshTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Service\\\\BranchSplitshTest\\:\\:getDisplay\\(\\) has no return type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Service\\BranchSplitshTest\:\:getDisplay\(\) has no return type specified\.$#'
+			identifier: missingType.return
 			count: 1
 			path: tests/Service/BranchSplitshTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Service\\\\BranchSplitshTest\\:\\:getInputStream\\(\\) has no return type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Service\\BranchSplitshTest\:\:getInputStream\(\) has no return type specified\.$#'
+			identifier: missingType.return
 			count: 1
 			path: tests/Service/BranchSplitshTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Service\\\\BranchSplitshTest\\:\\:getInputStream\\(\\) has parameter \\$input with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Tests\\Service\\BranchSplitshTest\:\:getInputStream\(\) has parameter \$input with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Service/BranchSplitshTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$splitshGit of class HubKit\\\\Service\\\\BranchSplitsh constructor expects HubKit\\\\Service\\\\SplitshGit, object given\\.$#"
+			message: '#^Parameter \#1 \$splitshGit of class HubKit\\Service\\BranchSplitsh constructor expects HubKit\\Service\\SplitshGit, object given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Service/BranchSplitshTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$stream of class Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput constructor expects resource, resource\\|false given\\.$#"
+			message: '#^Parameter \#1 \$stream of class Symfony\\Component\\Console\\Output\\StreamOutput constructor expects resource, resource\|false given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Service/BranchSplitshTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$stream of function fwrite expects resource, resource\\|false given\\.$#"
+			message: '#^Parameter \#1 \$stream of function fwrite expects resource, resource\|false given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Service/BranchSplitshTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$stream of function rewind expects resource, resource\\|false given\\.$#"
+			message: '#^Parameter \#1 \$stream of function rewind expects resource, resource\|false given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Service/BranchSplitshTest.php
 
 		-
-			message: "#^Parameter \\#2 \\$github of class HubKit\\\\Service\\\\BranchSplitsh constructor expects HubKit\\\\Service\\\\GitHub, object given\\.$#"
+			message: '#^Parameter \#2 \$github of class HubKit\\Service\\BranchSplitsh constructor expects HubKit\\Service\\GitHub, object given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Service/BranchSplitshTest.php
 
 		-
-			message: "#^Parameter \\#2 \\$string of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertDoesNotMatchRegularExpression\\(\\) expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#2 \$string of static method PHPUnit\\Framework\\Assert\:\:assertDoesNotMatchRegularExpression\(\) expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Service/BranchSplitshTest.php
 
 		-
-			message: "#^Parameter \\#2 \\$string of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertMatchesRegularExpression\\(\\) expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#2 \$string of static method PHPUnit\\Framework\\Assert\:\:assertMatchesRegularExpression\(\) expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Service/BranchSplitshTest.php
 
 		-
-			message: "#^Parameter \\#3 \\$subject of function str_replace expects array\\|string, string\\|false given\\.$#"
+			message: '#^Parameter \#5 \$git of class HubKit\\Service\\BranchSplitsh constructor expects HubKit\\Service\\Git, object given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Service/BranchSplitshTest.php
 
 		-
-			message: "#^Parameter \\#5 \\$git of class HubKit\\\\Service\\\\BranchSplitsh constructor expects HubKit\\\\Service\\\\Git, object given\\.$#"
+			message: '#^Property HubKit\\Tests\\Service\\BranchSplitshTest\:\:\$git with generic class Prophecy\\Prophecy\\ObjectProphecy does not specify its types\: T$#'
+			identifier: missingType.generics
 			count: 1
 			path: tests/Service/BranchSplitshTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Service\\\\BranchSplitshTest\\:\\:\\$git with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
+			message: '#^Property HubKit\\Tests\\Service\\BranchSplitshTest\:\:\$github with generic class Prophecy\\Prophecy\\ObjectProphecy does not specify its types\: T$#'
+			identifier: missingType.generics
 			count: 1
 			path: tests/Service/BranchSplitshTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Service\\\\BranchSplitshTest\\:\\:\\$github with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
+			message: '#^Property HubKit\\Tests\\Service\\BranchSplitshTest\:\:\$output \(Symfony\\Component\\Console\\Output\\StreamOutput\) does not accept Symfony\\Component\\Console\\Output\\OutputInterface\.$#'
+			identifier: assign.propertyType
 			count: 1
 			path: tests/Service/BranchSplitshTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Service\\\\BranchSplitshTest\\:\\:\\$output \\(Symfony\\\\Component\\\\Console\\\\Output\\\\StreamOutput\\) does not accept Symfony\\\\Component\\\\Console\\\\Output\\\\OutputInterface\\.$#"
+			message: '#^Property HubKit\\Tests\\Service\\BranchSplitshTest\:\:\$splitshGit with generic class Prophecy\\Prophecy\\ObjectProphecy does not specify its types\: T$#'
+			identifier: missingType.generics
 			count: 1
 			path: tests/Service/BranchSplitshTest.php
 
 		-
-			message: "#^Property HubKit\\\\Tests\\\\Service\\\\BranchSplitshTest\\:\\:\\$splitshGit with generic class Prophecy\\\\Prophecy\\\\ObjectProphecy does not specify its types\\: T$#"
-			count: 1
-			path: tests/Service/BranchSplitshTest.php
-
-		-
-			message: "#^Method HubKit\\\\Tests\\\\Service\\\\MessageValidatorTest\\:\\:createMessage\\(\\) has parameter \\$message with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Service\\MessageValidatorTest\:\:createMessage\(\) has parameter \$message with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Service/MessageValidatorTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Service\\\\MessageValidatorTest\\:\\:createMessage\\(\\) return type has no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Tests\\Service\\MessageValidatorTest\:\:createMessage\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Service/MessageValidatorTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$directory of function chdir expects string, string\\|false given\\.$#"
+			message: '#^Parameter \#1 \$directory of function chdir expects string, string\|false given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/Service/SplitshGitTest.php
 
 		-
-			message: "#^Parameter \\#3 \\$targets of method HubKit\\\\Service\\\\SplitshGit\\:\\:syncTags\\(\\) expects array\\<int\\|string, array\\{string, string, string\\}\\>, array\\{/tmp/hubkit/stor/_core\\: array\\{'2c00338aef823d0c091…', 'git@github\\.com\\:park…', 5\\}, /tmp/hubkit/stor/_user\\: array\\{'3eed8083737422fe9ac…', 'git@github\\.com\\:park…', 3\\}\\} given\\.$#"
+			message: '#^Parameter \#3 \$targets of method HubKit\\Service\\SplitshGit\:\:syncTags\(\) expects array\<int\|string, array\{string, string, string\}\>, array\{''/tmp/hubkit/stor/_core''\: array\{''2c00338aef823d0c091…'', ''git@github\.com\:park…'', 5\}, ''/tmp/hubkit/stor/_user''\: array\{''3eed8083737422fe9ac…'', ''git@github\.com\:park…'', 3\}\} given\.$#'
+			identifier: argument.type
 			count: 3
 			path: tests/Service/SplitshGitTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Unit\\\\Service\\\\EditorTest\\:\\:createEditorWithMockEditor\\(\\) has parameter \\$filesystem with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Unit\\Service\\EditorTest\:\:createEditorWithMockEditor\(\) has parameter \$filesystem with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Unit/Service/EditorTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Unit\\\\Service\\\\EditorTest\\:\\:createEditorWithMockEditor\\(\\) has parameter \\$process with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Unit\\Service\\EditorTest\:\:createEditorWithMockEditor\(\) has parameter \$process with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Unit/Service/EditorTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Unit\\\\Service\\\\EditorTest\\:\\:createFilesystemSpy\\(\\) has parameter \\$tempFile with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Unit\\Service\\EditorTest\:\:createFilesystemSpy\(\) has parameter \$tempFile with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Unit/Service/EditorTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Unit\\\\Service\\\\EditorTest\\:\\:createProcessModifierSpy\\(\\) has parameter \\$processCmd with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Unit\\Service\\EditorTest\:\:createProcessModifierSpy\(\) has parameter \$processCmd with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Unit/Service/EditorTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Unit\\\\Service\\\\EditorTest\\:\\:createProcessModifierSpy\\(\\) has parameter \\$tempFile with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Unit\\Service\\EditorTest\:\:createProcessModifierSpy\(\) has parameter \$tempFile with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Unit/Service/EditorTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Unit\\\\Service\\\\EditorTest\\:\\:createProcessSpy\\(\\) has parameter \\$processCmd with no type specified\\.$#"
+			message: '#^Method HubKit\\Tests\\Unit\\Service\\EditorTest\:\:createProcessSpy\(\) has parameter \$processCmd with no type specified\.$#'
+			identifier: missingType.parameter
 			count: 1
 			path: tests/Unit/Service/EditorTest.php
 
 		-
-			message: "#^Access to an undefined property HubKit\\\\Service\\\\Git\\\\GitBranch\\:\\:\\$diffStatusCall\\.$#"
+			message: '#^Access to an undefined property HubKit\\Service\\Git\\GitBranch\:\:\$diffStatusCall\.$#'
+			identifier: property.notFound
 			count: 3
 			path: tests/Unit/Service/Git/GitBranchTest.php
 
 		-
-			message: "#^Access to an undefined property HubKit\\\\Service\\\\Git\\\\GitBranch\\:\\:\\$pullCall\\.$#"
+			message: '#^Access to an undefined property HubKit\\Service\\Git\\GitBranch\:\:\$pullCall\.$#'
+			identifier: property.notFound
 			count: 3
 			path: tests/Unit/Service/Git/GitBranchTest.php
 
 		-
-			message: "#^Access to an undefined property HubKit\\\\Service\\\\Git\\\\GitBranch\\:\\:\\$pushCall\\.$#"
+			message: '#^Access to an undefined property HubKit\\Service\\Git\\GitBranch\:\:\$pushCall\.$#'
+			identifier: property.notFound
 			count: 3
 			path: tests/Unit/Service/Git/GitBranchTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Unit\\\\Service\\\\Git\\\\GitBranchTest\\:\\:createGitService\\(\\) has parameter \\$branches with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Service\\Git\\GitBranch@anonymous/tests/Unit/Service/Git/GitBranchTest\.php\:140\:\:getRemoteDiffStatus\(\) should return ''diverged''\|''need_branch''\|''need_pull''\|''need_push''\|''up\-to\-date'' but returns string\.$#'
+			identifier: return.type
 			count: 1
 			path: tests/Unit/Service/Git/GitBranchTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Unit\\\\Service\\\\Git\\\\GitBranchTest\\:\\:it_gets_versioned_branches_in_correct_order\\(\\) has parameter \\$branches with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Tests\\Unit\\Service\\Git\\GitBranchTest\:\:createGitService\(\) has parameter \$branches with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Unit/Service/Git/GitBranchTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Unit\\\\Service\\\\Git\\\\GitBranchTest\\:\\:it_gets_versioned_branches_in_correct_order\\(\\) has parameter \\$expectedVersions with no value type specified in iterable type array\\.$#"
+			message: '#^Method HubKit\\Tests\\Unit\\Service\\Git\\GitBranchTest\:\:it_gets_versioned_branches_in_correct_order\(\) has parameter \$branches with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Unit/Service/Git/GitBranchTest.php
 
 		-
-			message: "#^Method HubKit\\\\Tests\\\\Unit\\\\Service\\\\Git\\\\GitBranchTest\\:\\:provideExpectedVersions\\(\\) return type has no value type specified in iterable type iterable\\.$#"
+			message: '#^Method HubKit\\Tests\\Unit\\Service\\Git\\GitBranchTest\:\:it_gets_versioned_branches_in_correct_order\(\) has parameter \$expectedVersions with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Unit/Service/Git/GitBranchTest.php
 
 		-
-			message: "#^Method class@anonymous/tests/Unit/Service/Git/GitBranchTest\\.php\\:140\\:\\:getRemoteDiffStatus\\(\\) should return 'diverged'\\|'need_branch'\\|'need_pull'\\|'need_push'\\|'up\\-to\\-date' but returns string\\.$#"
+			message: '#^Method HubKit\\Tests\\Unit\\Service\\Git\\GitBranchTest\:\:provideExpectedVersions\(\) return type has no value type specified in iterable type iterable\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Unit/Service/Git/GitBranchTest.php
 
 		-
-			message: "#^Property class@anonymous/tests/Unit/Service/Git/GitBranchTest\\.php\\:140\\:\\:\\$diffStatusCall type has no value type specified in iterable type array\\.$#"
+			message: '#^Property HubKit\\Service\\Git\\GitBranch@anonymous/tests/Unit/Service/Git/GitBranchTest\.php\:140\:\:\$diffStatusCall type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Unit/Service/Git/GitBranchTest.php
 
 		-
-			message: "#^Property class@anonymous/tests/Unit/Service/Git/GitBranchTest\\.php\\:140\\:\\:\\$pullCall type has no value type specified in iterable type array\\.$#"
+			message: '#^Property HubKit\\Service\\Git\\GitBranch@anonymous/tests/Unit/Service/Git/GitBranchTest\.php\:140\:\:\$pullCall type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Unit/Service/Git/GitBranchTest.php
 
 		-
-			message: "#^Property class@anonymous/tests/Unit/Service/Git/GitBranchTest\\.php\\:140\\:\\:\\$pushCall type has no value type specified in iterable type array\\.$#"
+			message: '#^Property HubKit\\Service\\Git\\GitBranch@anonymous/tests/Unit/Service/Git/GitBranchTest\.php\:140\:\:\$pushCall type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: tests/Unit/Service/Git/GitBranchTest.php
