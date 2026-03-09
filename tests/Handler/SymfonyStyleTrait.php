@@ -57,6 +57,10 @@ trait SymfonyStyleTrait
 
     protected function getDisplay(bool $normalize = true)
     {
+        if (! isset($this->output)) {
+            throw new \RuntimeException('No output available. Call createStyle() first.');
+        }
+
         rewind($this->output->getStream());
 
         $display = stream_get_contents($this->output->getStream());
