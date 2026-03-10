@@ -205,6 +205,18 @@ final class HubKitApplicationConfig extends DefaultApplicationConfig
             })
             ->end()
 
+            ->beginCommand('cleanup-unmaintained')
+            ->setDescription('Clean-up local branches marked as unmaintained (remote branches remain unchanged)')
+            ->setHandler(function () {
+                return new Handler\CleanupUnmaintainedHandler(
+                    $this->container['style'],
+                    $this->container['git'],
+                    $this->container['github'],
+                    $this->container['config']
+                );
+            })
+            ->end()
+
             ->beginCommand('checkout')
             ->setDescription('Checkout a pull request as local branch. Allows to push changes (unless disabled by author)')
             ->addArgument('number', Argument::INTEGER, 'Number of the pull request to checkout')
