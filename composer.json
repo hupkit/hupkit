@@ -30,6 +30,7 @@
         "webmozart/console": "^2.0"
     },
     "require-dev": {
+        "boundwize/structarmed": "^0.21.8",
         "phpspec/prophecy-phpunit": "^2.0.1",
         "phpunit/phpunit": "^9.5.21",
         "rollerscapes/standards": "^0.3",

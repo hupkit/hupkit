@@ -18,7 +18,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 
-class QuestionHelper extends BaseQuestionHelper
+abstract class QuestionHelper extends BaseQuestionHelper
 {
     private ?int $maxAttempts = null;
 
