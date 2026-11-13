@@ -1,0 +1,18 @@
+---------------------------------------------------------------------------
+
+by samsonasik at 2026-11-12T17:10:58Z
+
+@sstok ready for review/merge 👍 
+
+---------------------------------------------------------------------------
+
+by sstok at 2026-11-13T08:20:55Z
+
+Good catch on Git leaking the configuration. Thank you for your work, all seems good.
+
+---------------------------------------------------------------------------
+
+by sstok at 2026-11-13T08:22:15Z
+
+Thank you @samsonasik
+
