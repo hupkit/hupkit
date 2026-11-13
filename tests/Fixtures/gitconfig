@@ -1,0 +1,12 @@
+[user]
+	name = HuPKit Tester
+	email = tester@example.com
+[author]
+	name = HuPKit Tester
+	email = tester@example.com
+[commit]
+	gpgsign = false
+[tag]
+	gpgsign = false
+[merge]
+	gpgsign = false

@@ -1,0 +1,47 @@
+name: StructArmed
+
+on:
+    pull_request:
+
+defaults:
+    run:
+        shell: bash
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+    cancel-in-progress: true
+
+permissions:
+    contents: read
+
+jobs:
+    structarmed:
+        name: StructArmed
+        runs-on: ubuntu-24.04
+
+        env:
+            php-version: '8.3'
+        steps:
+            -
+                name: Setup PHP
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: ${{ env.php-version }}
+                    ini-values: "memory_limit=-1"
+                    coverage: none
+
+            -
+                name: Checkout PR
+                uses: actions/checkout@v6
+
+            -
+                name: Install dependencies
+                run: |
+                    COMPOSER_HOME="$(composer config home)"
+                    ([ -d "$COMPOSER_HOME" ] || mkdir "$COMPOSER_HOME") && cp .github/composer-config.json "$COMPOSER_HOME/config.json"
+                    composer install --no-progress --ansi --no-plugins
+
+            -
+                name: StructArmed
+                run: |
+                    vendor/bin/structarmed analyse --no-progress --report=github
